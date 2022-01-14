@@ -1,0 +1,6 @@
+module Pods_DGCA_DGCATests {
+  umbrella header "Pods-DGCA-DGCATests-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,14 @@
+com/dgca/MainApplication.java
+ com.dgca.MainApplication
+ com.dgca.MainApplication$1
+com/dgca/BuildConfig.java
+ com.dgca.BuildConfig
+com/dgca/ReactNativeFlipper.java
+ com.dgca.ReactNativeFlipper
+ com.dgca.ReactNativeFlipper$1
+ com.dgca.ReactNativeFlipper$2
+ com.dgca.ReactNativeFlipper$2$1
+com/dgca/MainActivity.java
+ com.dgca.MainActivity
+com/facebook/react/PackageList.java
+ com.facebook.react.PackageList

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DGCA.iml" filepath="$PROJECT_DIR$/.idea/modules/DGCA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/461831561/DGCA.@react-native-async-storage_async-storage.iml" filepath="$PROJECT_DIR$/.idea/modules/461831561/DGCA.@react-native-async-storage_async-storage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/DGCA.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/DGCA.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1052562168/DGCA.react-native-appearance.iml" filepath="$PROJECT_DIR$/.idea/modules/1052562168/DGCA.react-native-appearance.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1839925768/DGCA.react-native-community_async-storage.iml" filepath="$PROJECT_DIR$/.idea/modules/1839925768/DGCA.react-native-community_async-storage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-262844187/DGCA.react-native-community_checkbox.iml" filepath="$PROJECT_DIR$/.idea/modules/-262844187/DGCA.react-native-community_checkbox.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1717285227/DGCA.react-native-community_datetimepicker.iml" filepath="$PROJECT_DIR$/.idea/modules/1717285227/DGCA.react-native-community_datetimepicker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-826062075/DGCA.react-native-community_masked-view.iml" filepath="$PROJECT_DIR$/.idea/modules/-826062075/DGCA.react-native-community_masked-view.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/237448287/DGCA.react-native-community_netinfo.iml" filepath="$PROJECT_DIR$/.idea/modules/237448287/DGCA.react-native-community_netinfo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1724930361/DGCA.react-native-date-picker.iml" filepath="$PROJECT_DIR$/.idea/modules/1724930361/DGCA.react-native-date-picker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1741249166/DGCA.react-native-gesture-handler.iml" filepath="$PROJECT_DIR$/.idea/modules/-1741249166/DGCA.react-native-gesture-handler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1431376978/DGCA.react-native-html-to-pdf.iml" filepath="$PROJECT_DIR$/.idea/modules/-1431376978/DGCA.react-native-html-to-pdf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/142838648/DGCA.react-native-iap.iml" filepath="$PROJECT_DIR$/.idea/modules/142838648/DGCA.react-native-iap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-65201452/DGCA.react-native-image-picker.iml" filepath="$PROJECT_DIR$/.idea/modules/-65201452/DGCA.react-native-image-picker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/990528304/DGCA.react-native-permissions.iml" filepath="$PROJECT_DIR$/.idea/modules/990528304/DGCA.react-native-permissions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-502137677/DGCA.react-native-picker_picker.iml" filepath="$PROJECT_DIR$/.idea/modules/-502137677/DGCA.react-native-picker_picker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1068097635/DGCA.react-native-print.iml" filepath="$PROJECT_DIR$/.idea/modules/1068097635/DGCA.react-native-print.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-27993750/DGCA.react-native-reanimated.iml" filepath="$PROJECT_DIR$/.idea/modules/-27993750/DGCA.react-native-reanimated.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1946801829/DGCA.react-native-safe-area-context.iml" filepath="$PROJECT_DIR$/.idea/modules/-1946801829/DGCA.react-native-safe-area-context.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1276735283/DGCA.react-native-screens.iml" filepath="$PROJECT_DIR$/.idea/modules/1276735283/DGCA.react-native-screens.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1946396449/DGCA.react-native-sqlite-storage.iml" filepath="$PROJECT_DIR$/.idea/modules/-1946396449/DGCA.react-native-sqlite-storage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1388429543/DGCA.react-native-svg.iml" filepath="$PROJECT_DIR$/.idea/modules/-1388429543/DGCA.react-native-svg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1560065956/DGCA.react-native-vector-icons.iml" filepath="$PROJECT_DIR$/.idea/modules/1560065956/DGCA.react-native-vector-icons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1607865182/DGCA.react-native-view-pdf.iml" filepath="$PROJECT_DIR$/.idea/modules/1607865182/DGCA.react-native-view-pdf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/846721283/DGCA.react-native-webview.iml" filepath="$PROJECT_DIR$/.idea/modules/846721283/DGCA.react-native-webview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-2124590867/DGCA.rn-fetch-blob.iml" filepath="$PROJECT_DIR$/.idea/modules/-2124590867/DGCA.rn-fetch-blob.iml" />
+    </modules>
+  </component>
+</project>

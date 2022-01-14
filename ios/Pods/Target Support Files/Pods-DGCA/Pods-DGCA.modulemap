@@ -1,0 +1,6 @@
+module Pods_DGCA {
+  umbrella header "Pods-DGCA-umbrella.h"
+
+  export *
+  module * { export * }
+}

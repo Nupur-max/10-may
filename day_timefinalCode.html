@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Get Day and Night Time of Flight</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.css" rel="stylesheet"/>
+	
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"/>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+<body>
+	<h2>Get Day and Night Time of Flight</h2>
+	<h4>
+	</h4>
+	<form>
+		<div class="col-md-6">
+			<div class="col-md-6">
+				<label>from</label>
+				<select id = "from">
+					<option value="delhi">Delhi</option>
+					<option value="kolkata">kolkata</option>
+					<option value="paris">paris</option>
+				</select>
+				<!-- <input type="text" name="fromLat" id="fromLat" placeholder="lat" value="48.7233333">
+				<input type="text" name="fromLong" id="fromLong" placeholder="long" value="2.3794444"> -->
+			</div>
+			<div class="col-md-6">
+				<label>to</label>
+				<select id = "to">
+					<option value="delhi">Delhi</option>
+					<option value="kolkata">kolkata</option>
+					<option value="paris">paris</option>
+				</select>
+				<!-- <input type="text" name="toLat" id="toLat" placeholder="lat" value="28.566499710083008">
+				<input type="text" name="toLong" id="toLong" placeholder="long" value="77.10310363769531"> -->
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<label for="depTime">Departure time</label>
+				<input type="text" name="depTime" id="depTime">
+			</div>
+			<div class="col-md-6">
+				<label for="arrTime">Arrivel time</label>
+				<input type="text" name="arrTime" id="arrTime">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<label for="flightDate">Date</label>
+				<input type="date" name="flightDate" id="flightDate">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<button type="button" id="submit">Submit</button>	
+			</div>
+		</div>
+	</form>
+	<h2 id="result"></h2>
+</body>
+</html>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#submit').click(function() {
+		if($('#from').val() == 'delhi'){
+			var fromLat = Number(28.566499710083008);
+			var fromLong = Number(77.10310363769531);
+		}else if($('#from').val() == 'paris'){
+			var fromLat = Number(48.7233333);
+			var fromLong = Number(2.3794444);
+		}else if($('#from').val() == 'kolkata'){
+			var fromLat = Number(22.654699325561523);
+			var fromLong = Number(88.44670104980469);
+		}
+		if($('#to').val() == 'delhi'){
+			var toLat = Number(28.566499710083008);
+			var toLong = Number(77.10310363769531);
+		}else if($('#to').val() == 'paris'){
+			var toLat = Number(48.7233333);
+			var toLong = Number(2.3794444);
+		}else if($('#to').val() == 'kolkata'){
+			var toLat = Number(22.654699325561523);
+			var toLong = Number(88.44670104980469);
+		}
+		//Get Data from form
+			var depT = $('#depTime').val();
+			var depTemp = depT.split(":");
+			var depH = Number(depTemp[0]);
+			var depM = Number(depTemp[1]);
+			var arrT = $('#arrTime').val();
+			var arrTemp = arrT.split(":");
+			var arrH = Number(arrTemp[0]);
+			var arrM = Number(arrTemp[1]);
+			var dateOfFlight = new Date($('#flightDate').val());
+			var departureTimeM = new Date($('#flightDate').val());
+			departureTimeM.setHours(depH);
+			departureTimeM.setMinutes(depM);
+			var arrivelTimeM = new Date($('#flightDate').val());
+			arrivelTimeM.setHours(arrH);
+			arrivelTimeM.setMinutes(arrM);
+			$('#result').html('');
+			// var fromLat = Number($('#fromLat').val());
+			// var fromLong = Number($('#fromLong').val());
+			// var toLat = Number($('#toLat').val());
+			// var toLong = Number($('#toLong').val());
+
+			// var fromLat = Number(22.654699325561523);
+			// var fromLong = Number(88.44670104980469);
+			// var toLat = Number(28.566499710083008);
+			// var toLong = Number(77.10310363769531);
+
+
+			//total flight time
+			var filghtTimeM = getFlightTime(dateToMinuts(departureTimeM), dateToMinuts(arrivelTimeM));
+			if(departureTimeM > arrivelTimeM && departureTimeM.getHours() > 20 && arrivelTimeM.getHours() < 10){
+				departureTimeM.setDate(departureTimeM.getDate()-1);
+			}else if(departureTimeM > arrivelTimeM && departureTimeM.getHours() > 12 && arrivelTimeM.getHours() < 12){
+				arrivelTimeM.setDate(arrivelTimeM.getDate()+1);
+			}
+
+			//Distance of departure and destination
+			var distance = distance(fromLat, fromLong, toLat, toLong, 'N'); // in nm
+
+			//SunRise and SunSet of departure and destination
+			var sunRiseDepartureTimeM = (solar_event(dateOfFlight, fromLat, fromLong, true, 90.833333));//23:30
+			var sunSetDepartureTimeM = (solar_event(dateOfFlight, fromLat, fromLong, false, 90.833333));//12:30
+			var sunRiseDestinationTimeM = (solar_event(dateOfFlight, toLat, toLong, true, 90.833333));//00:36
+			var sunSetDestinationTimeM = (solar_event(dateOfFlight, toLat, toLong, false, 90.833333));//13:11
+			if(sunRiseDepartureTimeM.getHours() > 20){
+				sunRiseDepartureTimeM.setDate(sunRiseDepartureTimeM.getDate()-1);
+			}
+			if(sunRiseDestinationTimeM.getHours() > 20){
+				sunRiseDestinationTimeM.setDate(sunRiseDestinationTimeM.getDate()-1);
+			}
+			if(sunSetDepartureTimeM.getHours() < 5){
+				sunSetDepartureTimeM.setDate(sunSetDepartureTimeM.getDate()+1);
+			}
+			if(sunSetDestinationTimeM.getHours() < 5){
+				sunSetDestinationTimeM.setDate(sunSetDestinationTimeM.getDate()+1);
+			}
+
+			// for pilots rules add 30 mints in sun sunsets and subtract 30 mints in sunrises
+			sunRiseDepartureTimeM.setMinutes(sunRiseDepartureTimeM.getMinutes()-30);
+			sunSetDepartureTimeM.setMinutes(sunSetDepartureTimeM.getMinutes()+30);
+			sunRiseDestinationTimeM.setMinutes(sunRiseDestinationTimeM.getMinutes()-30);
+			sunSetDestinationTimeM.setMinutes(sunSetDestinationTimeM.getMinutes()+30);
+			
+			
+			//Speed of AirCraft
+			var airCraftSpeed = distance / filghtTimeM;
+
+
+console.log("departureTimeM "+departureTimeM);
+console.log("arrivelTimeM "+arrivelTimeM);
+console.log("sunRiseDepartureTimeM "+sunRiseDepartureTimeM);
+console.log("sunRiseDestinationTimeM "+sunRiseDestinationTimeM);
+console.log("sunSetDepartureTimeM "+sunSetDepartureTimeM);
+console.log("sunSetDestinationTimeM "+sunSetDestinationTimeM);
+
+
+			if((sunRiseDepartureTimeM < sunRiseDestinationTimeM) && (sunSetDepartureTimeM < sunSetDestinationTimeM)){
+				console.log('west');
+				//difference in sunrises
+				var diffSunRiseTime = (dateToMinuts(sunRiseDestinationTimeM) - dateToMinuts(sunRiseDepartureTimeM));
+				if(diffSunRiseTime < 0){ diffSunRiseTime = diffSunRiseTime + 1440; }
+				if(diffSunRiseTime > 1440){ diffSunRiseTime = diffSunRiseTime - 1440; }
+
+				var diffSunSetTime = (dateToMinuts(sunSetDestinationTimeM) - dateToMinuts(sunSetDepartureTimeM));
+				if(diffSunSetTime < 0){ diffSunSetTime = diffSunSetTime + 1440; }
+				if(diffSunSetTime > 1440){ diffSunSetTime = diffSunSetTime - 1440; }
+
+				if((departureTimeM < sunRiseDepartureTimeM) && (arrivelTimeM > sunRiseDestinationTimeM)){
+					
+					//speed difference betwwen sun and aircraft
+					var sunSpeed = distance / diffSunRiseTime;
+					var SpeedDiff = sunSpeed - airCraftSpeed;
+
+					// calculate time diffrence between Departure time and sunrise time
+					var flyingTimeBeforeSR = dateToMinuts(sunRiseDepartureTimeM) - dateToMinuts(departureTimeM);
+					
+					//AirCraft Travel in flyingTimeBeforeSRM Time
+				    // var travelBeforeSR = (distance * flyingTimeBeforeSR) / filghtTimeM;
+				    var travelBeforeSR = airCraftSpeed * flyingTimeBeforeSR;
+
+				    //Time taken by sun to catch up the flight in minuts
+				    var catchupTime = travelBeforeSR / SpeedDiff;
+
+				    //So totaltime travel in night
+				    var nightTime = catchupTime + flyingTimeBeforeSR;
+				    if(nightTime <= 0){
+				    	nightTime = 0;
+				    }else if(nightTime > filghtTimeM){
+				    	nightTime = filghtTimeM;
+				    }
+
+				    // So DayTime = TotalTime - NightTime
+				    var dayTime = filghtTimeM - nightTime;
+
+					var dayTimeH = timeConvert(dayTime);
+					var filghtTimeH = timeConvert(filghtTimeM);
+					var nightTimeH = timeConvert(nightTime);
+
+					var result = "N-D : filghtTimeM:  "+filghtTimeH +"------nightTime:  "+nightTimeH+"----DayTime: "+dayTimeH;
+					$('#result').html(result);
+
+				}else	if((departureTimeM > sunRiseDepartureTimeM) && (arrivelTimeM < sunSetDestinationTimeM)){
+					
+					var dayTime = filghtTimeM;
+					var nightTime = 0;
+
+					var dayTimeH = timeConvert(dayTime);
+					var filghtTimeH = timeConvert(filghtTimeM);
+					var nightTimeH = timeConvert(nightTime);
+
+					var result = "D-D : filghtTimeM:  "+filghtTimeH +"------nightTime:  "+nightTimeH+"----DayTime: "+dayTimeH;
+					$('#result').html(result);
+
+				}else 	if((departureTimeM > sunSetDepartureTimeM) && (arrivelTimeM > sunSetDestinationTimeM)){
+					
+					var nightTime = filghtTimeM;
+					var dayTime = 0;
+
+					var dayTimeH = timeConvert(dayTime);
+					var filghtTimeH = timeConvert(filghtTimeM);
+					var nightTimeH = timeConvert(nightTime);
+
+					var result = "N-N : filghtTimeM:  "+filghtTimeH +"------nightTime:  "+nightTimeH+"----DayTime: "+dayTimeH;
+					$('#result').html(result);
+
+				}else	if((departureTimeM < sunSetDepartureTimeM) && (arrivelTimeM > sunSetDestinationTimeM)){
+					// total day time
+					var dayTime = dateToMinuts(sunSetDepartureTimeM) - dateToMinuts(departureTimeM);
+
+					// calculate Sun speed
+				    var sunSpeedM = distance / diffSunSetTime; // in nm
+
+				    // crossing speed
+				    var crossingSpeed = sunSpeedM - airCraftSpeed;
+
+				    // travel by AirCraft in day time of flight
+				    var travelAC = airCraftSpeed * dayTime;
+
+				    var distanceLeft = distance - travelAC;
+
+					if(distanceLeft <= 50){
+						var totalDayTime = filghtTimeM;
+					}else{
+						var time_by_sun_to_catch_aircraft = travelAC / crossingSpeed;
+						var totalDayTime = dayTime + time_by_sun_to_catch_aircraft;
+					}
+				    var nightTime = filghtTimeM - totalDayTime;
+					
+				    var dayTimeH = timeConvert(totalDayTime);
+					var filghtTimeH = timeConvert(filghtTimeM);
+					var nightTimeH = timeConvert(nightTime);
+
+					var result = "D-N : filghtTimeM:  "+filghtTimeH +"------nightTime:  "+nightTimeH+"----DayTime: "+dayTimeH;
+					$('#result').html(result);
+				}
+			}else{
+				console.log('east');
+				//difference in sunrises
+				var diffSunRiseTime = (dateToMinuts(sunRiseDepartureTimeM) - dateToMinuts(sunRiseDestinationTimeM));
+				if(diffSunRiseTime < 0){ diffSunRiseTime = diffSunRiseTime + 1440; }
+				if(diffSunRiseTime > 1440){ diffSunRiseTime = diffSunRiseTime - 1440; }
+
+				var diffSunSetTime = (dateToMinuts(sunSetDepartureTimeM) - dateToMinuts(sunSetDestinationTimeM));
+				if(diffSunSetTime < 0){ diffSunSetTime = diffSunSetTime + 1440; }
+				if(diffSunSetTime > 1440){ diffSunSetTime = diffSunSetTime - 1440; }
+
+				if((departureTimeM < sunRiseDepartureTimeM) && (arrivelTimeM > sunRiseDestinationTimeM)){
+					
+
+					//speed difference betwwen sun and aircraft
+					var sunSpeed = distance / diffSunRiseTime;
+					var crossingSpeed = sunSpeed + airCraftSpeed;
+
+					// calculate time diffrence between Departure time and sunrise time
+					var sunRiseAndDepTime = dateToMinuts(sunRiseDepartureTimeM) - dateToMinuts(departureTimeM);
+					if(sunRiseAndDepTime < 0){
+						sunRiseAndDepTime = 1440 + sunRiseAndDepTime;
+					}
+					if(sunRiseAndDepTime > 1440){
+						sunRiseAndDepTime = 1440 - sunRiseAndDepTime;
+					}
+
+					//distance bt sun at departure
+				    var sunAndDepTravel = sunSpeed * sunRiseAndDepTime;
+					
+
+				    //aircraft will meet sun at time
+				    var meetingTime = sunAndDepTravel / crossingSpeed;
+
+				    //So totaltime travel in night
+				    var nightTime = meetingTime;
+				    if(nightTime <= 0){
+				    	nightTime = 0;
+				    }else if(nightTime > filghtTimeM){
+				    	nightTime = filghtTimeM;
+				    }
+
+				    // So DayTime = TotalTime - NightTime
+				    var dayTime = filghtTimeM - nightTime;
+
+					var dayTimeH = timeConvert(dayTime);
+					var filghtTimeH = timeConvert(filghtTimeM);
+					var nightTimeH = timeConvert(nightTime);
+
+					var result = "N-D : filghtTimeM:  "+filghtTimeH +"------nightTime:  "+nightTimeH+"----DayTime: "+dayTimeH;
+					$('#result').html(result);
+
+				}else	if((departureTimeM >= sunRiseDepartureTimeM) && (arrivelTimeM <= sunSetDestinationTimeM)){
+					
+					var dayTime = filghtTimeM;
+					var nightTime = 0;
+
+					var dayTimeH = timeConvert(dayTime);
+					var filghtTimeH = timeConvert(filghtTimeM);
+					var nightTimeH = timeConvert(nightTime);
+
+					var result = "D-D : filghtTimeM:  "+filghtTimeH +"------nightTime:  "+nightTimeH+"----DayTime: "+dayTimeH;
+					$('#result').html(result);
+
+				}else 	if((departureTimeM >= sunSetDepartureTimeM) && (arrivelTimeM >= sunSetDestinationTimeM)){
+					
+					var nightTime = filghtTimeM;
+					var dayTime = 0;
+
+					var dayTimeH = timeConvert(dayTime);
+					var filghtTimeH = timeConvert(filghtTimeM);
+					var nightTimeH = timeConvert(nightTime);
+
+					var result = "N-N : filghtTimeM:  "+filghtTimeH +"------nightTime:  "+nightTimeH+"----DayTime: "+dayTimeH;
+					$('#result').html(result);
+
+				}else	if((departureTimeM < sunSetDepartureTimeM) && (arrivelTimeM > sunSetDestinationTimeM)){
+					
+
+					// total day time
+					var dayTime = dateToMinuts(sunSetDepartureTimeM) - dateToMinuts(departureTimeM);
+
+					// calculate Sun speed
+				    var sunSpeedM = distance / diffSunSetTime; // in nm
+
+					var crossingSpeed = sunSpeedM + airCraftSpeed;
+
+				    // travel by sun in day time of flight
+				    // var travelSun = sunSpeedM * dayTime;
+
+				    // travel by AirCraft in day time of flight
+				    var travelAC = airCraftSpeed * dayTime;
+
+				    // Aircraft will travel this distance in this time=
+				    var acDayTime = travelAC / crossingSpeed;
+
+				    // var sunDayTime = sunDayTravel / airCraftSpeed;
+					
+
+				    totalDayTime = dayTime - acDayTime;
+
+				    if(totalDayTime > filghtTimeM){
+				    	totalDayTime = totalDayTime - filghtTimeM;
+				    }else if(totalDayTime < 0){
+				    	totalDayTime = filghtTimeM;
+				    }
+				    var nightTime = filghtTimeM - totalDayTime;
+					
+				    var dayTimeH = timeConvert(totalDayTime);
+					var filghtTimeH = timeConvert(filghtTimeM);
+					var nightTimeH = timeConvert(nightTime);
+
+					var result = "D-N : filghtTimeM:  "+filghtTimeH +"------nightTime:  "+nightTimeH+"----DayTime: "+dayTimeH;
+					$('#result').html(result);
+
+				}
+			}
+
+			// functions
+
+			function getFlightTime(departureTimeM, arrivelTimeM) {
+				if(arrivelTimeM > departureTimeM){
+					filghtTimeM = arrivelTimeM - departureTimeM;
+				}else if(departureTimeM > 720){
+					var ab = (1440 - departureTimeM);
+					filghtTimeM = arrivelTimeM + ab;
+				}
+				return filghtTimeM;
+			}
+
+			function dateToMinuts(timeH) {
+				var timeM = (timeH.getHours() * 60) + (timeH.getMinutes()); //M = in Minuts
+				return timeM;
+			}
+
+			function hourToMinuts(timeH) {
+				var timeTemp = timeH.split(":");
+				var timeM = (Number(timeTemp[0]) * 60) + Number(timeTemp[1]); //M = in Minuts
+				return timeM;
+			}
+
+			function timeConvert(n) {
+				var num = n;
+				var hours = (num / 60);
+				var rhours = Math.floor(hours);
+				var minutes = (hours - rhours) * 60;
+				var rminutes = Math.round(minutes);
+				if(rminutes<10){ rminutes = "0"+rminutes; }
+				return rhours + ":" + rminutes;
+			}
+
+			function solar_event(date, latitude, longitude, rising, zenith) {
+			    var year = date.getFullYear(),
+			        month = date.getMonth() + 1,
+			        day = date.getDate();
+			    var floor = Math.floor,
+			        degtorad = function(deg) {
+			            return Math.PI * deg / 180;
+			        },
+			        radtodeg = function(rad) {
+			            return 180 * rad / Math.PI;
+			        },
+			        sin = function(deg) {
+			            return Math.sin(degtorad(deg));
+			        },
+			        cos = function(deg) {
+			            return Math.cos(degtorad(deg));
+			        },
+			        tan = function(deg) {
+			            return Math.tan(degtorad(deg));
+			        },
+			        asin = function(x) {
+			            return radtodeg(Math.asin(x));
+			        },
+			        acos = function(x) {
+			            return radtodeg(Math.acos(x));
+			        },
+			        atan = function(x) {
+			            return radtodeg(Math.atan(x));
+			        },
+			        modpos = function(x, m) {
+			            return ((x % m) + m) % m;
+			        };
+
+			    // 1. first calculate the day of the year
+			    var N1 = floor(275 * month / 9),
+			        N2 = floor((month + 9) / 12),
+			        N3 = (1 + floor((year - 4 * floor(year / 4) + 2) / 3)),
+			        N = N1 - (N2 * N3) + day - 30;
+
+			    // 2. convert the longitude to hour value and calculate an approximate time
+			    var lngHour = longitude / 15,
+			        t = N + (((rising ? 6 : 18) - lngHour) / 24);
+
+			    // 3. calculate the Sun's mean anomaly
+			    var M = (0.9856 * t) - 3.289;
+
+			    // 4. calculate the Sun's true longitude
+			    var L = M + (1.916 * sin(M)) + (0.020 * sin(2 * M)) + 282.634;
+			    L = modpos(L, 360); // NOTE: L potentially needs to be adjusted into the range [0,360) by adding/subtracting 360
+			    // 5a. calculate the Sun's right ascension
+			    var RA = atan(0.91764 * tan(L));
+			    RA = modpos(RA, 360); // NOTE: RA potentially needs to be adjusted into the range [0,360) by adding/subtracting 360
+			    // 5b. right ascension value needs to be in the same quadrant as L
+			    var Lquadrant = (floor(L / 90)) * 90,
+			        RAquadrant = (floor(RA / 90)) * 90;
+			    RA = RA + (Lquadrant - RAquadrant);
+
+			    // 5c. right ascension value needs to be converted into hours
+			    RA = RA / 15;
+
+			    // 6. calculate the Sun's declination
+			    var sinDec = 0.39782 * sin(L),
+			        cosDec = cos(asin(sinDec));
+
+			    // 7a. calculate the Sun's local hour angle
+			    var cosH = (cos(zenith) - (sinDec * sin(latitude))) / (cosDec * cos(latitude));
+			    var H;
+
+			    if (cosH > 1) {
+			        return undefined; // the sun never rises on this location (on the specified date)
+			    } else if (cosH < -1) {
+			        return undefined; // the sun never sets on this location (on the specified date)
+			    }
+
+			    // 7b. finish calculating H and convert into hours
+			    if (rising) {
+			        H = 360 - acos(cosH);
+			    } else {
+			        H = acos(cosH);
+			    }
+			    H = H / 15;
+
+			    // 8. calculate local mean time of rising/setting
+			    var T = H + RA - (0.06571 * t) - 6.622;
+
+			    // 9. adjust back to UTC
+			    var UT = T - lngHour;
+			    UT = modpos(UT, 24); // NOTE: UT potentially needs to be adjusted into the range [0,24) by adding/subtracting 24
+			    // console.log(UT);
+
+			    var hours = floor(UT),
+			        minutes = Math.round(60 * (UT - hours));
+			    var result = new Date(year, month - 1, day, hours, minutes);
+			    return result;
+			}
+
+			function distance(lat1, lon1, lat2, lon2, unit) {
+				if ((lat1 == lat2) && (lon1 == lon2)) {
+					return 0;
+				}
+				else {
+					var radlat1 = Math.PI * lat1/180;
+					var radlat2 = Math.PI * lat2/180;
+					var theta = lon1-lon2;
+					var radtheta = Math.PI * theta/180;
+					var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+					if (dist > 1) {
+						dist = 1;
+					}
+					dist = Math.acos(dist);
+					dist = dist * 180/Math.PI;
+					dist = dist * 60 * 1.1515;
+					if (unit=="K") { dist = dist * 1.609344 }
+					if (unit=="N") { dist = dist * 0.8684 }
+					return dist;
+				}
+			}
+		
+	});
+});
+</script>
