@@ -50,16 +50,17 @@ const DocScreenStyle = StyleSheet.create({
         width:'100%',
         borderBottomWidth: 1,
         borderBottomColor: '#DDDDDD',
-        padding: 8,  
+        padding:12,  
       },
       lastTab:{
         width:'100%',
-        padding: 8,
+        padding: 12,
       },
       tabText:{
-          fontSize: 13,
+          fontSize: 14,
           fontFamily: 'WorkSans-Regular',
           color:'#636363',
+          fontWeight: '600'
       },
       DarktabText:{
         fontSize: 13,

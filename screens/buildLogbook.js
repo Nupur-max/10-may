@@ -1025,7 +1025,7 @@ return (
         <RadioButton.Group value={edit?editCategory:category} 
          onValueChange={edit?(editCategory)=>EditSetCategory(editCategory):(category)=>setCategory(category)}
          >
-         <RadioButton
+         <RadioButton.Android
             value={"Air Plane"}
             color = '#256173'
             uncheckedColor = '#256173'
@@ -1037,7 +1037,7 @@ return (
         <View style={{flexDirection:'row', paddingLeft:78,}}>
         <RadioButton.Group value={edit?editCategory:category} 
           onValueChange={edit?(editCategory)=>EditSetCategory(editCategory):category=>setCategory(category)}>
-          <RadioButton
+          <RadioButton.Android
             value="microlight"
             color = '#256173'
             uncheckedColor = '#256173'
@@ -1051,7 +1051,7 @@ return (
         <View style={{flexDirection:'row',}}>
         <RadioButton.Group value={edit?editCategory:category} 
           onValueChange={edit?(editCategory)=>EditSetCategory(editCategory):category=>setCategory(category)}> 
-         <RadioButton
+         <RadioButton.Android
             value="Helicopter"
             color = '#256173'
             uncheckedColor = '#256173'
@@ -1063,7 +1063,7 @@ return (
         <View style={{flexDirection:'row', paddingLeft:70}}>
         <RadioButton.Group value={edit?editCategory:category} 
           onValueChange={edit?(editCategory)=>EditSetCategory(editCategory):category=>setCategory(category)}>
-        <RadioButton
+        <RadioButton.Android
             value="Glider"
             color = '#256173'
             uncheckedColor = '#256173'
@@ -1082,7 +1082,7 @@ return (
         <View style={{flexDirection:'row'}}> 
         <RadioButton.Group value={edit?editEngine:engine} 
          onValueChange={edit?editEngine=>editSetEngine(editEngine):engine=>setEngine(engine)}>
-         <RadioButton
+         <RadioButton.Android
             value="Jet"
             color = '#256173'
             uncheckedColor = '#256173'
@@ -1093,7 +1093,7 @@ return (
         <View style={{flexDirection:'row', paddingLeft:40,}}>
         <RadioButton.Group value={edit?editEngine:engine} 
           onValueChange={edit?editEngine=>editSetEngine(editEngine):engine=>setEngine(engine)}>
-          <RadioButton
+          <RadioButton.Android
             value="Turbo Prop"
             color = '#256173'
             uncheckedColor = '#256173'
@@ -1104,7 +1104,7 @@ return (
         <View style={{flexDirection:'row', paddingLeft:25,}}>
         <RadioButton.Group value={edit?editEngine:engine} 
           onValueChange={edit?editEngine=>editSetEngine(editEngine):engine=>setEngine(engine)}>
-        <RadioButton
+        <RadioButton.Android
             value="Turbo Shaft"
             color = '#256173'
             uncheckedColor = '#256173'
@@ -1118,7 +1118,7 @@ return (
         <View style={{flexDirection:'row',}}> 
         <RadioButton.Group value={edit?editEngine:engine} 
           onValueChange={edit?editEngine=>editSetEngine(editEngine):engine=>setEngine(engine)}>
-         <RadioButton
+         <RadioButton.Android
             value="Piston"
             color = '#256173'
             uncheckedColor = '#256173'
@@ -1130,7 +1130,7 @@ return (
         <View style={{flexDirection:'row', paddingLeft:23}}>
         <RadioButton.Group value={edit?editEngine:engine} 
           onValueChange={edit?editEngine=>editSetEngine(editEngine):engine=>setEngine(engine)}>
-        <RadioButton
+        <RadioButton.Android
             value="Not Powered"
             color = '#256173'
             uncheckedColor = '#256173'
@@ -1163,7 +1163,7 @@ return (
         <View style={{flexDirection:'row'}}> 
         <RadioButton.Group value={edit?editClass:Class} 
           onValueChange={edit?editClass=>editSetClass(editClass):Class=>setClass(Class)}>
-         <RadioButton
+         <RadioButton.Android
             value="ME Land"
             color = '#256173'
             uncheckedColor = '#256173'
@@ -1175,7 +1175,7 @@ return (
         <View style={{flexDirection:'row', paddingLeft: 20,}}>
         <RadioButton.Group value={edit?editClass:Class} 
           onValueChange={edit?editClass=>editSetClass(editClass):Class=>setClass(Class)}>
-        <RadioButton
+        <RadioButton.Android
             value="ME Sea"
             color = '#256173'
             uncheckedColor = '#256173'
@@ -1189,7 +1189,7 @@ return (
         <View style={{flexDirection:'row',}}>
         <RadioButton.Group value={edit?editClass:Class} 
           onValueChange={edit?editClass=>editSetClass(editClass):Class=>setClass(Class)}> 
-         <RadioButton
+         <RadioButton.Android
             value="SE Land"
             color = '#256173'
             uncheckedColor = '#256173'
@@ -1201,7 +1201,7 @@ return (
       <View style={{flexDirection:'row', paddingLeft:25}}>
       <RadioButton.Group value={edit?editClass:Class} 
           onValueChange={edit?editClass=>editSetClass(editClass):Class=>setClass(Class)}>
-        <RadioButton
+        <RadioButton.Android
             value="SE Sea"
             color = '#256173'
             uncheckedColor = '#256173'
@@ -1239,7 +1239,7 @@ return (
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Dual</Text>
            <MaskedTextInput
                     mask= '99:99'
-                    value={edit?editDay_dual:day_dual}
+                    value={edit?editDay_dual=='null'?'00:00':editDay_dual:day_dual}
                     onChangeText={edit?inputText => editSetDay_dual(inputText):inputText => setDay_dual(inputText)}
                     keyboardType="numeric"
                     placeholder="hh:mm"
@@ -1317,7 +1317,7 @@ return (
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Dual</Text>
            <MaskedTextInput
                     mask= '99:99'
-                    value={edit? editNight_dual : night_dual}
+                    value={edit?editNight_dual== 'null'?'00:00':editNight_dual:night_dual}
                     onChangeText={edit?(inputText) => editSetNight_dual(inputText):night_dual => setNight_dual(night_dual)}
                     keyboardType="numeric"
                     placeholder="hh:mm"
@@ -1398,7 +1398,7 @@ return (
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Day</Text>
            <MaskedTextInput
                     mask= '99:99'
-                    value={edit?editStl_day:stl_day}
+                    value={edit?editStl_day=== 'null'?'00:00':editStl_day:stl_day}
                     onChangeText={edit?(InputText) => editSetStl_day(InputText):(InputText) => setStl_Day(InputText)}
                     keyboardType="numeric"
                     placeholder="hh:mm"
@@ -1411,7 +1411,7 @@ return (
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Night</Text>
            <MaskedTextInput
                     mask= '99:99'
-                    value={edit?editStl_night:stl_night}
+                    value={edit?editStl_night==='null'?'00:00':editStl_night:stl_night}
                     onChangeText={edit?InputText => editSetStl_night(InputText):InputText => setStl_Night(InputText)}
                     keyboardType="numeric"
                     placeholder="hh:mm"
@@ -1424,7 +1424,7 @@ return (
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Total</Text>
            <MaskedTextInput
                     mask= '99:99'
-                    value={edit?editStl_total:TotalStlTime}
+                    value={edit?editStl_total==='null'?'00:00':editStl_total:TotalStlTime}
                     onChangeText={edit?InputText => editSetStl_total(InputText):InputText => setStl_Total(InputText)}
                     keyboardType="numeric"
                     placeholder="hh:mm"

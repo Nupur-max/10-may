@@ -94,8 +94,42 @@ const SetPeople = ({navigation}) => {
 
     const { dark, theme, toggle } = React.useContext(ThemeContext);
 
-    const getReduxData = useSelector(state => state.display.AirlineDispatched);
-    console.log ('peopleDispatcher', getReduxData.SelectedAirline)
+    const [userAirlineType,setUserAirlineType] = React.useState('')
+
+
+    // const getReduxData = useSelector(state => state.display.AirlineDispatched);
+    // console.log ('peopleDispatcher', getReduxData.SelectedAirline)
+
+    React.useEffect(() => {
+      GetUserDetails()
+      }, []);
+    
+      const GetUserDetails = async () => {
+        //console.log('hello')
+        let user = await AsyncStorage.getItem('userdetails');
+        user = JSON.parse(user);
+        let temData = [];
+        prePopulateddb.transaction(tx => {
+          tx.executeSql('SELECT airline_type FROM userProfileData Where user_id = "' + user.id + '"', [], (tx, result) => {
+            //setOffset(offset + 10);
+            if (result.rows.length > 0) {
+              //alert('data available '); 
+              console.log('result', result)
+            }
+            else {
+              console.log('error')
+            }
+            for (let i = 0; i <= result.rows.length; i++) {
+              //console.log('name: ', result.rows.item(i).airline_name, 'loginlink: ', result.rows.item(i).loginUrl)
+              temData.push({
+                airline_type: result.rows.item(i).airline_type,
+              });
+              setUserAirlineType(result.rows.item(i).airline_type)
+             }
+            //console.log('rosterid', rosterId)
+            });
+        });
+      }
 
     //sqlite 
   
@@ -120,7 +154,7 @@ const SetPeople = ({navigation}) => {
       user = JSON.parse(user);
       db.transaction(tx => {
         tx.executeSql(
-          'INSERT INTO pilots (Airline,,Egca_reg_no,Name,pilotId,selectedAirline,comments) VALUES ("'+getReduxData.SelectedAirline+'","'+egcaId+'","'+name+'", "'+airlineCode+'", "'+getReduxData.SelectedAirline+'", "'+comments+'")',
+          'INSERT INTO pilots (Airline,Egca_reg_no,Name,pilotId,selectedAirline,comments) VALUES ("'+userAirlineType+'","'+egcaId+'","'+name+'", "'+airlineCode+'", "'+userAirlineType+'", "'+comments+'")',
         );
       });
       alert('Saved successfully');

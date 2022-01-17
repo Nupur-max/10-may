@@ -69,6 +69,8 @@ const LogBookListing = ({ navigation }) => {
 
   const [modalVisible, setModalVisible] = React.useState(false);
 
+  const [downloadmodalVisible, setDownloadModalVisible] = React.useState(false);
+
   const [checkTag, setCheckTag] = React.useState('');
 
   const [deletedRoaster, setDeletedRoaster] = React.useState(false)
@@ -945,6 +947,12 @@ const LogBookListing = ({ navigation }) => {
         //setCheckTag(myArray)
       }
     }
+    if (getReduxProgressData.ProgressValue === undefined) {
+      setDownloadModalVisible(true)
+    }
+    else {
+      setDownloadModalVisible(false)
+    }
   };
   React.useEffect(() => {
     if (getReduxData.data) {
@@ -984,7 +992,7 @@ const LogBookListing = ({ navigation }) => {
         activeTabStyle={{backgroundColor:'#256173'}}
       /> : null}
 
-      {getReduxData.inProgress === undefined ?
+      {getReduxData.inProgress === undefined?
         <View style={styles.centeredView}>
           <Modal
             animationType="slide"
@@ -1015,26 +1023,23 @@ const LogBookListing = ({ navigation }) => {
           //ListFooterComponent={loadmore === true ? <ActivityIndicator color={'#000'} /> : null}
         />
       }
-      {/* {getReduxData.inProgress === undefined ?<View style={styles.spinnerView}>
-            <ActivityIndicator size="large" color="#0000ff" />
-            <Text>Wait While Logs Are downloading!!!!</Text>
-            </View>:null} */}
-      {/* <TouchableOpacity
-              style={{
-                width: 60,  
-                height: 60,   
-                borderRadius: 30,            
-                backgroundColor: '#256173',                                    
-                position: 'absolute',                                          
-                bottom: getReduxData.inProgress !== undefined && getReduxData.inProgress !==false ? 160 : 150,                                                    
-                right: 20, 
-                alignItems:'center',
-                justifyContent:'center',
-              }}
-              onPress = {()=>PlusNavigation()}
-            >
-              <MaterialCommunityIcons  name="plus" color={'#fff'} size={40} style = {{}} />
-            </TouchableOpacity> */}
+      {getReduxProgressData.ProgressValue!== undefined? 
+      <View style={styles.centeredView}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={downloadmodalVisible}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Logs are Downloading!!</Text>
+                <ActivityIndicator color={'#fff'} />
+                {getReduxProgressData.ProgressValue !== undefined ? <Text style={{ color: '#fff' }}>{ProgressBar}</Text> : null}
+              </View>
+            </View>
+          </Modal>
+        </View>  
+      :null}
 
 
       <Draggable

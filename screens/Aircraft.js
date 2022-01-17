@@ -76,7 +76,7 @@ const searchQuery = (dataToSearch) => {
   setSearch(dataToSearch)
   console.log('Searching for ', dataToSearch);
   db.transaction(tx => {
-    tx.executeSql('SELECT * FROM Aircrafts WHERE AircraftType  LIKE "%'+dataToSearch+'%"', [], (tx, result1) => {
+    tx.executeSql('SELECT * FROM Aircrafts WHERE AircraftType  LIKE "%'+dataToSearch+'%" Limit 10', [], (tx, result1) => {
       if (result1.rows.length > 0) {
         //alert('data available ');
         console.log('Searched result raw: ', result1)
@@ -92,7 +92,7 @@ const searchQuery = (dataToSearch) => {
             crew : result1.rows.item(i).Crew,
           }
           SearchedData.push(SingleResult);
-          console.log('single', SingleResult)
+          //console.log('single', SingleResult)
           console.log(' Searched data', SearchedData);
           setFilteredData(SearchedData);
           dataDispatcher(AircraftData({data: SearchedData}))

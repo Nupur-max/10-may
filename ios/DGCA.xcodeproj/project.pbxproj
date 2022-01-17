@@ -8,24 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* DGCATests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* DGCATests.m */; };
-		072A4BC5848B40B5B72954CF /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 50DE2BCA9B914E39AAA985E7 /* Roboto_medium.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		44AEF2713F494C1CB1B08874 /* AbrilFatface-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AD50F583873445B38B731007 /* AbrilFatface-Regular.ttf */; };
-		484453E6C5684CCC8AA7C0EB /* WorkSans-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2808108923EC48A7BFCBD5C4 /* WorkSans-VariableFont_wght.ttf */; };
-		4935B5E0CAA54D90A83D79C9 /* WorkSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE5A7E575ECE4BAD91039FAE /* WorkSans-ExtraBold.ttf */; };
 		5E831541626F5FF14B6538CC /* libPods-DGCA-DGCATests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 865CA29594E3ECA64A0E4F20 /* libPods-DGCA-DGCATests.a */; };
-		7E418078F75F4C249E149864 /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6D05567F35584496903DEE17 /* Roboto.ttf */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		A555FEB0BE894F23A374D69B /* WorkSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 353B8B7CA352414389A9EB9C /* WorkSans-Regular.ttf */; };
-		AF0704BDB5B24F52B00D0B63 /* WorkSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 249A45EDDDD44EFFB9BA0570 /* WorkSans-Bold.ttf */; };
-		D443C8B6278438E10076BB8C /* www in Resources */ = {isa = PBXBuildFile; fileRef = D443C8B5278438DF0076BB8C /* www */; };
 		D46280D85F45A1258E9E7927 /* libPods-DGCA.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC61186D3C8E4C02D3B848A /* libPods-DGCA.a */; };
-		D4A318ED2761C432007BF95F /* autoflightlogdb.db in Resources */ = {isa = PBXBuildFile; fileRef = D4A318EC2761C432007BF95F /* autoflightlogdb.db */; };
-		D4ADFB23276316B700C88E25 /* react-native in Resources */ = {isa = PBXBuildFile; fileRef = D4ADFB22276316B700C88E25 /* react-native */; };
-		DAB557FD45BD49A5A0830837 /* WorkSans-Italic-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B98405AB3DA540CC86EA976D /* WorkSans-Italic-VariableFont_wght.ttf */; };
-		EA3D6796C98E468AB0D88A5D /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB45446BAC814504911C9622 /* rubicon-icon-font.ttf */; };
+		D4EA5770279586BE00107484 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		D4EA5774279588B700107484 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4EA5773279588B400107484 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +55,7 @@
 		D44ABB8327846AE3004E2833 /* DGCADebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = DGCADebug.entitlements; path = DGCA/DGCADebug.entitlements; sourceTree = "<group>"; };
 		D4A318EC2761C432007BF95F /* autoflightlogdb.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = autoflightlogdb.db; path = ../android/app/src/main/assets/www/autoflightlogdb.db; sourceTree = "<group>"; };
 		D4ADFB22276316B700C88E25 /* react-native */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "react-native"; path = ../..; sourceTree = "<group>"; };
+		D4EA5773279588B400107484 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = DGCA/Images.xcassets; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC61186D3C8E4C02D3B848A /* libPods-DGCA.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DGCA.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -170,6 +159,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				D4EA5773279588B400107484 /* Images.xcassets */,
 				D443C8B5278438DF0076BB8C /* www */,
 				D4ADFB22276316B700C88E25 /* react-native */,
 				13B07FAE1A68108700A75B9A /* DGCA */,
@@ -220,13 +210,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "DGCA" */;
 			buildPhases = (
-				67A7D08016A533D55A327F35 /* [CP] Check Pods Manifest.lock */,
+				6C5B3F99A382933F65C938B7 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
-				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				D610F59FA5C154B32C475354 /* [CP] Embed Pods Frameworks */,
+				D4EA57722795888300107484 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -278,27 +267,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4EA5770279586BE00107484 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		13B07F8E1A680F5B00A75B9A /* Resources */ = {
+		D4EA57722795888300107484 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				072A4BC5848B40B5B72954CF /* Roboto_medium.ttf in Resources */,
-				D4A318ED2761C432007BF95F /* autoflightlogdb.db in Resources */,
-				7E418078F75F4C249E149864 /* Roboto.ttf in Resources */,
-				EA3D6796C98E468AB0D88A5D /* rubicon-icon-font.ttf in Resources */,
-				D4ADFB23276316B700C88E25 /* react-native in Resources */,
-				DAB557FD45BD49A5A0830837 /* WorkSans-Italic-VariableFont_wght.ttf in Resources */,
-				D443C8B6278438E10076BB8C /* www in Resources */,
-				484453E6C5684CCC8AA7C0EB /* WorkSans-VariableFont_wght.ttf in Resources */,
-				AF0704BDB5B24F52B00D0B63 /* WorkSans-Bold.ttf in Resources */,
-				4935B5E0CAA54D90A83D79C9 /* WorkSans-ExtraBold.ttf in Resources */,
-				A555FEB0BE894F23A374D69B /* WorkSans-Regular.ttf in Resources */,
-				44AEF2713F494C1CB1B08874 /* AbrilFatface-Regular.ttf in Resources */,
+				D4EA5774279588B700107484 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,7 +296,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		67A7D08016A533D55A327F35 /* [CP] Check Pods Manifest.lock */ = {
+		6C5B3F99A382933F65C938B7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -361,23 +338,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D610F59FA5C154B32C475354 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-DGCA/Pods-DGCA-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-DGCA/Pods-DGCA-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DGCA/Pods-DGCA-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -490,7 +450,7 @@
 				CODE_SIGN_ENTITLEMENTS = DGCA/DGCADebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.2;
+				CURRENT_PROJECT_VERSION = 2.2;
 				DEVELOPMENT_TEAM = DPL24P9YXS;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = DGCA/Info.plist;
@@ -522,7 +482,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.2;
+				CURRENT_PROJECT_VERSION = 2.2;
 				DEVELOPMENT_TEAM = DPL24P9YXS;
 				INFOPLIST_FILE = DGCA/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

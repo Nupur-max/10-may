@@ -151,7 +151,7 @@ const searchQuery = (dataToSearch) => {
   setSearch(dataToSearch)
   console.log('Searching for ', dataToSearch);
   prePopulateddb.transaction(tx => {
-    tx.executeSql('SELECT id,Airline,Egca_reg_no,Name,pilotId FROM pilots WHERE Name  LIKE "%'+dataToSearch+'%" AND Airline = selectedAirline ', [], (tx, result1) => {
+    tx.executeSql('SELECT id,Airline,Egca_reg_no,Name,pilotId FROM pilots WHERE Name  LIKE "%'+dataToSearch+'%" AND Airline = selectedAirline Limit 10', [], (tx, result1) => {
       if (result1.rows.length > 0) {
         //alert('data available ');
         console.log('Searched result raw: ', result1)
@@ -164,7 +164,7 @@ const searchQuery = (dataToSearch) => {
             pilotId: result1.rows.item(i).pilotId,
           }
           SearchedData.push(SingleResult);
-          //console.log('single', SingleResult)
+          console.log('single', SingleResult)
           //console.log(' Searched data', SearchedData);
           //setFilteredData(SearchedData);
           dataDispatcher(PilotData({data: SearchedData}))
