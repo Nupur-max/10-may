@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component, useEffect } from 'react';
-import { View, Text, TouchableOpacity,ActivityIndicator, TextInput, Button, Modal, Dimensions,Pressable, StyleSheet, Alert, SafeAreaView, Platform, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TouchableOpacity,ActivityIndicator, TextInput, Button,KeyboardAvoidingView, Modal, Dimensions,Pressable, StyleSheet, Alert, SafeAreaView, Platform, TouchableWithoutFeedback } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DatePicker from 'react-native-datepicker';
 import { RadioButton } from 'react-native-paper';
@@ -2244,9 +2244,10 @@ React.useEffect(() => {
      }
 
     return (
-
+        <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
+        <ScrollView>
         <SafeAreaView style={modalVisible || FlightmodalVisible || TimemodalVisible || LandingmodalVisible || ApproachmodalVisible || FlightAlertmodalVisible || TimeAlertmodalVisible || AppAlertmodalVisible || lndgAlertmodalVisible || importModal || RostermodalVisible ? {...Logbook.container, ...{backgroundColor: 'rgba(0,0,0,0.4)'}} : [Logbook.container, {backgroundColor: theme.backgroundColor}]}>
-
+    
         <View style={styles.header}>
         <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{padding:6}} onPress={()=>navigation.navigate('LogBookListing')} />
         <Text style={styles.aircrafts}>LogBook</Text>
@@ -3842,9 +3843,12 @@ React.useEffect(() => {
 
                 </Modal>
             </View>
-
-
+            
+            
         </SafeAreaView>
+        </ScrollView>
+        </KeyboardAvoidingView>
+       
     );
 };
 

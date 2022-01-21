@@ -46,7 +46,9 @@ const SsStyle = StyleSheet.create({
         fontSize: 15,
         color: Colors.primary,
         //fontWeight: 'bold',
-        fontFamily:'WorkSans-Regular'
+        fontFamily:'WorkSans-Regular',
+        fontWeight: Platform.OS == 'ios' ? '600' : '700',
+        paddingLeft: 8
     },
     centeredView: {
         flex: 1,

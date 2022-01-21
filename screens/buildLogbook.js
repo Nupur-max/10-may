@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, Dimensions, Platform, Alert, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity,KeyboardAvoidingView, TextInput, ScrollView, Dimensions, Platform, Alert, SafeAreaView } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RadioButton } from 'react-native-paper';
 import { ThemeContext } from '../theme-context';
@@ -990,6 +990,7 @@ const { dark, theme, toggle } = React.useContext(ThemeContext);
   // stl hours calculation
 console.log('engineName', engineName);
 return (
+  <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
     <ScrollView ref={ref}>
     <SafeAreaView style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
 
@@ -1635,6 +1636,7 @@ return (
 
     </SafeAreaView>
     </ScrollView>
+    </KeyboardAvoidingView>
     );
 };
 
@@ -1654,12 +1656,13 @@ const styles = StyleSheet.create({
     },
     HeadlineText:{
         color:'#000',
-        fontSize: 14,
+        fontSize: Platform.OS == 'ios' ? 14 : 16,
         fontFamily: 'WorkSans-Regular',
+        fontWeight: '700'
     },
     fieldWithoutBottom: {
         paddingHorizontal:15, 
-        //paddingVertical:10, 
+        paddingVertical:10, 
         width:'100%',
         flexDirection:'row'
     },
@@ -1675,9 +1678,9 @@ const styles = StyleSheet.create({
         color: Colors.accent
     },
     fieldText: {
-        fontSize: 14,
+        fontSize: Platform.OS == 'ios' ? 13 : 15,
         //marginTop: 5,
-        fontWeight: '600',
+        fontWeight: Platform.OS == 'ios' ? '600' : '700',
         fontFamily: 'WorkSans-Regular',
         lineHeight: 25,
         color: Colors.primary,
@@ -1685,7 +1688,7 @@ const styles = StyleSheet.create({
     fieldTextRadio: {
             fontSize: 14,
             //marginTop: 5,
-            fontWeight: '600',
+            fontWeight: Platform.OS == 'ios' ? '600':'700',
             fontFamily: 'WorkSans-Regular',
             lineHeight: 30,
             color: Colors.primary,

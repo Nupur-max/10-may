@@ -59,7 +59,7 @@ const Docs = ({ navigation }) => {
     setSearch(dataToSearch)
     if (selectedIndex === 0) {
       prePopulateddb.transaction(tx => {
-        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE tag = "manual" AND  crewCustom1 LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC limit 10', [], (tx, result) => {
+        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE tag = "manual" AND  crewCustom1 LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC , inTime DESC limit 10', [], (tx, result) => {
           if (result.rows.length > 0) {
             for (let i = 0; i <= result.rows.length; i++) {
               SingleResult = {
@@ -88,7 +88,7 @@ const Docs = ({ navigation }) => {
 
     }
     else if (selectedIndex === 1) {
-      let queryString = 'SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE tag = "manual" AND from_city  LIKE "%' + dataToSearch + '%" OR to_city LIKE "%' + dataToSearch + '%" OR from_nameICAO LIKE "%' + dataToSearch + '%" OR to_nameICAO LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC limit 10';
+      let queryString = 'SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE tag = "manual" AND from_city  LIKE "%' + dataToSearch + '%" OR to_city LIKE "%' + dataToSearch + '%" OR from_nameICAO LIKE "%' + dataToSearch + '%" OR to_nameICAO LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC , inTime DESC limit 10';
       prePopulateddb.transaction(tx => {
         tx.executeSql(queryString, [], (tx, result) => {
           if (result.rows.length > 0) {
@@ -119,7 +119,7 @@ const Docs = ({ navigation }) => {
     }
     else if (selectedIndex === 2) {
       prePopulateddb.transaction(tx => {
-        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE tag = "manual" AND aircraftReg  LIKE "%' + dataToSearch + '%" OR aircraftType LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC limit 10', [], (tx, result) => {
+        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE tag = "manual" AND aircraftReg  LIKE "%' + dataToSearch + '%" OR aircraftType LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC , inTime DESC limit 10', [], (tx, result) => {
           if (result.rows.length > 0) {
             for (let i = 0; i <= result.rows.length; i++) {
               SingleResult = {
@@ -148,7 +148,7 @@ const Docs = ({ navigation }) => {
     }
     else if (selectedIndex === 3) {
       prePopulateddb.transaction(tx => {
-        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE tag = "manual" AND date  LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC limit 10', [], (tx, result) => {
+        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE tag = "manual" AND date  LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC , inTime DESC limit 10', [], (tx, result) => {
           if (result.rows.length > 0) {
             for (let i = 0; i <= result.rows.length; i++) {
               SingleResult = {
@@ -177,7 +177,7 @@ const Docs = ({ navigation }) => {
     }
     else if (selectedIndex === 4) {
       prePopulateddb.transaction(tx => {
-        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE tag = "manual" AND flight  LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC limit 10', [], (tx, result) => {
+        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE tag = "manual" AND flight  LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC , inTime DESC limit 10', [], (tx, result) => {
           if (result.rows.length > 0) {
             for (let i = 0; i <= result.rows.length; i++) {
               SingleResult = {
@@ -222,7 +222,7 @@ const Docs = ({ navigation }) => {
     //let temData = []
     //dataDispatcher(DocListData({data: []}))
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND tag= "manual" OR tag= "server" ORDER BY orderedDate DESC LIMIT 5 OFFSET "' + offset + '"', [], (tx, result) => {
+      tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND tag= "server" ORDER BY orderedDate DESC , inTime DESC LIMIT 5 OFFSET "' + offset + '"', [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           return false;
@@ -422,6 +422,7 @@ const Docs = ({ navigation }) => {
     console.log(data)
     data.map((d) => {
       //--------  nightTime flying hours --------//
+      if(d.night !== ""){
       var Night = d.night.split(":")
       var total_Nighttime = Number(Night[0] * 60) + Number(Night[1])
       Night_Hours += total_Nighttime
@@ -437,8 +438,10 @@ const Docs = ({ navigation }) => {
       if (isNaN(Final_Night_Time[1])) {
         Final_Night_Time = '00:00'
       }
+    }
 
       //--------  total_Time flying hours --------//
+      if(d.totalTime !== ""){
       var TotalTime = d.totalTime.split(":")
       var total_time = Number(TotalTime[0] * 60) + Number(TotalTime[1])
       total_Flying += total_time
@@ -451,8 +454,9 @@ const Docs = ({ navigation }) => {
         total_Min = '0' + total_Min;
       }
       Total_Time = total_Hours + ":" + total_Min;
-
+    }
       //--------  total_Pic Time flying hours --------//
+      if(d.totalTime !== ""){
       var Pic_Hours = d.totalTime.split(":")
       var pic_hrs = Number(Pic_Hours[0] * 60) + Number(Pic_Hours[1])
       total_PIC_Time += pic_hrs
@@ -468,8 +472,10 @@ const Docs = ({ navigation }) => {
       if (isNaN(Final_PIC_Time[1])) {
         Final_PIC_Time = '00:00'
       }
+    }
 
     //------- instrument flying hours --------//
+    if(d.totalTime !== ""){
     var sim_instrument = d.sim_instrument.split(":")
     var act_instrument = d.actual_Instrument.split(":")
     var total_sim_instrument = Number(sim_instrument[0] * 60) + Number(sim_instrument[1])
@@ -488,6 +494,7 @@ const Docs = ({ navigation }) => {
     if (isNaN(total_instrument1[1])) {
         total_instrument1 = '00:00'
     }
+  }
   })
     const htmldata = '<style type="text/css">td{border: 1px #ccc solid; font-size:12px; padding: 2px;} .ritz{width:100%}</style><div class="ritz grid-container"><table class="waffle" cellspacing="0" cellpadding="0"><tbody><tr style="height: 20px"><td class="s0" colspan="5">Total flying experience till THE DATE OF SUBMISSION OF PAPERS IN DGCA</td></tr><tr style="height: 20px"><td colspan="2">Requirement</td><td>Hrs Req.</td><td>Actual</td><td>Remarks</td></tr><tr style="height: 20px"><td class="s0" colspan="5">Total flying experience details</td></tr><tr style="height: 20px"><td>(i)</td><td>Total flying time (in this 50% of multi co-pilot hrs are counted)</td><td>1500</td><td>' +Total_Time+ '</td><td></td></tr><tr style="height: 20px"><td>(ii)</td><td>Total as PIC (in this P1 U/S and STL hrs are counted 50%)</td><td>500</td><td>' + Final_PIC_Time + '</td><td></td></tr><tr style="height: 20px"><td class="s2">(iii)</td><td>Total Night flying experience (in this 50% of multi co-pilot night hrs are counted)</td><td class="s2">100</td><td>' +Final_Night_Time + '</td><td></td></tr><tr style="height: 20px"><td>(iv)</td><td>Total Instrument Time (not more than 50 synthetic simulator hrs shall be counted)</td><td>100</td><td>'+total_instrument1+'</td><td></td></tr><tr style="height: 20px"><td class="s0" colspan="5">X-country flying time</td></tr><tr style="height: 20px"><td>(i)</td><td>Total X-country by day and night</td><td>1000</td><td></td><td></td></tr><tr style="height: 20px"><td>(ii)</td><td>Total PIC X-country by day and night</td><td>200</td><td></td><td></td></tr><tr style="height: 20px"><td class="s2">(iii)</td><td>Total PIC X-country flying time by Night</td><td>50</td><td></td><td></td></tr></tbody></table></div>';
     const resulthtml = await RNHTMLtoPDF.convert({

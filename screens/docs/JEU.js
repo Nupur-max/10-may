@@ -1,6 +1,6 @@
 //import liraries
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Platform, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Platform, SafeAreaView, ScrollView } from 'react-native';
 import DgcaLogbookStyles from '../../styles/dgcaLogbookStyles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RadioButton } from 'react-native-paper'
@@ -172,7 +172,7 @@ const JEU = ({ navigation }) => {
         let temData = [];
         var ordered = {};
         prePopulateddb.transaction(tx => {
-            tx.executeSql('Select * from logbook INNER JOIN Aircrafts on Aircrafts.AircraftType = logbook.aircraftType WHERE user_id == "' + user.id + '" AND orderedDate BETWEEN "' + orderStart + '" AND "' + orderEnd + '" AND tag == "manual" ORDER BY orderedDate ASC', [], (tx, result) => {
+            tx.executeSql('Select * from logbook  WHERE user_id == "' + user.id + '" AND orderedDate BETWEEN "' + orderStart + '" AND "' + orderEnd + '" AND tag == "server" ORDER BY orderedDate ASC', [], (tx, result) => {
                 for (let i = 0; i <= result.rows.length; i++) {
                     temData.push({
                         id: result.rows.item(i).id,
@@ -559,8 +559,8 @@ const JEU = ({ navigation }) => {
             var pageNo = Number(page) + index
             htmlContent += '<style type="text/css"> @page { size:29.5cm 21cm; }table{"page-break-after: always;"} tr { page-break-inside:avoid !important; page-break-after:auto } .j_ue:nth-child(even) {background-color: #e0ebeb;} .ritz .waffle a { color: inherit; }.ritz .waffle .s0{text-align:center;color:#000000;font-size:9pt;vertical-align:center;white-space:normal;overflow:hidden;word-wrap:break-word;direction:ltr;} ' + platFormCss + ' td{ border: 2px #000 solid}</style><div class="ritz grid-container" dir="ltr"><table class="waffle" cellspacing="0" cellpadding="0">        <thead>            <tr style="height: 20px">                <td class="s0" dir="ltr" rowspan="2">DATE (DD/MM/YY)</td>                <td class="s0" dir="ltr" colspan="2">DEPARTURE</td>                <td class="s0" dir="ltr" colspan="2">ARRIVAL</td>                <td class="s0" dir="ltr" colspan="2">AIRCRAFT</td>                <td class="s0" dir="ltr" colspan="2">SP</td>                <td class="s0" dir="ltr" rowspan="2">MULTI- PILOT</td>                <td class="s0" dir="ltr" rowspan="2">TOTAL TIME OF FLIGHT</td>                		<td class="s0" dir="ltr" rowspan="2">NAME PIC</td>                 <td class="s0" dir="ltr" colspan="2">LANDINGS</td>             </tr> <tr style="height: 20px">                <td class="s0" dir="ltr">PLACE</td>                <td class="s0" dir="ltr">TIME</td>                <td class="s0" dir="ltr">PLACE</td>                <td class="s0" dir="ltr">TIME</td>                <td class="s0" dir="ltr">MAKE & MODEL</td>        <td class="s0" dir="ltr">REGISTRATION</td>                <td class="s0" dir="ltr">SE</td>                <td class="s0" dir="ltr">ME</td>                <td class="s0" dir="ltr">DAY</td>                <td class="s0" dir="ltr">NIGHT</td>           </tr> </thead><tbody>'
             monthData[1].map(d => {
-                var SEtime = d.Class.slice(0, 2) == "SE" ? d.totalTime : '';
-                var MEtime = d.Class.slice(0, 2) == "ME" ? d.totalTime : '';
+                var SEtime = d.Class == "SE" ? d.totalTime : '';
+                var MEtime = d.Class == "ME" ? d.totalTime : '';
                 htmlContent += '<tr  class="j_ue" style="height: 20px">                <td class="s0" dir="ltr">' + d.date + '</td>                <td class="s0" dir="ltr">' + d.from + '</td>                <td class="s0" dir="ltr">' + d.chocksOffTime + '</td>                <td class="s0" dir="ltr">' + d.to + '</td>                <td class="s0" dir="ltr">' + d.chocksOnTime + '</td>                <td class="s0" dir="ltr">' + d.aircraftType + '</td>                <td class="s0" dir="ltr">' + d.aircraftReg + '</td>                <td class="s0" dir="ltr">' + SEtime + '</td>                <td class="s0" dir="ltr">' + MEtime + '</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">' + d.totalTime + '</td>             <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">' + d.dayLanding + '</td>                <td class="s0" dir="ltr">' + d.nightLanding + '</td>      </tr>'
             })
             for (let i = 0; i < rows - monthData[1].length; i++) {
@@ -639,6 +639,7 @@ const JEU = ({ navigation }) => {
 
     return (
         <SafeAreaView style={[DgcaLogbookStyles.container, {backgroundColor:theme.backgroundColor}]}>
+            <ScrollView>
             <View style={DgcaLogbookStyles.header}>
                 <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{ padding: 6 }} onPress={() => navigation.goBack()} />
                 <Text style={DgcaLogbookStyles.aircrafts}>Jeppessen Logbook (EU)</Text>
@@ -653,14 +654,14 @@ const JEU = ({ navigation }) => {
                 <View style={DgcaLogbookStyles.radioSection}>
                     <View style={{ flexDirection: 'row' }}>
                         <View style={{ flexDirection: 'row' }}>
-                            <RadioButton
+                            <RadioButton.Android
                                 uncheckedColor={dark?'#fff':'#000'}
                                 color={dark?'#fff':'#000'}
                                 value="preDefined" />
                             <Text style={dark?DgcaLogbookStyles.DarkradioText:DgcaLogbookStyles.radioText}>Pre Defined</Text>
                         </View>
                         <View style={{ flexDirection: 'row', paddingLeft: 100 }}>
-                            <RadioButton
+                            <RadioButton.Android
                                 uncheckedColor={dark?'#fff':'#000'}
                                 color={dark?'#fff':'#000'}
                                 value="calenderDate" />
@@ -797,6 +798,7 @@ const JEU = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
 
+        </ScrollView>
         </SafeAreaView>
     );
 };

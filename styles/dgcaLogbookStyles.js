@@ -29,7 +29,8 @@ const DgcaLogbookStyles = StyleSheet.create({
       tagLine: {
           fontFamily: 'WorkSans-Bold',
           color : '#000',
-          fontSize: 14,
+          fontSize: 16,
+          fontWeight: Platform.OS == 'ios' ? '600' : '700'
       },
       DarktagLine:{
         fontFamily: 'WorkSans-Bold',
@@ -38,9 +39,10 @@ const DgcaLogbookStyles = StyleSheet.create({
       },
       radioText:{
           fontFamily:'WorkSans-Regular',
-          fontSize: 13,
+          fontSize: 14,
           color: '#636363',
-          paddingTop:5
+          paddingTop:8,
+          fontWeight: Platform.OS == 'ios' ? '600' : '700'
       },
       DarkradioText:{
         fontFamily:'WorkSans-Regular',
@@ -57,6 +59,7 @@ const DgcaLogbookStyles = StyleSheet.create({
         fontFamily:'WorkSans-Regular',
         fontSize: 14,
         color: '#636363',
+        fontWeight: Platform.OS == 'ios' ? '600' : '700'
       },
       TextInputView:{
           borderColor: '#000',

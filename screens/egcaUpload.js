@@ -367,7 +367,7 @@ const EGCAUpload = ({navigation}) => {
         </View>
         <View style={styles.fieldWithoutBottom}>
         <View style={{flexDirection:'row'}}> 
-        <RadioButton
+        <RadioButton.Android
             value="Training"
             status={ egca === 'Training' ? 'checked' : 'unchecked' }
             onPress={() => setEgca('Training')}
@@ -378,7 +378,7 @@ const EGCAUpload = ({navigation}) => {
           <Text style={styles.fieldTextRadio}>Training</Text>
         </View>
         <View style={{flexDirection:'row', paddingLeft:78,}}>
-        <RadioButton
+        <RadioButton.Android
             value="Test"
             status={ egca === 'Test' ? 'checked' : 'unchecked' }
             onPress={() => setEgca('Test')}
@@ -391,7 +391,7 @@ const EGCAUpload = ({navigation}) => {
       </View>
       <View style={styles.fieldWithoutBottom}>
         <View style={{flexDirection:'row',}}> 
-         <RadioButton
+         <RadioButton.Android
             value="Commercial"
             status={ egca === 'Commercial' ? 'checked' : 'unchecked' }
             onPress={() => setEgca('Commercial')}
@@ -402,7 +402,7 @@ const EGCAUpload = ({navigation}) => {
           <Text style={styles.fieldTextRadio}>Commercial</Text>
         </View>
         <View style={{flexDirection:'row', paddingLeft:50}}>
-        <RadioButton
+        <RadioButton.Android
             value="Non-commercial"
             status={ egca === 'Non-commercial' ? 'checked' : 'unchecked' }
             onPress={() => setEgca('Non-commercial')}
@@ -497,7 +497,7 @@ const EGCAUpload = ({navigation}) => {
 
         <View style={{...styles.fieldWithoutBottom, ...{zIndex:-5}}}>
         <View style={{flexDirection:'row'}}> 
-        <RadioButton
+        <RadioButton.Android
             value="yes"
             status={ choice === 'yes' ? 'checked' : 'unchecked' }
             onPress={() => setChoice('yes')}
@@ -508,7 +508,7 @@ const EGCAUpload = ({navigation}) => {
           <Text style={styles.fieldTextRadio}>Yes</Text>
         </View>
         <View style={{flexDirection:'row', paddingLeft:78,}}>
-        <RadioButton
+        <RadioButton.Android
             value="no"
             status={ choice === 'no' ? 'checked' : 'unchecked' }
             onPress={() => setChoice('no')}

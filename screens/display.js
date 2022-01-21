@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Dimensions, Platform, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Dimensions, Platform, SafeAreaView,KeyboardAvoidingView } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RadioButton, List, Switch } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -21,10 +21,6 @@ import { TotalTypeData } from '../store/actions/totalTypeAction';
 import { useSelector, useDispatch } from 'react-redux';
 import SQLite from 'react-native-sqlite-storage';
 
-import {BaseUrl} from '../components/url.json';
-
-
-import Colors from '../components/colors';
 
 const prePopulateddb = SQLite.openDatabase(
     {
@@ -144,7 +140,8 @@ const Display = ({navigation}) => {
     }, [params.displayAirType]);
     
     return (
-        
+      <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>  
+      <ScrollView>
         <SafeAreaView edges={['bottom', 'left', 'right']} style={[DisplayStyles.container,{ backgroundColor: theme.backgroundColor }]}>
         <View>
         
@@ -163,7 +160,7 @@ const Display = ({navigation}) => {
         <RadioButton.Group value={datee}
         onValueChange={DateFormat}>
         <View style={DisplayStyles.fieldWithoutBottom}>
-        <RadioButton
+        <RadioButton.Android
             value="DDMM"
             //status={ df === 'DDMM' ? 'checked' : 'unchecked' }
             //onPress={()=>{Update_Display();setDf('DDMM')}}
@@ -174,7 +171,7 @@ const Display = ({navigation}) => {
         />
         <Text style={dark?DisplayStyles.DarkfieldText:DisplayStyles.fieldText}>DD MM YYYY</Text>
         <View style={{paddingHorizontal:40, flexDirection:'row'}}>
-        <RadioButton
+        <RadioButton.Android
             value="MMDD"
             //status={ df === 'MMDD' ? 'checked' : 'unchecked' }
             //onPress={()=>{Update_Display();setDf('MMDD')}}
@@ -224,7 +221,7 @@ const Display = ({navigation}) => {
         <RadioButton.Group value={role}
         onValueChange={roleChecked}>
         <View style={DisplayStyles.fieldWithoutBottom}>
-        <RadioButton
+        <RadioButton.Android
             value="AirlineCaptain"
             //status={ roleChecked === 'AirlineCaptain' ? 'checked' : 'unchecked' }
             //onPress={() => {setRoleChecked('AirlineCaptain'); Update_Display()}}
@@ -234,7 +231,7 @@ const Display = ({navigation}) => {
         />
         <Text style={dark?DisplayStyles.DarkfieldText:DisplayStyles.fieldText}>Airline Captain</Text>
         <View style={{paddingHorizontal:25, flexDirection:'row'}}> 
-        <RadioButton
+        <RadioButton.Android
             value="AirlineFirstOfficer"
             //status={ roleChecked === 'AirlineFirstOfficer' ? 'checked' : 'unchecked' }
             //onPress={() => {setRoleChecked('AirlineFirstOfficer'); Update_Display()}}
@@ -247,7 +244,7 @@ const Display = ({navigation}) => {
         </View>
 
         <View style={DisplayStyles.fieldWithoutBottom}>
-        <RadioButton
+        <RadioButton.Android
             value="AirlineInstructor"
             //status={ roleChecked === 'AirlineInstructor' ? 'checked' : 'unchecked' }
             //onPress={() => {setRoleChecked('AirlineInstructor'); Update_Display()}}
@@ -259,7 +256,7 @@ const Display = ({navigation}) => {
         <Text style={dark?DisplayStyles.DarkfieldText:DisplayStyles.fieldText}>Airline Instructor</Text>
         <View style={{paddingHorizontal:10, flexDirection:'row'}}>
         
-        <RadioButton
+        <RadioButton.Android
             value="FlightCadet"
             //status={ roleChecked === 'FlightCadet' ? 'checked' : 'unchecked' }
             //onPress={() => {setRoleChecked('FlightCadet'); Update_Display()}}
@@ -273,7 +270,7 @@ const Display = ({navigation}) => {
         </View>
         <View style={{paddingHorizontal:10, flexDirection:'row'}}>
         <View style={DisplayStyles.underline}>
-        <RadioButton
+        <RadioButton.Android
             value="Cfi"
             //status={ roleChecked === 'FlightCadet' ? 'checked' : 'unchecked' }
             //onPress={() => {setRoleChecked('FlightCadet'); Update_Display()}}
@@ -360,8 +357,8 @@ const Display = ({navigation}) => {
 
         </View>
         </SafeAreaView>
-        
-
+        </ScrollView>
+        </KeyboardAvoidingView>
     );
 };
 

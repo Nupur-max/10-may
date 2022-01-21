@@ -1,6 +1,6 @@
 //import liraries
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Platform, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Platform, SafeAreaView, ScrollView } from 'react-native';
 import DgcaLogbookStyles from '../../styles/dgcaLogbookStyles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RadioButton, ThemeProvider } from 'react-native-paper'
@@ -170,7 +170,7 @@ const JUSA = ({ navigation }) => {
         let temData = [];
         var ordered = {};
         prePopulateddb.transaction(tx => {
-            tx.executeSql('Select * from logbook INNER JOIN Aircrafts on Aircrafts.AircraftType = logbook.aircraftType WHERE user_id == "' + user.id + '" AND orderedDate BETWEEN "' + orderStart + '" AND "' + orderEnd + '" AND tag == "manual" ORDER BY orderedDate ASC', [], (tx, result) => {
+            tx.executeSql('Select * from logbook WHERE user_id == "' + user.id + '" AND orderedDate BETWEEN "' + orderStart + '" AND "' + orderEnd + '" AND tag == "server" ORDER BY orderedDate ASC', [], (tx, result) => {
                 for (let i = 0; i <= result.rows.length; i++) {
                     temData.push({
                         id: result.rows.item(i).id,
@@ -189,14 +189,6 @@ const JUSA = ({ navigation }) => {
                         dual_day: result.rows.item(i).dual_day,
                         dual_night: result.rows.item(i).dual_night,
                         flight: result.rows.item(i).flight,
-                        from_airportID: result.rows.item(i).from_airportID,
-                        from_altitude: result.rows.item(i).from_altitude,
-                        from_city: result.rows.item(i).from_city,
-                        from_country: result.rows.item(i).from_country,
-                        from_dayLightSaving: result.rows.item(i).from_dayLightSaving,
-                        from_source: result.rows.item(i).from_source,
-                        from_lat: result.rows.item(i).from_lat,
-                        from_long: result.rows.item(i).from_long,
                         from_name: result.rows.item(i).from_name,
                         from_nameIATA: result.rows.item(i).from_nameIATA,
                         from: result.rows.item(i).from_nameICAO,
@@ -266,6 +258,13 @@ const JUSA = ({ navigation }) => {
                     if (!ordered[months[m] + " " + [y]]) { ordered[months[m] + " " + [y]] = []; }
                     ordered[months[m] + " " + [y]].push(entry);
                     setMonthWise(ordered)
+
+                       const chunkSize = 10
+                                for (var k = 0; k < temData[i].length; k += chunkSize) {
+                                    const chunk = array.slice(k, k + chunkSize);
+                                    console.log('chunk=', chunk)
+                                    // do whatever
+                                }
 
                 }
             });
@@ -690,7 +689,7 @@ const JUSA = ({ navigation }) => {
                 var Approches = d.approach1.split(";");
                 var app_Type = Approches[1]
                 var app_No = Approches[0]
-                htmlContent += '<tr style="height: 30px" class="j_usa">                <td class="s0" dir="ltr">' + d.night + '</td>                <td class="s0" dir="ltr">' + d.actual_Instrument + '</td>                <td class="s0" dir="ltr">' + d.sim_instrument + '</td>                <td class="s0" dir="ltr">'+app_No+'</td>                <td class="s0" dir="ltr">'+app_Type+'</td>                <td class="s0" dir="ltr">x_country</td>                <td class="s0" dir="ltr">flight sim</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + pic_Time + '</td>                <td class="s0" dir="ltr">' + sic_Time + '</td>                <td class="s0" dir="ltr">' + d.dual_day + '</td><td class="s0" dir="ltr">' + d.instructional + '</td>                <td class="s0" dir="ltr">' + d.remark + '</td></tr>'
+                htmlContent += '<tr style="height: 30px" class="j_usa">                <td class="s0" dir="ltr">' + d.night + '</td>                <td class="s0" dir="ltr">' + d.actual_Instrument + '</td>                <td class="s0" dir="ltr">' + d.sim_instrument + '</td>                <td class="s0" dir="ltr">' + app_No + '</td>                <td class="s0" dir="ltr">' + app_Type + '</td>                <td class="s0" dir="ltr">x_country</td>                <td class="s0" dir="ltr">flight sim</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + pic_Time + '</td>                <td class="s0" dir="ltr">' + sic_Time + '</td>                <td class="s0" dir="ltr">' + d.dual_day + '</td><td class="s0" dir="ltr">' + d.instructional + '</td>                <td class="s0" dir="ltr">' + d.remark + '</td></tr>'
             })
             for (let i = 0; i < rows - monthData[1].length; i++) {
                 htmlContent += '            <tr style="height: 30px" class="j_usa">                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td><td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                </tr>  '
@@ -735,19 +734,19 @@ const JUSA = ({ navigation }) => {
 
     // ------------ Validation --------- //
     const validate = () => {
-        if(period == "preDefined"){
-            if (value == null){
+        if (period == "preDefined") {
+            if (value == null) {
                 alert("please Select Duration");
             }
             else {
                 printPDF();
             }
         }
-        else if(period == "calenderDate"){
-            if (fromPeriod == ''){
+        else if (period == "calenderDate") {
+            if (fromPeriod == '') {
                 alert("Please Select Start Date")
             }
-            else if (toPeriod == ''){
+            else if (toPeriod == '') {
                 alert("Please Select End Date")
             }
             else {
@@ -757,167 +756,169 @@ const JUSA = ({ navigation }) => {
     }
 
     return (
-        <SafeAreaView style={[DgcaLogbookStyles.container, {backgroundColor:theme.backgroundColor}]}>
-            <View style={DgcaLogbookStyles.header}>
-                <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{ padding: 6 }} onPress={() => navigation.goBack()} />
-                <Text style={DgcaLogbookStyles.aircrafts}>Jeppessen Logbook (USA)</Text>
-            </View>
+        <SafeAreaView style={[DgcaLogbookStyles.container, { backgroundColor: theme.backgroundColor }]}>
+            <ScrollView>
+                <View style={DgcaLogbookStyles.header}>
+                    <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{ padding: 6 }} onPress={() => navigation.goBack()} />
+                    <Text style={DgcaLogbookStyles.aircrafts}>Jeppessen Logbook (USA)</Text>
+                </View>
 
-            <View style={dark?DgcaLogbookStyles.DarkmainTagLine:DgcaLogbookStyles.mainTagLine}>
-                <Text style={dark?DgcaLogbookStyles.DarktagLine:DgcaLogbookStyles.tagLine}>Period</Text>
-            </View>
+                <View style={dark ? DgcaLogbookStyles.DarkmainTagLine : DgcaLogbookStyles.mainTagLine}>
+                    <Text style={dark ? DgcaLogbookStyles.DarktagLine : DgcaLogbookStyles.tagLine}>Period</Text>
+                </View>
 
-            <RadioButton.Group
-                onValueChange={period => setPeriod(period)} value={period}>
-                <View style={DgcaLogbookStyles.radioSection}>
-                    <View style={{ flexDirection: 'row' }}>
+                <RadioButton.Group
+                    onValueChange={period => setPeriod(period)} value={period}>
+                    <View style={DgcaLogbookStyles.radioSection}>
                         <View style={{ flexDirection: 'row' }}>
-                            <RadioButton
-                                uncheckedColor={dark?'#fff':'#000'}
-                                color={dark?'#fff':'#000'}
-                                value="preDefined" />
-                            <Text style={dark?DgcaLogbookStyles.DarkradioText:DgcaLogbookStyles.radioText}>Pre Defined</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', paddingLeft: 100 }}>
-                            <RadioButton
-                                uncheckedColor={dark?'#fff':'#000'}
-                                color={dark?'#fff':'#000'}
-                                value="calenderDate" />
-                            <Text style={dark?DgcaLogbookStyles.DarkradioText:DgcaLogbookStyles.radioText}>Calender Date</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <RadioButton.Android
+                                    uncheckedColor={dark ? '#fff' : '#000'}
+                                    color={dark ? '#fff' : '#000'}
+                                    value="preDefined" />
+                                <Text style={dark ? DgcaLogbookStyles.DarkradioText : DgcaLogbookStyles.radioText}>Pre Defined</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', paddingLeft: 100 }}>
+                                <RadioButton.Android
+                                    uncheckedColor={dark ? '#fff' : '#000'}
+                                    color={dark ? '#fff' : '#000'}
+                                    value="calenderDate" />
+                                <Text style={dark ? DgcaLogbookStyles.DarkradioText : DgcaLogbookStyles.radioText}>Calender Date</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
-            </RadioButton.Group>
+                </RadioButton.Group>
 
-            <View style={Platform.OS === 'ios' ? { paddingHorizontal: 10, paddingVertical: 20, zIndex: 999 } : { paddingHorizontal: 10, paddingVertical: 20, }}>
-                {period == 'preDefined' ?
-                    <View style={{ width: '100%' }}>
-                        <DropDownPicker
-                            open={open}
-                            value={value}
-                            items={items}
-                            setOpen={setOpen}
-                            setValue={setValue}
-                            setItems={setItems}
-                            placeholder="Select Duration"
-                            style={[{
-                                borderWidth: 0.2,
-                                borderColor: dark?"#fff":"#393F45",
-                                marginTop: 10,
-                                backgroundColor: ' #000'
-                            }]}
-                            textStyle={{
-                                fontSize: 14,
-                                color: "#266173",
-                            }}
-                            dropDownContainerStyle={{ borderColor: "#266173", backgroundColor: dark?'#000':'#fff' }}
+                <View style={Platform.OS === 'ios' ? { paddingHorizontal: 10, paddingVertical: 20, zIndex: 999 } : { paddingHorizontal: 10, paddingVertical: 20, }}>
+                    {period == 'preDefined' ?
+                        <View style={{ width: '100%' }}>
+                            <DropDownPicker
+                                open={open}
+                                value={value}
+                                items={items}
+                                setOpen={setOpen}
+                                setValue={setValue}
+                                setItems={setItems}
+                                placeholder="Select Duration"
+                                style={[{
+                                    borderWidth: 0.2,
+                                    borderColor: dark ? "#fff" : "#393F45",
+                                    marginTop: 10,
+                                    backgroundColor: ' #000'
+                                }]}
+                                textStyle={{
+                                    fontSize: 14,
+                                    color: "#266173",
+                                }}
+                                dropDownContainerStyle={{ borderColor: "#266173", backgroundColor: dark ? '#000' : '#fff' }}
+                            />
+                        </View>
+                        :
+                        <View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <DatePicker
+                                    style={{ width: '48%' }}
+                                    date={fromPeriod}
+                                    mode="date"
+                                    placeholder="From"
+                                    placeholderTextColor="#266173"
+                                    format="DD-MM-YYYY"
+                                    confirmBtnText="Confirm"
+                                    cancelBtnText="Cancel"
+                                    suffixIcon={null}
+                                    customStyles={{
+                                        dateInput: {
+                                            borderColor: '#F2F2F2',
+                                            borderWidth: 1,
+                                            borderRadius: 5,
+                                            width: '50%',
+                                        },
+                                        dateIcon: {
+                                            display: 'none'
+                                        },
+                                    }}
+                                    onDateChange={(date) => {
+                                        setfromPeriod(date); calenderFrom(date)
+                                    }}
+                                />
+
+                                <DatePicker
+                                    style={{ width: '48%', marginLeft: 15 }}
+                                    date={toPeriod}
+                                    mode="date"
+                                    placeholder="To"
+                                    placeholderTextColor="#266173"
+                                    format="DD-MM-YYYY"
+                                    confirmBtnText="Confirm"
+                                    cancelBtnText="Cancel"
+                                    suffixIcon={null}
+                                    customStyles={{
+                                        dateInput: {
+                                            borderColor: '#F2F2F2',
+                                            borderWidth: 1,
+                                            borderRadius: 5,
+                                            width: '50%',
+                                        },
+                                        dateIcon: {
+                                            display: 'none'
+                                        },
+                                    }}
+                                    onDateChange={(date) => {
+                                        settoPeriod(date); calenderTo(date)
+                                    }}
+                                />
+                            </View>
+                        </View>
+                    }
+                </View>
+                <View style={DgcaLogbookStyles.mainTagLine}>
+                    <Text style={dark ? DgcaLogbookStyles.DarktagLine : DgcaLogbookStyles.tagLine}>Page details</Text>
+                </View>
+
+                <View style={DgcaLogbookStyles.mainTagLine}>
+                    <Text style={DgcaLogbookStyles.pageDetailText}>Number of Rows</Text>
+                </View>
+                <View style={{ paddingHorizontal: 10 }}>
+                    <View style={dark ? DgcaLogbookStyles.DarkTextInputView : DgcaLogbookStyles.TextInputView}>
+                        <TextInput
+                            placeholder='Min. 10 - max. 25'
+                            placeholderTextColor='grey'
+                            keyboardType='numeric'
+                            value={rows}
+                            onChangeText={(text) => setRows(text)}
+                            max={2}
+                            style={dark ? { color: '#fff', padding: 10 } : { padding: 10 }}
                         />
                     </View>
-                    :
-                    <View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <DatePicker
-                                style={{ width: '48%' }}
-                                date={fromPeriod}
-                                mode="date"
-                                placeholder="From"
-                                placeholderTextColor="#266173"
-                                format="DD-MM-YYYY"
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-                                suffixIcon={null}
-                                customStyles={{
-                                    dateInput: {
-                                        borderColor: '#F2F2F2',
-                                        borderWidth: 1,
-                                        borderRadius: 5,
-                                        width: '50%',
-                                    },
-                                    dateIcon: {
-                                        display: 'none'
-                                    },
-                                }}
-                                onDateChange={(date) => {
-                                    setfromPeriod(date); calenderFrom(date)
-                                }}
-                            />
+                </View>
 
-                            <DatePicker
-                                style={{ width: '48%', marginLeft: 15 }}
-                                date={toPeriod}
-                                mode="date"
-                                placeholder="To"
-                                placeholderTextColor="#266173"
-                                format="DD-MM-YYYY"
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-                                suffixIcon={null}
-                                customStyles={{
-                                    dateInput: {
-                                        borderColor: '#F2F2F2',
-                                        borderWidth: 1,
-                                        borderRadius: 5,
-                                        width: '50%',
-                                    },
-                                    dateIcon: {
-                                        display: 'none'
-                                    },
-                                }}
-                                onDateChange={(date) => {
-                                    settoPeriod(date); calenderTo(date)
-                                }}
-                            />
+                <View style={DgcaLogbookStyles.mainTagLine}>
+                    <Text style={dark ? DgcaLogbookStyles.DarktagLine : DgcaLogbookStyles.pageDetailText}>Start page number</Text>
+                </View>
+                <View style={{ paddingHorizontal: 10 }}>
+                    <View style={dark ? DgcaLogbookStyles.DarkTextInputView : DgcaLogbookStyles.TextInputView}>
+                        <TextInput
+                            placeholder='Enter Number'
+                            placeholderTextColor='grey'
+                            keyboardType='numeric'
+                            value={page}
+                            onChangeText={(text) => setPage(text)}
+                            max={2}
+                            style={dark ? { color: '#fff', padding: 10 } : { padding: 10 }}
+                        />
+                    </View>
+                </View>
+
+                <View style={DgcaLogbookStyles.footer}>
+                    <TouchableOpacity onPress={() => { validate() }}>
+                        <View style={DgcaLogbookStyles.button}>
+                            <Text style={DgcaLogbookStyles.buttonText}>View/Download</Text>
                         </View>
-                    </View>
-                }
-            </View>
-            <View style={DgcaLogbookStyles.mainTagLine}>
-                <Text style={dark?DgcaLogbookStyles.DarktagLine:DgcaLogbookStyles.tagLine}>Page details</Text>
-            </View>
-
-            <View style={DgcaLogbookStyles.mainTagLine}>
-                <Text style={DgcaLogbookStyles.pageDetailText}>Number of Rows</Text>
-            </View>
-            <View style={{ paddingHorizontal: 10 }}>
-                <View style={dark?DgcaLogbookStyles.DarkTextInputView:DgcaLogbookStyles.TextInputView}>
-                    <TextInput
-                        placeholder='Min. 10 - max. 25'
-                        placeholderTextColor='grey'
-                        keyboardType='numeric'
-                        value={rows}
-                        onChangeText={(text) => setRows(text)}
-                        max={2}
-                        style={dark?{color:'#fff',padding: 10}:{ padding: 10 }}
-                    />
+                    </TouchableOpacity>
                 </View>
-            </View>
-
-            <View style={DgcaLogbookStyles.mainTagLine}>
-                <Text style={dark?DgcaLogbookStyles.DarktagLine:DgcaLogbookStyles.pageDetailText}>Start page number</Text>
-            </View>
-            <View style={{ paddingHorizontal: 10 }}>
-                <View style={dark?DgcaLogbookStyles.DarkTextInputView:DgcaLogbookStyles.TextInputView}>
-                    <TextInput
-                        placeholder='Enter Number'
-                        placeholderTextColor='grey'
-                        keyboardType='numeric'
-                        value={page}
-                        onChangeText={(text) => setPage(text)}
-                        max={2}
-                        style={dark?{color:'#fff',padding: 10}:{ padding: 10 }}
-                    />
-                </View>
-            </View>
-
-            <View style={DgcaLogbookStyles.footer}>
-                <TouchableOpacity onPress={() => { validate() }}>
-                    <View style={DgcaLogbookStyles.button}>
-                        <Text style={DgcaLogbookStyles.buttonText}>View/Download</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
+            </ScrollView>
         </SafeAreaView>
-     );
+    );
 };
 
 // define your styles

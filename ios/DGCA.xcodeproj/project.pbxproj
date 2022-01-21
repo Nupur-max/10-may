@@ -12,6 +12,13 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		5E831541626F5FF14B6538CC /* libPods-DGCA-DGCATests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 865CA29594E3ECA64A0E4F20 /* libPods-DGCA-DGCATests.a */; };
 		D46280D85F45A1258E9E7927 /* libPods-DGCA.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC61186D3C8E4C02D3B848A /* libPods-DGCA.a */; };
+		D4B643992799672A0089F962 /* WorkSans-Italic-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4B64393279967210089F962 /* WorkSans-Italic-VariableFont_wght.ttf */; };
+		D4B6439A2799672A0089F962 /* WorkSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4B64394279967230089F962 /* WorkSans-ExtraBold.ttf */; };
+		D4B6439B2799672A0089F962 /* WorkSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4B64395279967240089F962 /* WorkSans-Regular.ttf */; };
+		D4B6439C2799672A0089F962 /* WorkSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4B64396279967260089F962 /* WorkSans-Bold.ttf */; };
+		D4B6439D2799672A0089F962 /* AbrilFatface-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4B64397279967270089F962 /* AbrilFatface-Regular.ttf */; };
+		D4B6439E2799672A0089F962 /* WorkSans-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4B64398279967280089F962 /* WorkSans-VariableFont_wght.ttf */; };
+		D4B643A0279968930089F962 /* www in Resources */ = {isa = PBXBuildFile; fileRef = D4B6439F279968920089F962 /* www */; };
 		D4EA5770279586BE00107484 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		D4EA5774279588B700107484 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4EA5773279588B400107484 /* Images.xcassets */; };
 /* End PBXBuildFile section */
@@ -51,10 +58,16 @@
 		BB45446BAC814504911C9622 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/my-react-native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
 		BCDAAAAB8BBB144E0DA93410 /* Pods-DGCA-DGCATests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DGCA-DGCATests.debug.xcconfig"; path = "Target Support Files/Pods-DGCA-DGCATests/Pods-DGCA-DGCATests.debug.xcconfig"; sourceTree = "<group>"; };
 		CE5A7E575ECE4BAD91039FAE /* WorkSans-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-ExtraBold.ttf"; path = "../assets/fonts/WorkSans-ExtraBold.ttf"; sourceTree = "<group>"; };
-		D443C8B5278438DF0076BB8C /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = ../www; sourceTree = "<group>"; };
 		D44ABB8327846AE3004E2833 /* DGCADebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = DGCADebug.entitlements; path = DGCA/DGCADebug.entitlements; sourceTree = "<group>"; };
 		D4A318EC2761C432007BF95F /* autoflightlogdb.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = autoflightlogdb.db; path = ../android/app/src/main/assets/www/autoflightlogdb.db; sourceTree = "<group>"; };
 		D4ADFB22276316B700C88E25 /* react-native */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "react-native"; path = ../..; sourceTree = "<group>"; };
+		D4B64393279967210089F962 /* WorkSans-Italic-VariableFont_wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "WorkSans-Italic-VariableFont_wght.ttf"; path = "../assets/fonts/WorkSans-Italic-VariableFont_wght.ttf"; sourceTree = "<group>"; };
+		D4B64394279967230089F962 /* WorkSans-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "WorkSans-ExtraBold.ttf"; path = "../assets/fonts/WorkSans-ExtraBold.ttf"; sourceTree = "<group>"; };
+		D4B64395279967240089F962 /* WorkSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "WorkSans-Regular.ttf"; path = "../assets/fonts/WorkSans-Regular.ttf"; sourceTree = "<group>"; };
+		D4B64396279967260089F962 /* WorkSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "WorkSans-Bold.ttf"; path = "../assets/fonts/WorkSans-Bold.ttf"; sourceTree = "<group>"; };
+		D4B64397279967270089F962 /* AbrilFatface-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AbrilFatface-Regular.ttf"; path = "../assets/fonts/AbrilFatface-Regular.ttf"; sourceTree = "<group>"; };
+		D4B64398279967280089F962 /* WorkSans-VariableFont_wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "WorkSans-VariableFont_wght.ttf"; path = "../assets/fonts/WorkSans-VariableFont_wght.ttf"; sourceTree = "<group>"; };
+		D4B6439F279968920089F962 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = ../android/app/src/main/assets/www; sourceTree = "<group>"; };
 		D4EA5773279588B400107484 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = DGCA/Images.xcassets; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC61186D3C8E4C02D3B848A /* libPods-DGCA.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DGCA.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -159,8 +172,14 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				D4B6439F279968920089F962 /* www */,
+				D4B64397279967270089F962 /* AbrilFatface-Regular.ttf */,
+				D4B64396279967260089F962 /* WorkSans-Bold.ttf */,
+				D4B64394279967230089F962 /* WorkSans-ExtraBold.ttf */,
+				D4B64393279967210089F962 /* WorkSans-Italic-VariableFont_wght.ttf */,
+				D4B64395279967240089F962 /* WorkSans-Regular.ttf */,
+				D4B64398279967280089F962 /* WorkSans-VariableFont_wght.ttf */,
 				D4EA5773279588B400107484 /* Images.xcassets */,
-				D443C8B5278438DF0076BB8C /* www */,
 				D4ADFB22276316B700C88E25 /* react-native */,
 				13B07FAE1A68108700A75B9A /* DGCA */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -195,6 +214,8 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
+				C0D4A84FD766A6400C124FBC /* [CP] Embed Pods Frameworks */,
+				B0264EEA164BEF4290C1B6FF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -216,6 +237,8 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				D4EA57722795888300107484 /* Resources */,
+				E19B0759DBFE6EAB0D3510F7 /* [CP] Embed Pods Frameworks */,
+				C4A6145EF2DD232DED31B789 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -275,6 +298,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4B643A0279968930089F962 /* www in Resources */,
+				D4B643992799672A0089F962 /* WorkSans-Italic-VariableFont_wght.ttf in Resources */,
+				D4B6439A2799672A0089F962 /* WorkSans-ExtraBold.ttf in Resources */,
+				D4B6439B2799672A0089F962 /* WorkSans-Regular.ttf in Resources */,
+				D4B6439C2799672A0089F962 /* WorkSans-Bold.ttf in Resources */,
+				D4B6439D2799672A0089F962 /* AbrilFatface-Regular.ttf in Resources */,
+				D4B6439E2799672A0089F962 /* WorkSans-VariableFont_wght.ttf in Resources */,
 				D4EA5774279588B700107484 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -318,6 +348,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		B0264EEA164BEF4290C1B6FF /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DGCA-DGCATests/Pods-DGCA-DGCATests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DGCA-DGCATests/Pods-DGCA-DGCATests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DGCA-DGCATests/Pods-DGCA-DGCATests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		B053C3D95214C9AF7B12AB7B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -338,6 +385,57 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C0D4A84FD766A6400C124FBC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DGCA-DGCATests/Pods-DGCA-DGCATests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DGCA-DGCATests/Pods-DGCA-DGCATests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DGCA-DGCATests/Pods-DGCA-DGCATests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C4A6145EF2DD232DED31B789 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DGCA/Pods-DGCA-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DGCA/Pods-DGCA-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DGCA/Pods-DGCA-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E19B0759DBFE6EAB0D3510F7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DGCA/Pods-DGCA-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DGCA/Pods-DGCA-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DGCA/Pods-DGCA-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {

@@ -426,7 +426,7 @@ const LogBookListing = ({ navigation }) => {
     if (selectedIndex === 0) {
       //console.log('hello')
       prePopulateddb.transaction(tx => {
-        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE crewCustom1  LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC limit 10', [], (tx, result) => {
+        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE crewCustom1  LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC , inTime DESC limit 10', [], (tx, result) => {
           if (result.rows.length > 0) {
             //alert('data available ');
             //console.log('Searched result raw: ', result)
@@ -463,7 +463,7 @@ const LogBookListing = ({ navigation }) => {
     else if (selectedIndex === 1) {
       dataDispatcher(LogListData({ data: [], inProgress: false }))
       prePopulateddb.transaction(tx => {
-        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE from_city  LIKE "%' + dataToSearch + '%" OR to_city LIKE "%' + dataToSearch + '%" OR from_nameICAO LIKE "%' + dataToSearch + '%" OR to_nameICAO LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC limit 10', [], (tx, result) => {
+        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE from_city  LIKE "%' + dataToSearch + '%" OR to_city LIKE "%' + dataToSearch + '%" OR from_nameICAO LIKE "%' + dataToSearch + '%" OR to_nameICAO LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC , inTime DESC limit 10', [], (tx, result) => {
           if (result.rows.length > 0) {
             //alert('data available ');
             //console.log('Searched result raw: ', result)
@@ -498,7 +498,7 @@ const LogBookListing = ({ navigation }) => {
     else if (selectedIndex === 2) {
       dataDispatcher(LogListData({ data: [], inProgress: false }))
       prePopulateddb.transaction(tx => {
-        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE aircraftReg  LIKE "%' + dataToSearch + '%" OR aircraftType LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC limit 10', [], (tx, result) => {
+        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long FROM logbook WHERE aircraftReg  LIKE "%' + dataToSearch + '%" OR aircraftType LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC , inTime DESC limit 10', [], (tx, result) => {
           if (result.rows.length > 0) {
             //alert('data available ');
             //console.log('Searched result raw: ', result)
@@ -534,7 +534,7 @@ const LogBookListing = ({ navigation }) => {
     else if (selectedIndex === 3) {
       dataDispatcher(LogListData({ data: [], inProgress: false }))
       prePopulateddb.transaction(tx => {
-        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,outTime,inTime FROM logbook WHERE date  LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC limit 10', [], (tx, result) => {
+        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,outTime,inTime FROM logbook WHERE date  LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC , inTime DESC limit 10', [], (tx, result) => {
           if (result.rows.length > 0) {
             //alert('data available ');
             //console.log('Searched result raw: ', result)
@@ -572,7 +572,7 @@ const LogBookListing = ({ navigation }) => {
     else if (selectedIndex === 4) {
       dataDispatcher(LogListData({ data: [], inProgress: false }))
       prePopulateddb.transaction(tx => {
-        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,outTime,inTime FROM logbook WHERE flight  LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC limit 10', [], (tx, result) => {
+        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,outTime,inTime FROM logbook WHERE flight  LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC , inTime DESC limit 10', [], (tx, result) => {
           if (result.rows.length > 0) {
             //alert('data available ');
             //console.log('Searched result raw: ', result)
@@ -635,9 +635,10 @@ const LogBookListing = ({ navigation }) => {
     user = JSON.parse(user);
     let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,totalTime,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
-        setOffset(offset + 10);
-        console.log('lengthssss', result.rows.length)
+      tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,totalTime,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC, inTime DESC, onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+        
+        
+        
         //if (result.rows.length > 1){
         for (let i = 0; i <= result.rows.length; i++) {
           if (result.rows.length !== 0){
@@ -830,7 +831,7 @@ const LogBookListing = ({ navigation }) => {
     console.log('test');
     if (AcceptRoster === true) {
       console.log('inner', user.id)
-      const query = 'SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC LIMIT 5 OFFSET ' + offset
+      const query = 'SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC , inTime DESC LIMIT 5 OFFSET ' + offset
       console.log(query)
       prePopulateddb.transaction(tx => {
         tx.executeSql(query, [], (tx, result) => {

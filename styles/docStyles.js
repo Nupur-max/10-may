@@ -38,6 +38,7 @@ const DocScreenStyle = StyleSheet.create({
         // fontWeight: '700',
         fontFamily:'WorkSans-Regular',
         //paddingTop: 5
+        fontWeight: Platform.OS == 'ios' ? '600' : '700'
       },
       DarktagLine:{
         fontSize: 20,
@@ -51,16 +52,17 @@ const DocScreenStyle = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#DDDDDD',
         padding:12,  
+        
       },
       lastTab:{
         width:'100%',
         padding: 12,
       },
       tabText:{
-          fontSize: 14,
+          fontSize: 15,
           fontFamily: 'WorkSans-Regular',
           color:'#636363',
-          fontWeight: '600'
+          fontWeight: Platform.OS == 'ios' ? '600' : '700'
       },
       DarktabText:{
         fontSize: 13,
