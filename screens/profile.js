@@ -98,6 +98,7 @@ const P1 = ({ navigation }) => {
 
   const [pilotListProgress, setPilotListProgress] = React.useState('');
   const [progressValue, setProgressValue] = React.useState('')
+  //const [error, setError] = React.useState('')
 
 
   //console.log('dhfshgfghghdjg', name)
@@ -152,6 +153,7 @@ const P1 = ({ navigation }) => {
           setEId(result.rows.item(i).roster_id);
           setEPwd(result.rows.item(i).roster_pwd);
           setAirlineValue(result.rows.item(i).airline_type)
+          setCountryName(result.rows.item(i).Country)
 
         }
       });
@@ -221,8 +223,7 @@ const P1 = ({ navigation }) => {
         console.log(resData);
         console.log('data ---->', resData.data)
         console.log('roaster data--->', roasterData)
-
-
+        //setError(resData.data)
 
         for (let i = 0; i < resData.data.length; i++) {
 
@@ -290,29 +291,15 @@ const P1 = ({ navigation }) => {
               setProgressValue(0.5)
             }
 
+            if(resData.msg!==false){
             if ((i + 1) == resData.data.length) {
               //
               //selection from table logbook
               let temData = [];
               db.transaction(tx => {
-                tx.executeSql('SELECT id,tag,aircraftType,aircraftReg,user_id,date,from_nameICAO,to_nameICAO,offTime,onTime,from_lat,from_long,to_lat,to_long,p1,p2,dayLanding,nightLanding,dayTO,nightTO from logbook WHERE user_id = "' + user.id + '" AND tag ="roster" ORDER BY orderedDate DESC, inTime DESC, onTime DESC ', [], (tx, result) => {
+                tx.executeSql('SELECT id,tag,aircraftType,aircraftReg,user_id,date,from_nameICAO,to_nameICAO,offTime,onTime,from_lat,from_long,to_lat,to_long,p1,p2,dayLanding,nightLanding,dayTO,nightTO from logbook WHERE user_id = "' + user.id + '" AND tag ="roster" ORDER BY orderedDate DESC, inTime DESC', [], (tx, result) => {
                   setOffset(offset + 10);
-                  // if (result.rows.length > 0) {
-                  //     //alert('data available ');
-                  //     //console.log('result', result)
-                  //     //setProgressValue(0.5)
-                  // }
-                  // if(result.rows.length<=10){
-                  //   setProgressValue(0.5)
-                  // }
-                  // if (result.rows.length<=30){
-                  //   setProgressValue(0.8)
-                  // }
-                  // if (result.rows.length===j+1){
-                  //   setProgressValue(1)
-                  // }
-
-
+                  
                   for (let j = 0; j < result.rows.length; j++) {
                     temData.push({
                       id: result.rows.item(j).id,
@@ -339,9 +326,6 @@ const P1 = ({ navigation }) => {
                     console.log('Entry fetched ' + j + ' out of :' + result.rows.length);
                     console.log('id', result.rows.item(j).id)
                     setProgressValue(1)
-                    //setLocalLogbookData(temData);
-                    //console.log('peopleee', result.rows.item(j).dayLanding+result.rows.item(j).nightLanding+result.rows.item(j).dayTO+result.rows.item(j).nightTO);
-                    //console.log('icao code test : ' ,temData)
                     dataDispatcher(LogListData({ data: temData, inProgress: false }))
                     let jPos = j + 1
                     //console.log('data fetched pos', jPos, result.rows.length)
@@ -355,13 +339,17 @@ const P1 = ({ navigation }) => {
                 });
               });
             }
+          }
             //Select Query end
+            else{
+              alert(resData.data)
+            }
           });
         }
-
-      }).catch((error) => {
+       })
+      .catch((error) => {
         console.log(error)
-        alert('Credentials incorrect', error)
+        alert(error)
         setModalVisible(false)
       });
   }
@@ -788,10 +776,10 @@ const P1 = ({ navigation }) => {
           }}>
             <View style={styles.mobileCode}>
               <TextInput
-                placeholder='+91'
+                placeholder='Country-Code'
                 placeholderTextColor="#266173"
-                value={code}
-                onChangeText={code => setCode(code)}
+                value={countryName==='india'?'+91':countryName==='afg'?'+93':'+358' }
+                //onChangeText={code => setCode(code)}
                 style={{ paddingLeft: 8 }}
               />
             </View>

@@ -25,9 +25,6 @@ const SettingScreen = ({navigation}) => {
             name="cog-outline" color='#256173' size={50} style={Platform.OS === 'ios' ? {lineHeight:80,}: {lineHeight:57,} } />
             <Text style={Platform.OS === 'android' ? SsStyle.settings : SsStyle.settingsIos}>Settings</Text>
             </View>
-            {/* <Text style={SsStyle.mainLine}>Lorem Ipsum</Text> */}
-
-            {/* modal for Pilot details */}
             <View style={SsStyle.centeredView}>
             <Modal
                 animationType="fade"
@@ -63,7 +60,6 @@ const SettingScreen = ({navigation}) => {
             </View>
 
             {/* modal for build logbook */}
-
             <View style={SsStyle.centeredView}>
             <Modal
                 animationType="fade"

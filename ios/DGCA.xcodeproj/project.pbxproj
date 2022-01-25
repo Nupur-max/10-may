@@ -236,9 +236,9 @@
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				D4EA57722795888300107484 /* Resources */,
 				E19B0759DBFE6EAB0D3510F7 /* [CP] Embed Pods Frameworks */,
 				C4A6145EF2DD232DED31B789 /* [CP] Copy Pods Resources */,
+				D4EA57722795888300107484 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -548,7 +548,7 @@
 				CODE_SIGN_ENTITLEMENTS = DGCA/DGCADebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.2;
+				CURRENT_PROJECT_VERSION = 2.4;
 				DEVELOPMENT_TEAM = DPL24P9YXS;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = DGCA/Info.plist;
@@ -580,7 +580,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.2;
+				CURRENT_PROJECT_VERSION = 2.4;
 				DEVELOPMENT_TEAM = DPL24P9YXS;
 				INFOPLIST_FILE = DGCA/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

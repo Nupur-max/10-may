@@ -57,7 +57,7 @@ const EGCAUpload = ({navigation}) => {
     const [AuthPersonvalue, setAuthPersonValue] = React.useState('');
     const [AuthPersonitems, setAuthPersonItems] = React.useState(Elog_verifiers);
 
-    const [egca, setEgca] = React.useState('Commercial');
+    const [egca, setEgca] = React.useState('');
     const [choice, setChoice] = React.useState('');
     const [open, setOpen] = React.useState(false);
     const [training, setTraining] = React.useState('');
@@ -235,24 +235,47 @@ const EGCAUpload = ({navigation}) => {
 
 
       //Sql starts
-      // const insertQuery = async() => {
-      //   let user = await AsyncStorage.getItem('userdetails');
-      //   user = JSON.parse(user);
-      //   db.transaction(tx => {
-      //     tx.executeSql(
+      const SelectQuery = async() => {
+        let user = await AsyncStorage.getItem('userdetails');
+        user = JSON.parse(user);
+        let selectedData = []; 
+        db.transaction(tx => {
+            tx.executeSql(
+                'SELECT * from EGCADetails WHERE user_id = "'+user.id+'"', [], (tx, result) => {
+                    for (let i = 0; i <= result.rows.length; i++) {
+                    selectedData.push({
+                      egcaId :  result.rows.item(i).egcaId , 
+                      egcaPwd :  result.rows.item(i).egcaPwd,
+                      FtoOperator :  result.rows.item(i).FtoOperator,
+                      FlightType :  result.rows.item(i).FlightType,
+                      Purpose :  result.rows.item(i).Purpose,
+                      AuthVerifier :  result.rows.item(i).AuthVerifier,
+                      NameOfAuthVerifier :  result.rows.item(i).NameOfAuthVerifier,
 
-      //       // 'UPDATE logbook set egca_id="'+egca_user+'", egca_pwd="'+egca_pwd+'" , FTO_operator="'+FTOvalue+'", flight_Type="'+egca+'", purpose="'+commercial+'", AuthVerification="'+Authvalue+'", AuthVerificationName="'+AuthPersonvalue+'" where user_id="'+user.id+'"',
+                     });
+                     console.log('setRosterAId', selectedData)
+                     setEGCAUSER(result.rows.item(i).egcaId)
+                     setEGCAPWD(result.rows.item(i).egcaPwd)
+                     setFTOValue(result.rows.item(i).FtoOperator)
+                     setEgca(result.rows.item(i).FlightType)
 
-      //       'INSERT INTO EGCADetails (user_id, egcaId, egcaPwd, FtoOperator, FlightType, Purpose, AuthVerifier, NameOfAuthVerifier ) VALUES ("'+user.id+'","'+egca_user+'", "'+egca_pwd+'", "'+FTOvalue+'", "'+egca+'", "'+commercial+'", "'+Authvalue+'", "'+AuthPersonvalue+'")',
-             
-      //       //console.log('INSERT INTO EGCADetails (user_id, egcaId, egcaPwd, FtoOperator, FlightType, Purpose, AuthVerifier, NameOfAuthVerifier ) VALUES ("'+user.id+'","'+egca_user+'", "'+egca_pwd+'", "'+FTOvalue+'", "'+egca+'", "'+commercial+'", "'+Authvalue+'", "'+AuthPersonvalue+'")'),
+                     egca === "Training" ?
+                     setTraining(result.rows.item(i).Purpose):
+                     egca === "Test" ?
+                     setTest(result.rows.item(i).Purpose): 
+                     egca === "Commercial" ?
+                     setCommercial(result.rows.item(i).Purpose):
+                     []
+                     setAuthValue(result.rows.item(i).AuthVerifier)
+                     setAuthPersonValue(result.rows.item(i).NameOfAuthVerifier)
+                    }
+                }
+            );
+        });
+    }
+    React.useEffect(() => {SelectQuery()}, []);
 
-      //       alert('Saved successfully'),
-
-      //       //console.log('UPDATE EGCADetails set egcaId="'+egca_user+'", egcaPwd="'+egca_pwd+'" , FtoOperator="'+FTOvalue+'", FlightType="'+egca+'", Purpose="'+commercial+'", AuthVerifier="'+Authvalue+'", NameOfAuthVerifier="'+AuthPersonvalue+'" where user_id="'+user.id+'"')
-      //     );
-      //   });
-      // }
+    const PurposeData = egca==='Training'? training : egca==='Test'? test : egca==='Commercial'?commercial:''
 
       const UpdateQuery = async() => {
         let user = await AsyncStorage.getItem('userdetails');
@@ -262,12 +285,12 @@ const EGCAUpload = ({navigation}) => {
           tx.executeSql('SELECT * FROM EGCADetails Where user_id = "'+user.id+'"', [], (tx, result) => {
             //setOffset(offset + 10);
             if (result.rows.length > 0) {
-              tx.executeSql('UPDATE EGCADetails set egcaId="'+egca_user+'", egcaPwd="'+egca_pwd+'" , FtoOperator="'+FTOvalue+'", FlightType="'+egca+'", Purpose="'+commercial+'", AuthVerifier="'+Authvalue+'", NameOfAuthVerifier="'+AuthPersonvalue+'" where user_id="'+user.id+'"')
+              tx.executeSql('UPDATE EGCADetails set egcaId="'+egca_user+'", egcaPwd="'+egca_pwd+'" , FtoOperator="'+FTOvalue+'", FlightType="'+egca+'", Purpose="'+PurposeData+'", AuthVerifier="'+Authvalue+'", NameOfAuthVerifier="'+AuthPersonvalue+'" where user_id="'+user.id+'"')
 
               alert('Saved successfully')
             }
             else{
-              tx.executeSql( 'INSERT INTO EGCADetails (user_id, egcaId, egcaPwd, FtoOperator, FlightType, Purpose, AuthVerifier, NameOfAuthVerifier ) VALUES ("'+user.id+'","'+egca_user+'", "'+egca_pwd+'", "'+FTOvalue+'", "'+egca+'", "'+commercial+'", "'+Authvalue+'", "'+AuthPersonvalue+'")')
+              tx.executeSql( 'INSERT INTO EGCADetails (user_id, egcaId, egcaPwd, FtoOperator, FlightType, Purpose, AuthVerifier, NameOfAuthVerifier ) VALUES ("'+user.id+'","'+egca_user+'", "'+egca_pwd+'", "'+FTOvalue+'", "'+egca+'", "'+PurposeData+'", "'+Authvalue+'", "'+AuthPersonvalue+'")')
 
               alert('Saved successfully')
             }

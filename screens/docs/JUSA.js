@@ -1,6 +1,6 @@
 //import liraries
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Platform, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text,KeyboardAvoidingView, TextInput, TouchableOpacity, Platform, SafeAreaView, ScrollView } from 'react-native';
 import DgcaLogbookStyles from '../../styles/dgcaLogbookStyles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RadioButton, ThemeProvider } from 'react-native-paper'
@@ -290,6 +290,7 @@ const JUSA = ({ navigation }) => {
 
         monthData[1].map(d => {
             //-------- total_Time flying hours --------//
+            if(d.aircraftReg !== "SIMU"){
             var Day = d.totalTime.split(":")
             var total_time1 = Number(Day[0] * 60) + Number(Day[1])
             total_time += total_time1
@@ -336,6 +337,7 @@ const JUSA = ({ navigation }) => {
             Final_night_landing = total_nightLanding
 
             // 
+        }
         })
         let htmlContent = '<html><body>'
 
@@ -381,7 +383,8 @@ const JUSA = ({ navigation }) => {
 
     const dateTotalLeft = (monthData) => {
         monthData[1].map(d => {
-            //-------- total_Time flying hours --------//
+            if(d.aircraftReg !== "SIMU"){
+                //-------- total_Time flying hours --------//
             var Day = d.totalTime.split(":")
             var total_time1 = Number(Day[0] * 60) + Number(Day[1])
             date_total_time += total_time1
@@ -436,7 +439,7 @@ const JUSA = ({ navigation }) => {
             date_total_nightLanding += date_nightLanding
             date_Final_night_landing = date_total_nightLanding
             nightl_array.push(date_Final_night_landing)
-
+        }
         })
         let htmlContent = '<html><body>'
         htmlContent += '<tr style="height: 30px">                <td class="s0" dir="ltr" colspan="2" style="border-top:none;"></td>                <td class="s0" dir="ltr" colspan="3"><b>TOTALS TO DATE</b></td>                <td class="s0" dir="ltr">' + date_Final_Total_Dur + '</td>                <td class="s0" dir="ltr">' + date_Final_SEL_time + '</td>                <td class="s0" dir="ltr">' + date_Final_SES_time + '</td>                <td class="s0" dir="ltr">' + date_Final_MEL_time + '</td>                <td class="s0" dir="ltr">' + date_Final_MES_time + '</td>                <td class="s0" dir="ltr">' + date_Final_Jet_time + '</td>                <td class="s0" dir="ltr">' + date_Final_Hel_time + '</td>                <td class="s0" dir="ltr">' + date_Final_Gli_time + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + date_Final_day_landing + '</td>                <td class="s0" dir="ltr">' + date_Final_night_landing + '</td></tr>'
@@ -445,27 +448,34 @@ const JUSA = ({ navigation }) => {
     }
 
     //-------- Total calculation of Right page data   --------//
-    var totalNight_array = ["00:00",]
-    var totalSIC_array = ["00:00",]
-    var totalPIC_array = ["00:00",]
-    var totalactual_array = ["00:00",]
-    var totalsimu_array = ["00:00",]
+    
 
     const totalForRight = (monthData) => {
         var totalNight = 0
         var totalactual_Instrument = 0
         var totalsim_instrument = 0;
         var totalFinalTime = 0
+        var totalApproches =0
+
         var Final_Night_Time = ''
         var Final_PIC_Time = ''
         var Final_SIC_Time = ''
         var Total_Time = ''
         var totalactual_Instrument1 = ''
         var totalsim_instrument1 = '';
+        var final_TotalApproches =''
 
 
         monthData[1].map(d => {
-            //--------  nightTime flying hours --------//
+            if(d.aircraftReg !== "SIMU"){
+
+                //-------- total Day Landings --------//
+                var Approche = d.approach1.split(";");
+            var Appro = +Approche[0]
+            totalApproches += Appro
+            final_TotalApproches = totalApproches
+
+                //--------  nightTime flying hours --------//
             var Night = d.night.split(":")
             var total_Nighttime = Number(Night[0] * 60) + Number(Night[1])
             totalNight += total_Nighttime
@@ -481,7 +491,6 @@ const JUSA = ({ navigation }) => {
             if (isNaN(Final_Night_Time[1])) {
                 Final_Night_Time = '00:00'
             }
-            totalNight_array.push(Final_Night_Time)
 
             //--------  total_Time flying hours --------//
             var TotalTime = d.totalTime.split(":")
@@ -496,17 +505,9 @@ const JUSA = ({ navigation }) => {
                 total_Min = '0' + total_Min;
             }
             Total_Time = total_Hours + ":" + total_Min;
-
-            if (d.p1 == 'Self') {
-                Final_PIC_Time = Total_Time
-                totalPIC_array.push(Final_PIC_Time)
-
-            }
-            if (d.p2 == 'Self') {
-                Final_SIC_Time = Total_Time
-                totalSIC_array.push(Final_SIC_Time)
-
-            }
+                Final_SIC_Time = d.p1 == 'Self' ? "" : Total_Time
+                Final_PIC_Time = d.p1 == 'Self' ? Total_Time : "" 
+            
 
             //-------- act_instrument flying hours -------- //
             var actual_Instrument = d.actual_Instrument.split(":")
@@ -524,7 +525,7 @@ const JUSA = ({ navigation }) => {
             if (isNaN(totalactual_Instrument1[1])) {
                 totalactual_Instrument1 = '00:00'
             }
-            totalactual_array.push(totalactual_Instrument1)
+
             //-------- sim_instrument flying hours --------//
             var sim_instrument = d.sim_instrument.split(":")
             var total_sim_instrument = Number(sim_instrument[0] * 60) + Number(sim_instrument[1])
@@ -541,13 +542,12 @@ const JUSA = ({ navigation }) => {
             if (isNaN(totalsim_instrument1[1])) {
                 totalsim_instrument1 = '00:00'
             }
-            totalsimu_array.push(totalsim_instrument1)
-
+        }
 
         })
         let htmlContent = '<html><body>'
 
-        htmlContent += ' <tr style="height: 30px">                <td class="s0" dir="ltr">' + Final_Night_Time + '</td>                <td class="s0" dir="ltr">' + totalactual_Instrument1 + '</td>                <td class="s0" dir="ltr">' + totalsim_instrument1 + '</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + Final_PIC_Time + '</td>                <td class="s0" dir="ltr">' + Final_SIC_Time + '</td>                <td class="s0" dir="ltr">0:00</td>      <td class="s0" dir="ltr">0:00</td>                <td style="padding:2px 0px 2px 3px; height: 20px" rowspan="3" >I certifiy that the all entries are true <br>-------------- <br> Pilot\'s Signature</td></tr>        '
+        htmlContent += ' <tr style="height: 30px">                <td class="s0" dir="ltr">' + Final_Night_Time + '</td>                <td class="s0" dir="ltr">' + totalactual_Instrument1 + '</td>                <td class="s0" dir="ltr">' + totalsim_instrument1 + '</td>                <td class="s0" dir="ltr">'+final_TotalApproches+'</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + Final_PIC_Time + '</td>                <td class="s0" dir="ltr">' + Final_SIC_Time + '</td>                <td class="s0" dir="ltr">0:00</td>      <td class="s0" dir="ltr">0:00</td>                <td style="padding:2px 0px 2px 3px; height: 20px" rowspan="3" >I certifiy that the all entries are true <br>-------------- <br> Pilot\'s Signature</td></tr>        '
         htmlContent += '</body></html>'
         return htmlContent
     }
@@ -557,27 +557,48 @@ const JUSA = ({ navigation }) => {
 
     const amtForwardRight = () => {
         let htmlContent = '<html><body>'
-        htmlContent += ' <tr style="height: 30px">                <td class="s0" dir="ltr">' + totalNight_array.splice(-1) + '</td>                <td class="s0" dir="ltr">' + totalsimu_array.splice(-1) + '</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">' + totalPIC_array.splice(-1) + '</td>                <td class="s0" dir="ltr">' + totalSIC_array.splice(-1) + '</td>                <td class="s0" dir="ltr"></td>      <td class="s0" dir="ltr">0:00</td></tr>        '
+        htmlContent += ' <tr style="height: 30px">                <td class="s0" dir="ltr">' + totalNight_array.splice(-1) + '</td>                <td class="s0" dir="ltr">' + totalsimu_array.splice(-1) + '</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">'+total_App.splice(-1)+'</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">' + totalPIC_array.splice(-1) + '</td>                <td class="s0" dir="ltr">' + totalSIC_array.splice(-1) + '</td>                <td class="s0" dir="ltr"></td>      <td class="s0" dir="ltr">0:00</td></tr>        '
         htmlContent += '</body></html>'
         return htmlContent
     }
 
 
     //------- total calculation of  total to Date Right Page data  --------//
+
+    var totalNight_array = ["00:00",]
+    var totalSIC_array = ["00:00",]
+    var totalPIC_array = ["00:00",]
+    var totalactual_array = ["00:00",]
+    var totalsimu_array = ["00:00",]
+    var total_App =["0"]
+
+
     var datetotalNight = 0
     var datetotalactual_Instrument = 0
     var datetotalsim_instrument = 0;
     var datetotalFinalTime = 0
-    var dateFinal_Night_Time = 0
-    var dateFinal_PIC_Time = 0
-    var dateFinal_SIC_Time = 0
-    var dateTotal_Time = 0
-    var datetotalactual_Instrument1 = 0
-    var datetotalsim_instrument1 = 0;
+    var date_total_App = 0
+
+    var dateFinal_Night_Time = ""
+    var dateFinal_PIC_Time = ""
+    var dateFinal_SIC_Time = ""
+    var dateTotal_Time = ""
+    var datetotalactual_Instrument1 = ""
+    var datetotalsim_instrument1 = "";
+    var date_total_App1 = ""
 
     const dateTotalRight = (monthData) => {
         let htmlContent = '<html><body>'
         monthData[1].map(d => {
+            if(d.aircraftReg !== "SIMU") {
+                //-------- total Day Landings --------//
+                var Approch = d.approach1.split(";");
+            var Appr = + Approch[0]
+            date_total_App += Appr
+            date_total_App1 = date_total_App
+            total_App.push(date_total_App1)
+
+
             //-------- night flying hours --------//
             var Night = d.night.split(":")
             var total_Nighttime = Number(Night[0] * 60) + Number(Night[1])
@@ -594,6 +615,8 @@ const JUSA = ({ navigation }) => {
             if (isNaN(dateFinal_Night_Time[1])) {
                 dateFinal_Night_Time = '00:00'
             }
+            totalNight_array.push(dateFinal_Night_Time)
+
 
             //--------  totaltime flying hours --------//
             var TotalTime = d.totalTime.split(":")
@@ -609,8 +632,16 @@ const JUSA = ({ navigation }) => {
             }
             dateTotal_Time = total_Hours + ":" + total_Min;
 
-            dateFinal_PIC_Time = d.p1 == 'Self' ? dateTotal_Time : '-';
-            dateFinal_SIC_Time = d.p2 == 'Self' ? dateTotal_Time : '-';
+            if (d.p1 == 'Self') {
+                dateFinal_PIC_Time = dateTotal_Time
+                totalPIC_array.push(dateFinal_PIC_Time)
+
+            }
+            if (d.p1 !== 'Self') {
+                dateFinal_SIC_Time = dateTotal_Time
+                totalSIC_array.push(dateFinal_SIC_Time)
+
+            }
 
             //--------act_instrument flying hours --------//
             var actual_Instrument = d.actual_Instrument.split(":")
@@ -628,6 +659,8 @@ const JUSA = ({ navigation }) => {
             if (isNaN(datetotalactual_Instrument1[1])) {
                 datetotalactual_Instrument1 = '00:00'
             }
+            totalactual_array.push(datetotalactual_Instrument1)
+
             //------- sim_instrument flying hours --------//
             var sim_instrument = d.sim_instrument.split(":")
             var total_sim_instrument = Number(sim_instrument[0] * 60) + Number(sim_instrument[1])
@@ -644,9 +677,13 @@ const JUSA = ({ navigation }) => {
             if (isNaN(datetotalsim_instrument1)) {
                 datetotalsim_instrument1 = '00:00'
             }
+            totalsimu_array.push(datetotalsim_instrument1)
+
+
+        }
         })
 
-        htmlContent += '<tr style="height: 30px">                <td class="s0" dir="ltr">' + dateFinal_Night_Time + '</td>                <td class="s0" dir="ltr">' + datetotalactual_Instrument1 + '</td>                <td class="s0" dir="ltr">' + datetotalsim_instrument1 + '</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + dateFinal_PIC_Time + '</td>                <td class="s0" dir="ltr">' + dateFinal_SIC_Time + '</td>                <td class="s0" dir="ltr">0:00</td>      <td class="s0" dir="ltr">0:00</td>                </tr>    '
+        htmlContent += '<tr style="height: 30px">                <td class="s0" dir="ltr">' + dateFinal_Night_Time + '</td>                <td class="s0" dir="ltr">' + datetotalactual_Instrument1 + '</td>                <td class="s0" dir="ltr">' + datetotalsim_instrument1 + '</td>                <td class="s0" dir="ltr">'+date_total_App1+'</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + dateFinal_PIC_Time + '</td>                <td class="s0" dir="ltr">' + dateFinal_SIC_Time + '</td>                <td class="s0" dir="ltr">0:00</td>      <td class="s0" dir="ltr">0:00</td>                </tr>    '
         htmlContent += '</body></html>'
         return htmlContent
     }
@@ -677,19 +714,32 @@ const JUSA = ({ navigation }) => {
                 var Jet = d.Engine == 'Jet' ? d.totalTime : '';
                 var Helicopter = d.Category == 'Helicopter' ? d.totalTime : ''
                 var Glider = d.Category == 'glider' ? d.totalTime : ''
-                htmlContent += '<tr style="height: 30px" class="j_usa">                <td class="s0" dir="ltr">' + d.date + '</td>                <td class="s0" dir="ltr">' + d.aircraftType + '</td>                <td class="s0" dir="ltr">' + d.aircraftReg + '</td>                <td class="s0" dir="ltr">' + d.from + '</td>                <td class="s0" dir="ltr">' + d.to + '</td>                <td class="s0" dir="ltr">' + d.totalTime + '</td>                <td class="s0" dir="ltr">' + SELand + '</td>                <td class="s0" dir="ltr">' + SEsea + '</td>                <td class="s0" dir="ltr">' + MELand + '</td>                <td class="s0" dir="ltr">' + MEsea + '</td>                <td class="s0" dir="ltr">' + Jet + '</td>                <td class="s0" dir="ltr">' + Helicopter + '</td>                <td class="s0" dir="ltr">' + Glider + '</td>                <td class="s0" dir="ltr">Pcatd</td>                <td class="s0" dir="ltr">' + d.dayLanding + '</td>                <td class="s0" dir="ltr">' + d.nightLanding + '</td></tr> '
+                var totalDur = d.aircraftReg == 'SIMU' ? "" : d.totalTime;
+                htmlContent += '<tr style="height: 30px" class="j_usa">                <td class="s0" dir="ltr">' + d.date + '</td>                <td class="s0" dir="ltr">' + d.aircraftType + '</td>                <td class="s0" dir="ltr">' + d.aircraftReg + '</td>                <td class="s0" dir="ltr">' + d.from + '</td>                <td class="s0" dir="ltr">' + d.to + '</td>                <td class="s0" dir="ltr">' + totalDur + '</td>                <td class="s0" dir="ltr">' + SELand + '</td>                <td class="s0" dir="ltr">' + SEsea + '</td>                <td class="s0" dir="ltr">' + MELand + '</td>                <td class="s0" dir="ltr">' + MEsea + '</td>                <td class="s0" dir="ltr">' + Jet + '</td>                <td class="s0" dir="ltr">' + Helicopter + '</td>                <td class="s0" dir="ltr">' + Glider + '</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">' + d.dayLanding + '</td>                <td class="s0" dir="ltr">' + d.nightLanding + '</td></tr> '
             })
             for (let i = 0; i < rows - monthData[1].length; i++) {
                 htmlContent += '<tr style="height: 30px" class="j_usa">                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td></tr>  '
             }
             htmlContent += totalForLeft(monthData) + '' + amtForwardLeft(monthData) + '' + dateTotalLeft(monthData) + '</tbody>' + breakTag() + '</table><p>Page' + pageNo + '-A(AutoFlightLog)</p>' + breakTag() + '<table class="waffle" cellspacing="0" cellpadding="0">' + breakTag() + '<thead><tr style="height: 30px">    <th class="s0" dir="ltr" colspan="6"><b>CONDITIONS OF FLIGHT</b></th>    <th class="s0"dir="ltr" rowspan="3"><b>FLIGHT SIMULATOR</b></th>    <th class="s0" dir="ltr" colspan="5"><b>TYPE OF PILOTING TIME</b></th>    <th class="s0" dir="ltr" rowspan="3"><b>REMARKS AND ENDORDEMENTS</b></th></tr><tr style="height: 30px">    <th class="s0" dir="ltr" rowspan="2">Night</th>    <th class="s0" dir="ltr" rowspan="2">ACTUAL INSTRUMENT</th>    <th class="s0" dir="ltr" rowspan="2">SIMULATED INSTRUMENT (HOOD)</th>    <th class="s0" dir="ltr" colspan="2">APP</th>    <th class="s0" dir="ltr" rowspan="2">CROSS COUNTRY</th>    <th class="s0" dir="ltr" rowspan="2">SOLO</th>    <th class="s0" dir="ltr" rowspan="2">PILOT IN COMMAND</th>    <th class="s0" dir="ltr" rowspan="2">SECOND IN COMMAND</th>    <th class="s0" dir="ltr" rowspan="2">DUAL RECEIVED</th>    <th class="s0" dir="ltr" rowspan="2">INSTRUCTOR</th></tr><tr><th class="s0" dir="ltr">NO.</th>    <th class="s0" dir="ltr">TYPE</th></tr></thead><tbody>'
             monthData[1].map(d => {
-                var sic_Time = d.p2 == 'Self' ? d.totalTime : d.p2.slice(0, 9) + "..."
-                var pic_Time = d.p1 == 'Self' ? d.totalTime : d.p1.slice(0, 9) + "..."
-                var Approches = d.approach1.split(";");
-                var app_Type = Approches[1]
-                var app_No = Approches[0]
-                htmlContent += '<tr style="height: 30px" class="j_usa">                <td class="s0" dir="ltr">' + d.night + '</td>                <td class="s0" dir="ltr">' + d.actual_Instrument + '</td>                <td class="s0" dir="ltr">' + d.sim_instrument + '</td>                <td class="s0" dir="ltr">' + app_No + '</td>                <td class="s0" dir="ltr">' + app_Type + '</td>                <td class="s0" dir="ltr">x_country</td>                <td class="s0" dir="ltr">flight sim</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + pic_Time + '</td>                <td class="s0" dir="ltr">' + sic_Time + '</td>                <td class="s0" dir="ltr">' + d.dual_day + '</td><td class="s0" dir="ltr">' + d.instructional + '</td>                <td class="s0" dir="ltr">' + d.remark + '</td></tr>'
+                var sic_Time = d.p2 == 'Self' ? d.totalTime : d.totalTime
+                if(d.aircraftReg !== 'SIMU'){
+                    var sic_Time = d.p1 == 'Self' ? "" : d.totalTime
+                    var pic_Time = d.p1 == 'Self' ? d.totalTime : d.p1.slice(0, 9) 
+                    var Approches = d.approach1.split(";");
+                    var app_Split = Approches[1].split("$")
+                    var app_Type = app_Split[1]
+                    var app_No = Approches[0]
+                    var flight_sim = d.aircraftReg == 'SIMU' ? d.totalTime : "" ;
+                }
+                else{
+                    var sic_Time = ""
+                    var pic_Time = ""
+                    var app_Type = ""
+                    var app_No =  ""
+                    var flight_sim = ""
+                }
+                htmlContent += '<tr style="height: 30px" class="j_usa">                <td class="s0" dir="ltr">' + d.night + '</td>                <td class="s0" dir="ltr">' + d.actual_Instrument + '</td>                <td class="s0" dir="ltr">' + d.sim_instrument + '</td>                <td class="s0" dir="ltr">' + app_No + '</td>                <td class="s0" dir="ltr">' + app_Type + '</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">'+ flight_sim +'</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + pic_Time + '</td>                <td class="s0" dir="ltr">' + sic_Time + '</td>                <td class="s0" dir="ltr">' + d.dual_day + '</td><td class="s0" dir="ltr">' + d.instructional + '</td>                <td class="s0" dir="ltr">' + d.remark + '</td></tr>'
             })
             for (let i = 0; i < rows - monthData[1].length; i++) {
                 htmlContent += '            <tr style="height: 30px" class="j_usa">                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td><td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                </tr>  '
@@ -757,6 +807,7 @@ const JUSA = ({ navigation }) => {
 
     return (
         <SafeAreaView style={[DgcaLogbookStyles.container, { backgroundColor: theme.backgroundColor }]}>
+            <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
             <ScrollView>
                 <View style={DgcaLogbookStyles.header}>
                     <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{ padding: 6 }} onPress={() => navigation.goBack()} />
@@ -891,6 +942,8 @@ const JUSA = ({ navigation }) => {
                         />
                     </View>
                 </View>
+                {rows < 10 ? <Text style={{ color: 'red', paddingLeft: 12 }}>Minimum number  of rows is 10</Text> : null}
+                {rows > 25 ? <Text style={{ color: 'red', paddingLeft: 12 }}>Maximum number  of rows is 25</Text> : null}
 
                 <View style={DgcaLogbookStyles.mainTagLine}>
                     <Text style={dark ? DgcaLogbookStyles.DarktagLine : DgcaLogbookStyles.pageDetailText}>Start page number</Text>
@@ -917,6 +970,7 @@ const JUSA = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
             </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 };

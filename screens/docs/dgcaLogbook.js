@@ -1129,6 +1129,7 @@ const DgcaLogBook = ({ navigation }) => {
 
     return (
         <SafeAreaView style={[DgcaLogbookStyles.container, { backgroundColor: theme.backgroundColor }]}>
+            <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
             <ScrollView>
                 <View style={DgcaLogbookStyles.header}>
                     <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{ padding: 6 }} onPress={() => navigation.goBack()} />
@@ -1334,6 +1335,7 @@ const DgcaLogBook = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
             </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 };

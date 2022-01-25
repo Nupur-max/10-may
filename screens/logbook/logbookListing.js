@@ -635,10 +635,14 @@ const LogBookListing = ({ navigation }) => {
     user = JSON.parse(user);
     let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,totalTime,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC, inTime DESC, onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
-        
-        
-        
+      tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,totalTime,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+        if (result.rows.length == 0) {
+          console.log('no data to load')
+          //dataDispatcher(LogListData({ data: [], inProgress: false }))
+          setLoadmore(false)
+          return false;
+        }
+        setOffset(offset + 10);
         //if (result.rows.length > 1){
         for (let i = 0; i <= result.rows.length; i++) {
           if (result.rows.length !== 0){
