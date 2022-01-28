@@ -60,8 +60,9 @@ const JEU = ({ navigation }) => {
     const [toPeriod, settoPeriod] = useState('');
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState(null);
-    const [licenseHolderName, setlicenseHolderName] = useState('Nupur');
+    const [licenseHolderName, setlicenseHolderName] = useState('');
     const [data, setData] = useState(null)
+    // const [pdfData, setPdfData] = useState([])
 
     const [orderStart, setOrderStart] = React.useState('')
     const [orderEnd, setOrderEnd] = React.useState('')
@@ -171,6 +172,7 @@ const JEU = ({ navigation }) => {
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         let temData = [];
         var ordered = {};
+        let array = [];
         prePopulateddb.transaction(tx => {
             tx.executeSql('Select * from logbook  WHERE user_id == "' + user.id + '" AND orderedDate BETWEEN "' + orderStart + '" AND "' + orderEnd + '" AND tag == "server" ORDER BY orderedDate ASC', [], (tx, result) => {
                 for (let i = 0; i <= result.rows.length; i++) {
@@ -262,17 +264,18 @@ const JEU = ({ navigation }) => {
                     });
                     setData(temData);
                     //-------- Converted Data into monthWise -------//
-                    var entry = temData[i];
-                    var m = parseInt(entry.date.split("-")[1]) - 1;
-                    var y = parseInt(entry.date.split("-")[2]);
-                    if (!ordered[months[m] + " " + [y]]) { ordered[months[m] + " " + [y]] = []; }
-                    ordered[months[m] + " " + [y]].push(entry);
-                    setMonthWise(ordered)
+                    // var entry = temData[i];
+                    // var m = parseInt(entry.date.split("-")[1]) - 1;
+                    // var y = parseInt(entry.date.split("-")[2]);
+                    // if (!ordered[months[m] + " " + [y]]) { ordered[months[m] + " " + [y]] = []; }
+                    // ordered[months[m] + " " + [y]].push(entry);
+                    // setMonthWise(ordered)
 
 
                 }
             });
         })
+        
     }
 
     //-------- Total calculation of left page data --------//
@@ -284,7 +287,7 @@ const JEU = ({ navigation }) => {
         let Final_day_landing = '';
         let Final_night_landing = '';
 
-        monthData[1].map(d => {
+        monthData.map(d => {
             if(d.aircraftReg !== "SIMU"){
             //-------- total_Time flying hours --------//
             let Day = d.totalTime.split(":")
@@ -337,7 +340,7 @@ const JEU = ({ navigation }) => {
     var time_Final_night_landing = ''
 
     const leftPageTotalTime = (monthData) => {
-        monthData[1].map(d => {
+        monthData.map(d => {
             if(d.aircraftReg !== "SIMU"){
             //-------- total_Time flying hours --------//
             let time_Day = d.totalTime.split(":")
@@ -384,7 +387,7 @@ const JEU = ({ navigation }) => {
         var Total_Time = '';
         var TotalInst = '';
 
-        monthData[1].map(d => {
+        monthData.map(d => {
             if(d.aircraftReg !== "SIMU"){
             //--------  NightTime flying hours --------//
             var Night = d.night.split(":")
@@ -442,7 +445,7 @@ const JEU = ({ navigation }) => {
         })
         let htmlContent = '<html><body>'
 
-        htmlContent += '<tr style="height: 20px">                <td class="s0" dir="ltr">' + Final_Night_Time + '</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + Final_PIC_Time + '</td>                <td class="s0" dir="ltr">' + Final_SIC_Time + '</td>                <td class="s0" dir="ltr">' + Total_Time + '</td>                <td class="s0" dir="ltr">' + TotalInst + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + Total_Time + '</td>                <td style="padding:2px 0px 2px 3px; height: 20px" rowspan="3">I certifiy that the all entries are true <br> -------------- <br> Pilot\'s Signature</td></tr>'
+        htmlContent += '<tr style="height: 20px">                <td class="s0" dir="ltr">' + Final_Night_Time + '</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + Final_PIC_Time + '</td>                <td class="s0" dir="ltr">' + Final_SIC_Time + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + TotalInst + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + Total_Time + '</td>                <td style="padding:0px 3px; font-size:8px" rowspan="3">I certifiy that the all entries are true <br> -------------- <br> Pilot\'s Signature</td></tr>'
         htmlContent += '</body></html>'
         return htmlContent
     }
@@ -473,7 +476,7 @@ const JEU = ({ navigation }) => {
     var totalSession_array = ["00:00",]
 
     const rightPageTotalTime = (monthData) => {
-        monthData[1].map(d => {
+        monthData.map(d => {
             if(d.aircraftReg !== "SIMU"){
             //-------- night flying hours --------//
             var time_Night = d.night.split(":")
@@ -539,7 +542,7 @@ const JEU = ({ navigation }) => {
         }
         })
         let htmlContent = '<html><body>'
-        htmlContent += '<tr style="height: 30px">       <td class="s0" dir="ltr">' + time_Final_Night_Time + '</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + time_Final_PIC_Time + '</td>                <td class="s0" dir="ltr">' + time_Final_SIC_Time + '</td>                <td class="s0" dir="ltr">' + time_Total_Time + '</td>                <td class="s0" dir="ltr">' + time_TotalInst + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + time_Total_Time + '</td>                </tr>'
+        htmlContent += '<tr style="height: 20px">       <td class="s0" dir="ltr">' + time_Final_Night_Time + '</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + time_Final_PIC_Time + '</td>                <td class="s0" dir="ltr">' + time_Final_SIC_Time + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + time_TotalInst + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + time_Total_Time + '</td>                </tr>'
         htmlContent += '</body></html>'
         return htmlContent
     }
@@ -558,13 +561,22 @@ const JEU = ({ navigation }) => {
 
     //----- combined all function to Show in pdf -----//
     const dataToPrint = () => {
+        const chunkSize = Number(rows)
+        var pdfData = []
+        for (var k = 0; k < data.length; k += chunkSize) {
+            const chunk = data.slice(k, k + chunkSize);
+            pdfData.push(chunk)
+        }
         var platForm = Platform.OS === "ios" ? '<br>' : ''
-        var platFormCss = Platform.OS === "ios" ? '.ritz .waffle .s0{padding:0px 9px}' : '.ritz .waffle .s0{padding:3px 9px}'
+        var platFormCss = Platform.OS === "ios" ? '.ritz .waffle .s0{padding:0px 9px}' : '.ritz .waffle .s0{padding:2px 9px}'
         let htmlContent = '<html><body>'
-        Object.entries(monthWise).map((monthData, index) => {
+        pdfData.map((monthData, index) => {
             var pageNo = Number(page) + index
-            htmlContent += '<style type="text/css"> @page { size:29.5cm 21cm; }table{"page-break-after: always;"} tr { page-break-inside:avoid !important; page-break-after:auto } .j_ue:nth-child(even) {background-color: #e0ebeb;} .ritz .waffle a { color: inherit; }.ritz .waffle .s0{text-align:center;color:#000000;font-size:9pt;vertical-align:center;white-space:normal;overflow:hidden;word-wrap:break-word;direction:ltr;} ' + platFormCss + ' td{ border: 2px #000 solid}</style><div class="ritz grid-container" dir="ltr"><table class="waffle" cellspacing="0" cellpadding="0">        <thead>            <tr style="height: 20px">                <td class="s0" dir="ltr" rowspan="2">DATE (DD/MM/YY)</td>                <td class="s0" dir="ltr" colspan="2">DEPARTURE</td>                <td class="s0" dir="ltr" colspan="2">ARRIVAL</td>                <td class="s0" dir="ltr" colspan="2">AIRCRAFT</td>                <td class="s0" dir="ltr" colspan="2">SP</td>                <td class="s0" dir="ltr" rowspan="2">MULTI- PILOT</td>                <td class="s0" dir="ltr" rowspan="2">TOTAL TIME OF FLIGHT</td>                		<td class="s0" dir="ltr" rowspan="2">NAME PIC</td>                 <td class="s0" dir="ltr" colspan="2">LANDINGS</td>             </tr> <tr style="height: 20px">                <td class="s0" dir="ltr">PLACE</td>                <td class="s0" dir="ltr">TIME</td>                <td class="s0" dir="ltr">PLACE</td>                <td class="s0" dir="ltr">TIME</td>                <td class="s0" dir="ltr">MAKE & MODEL</td>        <td class="s0" dir="ltr">REGISTRATION</td>                <td class="s0" dir="ltr">SE</td>                <td class="s0" dir="ltr">ME</td>                <td class="s0" dir="ltr">DAY</td>                <td class="s0" dir="ltr">NIGHT</td>           </tr> </thead><tbody>'
-            monthData[1].map(d => {
+            var page1 = Platform.OS == "ios" ? '<p>Page' + pageNo + '-A(AutoFlightLog)</p>' : ''
+            var page2 = Platform.OS == "ios" ? '<p>Page' + pageNo + '-B(AutoFlightLog)</p>' : ''
+            var brTag = Platform.OS == "ios" ? '<br><br><br>' : '<br><br>'
+            htmlContent += '<style type="text/css"> @page { size:29.5cm 21cm; }table{"page-break-after: always;"} tr { page-break-inside:avoid !important; page-break-after:auto } .j_ue:nth-child(even) {background-color: #e0ebeb;} .ritz .waffle a { color: inherit; }.ritz .waffle .s0{text-align:center;color:#000000;font-size:10pt;vertical-align:center;white-space:normal;overflow:hidden;word-wrap:break-word;direction:ltr;} ' + platFormCss + ' td{ border: 2px #000 solid}</style><div class="ritz grid-container" dir="ltr"><table class="waffle" cellspacing="0" cellpadding="0">                   <tr style="height: 20px">                <td class="s0" dir="ltr" rowspan="2">DATE (DD/MM/YY)</td>                <td class="s0" dir="ltr" colspan="2">DEPARTURE</td>                <td class="s0" dir="ltr" colspan="2">ARRIVAL</td>                <td class="s0" dir="ltr" colspan="2">AIRCRAFT</td>                <td class="s0" dir="ltr" colspan="2">SP</td>                <td class="s0" dir="ltr" rowspan="2">MULTI- PILOT</td>                <td class="s0" dir="ltr" rowspan="2">TOTAL TIME OF FLIGHT</td>                		<td class="s0" dir="ltr" rowspan="2">NAME PIC</td>                 <td class="s0" dir="ltr" colspan="2">LANDINGS</td>             </tr> <tr style="height: 20px">                <td class="s0" dir="ltr">PLACE</td>                <td class="s0" dir="ltr">TIME</td>                <td class="s0" dir="ltr">PLACE</td>                <td class="s0" dir="ltr">TIME</td>                <td class="s0" dir="ltr">MAKE & MODEL</td>        <td class="s0" dir="ltr">REGISTRATION</td>                <td class="s0" dir="ltr">SE</td>                <td class="s0" dir="ltr">ME</td>                <td class="s0" dir="ltr">DAY</td>                <td class="s0" dir="ltr">NIGHT</td>           </tr><tbody>'
+            monthData.map(d => {
                 if(d.aircraftReg !== "SIMU"){
                 var SEtime = d.Class == "SE" ? d.totalTime : '';
                 var MEtime = d.Class == "ME" ? d.totalTime : '';
@@ -578,11 +590,11 @@ const JEU = ({ navigation }) => {
 
                 htmlContent += '<tr  class="j_ue" style="height: 20px">                <td class="s0" dir="ltr">' + d.date + '</td>                <td class="s0" dir="ltr">' + d.from + '</td>                <td class="s0" dir="ltr">' + d.chocksOffTime + '</td>                <td class="s0" dir="ltr">' + d.to + '</td>                <td class="s0" dir="ltr">' + d.chocksOnTime + '</td>                <td class="s0" dir="ltr">' + d.aircraftType + '</td>                <td class="s0" dir="ltr">' + d.aircraftReg + '</td>                <td class="s0" dir="ltr">' + SEtime + '</td>                <td class="s0" dir="ltr">' + MEtime + '</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">' + totalDuration + '</td>             <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">' + d.dayLanding + '</td>                <td class="s0" dir="ltr">' + d.nightLanding + '</td>      </tr>'
             })
-            for (let i = 0; i < rows - monthData[1].length; i++) {
+            for (let i = 0; i < rows - monthData.length; i++) {
                 htmlContent += '<tr class="j_ue" style="height: 20px" id=' + [i] + '>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td> <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                </tr>'
             }
-            htmlContent += leftPageTotal(monthData) + prevTotalLeft(monthData) + leftPageTotalTime(monthData) + '        </tbody> ' + breakTag() + '   </table><p>Page' + pageNo + '-A(AutoFlightLog)</p><table class="waffle" cellspacing="0" cellpadding="0" >' + breakTag() + '      <thead>            <tr style="height: 20px">                <td class="s0" dir="ltr" colspan="2">OPERATIONAL CONDITION</td>                <td class="s0" dir="ltr" colspan="4">PILOT FUNCTION</td>                <td class="s0" dir="ltr" colspan="3">SYNTHETIC TRAINING DEVICES SESSION</td>                <td class="s0" dir="ltr" rowspan="2">REMARKS AND ENDORSMENTS</td>             </tr>            <tr style="height: 20px">                <td class="s0" dir="ltr">NIGHT</td>                <td class="s0" dir="ltr">IFR</td>                <td class="s0" dir="ltr">PILOT-IN-COMMAND</td>                <td class="s0" dir="ltr">CO- PILOT</td>                <td class="s0" dir="ltr">DUAL</td>        <td class="s0" dir="ltr">INSTRUCTOR</td>                <td class="s0" dir="ltr">DATE (DD/MM/YY)</td>                <td class="s0" dir="ltr">TYPE</td>                <td class="s0" dir="ltr">TOTAL TIME OF SESSION</td>           </tr> </thead><tbody>'
-            monthData[1].map(d => {
+            htmlContent += leftPageTotal(monthData) + prevTotalLeft(monthData) + leftPageTotalTime(monthData) + '        </tbody> ' + breakTag() + ' '+brTag+' </table>'+page1+'<table class="waffle" cellspacing="0" cellpadding="0" >' + breakTag() + '    <br>             <tr style="height: 20px">                <td class="s0" dir="ltr" colspan="2">OPERATIONAL CONDITION</td>                <td class="s0" dir="ltr" colspan="4">PILOT FUNCTION</td>                <td class="s0" dir="ltr" colspan="3">SYNTHETIC TRAINING DEVICES SESSION</td>                <td class="s0" dir="ltr" rowspan="2">REMARKS AND ENDORSMENTS</td>             </tr>            <tr style="height: 20px">                <td class="s0" dir="ltr">NIGHT</td>                <td class="s0" dir="ltr">IFR</td>                <td class="s0" dir="ltr">PILOT-IN-COMMAND</td>                <td class="s0" dir="ltr">CO- PILOT</td>                <td class="s0" dir="ltr">DUAL</td>        <td class="s0" dir="ltr">INSTRUCTOR</td>                <td class="s0" dir="ltr">DATE (DD/MM/YY)</td>                <td class="s0" dir="ltr">TYPE</td>                <td class="s0" dir="ltr">TOTAL TIME OF SESSION</td>           </tr> <tbody>'
+            monthData.map(d => {
                 if(d.aircraftReg !== "SIMU"){
                 var sic_Time = d.p2 == 'Self' ? d.totalTime : d.p2.slice(0, 10) + '...'
                 var pic_Time = d.p1 == 'Self' ? d.totalTime : d.p1.slice(0, 10) + '...'
@@ -592,12 +604,12 @@ const JEU = ({ navigation }) => {
                     var pic_Time = ""
                 }
 
-                htmlContent += '<tr class="j_ue" style="height: 20px">                <td class="s0" dir="ltr">' + d.night + '</td>                <td class="s0" dir="ltr">' + d.ifr_vfr + '</td>                <td class="s0" dir="ltr">' + pic_Time + '</td>                <td class="s0" dir="ltr" style="width: 90px">' + sic_Time + '</td>                <td class="s0" dir="ltr">' + d.dual_day  + '</td>                <td class="s0" dir="ltr">' + d.instructional + '</td>                <td class="s0" dir="ltr">' + d.date + '</td>                <td class="s0" dir="ltr">'+d.aircraftType+'</td>                <td class="s0" dir="ltr">' + d.totalTime + '</td>                <td class="s0" dir="ltr">' + d.remark + '</td>  </tr>'
+                htmlContent += '<tr class="j_ue" style="height: 20px">                <td class="s0" dir="ltr">' + d.night + '</td>                <td class="s0" dir="ltr">' + d.ifr_vfr + '</td>                <td class="s0" dir="ltr">' + pic_Time + '</td>                <td class="s0" dir="ltr" style="width: 90px">' + sic_Time + '</td>                <td class="s0" dir="ltr">' + d.dual_day  + '</td>                <td class="s0" dir="ltr">' + d.instructional + '</td>                <td class="s0" dir="ltr">' + d.date + '</td>                <td class="s0" dir="ltr">'+d.aircraftType+'</td>                <td class="s0" dir="ltr">' + d.totalTime + '</td>                <td class="s0" dir="ltr"></td>  </tr>'
             })
-            for (let i = 0; i < rows - monthData[1].length; i++) {
+            for (let i = 0; i < rows - monthData.length; i++) {
                 htmlContent += '<tr class="j_ue" style="height: 20px" id=' + i + '>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                </tr> '
             }
-            htmlContent += rightPageTotal(monthData) + fromPrevRight(monthData) + rightPageTotalTime(monthData) + '       </tbody>    </table><p>Page' + pageNo + '-A(AutoFlightLog)</p></div>'
+            htmlContent += rightPageTotal(monthData) + fromPrevRight(monthData) + rightPageTotalTime(monthData) + '       </tbody>    </table>'+page2+'</div>'
         }).join(' ')
         htmlContent += '</body></html>'
         return htmlContent
@@ -795,11 +807,8 @@ const JEU = ({ navigation }) => {
                 </View>
             </View>
 
-            {rows < 10 ? <Text style={{ color: 'red', paddingLeft: 12 }}>Minimum number  of rows is 10</Text> : null}
-            {rows > 25 ? <Text style={{ color: 'red', paddingLeft: 12 }}>Maximum number  of rows is 25</Text> : null}
-
             <View style={DgcaLogbookStyles.mainTagLine}>
-                <Text style={dark ? DgcaLogbookStyles.DarktagLine : DgcaLogbookStyles.pageDetailText}>Start page number</Text>
+                <Text style={DgcaLogbookStyles.pageDetailText}>Start page number</Text>
             </View>
             <View style={{ paddingHorizontal: 10 }}>
                 <View style={dark?DgcaLogbookStyles.DarkTextInputView:DgcaLogbookStyles.TextInputView}>

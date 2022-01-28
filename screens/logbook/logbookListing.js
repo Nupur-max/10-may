@@ -776,6 +776,7 @@ const LogBookListing = ({ navigation }) => {
           setOffset(offset + 5);
           let DataAfterRosterDel = [];
           for (let i = 0; i <= result.rows.length; i++) {
+            if (result.rows.length !== 0){
             DataAfterRosterDel.push({
               id: result.rows.item(i).id,
               tag: result.rows.item(i).tag,
@@ -808,7 +809,14 @@ const LogBookListing = ({ navigation }) => {
             //console.log(DataAfterRosterDel)
             //setComplete(true)
             dataDispatcher(LogListData({ data: DataAfterRosterDel, inProgress: false }))
+            setLoadmore(false)
+            setFindTag(result.rows.item(i).tag);
           }
+          else {
+            console.log('no data to show')
+            dataDispatcher(LogListData({ data: [], inProgress: false }))
+          }
+        }
         });
       });
       const getReduxDataDeleted = dataSelector;

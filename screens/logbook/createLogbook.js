@@ -1254,6 +1254,74 @@ React.useEffect(() => {
             });
     };
 
+    const DeleteLogs = () => {
+        //dataDispatcher(LogListData({ data: [] }))
+        prePopulateddb.transaction(tx => {
+          tx.executeSql(
+            'DELETE FROM logbook WHERE id = "'+rosterId+'"', [], (tx, Delresult) => {
+              //console.log('Result', Delresult.rows.length);
+              //console.log('DELETE FROM logbook WHERE tag = "roster"')
+              SELECTAfterDel(true)
+              navigation.navigate('LogBookListing')
+            }
+          );
+        });
+      }
+
+      const SELECTAfterDel = async (deleteLog = false) => {
+        let user = await AsyncStorage.getItem('userdetails');
+        user = JSON.parse(user);
+        console.log('test');
+        if (deleteLog === true) {
+          //console.log('inner', user.id)
+          prePopulateddb.transaction(tx => {
+            tx.executeSql(
+                'SELECT * from logbook  WHERE user_id = "'+user.id+'" ORDER BY orderedDate DESC limit 5', [], (tx, result) => {
+                //setOffset(offset + 10);
+                      if (result.rows.length > 0) {
+                          //alert('data available ');
+                          //console.log('result', result)
+                      }
+                      for (let i = 0; i <= result.rows.length; i++) {
+                        if (result.rows.length !== 0){
+                          temData.push({
+                              id : result.rows.item(i).id,
+                              tag : result.rows.item(i).tag,
+                              user_id: result.rows.item(i).user_id,
+                              date: result.rows.item(i).date,
+                              from : result.rows.item(i).from_nameICAO,
+                              to : result.rows.item(i).to_nameICAO,
+                              from_lat : result.rows.item(i).from_lat,
+                              from_long : result.rows.item(i).from_long,
+                              to_lat : result.rows.item(i).to_lat, 
+                              to_long : result.rows.item(i).to_long,
+                              chocksOffTime : result.rows.item(i).offTime, 
+                              chocksOnTime : result.rows.item(i).onTime,
+                              approach1 : result.rows.item(i).approach1,
+                              from_airportID : result.rows.item(i).from_airportID,
+                              p1 : result.rows.item(i).p1,
+                              p2 : result.rows.item(i).p2,
+                              aircraftType : result.rows.item(i).aircraftType,
+                              aircraftReg : result.rows.item(i).aircraftReg,
+                          });
+                            console.log('logbook data', temData);
+                           //setLocalLogbookData(temData);
+                          dataDispatcher(LogListData({data: temData, inProgress: false}))
+                          //dataDispatcher(DocListData({data: temData}))
+                          
+                        }
+                        else {
+                            console.log('no data to show')
+                            dataDispatcher(LogListData({ data: [], inProgress: false }))
+                          }
+                    }
+                  });
+          });
+          //const getReduxDataDeleted = dataSelector;
+          //console.log('from Deleted Logbook', getReduxDataDeleted.data);
+        }
+      }
+
     const OpenRosterDateModal = () => {
         setRosterModalVisible(true)
         setModalVisible(false)
@@ -1435,7 +1503,7 @@ React.useEffect(() => {
         if(rosterAId !== 'SIMU'){
         //dataDispatcher(LogListData({data: []}))
         tx.executeSql(
-        'SELECT * from logbook  WHERE user_id = "'+user.id+'" ORDER BY orderedDate DESC', [], (tx, result) => {
+        'SELECT * from logbook  WHERE user_id = "'+user.id+'" ORDER BY orderedDate DESC limit 5', [], (tx, result) => {
         //setOffset(offset + 10);
               if (result.rows.length > 0) {
                   //alert('data available ');
@@ -1462,7 +1530,7 @@ React.useEffect(() => {
                       aircraftType : result.rows.item(i).aircraftType,
                       aircraftReg : result.rows.item(i).aircraftReg,
                   });
-                   //console.log('logbook data', result.rows.item(i).from_lat,);
+                    console.log('logbook data', temData);
                    //setLocalLogbookData(temData);
                   dataDispatcher(LogListData({data: temData, inProgress: false}))
                   //dataDispatcher(DocListData({data: temData}))
@@ -1474,7 +1542,7 @@ React.useEffect(() => {
             let temDataSIMU = [];
             //dataDispatcher(LogListData({data: []}))
             tx.executeSql(
-                'SELECT * from logbook  WHERE user_id = "'+user.id+'"', [], (tx, result) => {
+                'SELECT * from logbook  WHERE user_id = "'+user.id+'" limit 5', [], (tx, result) => {
                 //setOffset(offset + 10);
                       if (result.rows.length > 0) {
                           //alert('data available ');
@@ -2437,7 +2505,7 @@ React.useEffect(() => {
                             <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Aircraft Type <Text style={{ color: 'red' }}>*</Text></Text>
                             <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                                 {/* <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{ ListingParam === rosterFromParams ? rosterAType : AircraftParam === params.childParam2 ? aircraft_name : '' }</Text> */}
-                                <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{ rosterAType }</Text>
+                                <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterAId===undefined?'':rosterAType }</Text>
                                 <TouchableOpacity onPress={() => { navigation.navigate('SetAircraft', {itemAtype : rosterAType , itemAId : rosterAId , from : 'ATCreateLogbook'  }) }}>
                                     <MaterialCommunityIcons
                                         name="alert-circle-outline" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
@@ -3624,7 +3692,7 @@ React.useEffect(() => {
 
             <View style={dark?Logbook.DarkbuttonView:Logbook.buttonView}>
                 <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={()=>{Add_Logbook()}}> 
+                    <TouchableOpacity onPress={()=>{insertQuery();Add_Logbook()}}> 
                         <View style={Logbook.button}>
                             <Text style={Logbook.buttonText}>Save</Text>
                         </View>
@@ -3785,7 +3853,7 @@ React.useEffect(() => {
                                 </View>
                             </TouchableOpacity>
                             {rosterId ?
-                                <TouchableOpacity style={ModalView.Modal} onPress={deleteLogbbok}>
+                                <TouchableOpacity style={ModalView.Modal} onPress={()=>{deleteLogbbok();DeleteLogs()}}>
                                     <MaterialCommunityIcons name="account-plus" color={dark?'#fff':'#000'} size={20}/>
                                     <View>
                                         <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}>Delete</Text>

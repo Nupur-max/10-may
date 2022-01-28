@@ -43,10 +43,6 @@
 			</dict>
 		</dict>
 	</dict>
-	<!-- <key>NSCameraUsageDescription</key>
-	<true/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>COJO required to capture photos</string> -->
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to use your camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

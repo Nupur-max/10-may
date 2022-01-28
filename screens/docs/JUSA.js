@@ -1,6 +1,6 @@
 //import liraries
 import React, { useState } from 'react';
-import { View, Text,KeyboardAvoidingView, TextInput, TouchableOpacity, Platform, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, KeyboardAvoidingView, TextInput, TouchableOpacity, Platform, SafeAreaView, ScrollView } from 'react-native';
 import DgcaLogbookStyles from '../../styles/dgcaLogbookStyles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RadioButton, ThemeProvider } from 'react-native-paper'
@@ -169,6 +169,7 @@ const JUSA = ({ navigation }) => {
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         let temData = [];
         var ordered = {};
+        let array = []
         prePopulateddb.transaction(tx => {
             tx.executeSql('Select * from logbook WHERE user_id == "' + user.id + '" AND orderedDate BETWEEN "' + orderStart + '" AND "' + orderEnd + '" AND tag == "server" ORDER BY orderedDate ASC', [], (tx, result) => {
                 for (let i = 0; i <= result.rows.length; i++) {
@@ -259,12 +260,7 @@ const JUSA = ({ navigation }) => {
                     ordered[months[m] + " " + [y]].push(entry);
                     setMonthWise(ordered)
 
-                       const chunkSize = 10
-                                for (var k = 0; k < temData[i].length; k += chunkSize) {
-                                    const chunk = array.slice(k, k + chunkSize);
-                                    console.log('chunk=', chunk)
-                                    // do whatever
-                                }
+
 
                 }
             });
@@ -288,56 +284,56 @@ const JUSA = ({ navigation }) => {
         var Final_day_landing = '';
         var Final_night_landing = '';
 
-        monthData[1].map(d => {
+        monthData.map(d => {
             //-------- total_Time flying hours --------//
-            if(d.aircraftReg !== "SIMU"){
-            var Day = d.totalTime.split(":")
-            var total_time1 = Number(Day[0] * 60) + Number(Day[1])
-            total_time += total_time1
-            var total_time_Hours = Math.floor(total_time / 60);
-            var total_time_Min = total_time % 60;
-            if (total_time_Hours < 10) {
-                total_time_Hours = '0' + total_time_Hours;
-            }
-            if (total_time_Min < 10) {
-                total_time_Min = '0' + total_time_Min;
-            }
-            Final_Total_Dur = total_time_Hours + ":" + total_time_Min;
+            if (d.aircraftReg !== "SIMU") {
+                var Day = d.totalTime.split(":")
+                var total_time1 = Number(Day[0] * 60) + Number(Day[1])
+                total_time += total_time1
+                var total_time_Hours = Math.floor(total_time / 60);
+                var total_time_Min = total_time % 60;
+                if (total_time_Hours < 10) {
+                    total_time_Hours = '0' + total_time_Hours;
+                }
+                if (total_time_Min < 10) {
+                    total_time_Min = '0' + total_time_Min;
+                }
+                Final_Total_Dur = total_time_Hours + ":" + total_time_Min;
 
-            if (d.Class == 'SE Land') {
-                Final_SEL_time = total_time_Hours + ":" + total_time_Min;
-            }
-            if (d.Class == 'ME Land') {
-                Final_MEL_time = total_time_Hours + ":" + total_time_Min;
-            }
-            if (d.Class == 'SE Sea') {
-                Final_SES_time = total_time_Hours + ":" + total_time_Min;
-            }
-            if (d.Class == 'ME Sea') {
-                Final_MES_time = total_time_Hours + ":" + total_time_Min;
-            }
-            if (d.Engine == 'Jet') {
-                Final_Jet_time = total_time_Hours + ":" + total_time_Min;
-            }
-            if (d.Engine == 'Helicopter') {
-                Final_Hel_time = total_time_Hours + ":" + total_time_Min;
-            }
-            if (d.Engine == 'glider') {
-                Final_Gli_time = total_time_Hours + ":" + total_time_Min;
-            }
+                if (d.Class == 'SE Land') {
+                    Final_SEL_time = total_time_Hours + ":" + total_time_Min;
+                }
+                if (d.Class == 'ME Land') {
+                    Final_MEL_time = total_time_Hours + ":" + total_time_Min;
+                }
+                if (d.Class == 'SE Sea') {
+                    Final_SES_time = total_time_Hours + ":" + total_time_Min;
+                }
+                if (d.Class == 'ME Sea') {
+                    Final_MES_time = total_time_Hours + ":" + total_time_Min;
+                }
+                if (d.Engine == 'Jet') {
+                    Final_Jet_time = total_time_Hours + ":" + total_time_Min;
+                }
+                if (d.Engine == 'Helicopter') {
+                    Final_Hel_time = total_time_Hours + ":" + total_time_Min;
+                }
+                if (d.Engine == 'glider') {
+                    Final_Gli_time = total_time_Hours + ":" + total_time_Min;
+                }
 
-            //-------- total Day Landings --------//
-            var dayLanding = +d.dayLanding
-            total_dayLanding += dayLanding
-            Final_day_landing = total_dayLanding
+                //-------- total Day Landings --------//
+                var dayLanding = +d.dayLanding
+                total_dayLanding += dayLanding
+                Final_day_landing = total_dayLanding
 
-            //-------- total Night Landings --------//
-            var nightLanding = +d.nightLanding
-            total_nightLanding += nightLanding
-            Final_night_landing = total_nightLanding
+                //-------- total Night Landings --------//
+                var nightLanding = +d.nightLanding
+                total_nightLanding += nightLanding
+                Final_night_landing = total_nightLanding
 
-            // 
-        }
+                // 
+            }
         })
         let htmlContent = '<html><body>'
 
@@ -382,64 +378,64 @@ const JUSA = ({ navigation }) => {
     var totalTime_array = ["00:00",]
 
     const dateTotalLeft = (monthData) => {
-        monthData[1].map(d => {
-            if(d.aircraftReg !== "SIMU"){
+        monthData.map(d => {
+            if (d.aircraftReg !== "SIMU") {
                 //-------- total_Time flying hours --------//
-            var Day = d.totalTime.split(":")
-            var total_time1 = Number(Day[0] * 60) + Number(Day[1])
-            date_total_time += total_time1
-            var date_total_time_Hours = Math.floor(date_total_time / 60);
-            var date_total_time_Min = date_total_time % 60;
-            if (date_total_time_Hours < 10) {
-                date_total_time_Hours = '0' + date_total_time_Hours;
-            }
-            if (date_total_time_Min < 10) {
-                date_total_time_Min = '0' + date_total_time_Min;
-            }
-            date_Final_Total_Dur = date_total_time_Hours + ":" + date_total_time_Min;
-            totalTime_array.push(date_Final_Total_Dur);
+                var Day = d.totalTime.split(":")
+                var total_time1 = Number(Day[0] * 60) + Number(Day[1])
+                date_total_time += total_time1
+                var date_total_time_Hours = Math.floor(date_total_time / 60);
+                var date_total_time_Min = date_total_time % 60;
+                if (date_total_time_Hours < 10) {
+                    date_total_time_Hours = '0' + date_total_time_Hours;
+                }
+                if (date_total_time_Min < 10) {
+                    date_total_time_Min = '0' + date_total_time_Min;
+                }
+                date_Final_Total_Dur = date_total_time_Hours + ":" + date_total_time_Min;
+                totalTime_array.push(date_Final_Total_Dur);
 
-            if (d.Class == 'SE Land') {
-                date_Final_SEL_time = date_Final_Total_Dur;
-                sel_array.push(date_Final_SEL_time)
-            }
-            if (d.Class == 'ME Land') {
-                date_Final_MEL_time = date_Final_Total_Dur;
-                mel_array.push(date_Final_MEL_time)
-            }
-            if (d.Class == 'SE Sea') {
-                date_Final_SES_time = date_Final_Total_Dur;
-                ses_array.push(date_Final_SES_time)
-            }
-            if (d.Class == 'ME Sea') {
-                date_Final_MES_time = date_Final_Total_Dur;
-                mes_array.push(date_Final_MES_time)
-            }
-            if (d.Engine == 'Jet') {
-                date_Final_Jet_time = date_Final_Total_Dur;
-                jet_array.push(date_Final_Jet_time)
-            }
-            if (d.Engine == 'Helicopter') {
-                date_Final_Hel_time = date_Final_Total_Dur;
-                hel_array.push(date_Final_Hel_time)
-            }
-            if (d.Engine == 'glider') {
-                date_Final_Gli_time = date_Final_Total_Dur;
-                gli_array.push(date_Final_Gli_time)
-            }
+                if (d.Class == 'SE Land') {
+                    date_Final_SEL_time = date_Final_Total_Dur;
+                    sel_array.push(date_Final_SEL_time)
+                }
+                if (d.Class == 'ME Land') {
+                    date_Final_MEL_time = date_Final_Total_Dur;
+                    mel_array.push(date_Final_MEL_time)
+                }
+                if (d.Class == 'SE Sea') {
+                    date_Final_SES_time = date_Final_Total_Dur;
+                    ses_array.push(date_Final_SES_time)
+                }
+                if (d.Class == 'ME Sea') {
+                    date_Final_MES_time = date_Final_Total_Dur;
+                    mes_array.push(date_Final_MES_time)
+                }
+                if (d.Engine == 'Jet') {
+                    date_Final_Jet_time = date_Final_Total_Dur;
+                    jet_array.push(date_Final_Jet_time)
+                }
+                if (d.Engine == 'Helicopter') {
+                    date_Final_Hel_time = date_Final_Total_Dur;
+                    hel_array.push(date_Final_Hel_time)
+                }
+                if (d.Engine == 'glider') {
+                    date_Final_Gli_time = date_Final_Total_Dur;
+                    gli_array.push(date_Final_Gli_time)
+                }
 
-            //-------- total Day Landings --------//
-            var date_dayLanding = +d.dayLanding
-            date_total_dayLanding += date_dayLanding
-            date_Final_day_landing = date_total_dayLanding
-            dayl_array.push(date_Final_day_landing)
+                //-------- total Day Landings --------//
+                var date_dayLanding = +d.dayLanding
+                date_total_dayLanding += date_dayLanding
+                date_Final_day_landing = date_total_dayLanding
+                dayl_array.push(date_Final_day_landing)
 
-            //-------- total Night Landings --------//
-            var date_nightLanding = +d.nightLanding
-            date_total_nightLanding += date_nightLanding
-            date_Final_night_landing = date_total_nightLanding
-            nightl_array.push(date_Final_night_landing)
-        }
+                //-------- total Night Landings --------//
+                var date_nightLanding = +d.nightLanding
+                date_total_nightLanding += date_nightLanding
+                date_Final_night_landing = date_total_nightLanding
+                nightl_array.push(date_Final_night_landing)
+            }
         })
         let htmlContent = '<html><body>'
         htmlContent += '<tr style="height: 30px">                <td class="s0" dir="ltr" colspan="2" style="border-top:none;"></td>                <td class="s0" dir="ltr" colspan="3"><b>TOTALS TO DATE</b></td>                <td class="s0" dir="ltr">' + date_Final_Total_Dur + '</td>                <td class="s0" dir="ltr">' + date_Final_SEL_time + '</td>                <td class="s0" dir="ltr">' + date_Final_SES_time + '</td>                <td class="s0" dir="ltr">' + date_Final_MEL_time + '</td>                <td class="s0" dir="ltr">' + date_Final_MES_time + '</td>                <td class="s0" dir="ltr">' + date_Final_Jet_time + '</td>                <td class="s0" dir="ltr">' + date_Final_Hel_time + '</td>                <td class="s0" dir="ltr">' + date_Final_Gli_time + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + date_Final_day_landing + '</td>                <td class="s0" dir="ltr">' + date_Final_night_landing + '</td></tr>'
@@ -448,14 +444,14 @@ const JUSA = ({ navigation }) => {
     }
 
     //-------- Total calculation of Right page data   --------//
-    
+
 
     const totalForRight = (monthData) => {
         var totalNight = 0
         var totalactual_Instrument = 0
         var totalsim_instrument = 0;
         var totalFinalTime = 0
-        var totalApproches =0
+        var totalApproches = 0
 
         var Final_Night_Time = ''
         var Final_PIC_Time = ''
@@ -463,91 +459,96 @@ const JUSA = ({ navigation }) => {
         var Total_Time = ''
         var totalactual_Instrument1 = ''
         var totalsim_instrument1 = '';
-        var final_TotalApproches =''
+        var final_TotalApproches = ''
 
 
-        monthData[1].map(d => {
-            if(d.aircraftReg !== "SIMU"){
+        monthData.map(d => {
+            if (d.aircraftReg !== "SIMU") {
 
                 //-------- total Day Landings --------//
                 var Approche = d.approach1.split(";");
-            var Appro = +Approche[0]
-            totalApproches += Appro
-            final_TotalApproches = totalApproches
+                var Appro = +Approche[0]
+                totalApproches += Appro
+                final_TotalApproches = totalApproches
 
                 //--------  nightTime flying hours --------//
-            var Night = d.night.split(":")
-            var total_Nighttime = Number(Night[0] * 60) + Number(Night[1])
-            totalNight += total_Nighttime
-            var total_Night_Hours = Math.floor(totalNight / 60);
-            var total_Night_Min = totalNight % 60;
-            if (total_Night_Hours < 10) {
-                total_Night_Hours = '0' + total_Night_Hours;
-            }
-            if (total_Night_Min < 10) {
-                total_Night_Min = '0' + total_Night_Min;
-            }
-            Final_Night_Time = total_Night_Hours + ":" + total_Night_Min;
-            if (isNaN(Final_Night_Time[1])) {
-                Final_Night_Time = '00:00'
-            }
+                var Night = d.night.split(":")
+                var total_Nighttime = Number(Night[0] * 60) + Number(Night[1])
+                totalNight += total_Nighttime
+                var total_Night_Hours = Math.floor(totalNight / 60);
+                var total_Night_Min = totalNight % 60;
+                if (total_Night_Hours < 10) {
+                    total_Night_Hours = '0' + total_Night_Hours;
+                }
+                if (total_Night_Min < 10) {
+                    total_Night_Min = '0' + total_Night_Min;
+                }
+                Final_Night_Time = total_Night_Hours + ":" + total_Night_Min;
+                if (isNaN(Final_Night_Time[1])) {
+                    Final_Night_Time = '00:00'
+                }
 
-            //--------  total_Time flying hours --------//
-            var TotalTime = d.totalTime.split(":")
-            var total_time = Number(TotalTime[0] * 60) + Number(TotalTime[1])
-            totalFinalTime += total_time
-            var total_Hours = Math.floor(totalFinalTime / 60);
-            var total_Min = totalFinalTime % 60;
-            if (total_Hours < 10) {
-                total_Hours = '0' + total_Hours;
-            }
-            if (total_Min < 10) {
-                total_Min = '0' + total_Min;
-            }
-            Total_Time = total_Hours + ":" + total_Min;
-                Final_SIC_Time = d.p1 == 'Self' ? "" : Total_Time
-                Final_PIC_Time = d.p1 == 'Self' ? Total_Time : "" 
-            
+                //--------  total_Time flying hours --------//
+                var TotalTime = d.totalTime.split(":")
+                var total_time = Number(TotalTime[0] * 60) + Number(TotalTime[1])
+                totalFinalTime += total_time
+                var total_Hours = Math.floor(totalFinalTime / 60);
+                var total_Min = totalFinalTime % 60;
+                if (total_Hours < 10) {
+                    total_Hours = '0' + total_Hours;
+                }
+                if (total_Min < 10) {
+                    total_Min = '0' + total_Min;
+                }
+                Total_Time = total_Hours + ":" + total_Min;
 
-            //-------- act_instrument flying hours -------- //
-            var actual_Instrument = d.actual_Instrument.split(":")
-            var total_actual_Instrument = Number(actual_Instrument[0] * 60) + Number(actual_Instrument[1])
-            totalactual_Instrument += total_actual_Instrument
-            var actual_Instrument_Hours = Math.floor(totalactual_Instrument / 60);
-            var actual_Instrument_Min = totalactual_Instrument % 60;
-            if (actual_Instrument_Hours < 10) {
-                actual_Instrument_Hours = '0' + actual_Instrument_Hours;
-            }
-            if (actual_Instrument_Min < 10) {
-                actual_Instrument_Min = '0' + actual_Instrument_Min;
-            }
-            totalactual_Instrument1 = actual_Instrument_Hours + ":" + actual_Instrument_Min;
-            if (isNaN(totalactual_Instrument1[1])) {
-                totalactual_Instrument1 = '00:00'
-            }
+                if (d.p1 == 'Self') {
+                    Final_PIC_Time = Total_Time
 
-            //-------- sim_instrument flying hours --------//
-            var sim_instrument = d.sim_instrument.split(":")
-            var total_sim_instrument = Number(sim_instrument[0] * 60) + Number(sim_instrument[1])
-            totalsim_instrument += total_sim_instrument
-            var sim_instrument_Hours = Math.floor(totalsim_instrument / 60);
-            var sim_instrument_Min = totalsim_instrument % 60;
-            if (sim_instrument_Hours < 10) {
-                sim_instrument_Hours = '0' + sim_instrument_Hours;
+                }
+                if (d.p1 !== 'Self') {
+                    Final_SIC_Time = Total_Time
+                }
+
+                //-------- act_instrument flying hours -------- //
+                var actual_Instrument = d.actual_Instrument.split(":")
+                var total_actual_Instrument = Number(actual_Instrument[0] * 60) + Number(actual_Instrument[1])
+                totalactual_Instrument += total_actual_Instrument
+                var actual_Instrument_Hours = Math.floor(totalactual_Instrument / 60);
+                var actual_Instrument_Min = totalactual_Instrument % 60;
+                if (actual_Instrument_Hours < 10) {
+                    actual_Instrument_Hours = '0' + actual_Instrument_Hours;
+                }
+                if (actual_Instrument_Min < 10) {
+                    actual_Instrument_Min = '0' + actual_Instrument_Min;
+                }
+                totalactual_Instrument1 = actual_Instrument_Hours + ":" + actual_Instrument_Min;
+                if (isNaN(totalactual_Instrument1[1])) {
+                    totalactual_Instrument1 = '00:00'
+                }
+
+                //-------- sim_instrument flying hours --------//
+                var sim_instrument = d.sim_instrument.split(":")
+                var total_sim_instrument = Number(sim_instrument[0] * 60) + Number(sim_instrument[1])
+                totalsim_instrument += total_sim_instrument
+                var sim_instrument_Hours = Math.floor(totalsim_instrument / 60);
+                var sim_instrument_Min = totalsim_instrument % 60;
+                if (sim_instrument_Hours < 10) {
+                    sim_instrument_Hours = '0' + sim_instrument_Hours;
+                }
+                if (sim_instrument_Min < 10) {
+                    sim_instrument_Min = '0' + sim_instrument_Min;
+                }
+                totalsim_instrument1 = sim_instrument_Hours + ":" + sim_instrument_Min;
+                if (isNaN(totalsim_instrument1[1])) {
+                    totalsim_instrument1 = '00:00'
+                }
             }
-            if (sim_instrument_Min < 10) {
-                sim_instrument_Min = '0' + sim_instrument_Min;
-            }
-            totalsim_instrument1 = sim_instrument_Hours + ":" + sim_instrument_Min;
-            if (isNaN(totalsim_instrument1[1])) {
-                totalsim_instrument1 = '00:00'
-            }
-        }
 
         })
         let htmlContent = '<html><body>'
 
-        htmlContent += ' <tr style="height: 30px">                <td class="s0" dir="ltr">' + Final_Night_Time + '</td>                <td class="s0" dir="ltr">' + totalactual_Instrument1 + '</td>                <td class="s0" dir="ltr">' + totalsim_instrument1 + '</td>                <td class="s0" dir="ltr">'+final_TotalApproches+'</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + Final_PIC_Time + '</td>                <td class="s0" dir="ltr">' + Final_SIC_Time + '</td>                <td class="s0" dir="ltr">0:00</td>      <td class="s0" dir="ltr">0:00</td>                <td style="padding:2px 0px 2px 3px; height: 20px" rowspan="3" >I certifiy that the all entries are true <br>-------------- <br> Pilot\'s Signature</td></tr>        '
+        htmlContent += ' <tr style="height: 30px">                <td class="s0" dir="ltr">' + Final_Night_Time + '</td>                <td class="s0" dir="ltr">' + totalactual_Instrument1 + '</td>                <td class="s0" dir="ltr">' + totalsim_instrument1 + '</td>                <td class="s0" dir="ltr">' + final_TotalApproches + '</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + Final_PIC_Time + '</td>                <td class="s0" dir="ltr">' + Final_SIC_Time + '</td>                <td class="s0" dir="ltr">0:00</td>      <td class="s0" dir="ltr">0:00</td>                <td style="padding:2px 0px 2px 3px; height: 20px" rowspan="3" >I certifiy that the all entries are true <br>-------------- <br> Pilot\'s Signature</td></tr>        '
         htmlContent += '</body></html>'
         return htmlContent
     }
@@ -557,7 +558,7 @@ const JUSA = ({ navigation }) => {
 
     const amtForwardRight = () => {
         let htmlContent = '<html><body>'
-        htmlContent += ' <tr style="height: 30px">                <td class="s0" dir="ltr">' + totalNight_array.splice(-1) + '</td>                <td class="s0" dir="ltr">' + totalsimu_array.splice(-1) + '</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">'+total_App.splice(-1)+'</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">' + totalPIC_array.splice(-1) + '</td>                <td class="s0" dir="ltr">' + totalSIC_array.splice(-1) + '</td>                <td class="s0" dir="ltr"></td>      <td class="s0" dir="ltr">0:00</td></tr>        '
+        htmlContent += ' <tr style="height: 30px">                <td class="s0" dir="ltr">' + totalNight_array.splice(-1) + '</td>                <td class="s0" dir="ltr">' + totalsimu_array.splice(-1) + '</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">' + total_App.splice(-1) + '</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">' + totalPIC_array.splice(-1) + '</td>                <td class="s0" dir="ltr">' + totalSIC_array.splice(-1) + '</td>                <td class="s0" dir="ltr"></td>      <td class="s0" dir="ltr">0:00</td></tr>        '
         htmlContent += '</body></html>'
         return htmlContent
     }
@@ -570,7 +571,7 @@ const JUSA = ({ navigation }) => {
     var totalPIC_array = ["00:00",]
     var totalactual_array = ["00:00",]
     var totalsimu_array = ["00:00",]
-    var total_App =["0"]
+    var total_App = ["0"]
 
 
     var datetotalNight = 0
@@ -589,101 +590,101 @@ const JUSA = ({ navigation }) => {
 
     const dateTotalRight = (monthData) => {
         let htmlContent = '<html><body>'
-        monthData[1].map(d => {
-            if(d.aircraftReg !== "SIMU") {
+        monthData.map(d => {
+            if (d.aircraftReg !== "SIMU") {
                 //-------- total Day Landings --------//
                 var Approch = d.approach1.split(";");
-            var Appr = + Approch[0]
-            date_total_App += Appr
-            date_total_App1 = date_total_App
-            total_App.push(date_total_App1)
+                var Appr = + Approch[0]
+                date_total_App += Appr
+                date_total_App1 = date_total_App
+                total_App.push(date_total_App1)
 
 
-            //-------- night flying hours --------//
-            var Night = d.night.split(":")
-            var total_Nighttime = Number(Night[0] * 60) + Number(Night[1])
-            datetotalNight += total_Nighttime
-            var total_Night_Hours = Math.floor(datetotalNight / 60);
-            var total_Night_Min = datetotalNight % 60;
-            if (total_Night_Hours < 10) {
-                total_Night_Hours = '0' + total_Night_Hours;
-            }
-            if (total_Night_Min < 10) {
-                total_Night_Min = '0' + total_Night_Min;
-            }
-            dateFinal_Night_Time = total_Night_Hours + ":" + total_Night_Min;
-            if (isNaN(dateFinal_Night_Time[1])) {
-                dateFinal_Night_Time = '00:00'
-            }
-            totalNight_array.push(dateFinal_Night_Time)
+                //-------- night flying hours --------//
+                var Night = d.night.split(":")
+                var total_Nighttime = Number(Night[0] * 60) + Number(Night[1])
+                datetotalNight += total_Nighttime
+                var total_Night_Hours = Math.floor(datetotalNight / 60);
+                var total_Night_Min = datetotalNight % 60;
+                if (total_Night_Hours < 10) {
+                    total_Night_Hours = '0' + total_Night_Hours;
+                }
+                if (total_Night_Min < 10) {
+                    total_Night_Min = '0' + total_Night_Min;
+                }
+                dateFinal_Night_Time = total_Night_Hours + ":" + total_Night_Min;
+                if (isNaN(dateFinal_Night_Time[1])) {
+                    dateFinal_Night_Time = '00:00'
+                }
+                totalNight_array.push(dateFinal_Night_Time)
 
 
-            //--------  totaltime flying hours --------//
-            var TotalTime = d.totalTime.split(":")
-            var datetotal_Time = Number(TotalTime[0] * 60) + Number(TotalTime[1])
-            datetotalFinalTime += datetotal_Time
-            var total_Hours = Math.floor(datetotalFinalTime / 60);
-            var total_Min = datetotalFinalTime % 60;
-            if (total_Hours < 10) {
-                total_Hours = '0' + total_Hours;
-            }
-            if (total_Min < 10) {
-                total_Min = '0' + total_Min;
-            }
-            dateTotal_Time = total_Hours + ":" + total_Min;
+                //--------  totaltime flying hours --------//
+                var TotalTime = d.totalTime.split(":")
+                var datetotal_Time = Number(TotalTime[0] * 60) + Number(TotalTime[1])
+                datetotalFinalTime += datetotal_Time
+                var total_Hours = Math.floor(datetotalFinalTime / 60);
+                var total_Min = datetotalFinalTime % 60;
+                if (total_Hours < 10) {
+                    total_Hours = '0' + total_Hours;
+                }
+                if (total_Min < 10) {
+                    total_Min = '0' + total_Min;
+                }
+                dateTotal_Time = total_Hours + ":" + total_Min;
 
-            if (d.p1 == 'Self') {
-                dateFinal_PIC_Time = dateTotal_Time
-                totalPIC_array.push(dateFinal_PIC_Time)
+                if (d.p1 == 'Self') {
+                    dateFinal_PIC_Time = dateTotal_Time
+                    totalPIC_array.push(dateFinal_PIC_Time)
+
+                }
+                if (d.p1 !== 'Self') {
+                    dateFinal_SIC_Time = dateTotal_Time
+                    totalSIC_array.push(dateFinal_SIC_Time)
+
+                }
+
+                //--------act_instrument flying hours --------//
+                var actual_Instrument = d.actual_Instrument.split(":")
+                var total_actual_Instrument = Number(actual_Instrument[0] * 60) + Number(actual_Instrument[1])
+                datetotalactual_Instrument += total_actual_Instrument
+                var actual_Instrument_Hours = Math.floor(datetotalactual_Instrument / 60);
+                var actual_Instrument_Min = datetotalactual_Instrument % 60;
+                if (actual_Instrument_Hours < 10) {
+                    actual_Instrument_Hours = '0' + actual_Instrument_Hours;
+                }
+                if (actual_Instrument_Min < 10) {
+                    actual_Instrument_Min = '0' + actual_Instrument_Min;
+                }
+                datetotalactual_Instrument1 = actual_Instrument_Hours + ":" + actual_Instrument_Min;
+                if (isNaN(datetotalactual_Instrument1[1])) {
+                    datetotalactual_Instrument1 = '00:00'
+                }
+                totalactual_array.push(datetotalactual_Instrument1)
+
+                //------- sim_instrument flying hours --------//
+                var sim_instrument = d.sim_instrument.split(":")
+                var total_sim_instrument = Number(sim_instrument[0] * 60) + Number(sim_instrument[1])
+                datetotalsim_instrument += total_sim_instrument
+                var sim_instrument_Hours = Math.floor(datetotalsim_instrument / 60);
+                var sim_instrument_Min = datetotalsim_instrument % 60;
+                if (sim_instrument_Hours < 10) {
+                    sim_instrument_Hours = '0' + sim_instrument_Hours;
+                }
+                if (sim_instrument_Min < 10) {
+                    sim_instrument_Min = '0' + sim_instrument_Min;
+                }
+                datetotalsim_instrument1 = sim_instrument_Hours + ":" + sim_instrument_Min;
+                if (isNaN(datetotalsim_instrument1)) {
+                    datetotalsim_instrument1 = '00:00'
+                }
+                totalsimu_array.push(datetotalsim_instrument1)
+
 
             }
-            if (d.p1 !== 'Self') {
-                dateFinal_SIC_Time = dateTotal_Time
-                totalSIC_array.push(dateFinal_SIC_Time)
-
-            }
-
-            //--------act_instrument flying hours --------//
-            var actual_Instrument = d.actual_Instrument.split(":")
-            var total_actual_Instrument = Number(actual_Instrument[0] * 60) + Number(actual_Instrument[1])
-            datetotalactual_Instrument += total_actual_Instrument
-            var actual_Instrument_Hours = Math.floor(datetotalactual_Instrument / 60);
-            var actual_Instrument_Min = datetotalactual_Instrument % 60;
-            if (actual_Instrument_Hours < 10) {
-                actual_Instrument_Hours = '0' + actual_Instrument_Hours;
-            }
-            if (actual_Instrument_Min < 10) {
-                actual_Instrument_Min = '0' + actual_Instrument_Min;
-            }
-            datetotalactual_Instrument1 = actual_Instrument_Hours + ":" + actual_Instrument_Min;
-            if (isNaN(datetotalactual_Instrument1[1])) {
-                datetotalactual_Instrument1 = '00:00'
-            }
-            totalactual_array.push(datetotalactual_Instrument1)
-
-            //------- sim_instrument flying hours --------//
-            var sim_instrument = d.sim_instrument.split(":")
-            var total_sim_instrument = Number(sim_instrument[0] * 60) + Number(sim_instrument[1])
-            datetotalsim_instrument += total_sim_instrument
-            var sim_instrument_Hours = Math.floor(datetotalsim_instrument / 60);
-            var sim_instrument_Min = datetotalsim_instrument % 60;
-            if (sim_instrument_Hours < 10) {
-                sim_instrument_Hours = '0' + sim_instrument_Hours;
-            }
-            if (sim_instrument_Min < 10) {
-                sim_instrument_Min = '0' + sim_instrument_Min;
-            }
-            datetotalsim_instrument1 = sim_instrument_Hours + ":" + sim_instrument_Min;
-            if (isNaN(datetotalsim_instrument1)) {
-                datetotalsim_instrument1 = '00:00'
-            }
-            totalsimu_array.push(datetotalsim_instrument1)
-
-
-        }
         })
 
-        htmlContent += '<tr style="height: 30px">                <td class="s0" dir="ltr">' + dateFinal_Night_Time + '</td>                <td class="s0" dir="ltr">' + datetotalactual_Instrument1 + '</td>                <td class="s0" dir="ltr">' + datetotalsim_instrument1 + '</td>                <td class="s0" dir="ltr">'+date_total_App1+'</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + dateFinal_PIC_Time + '</td>                <td class="s0" dir="ltr">' + dateFinal_SIC_Time + '</td>                <td class="s0" dir="ltr">0:00</td>      <td class="s0" dir="ltr">0:00</td>                </tr>    '
+        htmlContent += '<tr style="height: 30px">                <td class="s0" dir="ltr">' + dateFinal_Night_Time + '</td>                <td class="s0" dir="ltr">' + datetotalactual_Instrument1 + '</td>                <td class="s0" dir="ltr">' + datetotalsim_instrument1 + '</td>                <td class="s0" dir="ltr">' + date_total_App1 + '</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + dateFinal_PIC_Time + '</td>                <td class="s0" dir="ltr">' + dateFinal_SIC_Time + '</td>                <td class="s0" dir="ltr">0:00</td>      <td class="s0" dir="ltr">0:00</td>                </tr>    '
         htmlContent += '</body></html>'
         return htmlContent
     }
@@ -701,12 +702,20 @@ const JUSA = ({ navigation }) => {
 
     //----- combined all function to Show in pdf -----//
     const dataRes = () => {
+        const chunkSize = Number(rows)
+        var pdfData = []
+        for (var k = 0; k < data.length; k += chunkSize) {
+            const chunk = data.slice(k, k + chunkSize);
+            pdfData.push(chunk)
+        }
         var platFormCss = Platform.OS === "ios" ? '.ritz .waffle .s0{padding:5px 13px}' : '.ritz .waffle .s0{padding:3px 13px}'
         let htmlContent = '<html><body>'
-        Object.entries(monthWise).map((monthData, index) => {
+        pdfData.map((monthData, index) => {
             var pageNo = Number(page) + index
+            var brTag = Platform.OS == "ios" ? "<br><br><br><br><br><br>" : "<br>"
+            var brTag1 =  Platform.OS == "ios" ? "" : "<br>"
             htmlContent += '<style type="text/css"> @page { size:29.5cm 21cm; }table{"page-break-after: always;"} tr { page-break-inside:avoid !important; page-break-after:auto } .j_usa:nth-child(even) {background-color: #e0ebeb;} .ritz .waffle a { color: inherit; }.ritz .waffle .s0{text-align:center;color:#000000;font-size:10pt;vertical-align:center;white-space:normal;overflow:hidden;word-wrap:break-word;direction:ltr;} ' + platFormCss + ' th, td{ border: 2px #000 solid}</style><div class="ritz grid-container" dir="ltr"> <table class="waffle" cellspacing="0" cellpadding="0" style=" width:100%;">   <thead>    <tr style="height: 30px">    <th class="s0" dir="ltr" rowspan="3" style="padding:0px 50px;"><b>Date</b></th>    <th class="s0" dir="ltr" rowspan="3"><b>AIRCRAFT MAKE AND MODEL</b></th>    <th class="s0" dir="ltr" rowspan="3"><b>AIRCRAFTIDENT</b></th>    <th class="s0" dir="ltr" colspan="2"><b>ROUTE</b></th>    <th class="s0" dir="ltr" rowspan="3"><b>TOTAL DUR OF FLIGHT</b></th>    <th class="s0" dir="ltr" colspan="8" ><b>AIRCRAFT CATEGORY AND CLASS</b></th>    <th class="s0" dir="ltr" colspan="2"><b>LNDGS</b></th></tr><tr style="height: 30px">    <th class="s0" dir="ltr" rowspan="2">FROM</th>    <th class="s0" dir="ltr" rowspan="2">TO</th>    <th class="s0" dir="ltr" rowspan="2">AIRPLANE SE-LAND</th>    <th class="s0" dir="ltr" rowspan="2">AIRPLANE SE-SEA</th>    <th class="s0" dir="ltr" rowspan="2">AIRPLANE ME-LAND</th>    <th class="s0" dir="ltr" rowspan="2">AIRPLANE ME-SEA</th>    <th class="s0" dir="ltr" rowspan="2">JET</th>    <th class="s0" dir="ltr" rowspan="2">ROTORCRAFT HELICOPTER</th>    <th class="s0" dir="ltr" rowspan="2">GLIDER</th>    <th class="s0" dir="ltr" rowspan="2">PCATD</th>    <th class="s0" dir="ltr" rowspan="2">Day</th>    <th class="s0" dir="ltr" rowspan="2">NIGHT</th></tr><tr></tr> </thead><tbody>'
-            monthData[1].map(d => {
+            monthData.map(d => {
                 var SELand = d.Class == 'SE Land' ? d.totalTime : '';
                 var SEsea = d.Class == 'SE Sea' ? d.totalTime : '';
                 var MELand = d.Class == 'ME Land' ? d.totalTime : '';
@@ -717,31 +726,31 @@ const JUSA = ({ navigation }) => {
                 var totalDur = d.aircraftReg == 'SIMU' ? "" : d.totalTime;
                 htmlContent += '<tr style="height: 30px" class="j_usa">                <td class="s0" dir="ltr">' + d.date + '</td>                <td class="s0" dir="ltr">' + d.aircraftType + '</td>                <td class="s0" dir="ltr">' + d.aircraftReg + '</td>                <td class="s0" dir="ltr">' + d.from + '</td>                <td class="s0" dir="ltr">' + d.to + '</td>                <td class="s0" dir="ltr">' + totalDur + '</td>                <td class="s0" dir="ltr">' + SELand + '</td>                <td class="s0" dir="ltr">' + SEsea + '</td>                <td class="s0" dir="ltr">' + MELand + '</td>                <td class="s0" dir="ltr">' + MEsea + '</td>                <td class="s0" dir="ltr">' + Jet + '</td>                <td class="s0" dir="ltr">' + Helicopter + '</td>                <td class="s0" dir="ltr">' + Glider + '</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">' + d.dayLanding + '</td>                <td class="s0" dir="ltr">' + d.nightLanding + '</td></tr> '
             })
-            for (let i = 0; i < rows - monthData[1].length; i++) {
+            for (let i = 0; i < rows - monthData.length; i++) {
                 htmlContent += '<tr style="height: 30px" class="j_usa">                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td></tr>  '
             }
-            htmlContent += totalForLeft(monthData) + '' + amtForwardLeft(monthData) + '' + dateTotalLeft(monthData) + '</tbody>' + breakTag() + '</table><p>Page' + pageNo + '-A(AutoFlightLog)</p>' + breakTag() + '<table class="waffle" cellspacing="0" cellpadding="0">' + breakTag() + '<thead><tr style="height: 30px">    <th class="s0" dir="ltr" colspan="6"><b>CONDITIONS OF FLIGHT</b></th>    <th class="s0"dir="ltr" rowspan="3"><b>FLIGHT SIMULATOR</b></th>    <th class="s0" dir="ltr" colspan="5"><b>TYPE OF PILOTING TIME</b></th>    <th class="s0" dir="ltr" rowspan="3"><b>REMARKS AND ENDORDEMENTS</b></th></tr><tr style="height: 30px">    <th class="s0" dir="ltr" rowspan="2">Night</th>    <th class="s0" dir="ltr" rowspan="2">ACTUAL INSTRUMENT</th>    <th class="s0" dir="ltr" rowspan="2">SIMULATED INSTRUMENT (HOOD)</th>    <th class="s0" dir="ltr" colspan="2">APP</th>    <th class="s0" dir="ltr" rowspan="2">CROSS COUNTRY</th>    <th class="s0" dir="ltr" rowspan="2">SOLO</th>    <th class="s0" dir="ltr" rowspan="2">PILOT IN COMMAND</th>    <th class="s0" dir="ltr" rowspan="2">SECOND IN COMMAND</th>    <th class="s0" dir="ltr" rowspan="2">DUAL RECEIVED</th>    <th class="s0" dir="ltr" rowspan="2">INSTRUCTOR</th></tr><tr><th class="s0" dir="ltr">NO.</th>    <th class="s0" dir="ltr">TYPE</th></tr></thead><tbody>'
-            monthData[1].map(d => {
+            htmlContent += totalForLeft(monthData) + '' + amtForwardLeft(monthData) + '' + dateTotalLeft(monthData) + '</tbody>' + breakTag() + ''+brTag1+'</table><p>Page' + pageNo + '-A(AutoFlightLog)</p>' + breakTag() + ''+brTag+'<table class="waffle" cellspacing="0" cellpadding="0">' + breakTag() + '<thead><tr style="height: 30px">    <th class="s0" dir="ltr" colspan="6"><b>CONDITIONS OF FLIGHT</b></th>    <th class="s0"dir="ltr" rowspan="3"><b>FLIGHT SIMULATOR</b></th>    <th class="s0" dir="ltr" colspan="5"><b>TYPE OF PILOTING TIME</b></th>    <th class="s0" dir="ltr" rowspan="3"><b>REMARKS AND ENDORDEMENTS</b></th></tr><tr style="height: 30px">    <th class="s0" dir="ltr" rowspan="2">Night</th>    <th class="s0" dir="ltr" rowspan="2">ACTUAL INSTRUMENT</th>    <th class="s0" dir="ltr" rowspan="2">SIMULATED INSTRUMENT (HOOD)</th>    <th class="s0" dir="ltr" colspan="2">APP</th>    <th class="s0" dir="ltr" rowspan="2">CROSS COUNTRY</th>    <th class="s0" dir="ltr" rowspan="2">SOLO</th>    <th class="s0" dir="ltr" rowspan="2">PILOT IN COMMAND</th>    <th class="s0" dir="ltr" rowspan="2">SECOND IN COMMAND</th>    <th class="s0" dir="ltr" rowspan="2">DUAL RECEIVED</th>    <th class="s0" dir="ltr" rowspan="2">INSTRUCTOR</th></tr><tr><th class="s0" dir="ltr">NO.</th>    <th class="s0" dir="ltr">TYPE</th></tr></thead><tbody>'
+            monthData.map(d => {
                 var sic_Time = d.p2 == 'Self' ? d.totalTime : d.totalTime
-                if(d.aircraftReg !== 'SIMU'){
+                if (d.aircraftReg !== 'SIMU') {
                     var sic_Time = d.p1 == 'Self' ? "" : d.totalTime
-                    var pic_Time = d.p1 == 'Self' ? d.totalTime : d.p1.slice(0, 9) 
+                    var pic_Time = d.p1 == 'Self' ? d.totalTime : d.p1.slice(0, 9)
                     var Approches = d.approach1.split(";");
                     var app_Split = Approches[1].split("$")
                     var app_Type = app_Split[1]
                     var app_No = Approches[0]
-                    var flight_sim = d.aircraftReg == 'SIMU' ? d.totalTime : "" ;
+                    var flight_sim = d.aircraftReg == 'SIMU' ? d.totalTime : "";
                 }
-                else{
+                else {
                     var sic_Time = ""
                     var pic_Time = ""
                     var app_Type = ""
-                    var app_No =  ""
+                    var app_No = ""
                     var flight_sim = ""
                 }
-                htmlContent += '<tr style="height: 30px" class="j_usa">                <td class="s0" dir="ltr">' + d.night + '</td>                <td class="s0" dir="ltr">' + d.actual_Instrument + '</td>                <td class="s0" dir="ltr">' + d.sim_instrument + '</td>                <td class="s0" dir="ltr">' + app_No + '</td>                <td class="s0" dir="ltr">' + app_Type + '</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">'+ flight_sim +'</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + pic_Time + '</td>                <td class="s0" dir="ltr">' + sic_Time + '</td>                <td class="s0" dir="ltr">' + d.dual_day + '</td><td class="s0" dir="ltr">' + d.instructional + '</td>                <td class="s0" dir="ltr">' + d.remark + '</td></tr>'
+                htmlContent += '<tr style="height: 30px" class="j_usa">                <td class="s0" dir="ltr">' + d.night + '</td>                <td class="s0" dir="ltr">' + d.actual_Instrument + '</td>                <td class="s0" dir="ltr">' + d.sim_instrument + '</td>                <td class="s0" dir="ltr">' + app_No + '</td>                <td class="s0" dir="ltr">' + app_Type + '</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">' + flight_sim + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + pic_Time + '</td>                <td class="s0" dir="ltr">' + sic_Time + '</td>                <td class="s0" dir="ltr">' + d.dual_day + '</td><td class="s0" dir="ltr">' + d.instructional + '</td>                <td class="s0" dir="ltr"></td></tr>'
             })
-            for (let i = 0; i < rows - monthData[1].length; i++) {
+            for (let i = 0; i < rows - monthData.length; i++) {
                 htmlContent += '            <tr style="height: 30px" class="j_usa">                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td><td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                </tr>  '
             }
             htmlContent += totalForRight(monthData) + '' + amtForwardRight(monthData) + '' + dateTotalRight(monthData) + '</tbody>    </table><p>Page' + pageNo + ' -B(AutoFlightLog)</p></div>'
@@ -807,169 +816,167 @@ const JUSA = ({ navigation }) => {
 
     return (
         <SafeAreaView style={[DgcaLogbookStyles.container, { backgroundColor: theme.backgroundColor }]}>
-            <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
-            <ScrollView>
-                <View style={DgcaLogbookStyles.header}>
-                    <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{ padding: 6 }} onPress={() => navigation.goBack()} />
-                    <Text style={DgcaLogbookStyles.aircrafts}>Jeppessen Logbook (USA)</Text>
-                </View>
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? "padding" : null}>
+                <ScrollView>
+                    <View style={DgcaLogbookStyles.header}>
+                        <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{ padding: 6 }} onPress={() => navigation.goBack()} />
+                        <Text style={DgcaLogbookStyles.aircrafts}>Jeppessen Logbook (USA)</Text>
+                    </View>
 
-                <View style={dark ? DgcaLogbookStyles.DarkmainTagLine : DgcaLogbookStyles.mainTagLine}>
-                    <Text style={dark ? DgcaLogbookStyles.DarktagLine : DgcaLogbookStyles.tagLine}>Period</Text>
-                </View>
+                    <View style={dark ? DgcaLogbookStyles.DarkmainTagLine : DgcaLogbookStyles.mainTagLine}>
+                        <Text style={dark ? DgcaLogbookStyles.DarktagLine : DgcaLogbookStyles.tagLine}>Period</Text>
+                    </View>
 
-                <RadioButton.Group
-                    onValueChange={period => setPeriod(period)} value={period}>
-                    <View style={DgcaLogbookStyles.radioSection}>
-                        <View style={{ flexDirection: 'row' }}>
+                    <RadioButton.Group
+                        onValueChange={period => setPeriod(period)} value={period}>
+                        <View style={DgcaLogbookStyles.radioSection}>
                             <View style={{ flexDirection: 'row' }}>
-                                <RadioButton.Android
-                                    uncheckedColor={dark ? '#fff' : '#000'}
-                                    color={dark ? '#fff' : '#000'}
-                                    value="preDefined" />
-                                <Text style={dark ? DgcaLogbookStyles.DarkradioText : DgcaLogbookStyles.radioText}>Pre Defined</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', paddingLeft: 100 }}>
-                                <RadioButton.Android
-                                    uncheckedColor={dark ? '#fff' : '#000'}
-                                    color={dark ? '#fff' : '#000'}
-                                    value="calenderDate" />
-                                <Text style={dark ? DgcaLogbookStyles.DarkradioText : DgcaLogbookStyles.radioText}>Calender Date</Text>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <RadioButton.Android
+                                        uncheckedColor={dark ? '#fff' : '#000'}
+                                        color={dark ? '#fff' : '#000'}
+                                        value="preDefined" />
+                                    <Text style={dark ? DgcaLogbookStyles.DarkradioText : DgcaLogbookStyles.radioText}>Pre Defined</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', paddingLeft: 100 }}>
+                                    <RadioButton.Android
+                                        uncheckedColor={dark ? '#fff' : '#000'}
+                                        color={dark ? '#fff' : '#000'}
+                                        value="calenderDate" />
+                                    <Text style={dark ? DgcaLogbookStyles.DarkradioText : DgcaLogbookStyles.radioText}>Calender Date</Text>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                </RadioButton.Group>
+                    </RadioButton.Group>
 
-                <View style={Platform.OS === 'ios' ? { paddingHorizontal: 10, paddingVertical: 20, zIndex: 999 } : { paddingHorizontal: 10, paddingVertical: 20, }}>
-                    {period == 'preDefined' ?
-                        <View style={{ width: '100%' }}>
-                            <DropDownPicker
-                                open={open}
-                                value={value}
-                                items={items}
-                                setOpen={setOpen}
-                                setValue={setValue}
-                                setItems={setItems}
-                                placeholder="Select Duration"
-                                style={[{
-                                    borderWidth: 0.2,
-                                    borderColor: dark ? "#fff" : "#393F45",
-                                    marginTop: 10,
-                                    backgroundColor: ' #000'
-                                }]}
-                                textStyle={{
-                                    fontSize: 14,
-                                    color: "#266173",
-                                }}
-                                dropDownContainerStyle={{ borderColor: "#266173", backgroundColor: dark ? '#000' : '#fff' }}
+                    <View style={Platform.OS === 'ios' ? { paddingHorizontal: 10, paddingVertical: 20, zIndex: 999 } : { paddingHorizontal: 10, paddingVertical: 20, }}>
+                        {period == 'preDefined' ?
+                            <View style={{ width: '100%' }}>
+                                <DropDownPicker
+                                    open={open}
+                                    value={value}
+                                    items={items}
+                                    setOpen={setOpen}
+                                    setValue={setValue}
+                                    setItems={setItems}
+                                    placeholder="Select Duration"
+                                    style={[{
+                                        borderWidth: 0.2,
+                                        borderColor: dark ? "#fff" : "#393F45",
+                                        marginTop: 10,
+                                        backgroundColor: ' #000'
+                                    }]}
+                                    textStyle={{
+                                        fontSize: 14,
+                                        color: "#266173",
+                                    }}
+                                    dropDownContainerStyle={{ borderColor: "#266173", backgroundColor: dark ? '#000' : '#fff' }}
+                                />
+                            </View>
+                            :
+                            <View>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <DatePicker
+                                        style={{ width: '48%' }}
+                                        date={fromPeriod}
+                                        mode="date"
+                                        placeholder="From"
+                                        placeholderTextColor="#266173"
+                                        format="DD-MM-YYYY"
+                                        confirmBtnText="Confirm"
+                                        cancelBtnText="Cancel"
+                                        suffixIcon={null}
+                                        customStyles={{
+                                            dateInput: {
+                                                borderColor: '#F2F2F2',
+                                                borderWidth: 1,
+                                                borderRadius: 5,
+                                                width: '50%',
+                                            },
+                                            dateIcon: {
+                                                display: 'none'
+                                            },
+                                        }}
+                                        onDateChange={(date) => {
+                                            setfromPeriod(date); calenderFrom(date)
+                                        }}
+                                    />
+
+                                    <DatePicker
+                                        style={{ width: '48%', marginLeft: 15 }}
+                                        date={toPeriod}
+                                        mode="date"
+                                        placeholder="To"
+                                        placeholderTextColor="#266173"
+                                        format="DD-MM-YYYY"
+                                        confirmBtnText="Confirm"
+                                        cancelBtnText="Cancel"
+                                        suffixIcon={null}
+                                        customStyles={{
+                                            dateInput: {
+                                                borderColor: '#F2F2F2',
+                                                borderWidth: 1,
+                                                borderRadius: 5,
+                                                width: '50%',
+                                            },
+                                            dateIcon: {
+                                                display: 'none'
+                                            },
+                                        }}
+                                        onDateChange={(date) => {
+                                            settoPeriod(date); calenderTo(date)
+                                        }}
+                                    />
+                                </View>
+                            </View>
+                        }
+                    </View>
+                    <View style={DgcaLogbookStyles.mainTagLine}>
+                        <Text style={dark ? DgcaLogbookStyles.DarktagLine : DgcaLogbookStyles.tagLine}>Page details</Text>
+                    </View>
+
+                    <View style={DgcaLogbookStyles.mainTagLine}>
+                        <Text style={DgcaLogbookStyles.pageDetailText}>Number of Rows</Text>
+                    </View>
+                    <View style={{ paddingHorizontal: 10 }}>
+                        <View style={dark ? DgcaLogbookStyles.DarkTextInputView : DgcaLogbookStyles.TextInputView}>
+                            <TextInput
+                                placeholder='Min. 10 - max. 25'
+                                placeholderTextColor='grey'
+                                keyboardType='numeric'
+                                value={rows}
+                                onChangeText={(text) => setRows(text)}
+                                max={2}
+                                style={dark ? { color: '#fff', padding: 10 } : { padding: 10 }}
                             />
                         </View>
-                        :
-                        <View>
-                            <View style={{ flexDirection: 'row' }}>
-                                <DatePicker
-                                    style={{ width: '48%' }}
-                                    date={fromPeriod}
-                                    mode="date"
-                                    placeholder="From"
-                                    placeholderTextColor="#266173"
-                                    format="DD-MM-YYYY"
-                                    confirmBtnText="Confirm"
-                                    cancelBtnText="Cancel"
-                                    suffixIcon={null}
-                                    customStyles={{
-                                        dateInput: {
-                                            borderColor: '#F2F2F2',
-                                            borderWidth: 1,
-                                            borderRadius: 5,
-                                            width: '50%',
-                                        },
-                                        dateIcon: {
-                                            display: 'none'
-                                        },
-                                    }}
-                                    onDateChange={(date) => {
-                                        setfromPeriod(date); calenderFrom(date)
-                                    }}
-                                />
+                    </View>
 
-                                <DatePicker
-                                    style={{ width: '48%', marginLeft: 15 }}
-                                    date={toPeriod}
-                                    mode="date"
-                                    placeholder="To"
-                                    placeholderTextColor="#266173"
-                                    format="DD-MM-YYYY"
-                                    confirmBtnText="Confirm"
-                                    cancelBtnText="Cancel"
-                                    suffixIcon={null}
-                                    customStyles={{
-                                        dateInput: {
-                                            borderColor: '#F2F2F2',
-                                            borderWidth: 1,
-                                            borderRadius: 5,
-                                            width: '50%',
-                                        },
-                                        dateIcon: {
-                                            display: 'none'
-                                        },
-                                    }}
-                                    onDateChange={(date) => {
-                                        settoPeriod(date); calenderTo(date)
-                                    }}
-                                />
+                    <View style={DgcaLogbookStyles.mainTagLine}>
+                        <Text style={dark ? DgcaLogbookStyles.DarktagLine : DgcaLogbookStyles.pageDetailText}>Start page number</Text>
+                    </View>
+                    <View style={{ paddingHorizontal: 10 }}>
+                        <View style={dark ? DgcaLogbookStyles.DarkTextInputView : DgcaLogbookStyles.TextInputView}>
+                            <TextInput
+                                placeholder='Enter Number'
+                                placeholderTextColor='grey'
+                                keyboardType='numeric'
+                                value={page}
+                                onChangeText={(text) => setPage(text)}
+                                max={2}
+                                style={dark ? { color: '#fff', padding: 10 } : { padding: 10 }}
+                            />
+                        </View>
+                    </View>
+
+                    <View style={DgcaLogbookStyles.footer}>
+                        <TouchableOpacity onPress={() => { validate() }}>
+                            <View style={DgcaLogbookStyles.button}>
+                                <Text style={DgcaLogbookStyles.buttonText}>View/Download</Text>
                             </View>
-                        </View>
-                    }
-                </View>
-                <View style={DgcaLogbookStyles.mainTagLine}>
-                    <Text style={dark ? DgcaLogbookStyles.DarktagLine : DgcaLogbookStyles.tagLine}>Page details</Text>
-                </View>
-
-                <View style={DgcaLogbookStyles.mainTagLine}>
-                    <Text style={DgcaLogbookStyles.pageDetailText}>Number of Rows</Text>
-                </View>
-                <View style={{ paddingHorizontal: 10 }}>
-                    <View style={dark ? DgcaLogbookStyles.DarkTextInputView : DgcaLogbookStyles.TextInputView}>
-                        <TextInput
-                            placeholder='Min. 10 - max. 25'
-                            placeholderTextColor='grey'
-                            keyboardType='numeric'
-                            value={rows}
-                            onChangeText={(text) => setRows(text)}
-                            max={2}
-                            style={dark ? { color: '#fff', padding: 10 } : { padding: 10 }}
-                        />
+                        </TouchableOpacity>
                     </View>
-                </View>
-                {rows < 10 ? <Text style={{ color: 'red', paddingLeft: 12 }}>Minimum number  of rows is 10</Text> : null}
-                {rows > 25 ? <Text style={{ color: 'red', paddingLeft: 12 }}>Maximum number  of rows is 25</Text> : null}
-
-                <View style={DgcaLogbookStyles.mainTagLine}>
-                    <Text style={dark ? DgcaLogbookStyles.DarktagLine : DgcaLogbookStyles.pageDetailText}>Start page number</Text>
-                </View>
-                <View style={{ paddingHorizontal: 10 }}>
-                    <View style={dark ? DgcaLogbookStyles.DarkTextInputView : DgcaLogbookStyles.TextInputView}>
-                        <TextInput
-                            placeholder='Enter Number'
-                            placeholderTextColor='grey'
-                            keyboardType='numeric'
-                            value={page}
-                            onChangeText={(text) => setPage(text)}
-                            max={2}
-                            style={dark ? { color: '#fff', padding: 10 } : { padding: 10 }}
-                        />
-                    </View>
-                </View>
-
-                <View style={DgcaLogbookStyles.footer}>
-                    <TouchableOpacity onPress={() => { validate() }}>
-                        <View style={DgcaLogbookStyles.button}>
-                            <Text style={DgcaLogbookStyles.buttonText}>View/Download</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
+                </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>
     );
