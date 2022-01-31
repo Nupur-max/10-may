@@ -194,7 +194,7 @@ class Sample extends Component {
         }
             else if (window.location.href === "https://www.dgca.gov.in/digigov-portal/web?requestType=ApplicationRH&actionVal=checkLogin") {
              
-              window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} + 1 , success:false, error:true ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,visible: true}));
+              window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos}, success:false, error:true ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,visible: true}));
               setTimeout(function () {
                   document.querySelector('#a90000603 ul:nth-child(2) li a').click();
                 }, 10000)
@@ -413,6 +413,7 @@ class Sample extends Component {
           document.querySelector('#verificationStatus').click();
           window.confirm = function(){return true;};
           document.querySelector('#btnAddSubmit').click();
+          window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos}, success:false, error:true ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,visible: true}));
           }, 60000)
         
         setTimeout(function () {

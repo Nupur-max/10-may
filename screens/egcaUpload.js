@@ -273,9 +273,10 @@ const EGCAUpload = ({navigation}) => {
             );
         });
     }
-    React.useEffect(() => {SelectQuery()}, []);
+    React.useEffect(() => {SelectQuery()}, [egca]);
 
     const PurposeData = egca==='Training'? training : egca==='Test'? test : egca==='Commercial'?commercial:''
+    console.log('purposeData',PurposeData)
 
       const UpdateQuery = async() => {
         let user = await AsyncStorage.getItem('userdetails');
@@ -444,7 +445,7 @@ const EGCAUpload = ({navigation}) => {
           <DropDownPicker
             searchable={true}
             open={open}
-            value={egca === "Training" ? training : egca === "Test" ? test : egca === "Commercial" ? commercial : ''}
+            value={PurposeData}
             items={egca === "Training" ? trainingValue : egca === "Test" ? testValue : egca === "Commercial" ? commercialValue : []}
             setOpen={setOpen}
             setValue={ egca === "Training" ? setTraining : egca === "Test" ? setTest : egca === "Commercial" ? setCommercial : ''}

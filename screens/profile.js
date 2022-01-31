@@ -225,6 +225,24 @@ const P1 = ({ navigation }) => {
         console.log('roaster data--->', roasterData)
         //setError(resData.data)
 
+        // fetch(BaseUrl + 'edit_profile', {
+        //   method: 'POST',
+        //   headers: {
+        //     'Accept': 'application/json',
+        //     'Content-Type': 'application/json'
+        //   },
+        //   body: JSON.stringify({
+        //     "user_id": user.id,
+        //     "rosterLength" : resData.data.length,
+    
+        //   })
+        // }).then(res => res.json())
+        //   .then(resData => {
+        //     console.log(resData);
+        //     GetUserDetails()
+        //     Alert.alert(resData.message);
+        //   });
+
         for (let i = 0; i < resData.data.length; i++) {
 
           //console.log('Aircraft id', resData.data[i] )
@@ -285,7 +303,11 @@ const P1 = ({ navigation }) => {
 
 
             console.log('data pos ' + i + ' ' + resData.data.length);
-            console.log(resData.data.length === resData.data.length)
+            tx.executeSql(
+              'INSERT INTO userProfileData (user_id,rosterLength) VALUES ("'+user.id+'", "'+resData.data.length+'")',
+            );
+
+             
 
             if (resData.data.length > 10) {
               setProgressValue(0.5)

@@ -79,6 +79,8 @@ const LogBookListing = ({ navigation }) => {
 
   const [rosterId, setRosterId] = React.useState('')
 
+  const [rosterLength, setRosterLength] = React.useState('')
+
   const [done, setDone] = React.useState(false)
 
 
@@ -120,7 +122,8 @@ const LogBookListing = ({ navigation }) => {
 
 
   React.useEffect(() => {
-  GetUserDetails()
+  GetUserDetails();
+  console.log('Tarun')
   }, []);
 
   const GetUserDetails = async () => {
@@ -129,7 +132,7 @@ const LogBookListing = ({ navigation }) => {
     user = JSON.parse(user);
     let temData = [];
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT reg_date,roster_id,Total_flying_hours FROM userProfileData Where user_id = "' + user.id + '"', [], (tx, result) => {
+      tx.executeSql('SELECT reg_date,roster_id,Total_flying_hours,rosterLength FROM userProfileData Where user_id = "' + user.id + '"', [], (tx, result) => {
         //setOffset(offset + 10);
         if (result.rows.length > 0) {
           //alert('data available '); 
@@ -145,12 +148,13 @@ const LogBookListing = ({ navigation }) => {
             reg_date: result.rows.item(i).reg_date,
             roster_id: result.rows.item(i).roster_id,
             Total_flying_hours: result.rows.item(i).Total_flying_hours,
-            //totalLogs : result.rows.item(i).totalLogs,
+            rosterLength : result.rows.item(i).rosterLength,
           });
           //console.log('user Data', temData);
           setReg_date(result.rows.item(i).reg_date)
           setRosterId(result.rows.item(i).roster_id)
-          console.log('rosterid', result.rows.item(i).Total_flying_hours)
+          console.log('rosterlength', result.rows.item(i).rosterLength)
+          setRosterLength(result.rows.item(i).rosterLength)
           setTotalFlyingHours(result.rows.item(i).Total_flying_hours)
          }
         //console.log('rosterid', rosterId)

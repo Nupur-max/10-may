@@ -3,9 +3,127 @@ import { View, Text, StyleSheet, ImageBackground, Dimensions, TextInput, Touchab
 //import { View, Text, StyleSheet,ImageBackground } from "react-native";
 import Colors from '../components/colors';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import * as RNIap from 'react-native-iap';
 
+const itemSubs = Platform.select({
+  ios: [
+    'com.aviation.AutoFlightLog.sub.Annual', // dooboolab
+],
+android: [
+   'com.aviation_autoflight_annual'
+]
+});
+    let purchaseUpdateSubscription = null;
+    let purchaseErrorSubscription = null;
 
 const Subscribe = ({navigation}) => {
+  const [products, setProducts] = useState([])
+  const [purchased, setPurchased] = useState('')
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    initilizeIAPConnection();
+}, []);
+
+const initilizeIAPConnection = async () => {
+    await RNIap.initConnection()
+        .then(async (connection) => {
+            console.log('IAP result', connection);
+            getItems();
+        })
+        .catch((err) => {
+            console.warn(`IAP ERROR ${err.code}`, err.message);
+        });
+    // await RNIap.flushFailedPurchasesCachedAsPendingAndroid()
+    //     .then(async (consumed) => {
+    //         console.log('consumed all items?', consumed);
+    //     }).catch((err) => {
+    //         console.warn(`flushFailedPurchasesCachedAsPendingAndroid ERROR ${err.code}`, err.message);
+    // });
+};
+
+const getItems = async () => {
+    try {
+        const Products = await RNIap.getSubscriptions(itemSubs);
+        console.log(' IAP Su', Products);
+        if (Products.length !== 0) {
+            if (Platform.OS === 'android') {
+                setProducts({ Products })
+            } else if (Platform.OS === 'ios') {
+                setProducts({ Products })
+            }
+            console.log("constant",products)
+        }
+    } catch (err) {
+        console.warn("IAP error", err.code, err.message, err);
+        setError(err.message);
+    }
+};
+
+
+useEffect(() => {
+    purchaseUpdateSubscription = RNIap.purchaseUpdatedListener(
+        async (purchase) => {
+            const receipt = purchase.transactionReceipt;
+            if (receipt) {
+                try {
+                    if (Platform.OS === 'ios') {
+                        RNIap.finishTransactionIOS(purchase.transactionId);
+                    } else if (Platform.OS === 'android') {
+                         RNIap.consumeAllItemsAndroid(purchase.purchaseToken);
+                        await RNIap.acknowledgePurchaseAndroid(purchase.purchaseToken);
+                    }
+                    await RNIap.finishTransaction(purchase, true);
+                } catch (ackErr) {
+                    console.log('ackErr INAPP>>>>', ackErr);
+                }
+            }
+        },
+    );
+    purchaseErrorSubscription = RNIap.purchaseErrorListener(
+        (error) => {
+            console.log('purchaseErrorListener INAPP>>>>', error);
+        },
+    );
+    return (() => {
+        if (purchaseUpdateSubscription) {
+            purchaseUpdateSubscription.remove();
+            purchaseUpdateSubscription = null;
+        }
+        if (purchaseErrorSubscription) {
+            purchaseErrorSubscription.remove();
+            purchaseErrorSubscription = null;
+        }
+    });
+}, []);
+
+
+const requestSubscription = async (sku) => {
+    try {
+        await RNIap.requestSubscription(sku)
+            .then(async (result) => {
+                console.log('IAP req sub', result);
+                if (Platform.OS === 'android') {
+                    // setProductId(result.productId);
+                    console.log(result.productId)
+                    // can do your API call here to save the purchase details of particular user
+                } else if (Platform.OS === 'ios') {
+                    console.log(result.transactionReceipt)
+                    // setProductId(result.productId);
+                    // setReceipt(result.transactionReceipt);
+                    // can do your API call here to save the purchase details of particular user
+                }
+                // setBuyIsLoading(false);
+            })
+            .catch((err) => {
+                console.warn(`IAP req ERROR %%%%%`, err.message,);
+                setError(err.message);
+            });
+    } catch (err) {
+        console.warn(`err ${error.code}`, error.message);
+        setError(err.message);
+    }
+};
     return (
         <ImageBackground source={require('../images/loginbg.png')}
         imageStyle={{
@@ -21,7 +139,7 @@ const Subscribe = ({navigation}) => {
             <Text style={styles.mainLine}>App Access (1 year) {'\n'} Subscription</Text>
             <Text style={styles.mainLine}>1,599.00/- Rupees</Text>
             <TouchableOpacity >
-              <View style={styles.button}>
+              <View style={styles.button} onPress={() => requestSubscription(products.Products[0].productId)}>
                 <Text style={styles.buttonText}>Subscribe Now</Text>
               </View>
             </TouchableOpacity>

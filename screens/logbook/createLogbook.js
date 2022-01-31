@@ -68,7 +68,7 @@ const CalcActualInstrument = () => {
         var min=Math.floor((t1cm-t2cm)%60); 
         var m = (Math.round(min/15) * 15) % 60;
         if (m < 10) { m = "0" + m; } 
-        console.log (hour+':'+m); 
+        //console.log (hour+':'+m); 
         setAi(hour+':'+m)
     }
     else {
@@ -455,7 +455,7 @@ const SICnight_editable = (inputText) => {
 
     //function to remove TextInput dynamically
     const removeTextInput = (index) => {
-    console.log('pressed', index)
+    //console.log('pressed', index)
     // let textInput1 = textInput;
     // let inputData1 = inputData;
     // textInput1.pop();
@@ -506,13 +506,13 @@ const removeTextInputTime = (timeIndex) => {
   }
 
     const TimeInputText = (timeIndex) => {
-    console.log('addTextInputTime')
+    //console.log('addTextInputTime')
     if (!TimeFilterCustom.trim()) {
     alert('Custom Field is required');
     setTimeModalVisible(!TimemodalVisible)
     }
     else{
-    console.log('addTextInput',timeIndex)
+    //console.log('addTextInput',timeIndex)
     let timeTextInput1 = timeTextInput;
     timeTextInput1.push(<View style={Logbook.fieldWithoutBottom}>
         <View style={Logbook.fields}>
@@ -547,7 +547,7 @@ const removelandingInputTime = (LandingIndex) => {
   }
 
     const LandingInputText = (LandingIndex) => {
-    console.log('addTextInputTime')
+    //console.log('addTextInputTime')
     if (!LandingFilterCustom.trim()) {
     alert('Custom Field is required');
     setLandingModalVisible(!LandingmodalVisible)
@@ -594,10 +594,10 @@ React.useEffect(() => {
           //setOffset(offset + 10);
           if (result.rows.length > 0) {
             //alert('data available '); 
-            console.log('result', result)
+            //console.log('result', result)
           }
           else {
-            console.log('error')
+            //console.log('error')
           }
           for (let i = 0; i <= result.rows.length; i++) {
             //console.log('name: ', result.rows.item(i).airline_name, 'loginlink: ', result.rows.item(i).loginUrl)
@@ -639,7 +639,7 @@ const Roaster = async() => {
       })
     }).then(res => res.json())
     .then(resData => {
-      console.log(resData);
+      //console.log(resData);
       //console.log('data ---->', resData.data)
       //console.log('roaster data--->' ,roasterData)
   
@@ -669,16 +669,16 @@ const Roaster = async() => {
   
           const RealAircraftType = AircraftType === '320' || AircraftType === '321' ? 'A-'+ AircraftType : AircraftType;
   
-           console.log('orginal date', date)
+           //console.log('orginal date', date)
   
           let text = date;
           const myArray = text.split("-");
           const day =  myArray[2]+ myArray[1] + myArray[0] 
-          console.log('sorted date', day);
+          //console.log('sorted date', day);
   
-           console.log('Pilot_Pic====', Pilot_Pic);
-           console.log('Pilot_Copilot====',Pilot_Copilot)
-           console.log('Pilot_Instructor===',Pilot_Instructor)
+           //console.log('Pilot_Pic====', Pilot_Pic);
+           //console.log('Pilot_Copilot====',Pilot_Copilot)
+          //console.log('Pilot_Instructor===',Pilot_Instructor)
   
            prePopulateddb.transaction((tx) => {
             if (Pilot_Pic !== ''){
@@ -700,8 +700,8 @@ const Roaster = async() => {
                );
             }
   
-            console.log('data pos '+ i +' '+ resData.data.length);
-            console.log(resData.data.length === resData.data.length)
+            //console.log('data pos '+ i +' '+ resData.data.length);
+            //console.log(resData.data.length === resData.data.length)
   
             if(resData.data.length>10){
               setProgressValue(0.5)
@@ -739,15 +739,15 @@ const Roaster = async() => {
                           dayTO : result.rows.item(j).dayTO,
                           nightTO : result.rows.item(j).nightTO,
                       });
-                      console.log('Entry fetched '+ j +' out of :'+result.rows.length );
-                      console.log('id', result.rows.item(j).id)
+                      //console.log('Entry fetched '+ j +' out of :'+result.rows.length );
+                      //console.log('id', result.rows.item(j).id)
                       setProgressValue(1)
                       //setLocalLogbookData(temData);
                       //console.log('peopleee', result.rows.item(j).dayLanding+result.rows.item(j).nightLanding+result.rows.item(j).dayTO+result.rows.item(j).nightTO);
                      //console.log('icao code test : ' ,RostertemData)
                       dataDispatcher(LogListData({data: RostertemData, inProgress:false}))
                       let jPos = j+1
-                      console.log('data fetched pos', jPos, result.rows.length)
+                      //console.log('data fetched pos', jPos, result.rows.length)
                       if(jPos == result.rows.length){
                         //console.log('jpos')
                         Alert.alert("Message",'Data fetched successfully');
@@ -764,7 +764,7 @@ const Roaster = async() => {
       }
   
     }).catch((error) => {
-      console.log(error)
+      //console.log(error)
       alert('Credentials incorrect',error)
       setModalVisible(false)
     });
@@ -803,14 +803,14 @@ const importPilotList = async() => {
       const Name =resData.data[k].Name
       const Pilotid =resData.data[k].id
        
-      console.log ('getting people',Pilotid )
+      //console.log ('getting people',Pilotid )
       prePopulateddb.transaction((tx) => {
         tx.executeSql(
           'INSERT INTO pilots (Airline,Egca_reg_no,Name,pilotId,selectedAirline)VALUES("'+Airline+'","'+EGCA_Registration_No+'","'+Name+'","'+Pilotid+'","'+userRosterAirlineType+'")',
           // console.log('INSERT INTO pilots (Airline, Egca_reg_no, Name, pilotId)  VALUES ("'+Airline+'","'+EGCA_Registration_No+'", "'+Name+'" ,"'+Pilotid+'")')
         );
-        console.log('K1', k+1);
-        console.log('K', resData.data.length);
+        //console.log('K1', k+1);
+        //console.log('K', resData.data.length);
         if((k+1) == resData.data.length){
           //selection from table pilots
             let PilotData1 = [];
@@ -819,7 +819,7 @@ const importPilotList = async() => {
                 //setOffset(offset + 10);
                 if (pilotresult.rows.length > 0) {
                     //alert('data available ');
-                    console.log('result', pilotresult)
+                    //console.log('result', pilotresult)
                 }
                 for (let l = 0; l < pilotresult.rows.length; l++) {
                 
@@ -831,7 +831,7 @@ const importPilotList = async() => {
                         pilotId :pilotresult.rows.item(l).pilotId,
                         
                     });
-                    console.log('Entry fetched '+ l +' out of :'+pilotresult.rows.length );
+                    //console.log('Entry fetched '+ l +' out of :'+pilotresult.rows.length );
                     //console.log('date', result.rows.item(j).date)
                     //setLocalLogbookData(temData);
                     //console.log('peopleee', result.rows.item(j).dayLanding+result.rows.item(j).nightLanding+result.rows.item(j).dayTO+result.rows.item(j).nightTO);
@@ -856,7 +856,7 @@ const importPilotList = async() => {
    }
    //alert('Pilots imported successfully')
 }).catch((error) => {
-    console.log(error)
+    //console.log(error)
     alert (error);
     setPilotsFetched (true);
   });
@@ -869,7 +869,7 @@ const removeApproachInputTime = (ApproachIndex) => {
   }
 
     const ApproachInputText = (ApproachIndex) => {
-    console.log('addTextInputTime')
+    //console.log('addTextInputTime')
     if (!ApproachFilterCustom.trim()) {
     alert('Custom Field is required');
     setApproachModalVisible(!ApproachmodalVisible)
@@ -990,7 +990,7 @@ const removeApproachInputTime = (ApproachIndex) => {
 
     React.useEffect(() => {
         if (Approachparams.childParam) {
-            console.log('Child param is', Approachparams.childParam);
+            //console.log('Child param is', Approachparams.childParam);
             setApproach1(Approachparams.ApproachMixture)
             setApproach2(Approachparams.ApproachMixture)
         }
@@ -1224,7 +1224,7 @@ React.useEffect(() => {
             })
         }).then(res => res.json())
             .then(resData => {
-                console.log('data---->', resData.data);
+                //console.log('data---->', resData.data);
                 Alert.alert(resData.message);
             }).catch((error) => {
                 console.log(error)
@@ -1271,7 +1271,7 @@ React.useEffect(() => {
       const SELECTAfterDel = async (deleteLog = false) => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
-        console.log('test');
+        //console.log('test');
         if (deleteLog === true) {
           //console.log('inner', user.id)
           prePopulateddb.transaction(tx => {
@@ -1304,14 +1304,14 @@ React.useEffect(() => {
                               aircraftType : result.rows.item(i).aircraftType,
                               aircraftReg : result.rows.item(i).aircraftReg,
                           });
-                            console.log('logbook data', temData);
+                            //console.log('logbook data', temData);
                            //setLocalLogbookData(temData);
                           dataDispatcher(LogListData({data: temData, inProgress: false}))
-                          //dataDispatcher(DocListData({data: temData}))
+                        //   dataDispatcher(DocListData({data: temData}))
                           
                         }
                         else {
-                            console.log('no data to show')
+                            //console.log('no data to show')
                             dataDispatcher(LogListData({ data: [], inProgress: false }))
                           }
                     }
@@ -1397,7 +1397,7 @@ React.useEffect(() => {
             })
         }).then(res => res.json())
             .then(resData => {
-                console.log('data---->', resData.data);
+                //console.log('data---->', resData.data);
                 Alert.alert(resData.message);
             });
     };
@@ -1405,13 +1405,13 @@ React.useEffect(() => {
    // console.log('name_PIc------>', rosterNamePic)
 
    const getReduxApproachData = useSelector(state => state.approaches.Airport);
-    console.log ('hehhhAproach', getReduxApproachData)
+    //console.log ('hehhhAproach', getReduxApproachData)
 
     //sqlite starts
 
     //React.useEffect(() => { getDataQuery() }, []);
-    console.log(rosterNamePic)
-    console.log('is it true ?' , rosterNamePic == 'Self')
+    //console.log(rosterNamePic)
+    //console.log('is it true ?' , rosterNamePic == 'Self')
     const selfPICday = rosterNamePic === 'Self' ? dayTime : pic_day
     //console.log('picday', selfPICday)
     const selfPICnight = rosterNamePic === 'Self' ? nightTime : pic_night
@@ -1432,7 +1432,7 @@ React.useEffect(() => {
                         aircraftReg :  result.rows.item(i).aircraftReg    
                      });
                      if (rosterAId !== 'SIMU') setRosterAId(result.rows.item(i).aircraftReg)
-                     console.log('setRosterAId', rosterAId)
+                     //console.log('setRosterAId', rosterAId)
                     }
                 }
             );
@@ -1483,12 +1483,81 @@ React.useEffect(() => {
         if (rosterId && rosterAId !== 'SIMU') {
             tx.executeSql(
                 'UPDATE logbook set tag="manual", user_id="'+user.id+'" , flight_no="", date="'+originalDate+'", day="'+dayTime+'", actual_Instrument="'+ai+'", aircraftReg="'+rosterAId+'", aircraftType="'+rosterAType+'", approach1="'+Approach1+'", approach2="'+approach2+'", approach3="", approach4="", approach5="", approach6="", approach7="", approach8="", approach9="", approach10="", crewCustom1="", crewCustom2="", crewCustom3="", crewCustom4="", crewCustom5="", dayLanding="'+dayLanding+'", dayTO="'+day_to+'", dual_day="'+dual_day+'", dual_night="'+dual_night+'", flight="'+flight+'", from_airportID="'+fromAirportid+'", from_altitude="'+fromElevation+'", from_city="", from_country="'+fromCountry+'", from_dayLightSaving="'+fromDst+'", from_source="'+fromSource+'", from_lat="'+fromLatitude+'", from_long="'+fromLongitude+'", from_name="'+fromAirportname+'", from_nameIATA="", from_nameICAO="'+rosterFrom+'", from_timeZone="'+fromTimeZone+'", from_type="'+fromType+'", from_dst_status="'+fromDstStatus+'", fullStop="'+fullStop+'", ifr_vfr="'+fr+'", instructional="'+instructional+'", instructor="'+instructor+'", inTime="'+landing+'", landingCustom1="", landingCustom2="", landingCustom3="", landingCustom4="", landingCustom5="", landingCustom6="", landingCustom7="", landingCustom8="", landingCustom9="", landingCustom10="", night="'+nightTime+'", nightLanding="'+nightLanding+'", nightTO="'+night_to+'", offTime="'+rosterChocksOff+'", onTime="'+rosterChocksOn+'", outTime="'+takeOff+'", p1="'+rosterNamePic+'", p1_us_day="'+p1_us_day+'", p1_us_night="'+p1_us_night+'", p2="'+rosterNameSic+'", pic_day="'+selfPICday+'", pic_night="'+selfPICnight+'", stl="'+stl+'", reliefCrew1="'+reliefCrew1+'", reliefCrew2="'+reliefCrew2+'", reliefCrew3="'+reliefCrew3+'", reliefCrew4="'+reliefCrew4+'", route="'+route+'", sic_day="'+SelfSICday+'", sic_night="'+SelfSICnight+'", sim_instructional="", sim_instrument="'+SimulatedInstrument+'", selected_role="", student="'+student+'", timeCustom1="", timeCustom2="", timeCustom3="", timeCustom4="", timeCustom5="", timeCustom6="", timeCustom7="", timeCustom8="", timeCustom9="", timeCustom10="", to_airportID="'+toAirportid+'", to_altitude="'+toElevation+'", to_city="", to_country="'+toCountry+'", to_dayLightSaving="'+toDst+'", to_source="'+toSource+'", to_lat="'+toLatitude+'", to_long="'+toLongitude+'", to_name="'+toAirportname+'", to_nameIATA="", to_nameICAO="'+rosterTo+'", to_timeZone="'+toTimeZone+'", to_type="'+toType+'", to_dst_status="'+toDstStatus+'", totalTime="'+filghtTimeM+'", touch_n_gos="'+touchGo+'", waterLanding="'+waterLanding+'", waterTO="'+water_to+'", x_country_day="'+xc_day+'", x_country_night="'+xc_night+'", x_country_day_leg="'+xc_day_leg+'", x_country_night_leg="'+xc_night_leg+'", outTime_LT="", offTime_LT="", onTime_LT="", inTime_LT="", sim_type="'+St+'", sim_exercise="'+Sim_exercise+'", pf_time="'+pfHours+'", pm_time="'+pmHours+'", sfi_sfe="'+sf+'", simCustom1="", simCustom2="", simCustom3="", simCustom4="", simCustom5="", simLocation="'+location+'", p1_ut_day="'+p1_ut_day+'", p1_ut_night="'+p1_ut_night+'", remark="'+remark+'", autolanding="'+autoLanding+'", flight_date="", selected_flight_timelog="", imported_log="", orderedDate="'+sortedDate+'" where id="'+rosterId+'"');
+
+                tx.executeSql(
+                    'SELECT * from logbook  WHERE user_id = "'+user.id+'" and id = "'+rosterId+'" ORDER BY orderedDate DESC limit 5', [], (tx, result) => {
+                    //setOffset(offset + 10);
+                          if (result.rows.length > 0) {
+                              //alert('data available ');
+                              //console.log('result', result)
+                          }
+                          for (let i = 0; i <= result.rows.length; i++) {
+                              temData.push({
+                                  id : result.rows.item(i).id,
+                                  tag : result.rows.item(i).tag,
+                                  user_id: result.rows.item(i).user_id,
+                                  date: result.rows.item(i).date,
+                                  from : result.rows.item(i).from_nameICAO,
+                                  to : result.rows.item(i).to_nameICAO,
+                                  from_lat : result.rows.item(i).from_lat,
+                                  from_long : result.rows.item(i).from_long,
+                                  to_lat : result.rows.item(i).to_lat, 
+                                  to_long : result.rows.item(i).to_long,
+                                  chocksOffTime : result.rows.item(i).offTime, 
+                                  chocksOnTime : result.rows.item(i).onTime,
+                                  approach1 : result.rows.item(i).approach1,
+                                  from_airportID : result.rows.item(i).from_airportID,
+                                  p1 : result.rows.item(i).p1,
+                                  p2 : result.rows.item(i).p2,
+                                  aircraftType : result.rows.item(i).aircraftType,
+                                  aircraftReg : result.rows.item(i).aircraftReg,
+                              });
+                                console.log('logbook data', temData);
+                               //setLocalLogbookData(temData);
+                              dataDispatcher(LogListData({data: temData, inProgress: false}))
+                              //dataDispatcher(DocListData({data: temData}))
+            
+                          }
+                      });
         }
         else if(rosterAId !== 'SIMU'){
-            console.log('INSERTING WITHOUT SIMU')
+            //console.log('INSERTING WITHOUT SIMU')
             tx.executeSql(
             'INSERT INTO logbook (tag, user_id, flight_no, date, day,  actual_Instrument, aircraftReg, aircraftType, approach1, approach2, approach3, approach4, approach5, approach6, approach7, approach8, approach9, approach10, crewCustom1, crewCustom2, crewCustom3, crewCustom4, crewCustom5, dayLanding, dayTO, dual_day, dual_night, flight, from_airportID, from_altitude, from_city, from_country, from_dayLightSaving, from_source, from_lat, from_long, from_name, from_nameIATA, from_nameICAO, from_timeZone, from_type, from_dst_status, fullStop, ifr_vfr, instructional, instructor, inTime, landingCustom1, landingCustom2, landingCustom3, landingCustom4, landingCustom5, landingCustom6, landingCustom7, landingCustom8, landingCustom9, landingCustom10, night, nightLanding, nightTO, offTime, onTime, outTime, p1, p1_us_day, p1_us_night, p2, pic_day, pic_night, stl, reliefCrew1, reliefCrew2, reliefCrew3, reliefCrew4, route, sic_day, sic_night, sim_instructional, sim_instrument, selected_role, student, timeCustom1, timeCustom2, timeCustom3, timeCustom4, timeCustom5, timeCustom6, timeCustom7, timeCustom8, timeCustom9, timeCustom10, to_airportID, to_altitude, to_city, to_country, to_dayLightSaving, to_source, to_lat, to_long, to_name, to_nameIATA, to_nameICAO, to_timeZone, to_type, to_dst_status, totalTime, touch_n_gos, waterLanding, waterTO, x_country_day, x_country_night, x_country_day_leg, x_country_night_leg, outTime_LT, offTime_LT, onTime_LT, inTime_LT, sim_type, sim_exercise, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, simLocation, p1_ut_day, p1_ut_night, remark, autolanding, flight_date, selected_flight_timelog, imported_log, orderedDate)  VALUES ("manual","'+user.id+'", "" ,"'+originalDate+'" , "'+dayTime+'" , "'+ai+'" , "'+rosterAId+'" , "'+rosterAType+'" , "'+Approach1+'" , "'+approach2+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+dayLanding+'" , "'+day_to+'" , "'+dual_day+'" , "'+dual_night+'" , "'+flight+'" , "'+fromAirportid+'" , "'+fromElevation+'" , "" , "'+fromCountry+'" , "'+fromDst+'" , "'+fromSource+'" , "'+fromLatitude+'" , "'+fromLongitude+'" , "'+fromAirportname+'" , "" , "'+rosterFrom+'", "'+fromTimeZone+'" , "'+fromType+'" , "'+fromDstStatus+'" , "'+fullStop+'" , "'+fr+'" , "'+instructional+'" , "'+instructor+'" , "'+landing+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+nightTime+'" , "'+nightLanding+'" , "'+night_to+'" , "'+rosterChocksOff+'" , "'+rosterChocksOn+'" , "'+takeOff+'" , "'+rosterNamePic+'" , "'+p1_us_day+'" , "'+p1_us_night+'" , "'+rosterNameSic+'" , "'+selfPICday+'" , "'+selfPICnight+'" , "'+stl+'" , "'+reliefCrew1+'" , "'+reliefCrew2+'" , "'+reliefCrew3+'" , "'+reliefCrew4+'" , "'+route+'" , "'+SelfSICday+'" , "'+SelfSICnight+'" , "" , "'+SimulatedInstrument+'" , "" , "'+student+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+toAirportid+'" , "'+toElevation+'" , "" , "'+toCountry+'" , "'+toDst+'" , "'+toSource+'" , "'+toLatitude+'" , "'+toLongitude+'" , "'+toAirportname+'" , "" , "'+rosterTo+'" , "'+toTimeZone+'" , "'+toType+'" , "'+toDstStatus+'" , "'+filghtTimeM+'" , "'+touchGo+'" , "'+waterLanding+'" , "'+water_to+'" , "'+xc_day+'" , "'+xc_night+'" , "'+xc_day_leg+'" , "'+xc_night_leg+'" , "" , "" , "" , "" , "'+St+'" , "'+Sim_exercise+'" , "'+pfHours+'" , "'+pmHours+'" , "'+sf+'" , "" , "" , "" , "" , "" , "'+location+'" , "'+p1_ut_day+'" , "'+p1_ut_night+'" , "'+remark+'" , "'+autoLanding+'" , "" , "" , "" , "'+sortedDate+'" )',
           );
+
+          tx.executeSql(
+            'SELECT * from logbook  WHERE user_id = "'+user.id+'" limit 5', [], (tx, result) => {
+            //setOffset(offset + 10);
+                  if (result.rows.length > 0) {
+                      //alert('data available ');
+                      //console.log('result', result)
+                  }
+                  for (let i = 0; i <= result.rows.length; i++) {
+                    temDataSIMU.push({
+                          id : result.rows.item(i).id,
+                          tag : result.rows.item(i).tag,
+                          aircraftReg : result.rows.item(i).aircraftReg,
+                          user_id: result.rows.item(i).user_id,
+                          date: result.rows.item(i).date,
+                          from : result.rows.item(i).from_nameICAO,
+                          to : result.rows.item(i).to_nameICAO,
+                        //   from_lat : result.rows.item(i).from_lat,
+                        //   from_long : result.rows.item(i).from_long,
+                        //   to_lat : result.rows.item(i).to_lat, 
+                        //   to_long : result.rows.item(i).to_long,
+                        outTime : result.rows.item(i).outTime, 
+                        inTime : result.rows.item(i).inTime,
+                        aircraftType : result.rows.item(i).aircraftType,
+                        aircraftReg : result.rows.item(i).aircraftReg,
+                        //   approach1 : result.rows.item(i).approach1,
+                        //   from_airportID : result.rows.item(i).from_airportID,
+                      });
+                       //console.log('logbook data', result.rows.item(i).from_lat,);
+                       //setLocalLogbookData(temData);
+                      dataDispatcher(LogListData({data: temDataSIMU, inProgress: false}))
+                  }
+              });
           //console.log('AIRCRAFFFFT ID', NIGHTtemp)
         }
         else {
@@ -1498,83 +1567,83 @@ React.useEffect(() => {
             );
         }
         
-        let temData = [];
-        prePopulateddb.transaction(tx => {
-        if(rosterAId !== 'SIMU'){
-        //dataDispatcher(LogListData({data: []}))
-        tx.executeSql(
-        'SELECT * from logbook  WHERE user_id = "'+user.id+'" ORDER BY orderedDate DESC limit 5', [], (tx, result) => {
-        //setOffset(offset + 10);
-              if (result.rows.length > 0) {
-                  //alert('data available ');
-                  //console.log('result', result)
-              }
-              for (let i = 0; i <= result.rows.length; i++) {
-                  temData.push({
-                      id : result.rows.item(i).id,
-                      tag : result.rows.item(i).tag,
-                      user_id: result.rows.item(i).user_id,
-                      date: result.rows.item(i).date,
-                      from : result.rows.item(i).from_nameICAO,
-                      to : result.rows.item(i).to_nameICAO,
-                      from_lat : result.rows.item(i).from_lat,
-                      from_long : result.rows.item(i).from_long,
-                      to_lat : result.rows.item(i).to_lat, 
-                      to_long : result.rows.item(i).to_long,
-                      chocksOffTime : result.rows.item(i).offTime, 
-                      chocksOnTime : result.rows.item(i).onTime,
-                      approach1 : result.rows.item(i).approach1,
-                      from_airportID : result.rows.item(i).from_airportID,
-                      p1 : result.rows.item(i).p1,
-                      p2 : result.rows.item(i).p2,
-                      aircraftType : result.rows.item(i).aircraftType,
-                      aircraftReg : result.rows.item(i).aircraftReg,
-                  });
-                    console.log('logbook data', temData);
-                   //setLocalLogbookData(temData);
-                  dataDispatcher(LogListData({data: temData, inProgress: false}))
-                  //dataDispatcher(DocListData({data: temData}))
+    //     let temData = [];
+    //     prePopulateddb.transaction(tx => {
+    //     if(rosterAId !== 'SIMU'){
+    //     //dataDispatcher(LogListData({data: []}))
+    //     tx.executeSql(
+    //     'SELECT * from logbook  WHERE user_id = "'+user.id+'" and id = "'+rosterId+'" ORDER BY orderedDate DESC ', [], (tx, result) => {
+    //     //setOffset(offset + 10);
+    //           if (result.rows.length > 0) {
+    //               //alert('data available ');
+    //               //console.log('result', result)
+    //           }
+    //           for (let i = 0; i <= result.rows.length; i++) {
+    //               temData.push({
+    //                   id : result.rows.item(i).id,
+    //                   tag : result.rows.item(i).tag,
+    //                   user_id: result.rows.item(i).user_id,
+    //                   date: result.rows.item(i).date,
+    //                   from : result.rows.item(i).from_nameICAO,
+    //                   to : result.rows.item(i).to_nameICAO,
+    //                   from_lat : result.rows.item(i).from_lat,
+    //                   from_long : result.rows.item(i).from_long,
+    //                   to_lat : result.rows.item(i).to_lat, 
+    //                   to_long : result.rows.item(i).to_long,
+    //                   chocksOffTime : result.rows.item(i).offTime, 
+    //                   chocksOnTime : result.rows.item(i).onTime,
+    //                   approach1 : result.rows.item(i).approach1,
+    //                   from_airportID : result.rows.item(i).from_airportID,
+    //                   p1 : result.rows.item(i).p1,
+    //                   p2 : result.rows.item(i).p2,
+    //                   aircraftType : result.rows.item(i).aircraftType,
+    //                   aircraftReg : result.rows.item(i).aircraftReg,
+    //               });
+    //                 console.log('logbook data', temData);
+    //                //setLocalLogbookData(temData);
+    //               dataDispatcher(LogListData({data: temData, inProgress: false}))
+    //               //dataDispatcher(DocListData({data: temData}))
 
-              }
-          });
-        }
-        else {
-            let temDataSIMU = [];
-            //dataDispatcher(LogListData({data: []}))
-            tx.executeSql(
-                'SELECT * from logbook  WHERE user_id = "'+user.id+'" limit 5', [], (tx, result) => {
-                //setOffset(offset + 10);
-                      if (result.rows.length > 0) {
-                          //alert('data available ');
-                          //console.log('result', result)
-                      }
-                      for (let i = 0; i <= result.rows.length; i++) {
-                        temDataSIMU.push({
-                              id : result.rows.item(i).id,
-                              tag : result.rows.item(i).tag,
-                              aircraftReg : result.rows.item(i).aircraftReg,
-                              user_id: result.rows.item(i).user_id,
-                              date: result.rows.item(i).date,
-                              from : result.rows.item(i).from_nameICAO,
-                              to : result.rows.item(i).to_nameICAO,
-                            //   from_lat : result.rows.item(i).from_lat,
-                            //   from_long : result.rows.item(i).from_long,
-                            //   to_lat : result.rows.item(i).to_lat, 
-                            //   to_long : result.rows.item(i).to_long,
-                            outTime : result.rows.item(i).outTime, 
-                            inTime : result.rows.item(i).inTime,
-                            aircraftType : result.rows.item(i).aircraftType,
-                            aircraftReg : result.rows.item(i).aircraftReg,
-                            //   approach1 : result.rows.item(i).approach1,
-                            //   from_airportID : result.rows.item(i).from_airportID,
-                          });
-                           //console.log('logbook data', result.rows.item(i).from_lat,);
-                           //setLocalLogbookData(temData);
-                          dataDispatcher(LogListData({data: temDataSIMU, inProgress: false}))
-                      }
-                  });
-        }
-      });
+    //           }
+    //       });
+    //     }
+    //     else {
+    //         let temDataSIMU = [];
+    //         //dataDispatcher(LogListData({data: []}))
+    //         tx.executeSql(
+    //             'SELECT * from logbook  WHERE user_id = "'+user.id+'" limit 5', [], (tx, result) => {
+    //             //setOffset(offset + 10);
+    //                   if (result.rows.length > 0) {
+    //                       //alert('data available ');
+    //                       //console.log('result', result)
+    //                   }
+    //                   for (let i = 0; i <= result.rows.length; i++) {
+    //                     temDataSIMU.push({
+    //                           id : result.rows.item(i).id,
+    //                           tag : result.rows.item(i).tag,
+    //                           aircraftReg : result.rows.item(i).aircraftReg,
+    //                           user_id: result.rows.item(i).user_id,
+    //                           date: result.rows.item(i).date,
+    //                           from : result.rows.item(i).from_nameICAO,
+    //                           to : result.rows.item(i).to_nameICAO,
+    //                         //   from_lat : result.rows.item(i).from_lat,
+    //                         //   from_long : result.rows.item(i).from_long,
+    //                         //   to_lat : result.rows.item(i).to_lat, 
+    //                         //   to_long : result.rows.item(i).to_long,
+    //                         outTime : result.rows.item(i).outTime, 
+    //                         inTime : result.rows.item(i).inTime,
+    //                         aircraftType : result.rows.item(i).aircraftType,
+    //                         aircraftReg : result.rows.item(i).aircraftReg,
+    //                         //   approach1 : result.rows.item(i).approach1,
+    //                         //   from_airportID : result.rows.item(i).from_airportID,
+    //                       });
+    //                        //console.log('logbook data', result.rows.item(i).from_lat,);
+    //                        //setLocalLogbookData(temData);
+    //                       dataDispatcher(LogListData({data: temDataSIMU, inProgress: false}))
+    //                   }
+    //               });
+    //     }
+    //   });
         });
         alert('Inserted successfully');
         navigation.goBack();
@@ -1689,7 +1758,7 @@ React.useEffect(() => {
 
 
         if ((sunRiseDepartureTimeM < sunRiseDestinationTimeM) && (sunSetDepartureTimeM < sunSetDestinationTimeM)) {
-            console.log('west');
+            //console.log('west');
             //difference in sunrises
             var diffSunRiseTime = (dateToMinuts(sunRiseDestinationTimeM) - dateToMinuts(sunRiseDepartureTimeM));
             if (diffSunRiseTime < 0) { diffSunRiseTime = diffSunRiseTime + 1440; }
@@ -1802,7 +1871,7 @@ React.useEffect(() => {
                 //console.log('d-n')
             }
         } else {
-            console.log('east');
+            //console.log('east');
             //difference in sunrises
             var diffSunRiseTime = (dateToMinuts(sunRiseDepartureTimeM) - dateToMinuts(sunRiseDestinationTimeM));
             if (diffSunRiseTime < 0) { diffSunRiseTime = diffSunRiseTime + 1440; }
@@ -2204,7 +2273,7 @@ React.useEffect(() => {
         showMode('date');
     };
 
-    console.log('stllll',stl )
+    //console.log('stllll',stl )
     const STL_CONDITIONS = () =>  {
         if (stl === false && rosterNameSic==='Self') {
             setP1_us_day(sic_day)
@@ -2231,7 +2300,7 @@ React.useEffect(() => {
             nanRemovable()}}
         , [rosterNamePic]);
 
-    console.log('p1/usDay ---- >', isNaN(p1_us_day))
+    //console.log('p1/usDay ---- >', isNaN(p1_us_day))
     const PerferctP1_us_day = isNaN(p1_us_day)==true ?'00:00': p1_us_day
     const PerferctP1_us_night = isNaN(p1_us_night)==true ? '00:00': p1_us_night
 
@@ -2239,7 +2308,7 @@ React.useEffect(() => {
     //const RoasterOriginalDate = datee == 'DDMM' ? RosterDDmmyy : RosterMMddyy;
     
     const ServeroriginalDate = datee == 'DDMM' ? Serverddmmyy : Servermmddyy;
-    console.log('getting date', ServeroriginalDate)
+    //console.log('getting date', ServeroriginalDate)
     
     //console.log("PARAMMMMMMMMM", rosterFromParams)
     //console.log ("contextparam", ListingParam)
@@ -2279,7 +2348,7 @@ React.useEffect(() => {
             var min=Math.floor((t1cm-t2cm)%60); 
             //var m = (Math.round(min/15) * 15) % 60;
             if (min < 10) { min = "0" + min; } 
-            console.log (hour+':'+min); 
+           // console.log (hour+':'+min); 
             setfilghtTimeM(hour+':'+min)
         }
         else {
@@ -2291,15 +2360,15 @@ React.useEffect(() => {
         if (rosterAId === 'SIMU') {
          SimuCalculations()}}, [rosterAId, SimuCalculations]);
 
-    console.log('ApproachNo',getReduxApproachData.ApproachNo)
-    console.log('ApproachType',getReduxApproachData.ApproachType)
-    console.log('Airport',getReduxApproachData.Airport)
+    //console.log('ApproachNo',getReduxApproachData.ApproachNo)
+    //console.log('ApproachType',getReduxApproachData.ApproachType)
+    //console.log('Airport',getReduxApproachData.Airport)
 
     const A = getReduxApproachData.ApproachNo === undefined ? 1 : getReduxApproachData.ApproachNo;
     const B = getReduxApproachData.ApproachType === undefined ? 'ILS' : getReduxApproachData.ApproachType
 
      const Approach1 = A+';'+B+';'+rosterTo;
-     console.log('C', Approach1)
+     //console.log('C', Approach1)
 
      const ut_control = () => {
          setP1_us_day('')
@@ -3293,7 +3362,7 @@ React.useEffect(() => {
                 </View> : null}
                 
                 {timeTextInput.map((Timevalue) => {
-                console.log('TimeValue', Timevalue)
+                //console.log('TimeValue', Timevalue)
                 return Timevalue
                 })}
 
@@ -3692,7 +3761,7 @@ React.useEffect(() => {
 
             <View style={dark?Logbook.DarkbuttonView:Logbook.buttonView}>
                 <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={()=>{insertQuery();Add_Logbook()}}> 
+                    <TouchableOpacity onPress={()=>{insertQuery();}}> 
                         <View style={Logbook.button}>
                             <Text style={Logbook.buttonText}>Save</Text>
                         </View>

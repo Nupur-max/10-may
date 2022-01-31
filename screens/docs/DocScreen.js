@@ -222,7 +222,7 @@ const Docs = ({ navigation }) => {
     //let temData = []
     //dataDispatcher(DocListData({data: []}))
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND tag= "server" ORDER BY orderedDate DESC , inTime DESC LIMIT 5 OFFSET "' + offset + '"', [], (tx, result) => {
+      tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND tag= "manual" ORDER BY orderedDate DESC , inTime DESC LIMIT 5 OFFSET "' + offset + '"', [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           return false;
@@ -286,6 +286,7 @@ const Docs = ({ navigation }) => {
   };
 
   const getReduxDocData = useSelector(state => state.docList.data);
+  //console.log(getReduxDocData.data.length)
 
   const openList = () => { setOpen(true); setSelectedItem([]); }
   const closeList = () => { setOpen(false); setSelectedItem([]); }
