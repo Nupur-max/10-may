@@ -1572,7 +1572,7 @@ React.useEffect(() => {
     //     if(rosterAId !== 'SIMU'){
     //     //dataDispatcher(LogListData({data: []}))
     //     tx.executeSql(
-    //     'SELECT * from logbook  WHERE user_id = "'+user.id+'" and id = "'+rosterId+'" ORDER BY orderedDate DESC ', [], (tx, result) => {
+    //     'SELECT * from logbook  WHERE user_id = "'+user.id+'" ORDER BY orderedDate DESC ', [], (tx, result) => {
     //     //setOffset(offset + 10);
     //           if (result.rows.length > 0) {
     //               //alert('data available ');
@@ -1644,6 +1644,7 @@ React.useEffect(() => {
     //               });
     //     }
     //   });
+
         });
         alert('Inserted successfully');
         navigation.goBack();

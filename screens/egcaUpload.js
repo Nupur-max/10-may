@@ -282,6 +282,35 @@ const EGCAUpload = ({navigation}) => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
         let temData = [];
+
+        if (!egca_user) {
+          alert('Please fill EGCA ID');
+          return;
+        }
+        if (!egca_pwd) {
+          alert('Please fill EGCA Password');
+          return;
+        }
+        if (!FTOvalue) {
+          alert('Please select Fto operator');
+          return;
+        }
+        if (!egca) {
+          alert('Please select FlightType');
+          return;
+        }
+        if (!PurposeData) {
+          alert('Please select Purpose');
+          return;
+        }
+        if (!Authvalue) {
+          alert('Please select Authorised Person for verification');
+          return;
+        }
+        if (!AuthPersonvalue) {
+          alert('Please select Name of Authorised Person for verification');
+          return;
+        }
         db.transaction(tx => {
           tx.executeSql('SELECT * FROM EGCADetails Where user_id = "'+user.id+'"', [], (tx, result) => {
             //setOffset(offset + 10);

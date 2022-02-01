@@ -1,6 +1,7 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, FlatList, ActivityIndicator, Dimensions, Modal,SafeAreaView } from 'react-native';
+import { useIsFocused } from "@react-navigation/native";
+import { View, Text, StyleSheet,RefreshControl, TouchableOpacity, TextInput, FlatList, ActivityIndicator, Dimensions, Modal,SafeAreaView } from 'react-native';
 import { LogbookListing } from '../../styles/styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LogBookList } from '../../components/dummyLogBookListing';
@@ -52,6 +53,8 @@ NetInfo.addEventListener(networkState => {
 // create a component
 const LogBookListing = ({ navigation }) => {
 
+  const isFocused = useIsFocused();
+
   const dataDispatcher = useDispatch();
   const dataSelector = useSelector(state => state.logList.data);
   const { dark, theme, toggle } = React.useContext(ThemeContext);
@@ -82,6 +85,8 @@ const LogBookListing = ({ navigation }) => {
   const [rosterLength, setRosterLength] = React.useState('')
 
   const [done, setDone] = React.useState(false)
+
+  const [refreshing,setRefreshing] = React.useState(false)
 
 
   const [selectedId, setSelectedId] = React.useState('')
@@ -123,7 +128,7 @@ const LogBookListing = ({ navigation }) => {
 
   React.useEffect(() => {
   GetUserDetails();
-  console.log('Tarun')
+  //console.log('Tarun')
   }, []);
 
   const GetUserDetails = async () => {
@@ -153,7 +158,7 @@ const LogBookListing = ({ navigation }) => {
           //console.log('user Data', temData);
           setReg_date(result.rows.item(i).reg_date)
           setRosterId(result.rows.item(i).roster_id)
-          console.log('rosterlength', result.rows.item(i).rosterLength)
+          //console.log('rosterlength', result.rows.item(i).rosterLength)
           setRosterLength(result.rows.item(i).rosterLength)
           setTotalFlyingHours(result.rows.item(i).Total_flying_hours)
          }
@@ -618,7 +623,7 @@ const LogBookListing = ({ navigation }) => {
 
 
 
-  React.useEffect(() => {getLogbookData()}, [getReduxData]);
+  
 
   // React.useEffect(() => {
   //   console.log(modalVisible)
@@ -634,7 +639,7 @@ const LogBookListing = ({ navigation }) => {
 
 
   const getLogbookData = async () => {
-    //console.log('First')
+   //console.log('First')
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
     let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
@@ -689,6 +694,69 @@ const LogBookListing = ({ navigation }) => {
     });
     });
   };
+
+  React.useEffect(() => {
+    getLogbookData();
+    //console.log('loadingggggg')
+  }, [getReduxData]);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    let user = await AsyncStorage.getItem('userdetails');
+    user = JSON.parse(user);
+    let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
+    prePopulateddb.transaction(tx => {
+      tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,totalTime,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+        if (result.rows.length == 0) {
+          console.log('no data to load')
+          //dataDispatcher(LogListData({ data: [], inProgress: false }))
+          setLoadmore(false)
+          return false;
+        }
+        setOffset(offset + 10);
+        //if (result.rows.length > 1){
+        for (let i = 0; i <= result.rows.length; i++) {
+          if (result.rows.length !== 0){
+          setModalVisible(true)
+          temData.push({
+            id: result.rows.item(i).id,
+            tag: result.rows.item(i).tag,
+            date: result.rows.item(i).date,
+            aircraftType: result.rows.item(i).aircraftType,
+            from_lat: result.rows.item(i).from_lat,
+            from_long: result.rows.item(i).from_long,
+            from: result.rows.item(i).from_nameICAO,
+            chocksOffTime: result.rows.item(i).offTime,
+            chocksOnTime: result.rows.item(i).onTime,
+            p1: result.rows.item(i).p1,
+            p2: result.rows.item(i).p2,
+            to: result.rows.item(i).to_nameICAO,
+            to_lat: result.rows.item(i).to_lat,
+            to_long: result.rows.item(i).to_long,
+            totalTime: result.rows.item(i).totalTime,
+            orderedDate: result.rows.item(i).orderedDate,
+
+          });
+          //console.log('checkdata', temData);
+          setLocalLogbookData(temData);
+          var arr = temData;
+          var clean = arr.filter((arr, index, self) =>
+          index === self.findIndex((t) => (t.chocksOffTime === arr.chocksOffTime && t.date === arr.date && t.from === arr.from)))
+
+          //console.log('imp-data',clean);
+          dataDispatcher(LogListData({ data: clean, inProgress: false }))
+          setLoadmore(false)
+          setFindTag(result.rows.item(i).tag);
+          setRefreshing(false);
+        }
+        else {
+          console.log('no data to show')
+          dataDispatcher(LogListData({ data: [], inProgress: false }))
+        }
+        }
+    });
+    });
+  }, [refreshing]);
 
   const getTotalTime = async () => {
     //console.log('First')
@@ -1036,6 +1104,7 @@ const LogBookListing = ({ navigation }) => {
           onEndReached={search !== '' ? null : getLogbookData}
           //onMomentumScrollEnd={getLogbookData}
           onEndReachedThreshold={1}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           //extraData={getReduxData}
           //ListFooterComponent={loadmore === true ? <ActivityIndicator color={'#000'} /> : null}
         />

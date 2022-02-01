@@ -122,17 +122,12 @@ const getDataQuery = async() => {
           Name:result.rows.item(i).Name,
           pilotId:result.rows.item(i).pilotId,
         });
-      //console.log('people data',temData);
-      //setData(temData);
-      //setFilteredData(temData);
-      dataDispatcher(PilotData({data: temData}))
+        var arr = temData;
+        var clean = arr.filter((arr, index, self) =>
+        index === self.findIndex((t) => (t.Egca_reg_no === arr.Egca_reg_no)))
+      dataDispatcher(PilotData({data: clean}))
       }
-      //console.log(result);
-      //console.log(result.rows.item(0).airline_name)
-      // result.rows.item.map((index, content) => {
-      //   data.push({name:content.airline_name, loginlink: content.loginUrl})
-      // });
-      // );
+     
     });
   });
 };
@@ -165,9 +160,10 @@ const searchQuery = (dataToSearch) => {
           }
           SearchedData.push(SingleResult);
           console.log('single', SingleResult)
-          //console.log(' Searched data', SearchedData);
-          //setFilteredData(SearchedData);
-          dataDispatcher(PilotData({data: SearchedData}))
+            var Searcharr = SearchedData;
+            var Searchclean = Searcharr.filter((Searcharr, index, self) =>
+            index === self.findIndex((t) => (t.Egca_reg_no === Searcharr.Egca_reg_no)))
+          dataDispatcher(PilotData({data: Searchclean}))
         }
         //setFilteredData(SearchedData);
        // console.log('Searched Result array: ', SearchedData)
