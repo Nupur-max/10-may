@@ -319,7 +319,7 @@ const P1 = ({ navigation }) => {
               //selection from table logbook
               let temData = [];
               db.transaction(tx => {
-                tx.executeSql('SELECT id,tag,aircraftType,aircraftReg,user_id,date,from_nameICAO,to_nameICAO,offTime,onTime,from_lat,from_long,to_lat,to_long,p1,p2,dayLanding,nightLanding,dayTO,nightTO from logbook WHERE user_id = "' + user.id + '" AND tag ="roster" ORDER BY orderedDate DESC, inTime DESC', [], (tx, result) => {
+                tx.executeSql('SELECT id,tag,aircraftType,aircraftReg,user_id,date,from_nameICAO,to_nameICAO,offTime,onTime,from_lat,from_long,to_lat,to_long,p1,p2,dayLanding,nightLanding,dayTO,nightTO from logbook WHERE user_id = "' + user.id + '" AND tag ="roster" ORDER BY orderedDate DESC, onTime DESC', [], (tx, result) => {
                   setOffset(offset + 10);
                   
                   for (let j = 0; j < result.rows.length; j++) {
@@ -360,6 +360,11 @@ const P1 = ({ navigation }) => {
                   }
                 });
               });
+
+              // setProgressValue(1)
+              // setDataFetched(false)
+              // setModalVisible(false)
+              // Alert.alert("Message", 'Data fetched successfully');
             }
           }
             //Select Query end
@@ -769,7 +774,8 @@ const P1 = ({ navigation }) => {
             setValue={setCountryName}
             setItems={setItems}
             placeholder="Select Country"
-            style={[{
+            style={modalVisible===true?[{backgroundColor:'rgba(0,0,0,0)',borderWidth: 0.2,borderColor: "#393F45",marginTop: 10}]:
+            [{
               borderWidth: 0.2,
               borderColor: "#393F45",
               marginTop: 10
@@ -827,7 +833,7 @@ const P1 = ({ navigation }) => {
 
         {/* headline for change password */}
         <TouchableOpacity onPress={() => setChangePassword(!changePassword)}>
-          <View style={dark ? styles.DarkHeadline : styles.headline}>
+          <View style={dark ? styles.DarkHeadline : modalVisible=== true?{...styles.headline,...{backgroundColor:'rgba(0,0,0,0)'}}:styles.headline}>
             {changePassword === true ? <MaterialCommunityIcons name="chevron-up" color={dark ? '#fff' : '#000'} size={20} style={{}} /> : <MaterialCommunityIcons name="chevron-down" color={dark ? '#fff' : '#000'} size={20} style={{}} />}
             <Text style={dark ? styles.DarkHeadlineText : styles.HeadlineText}> Change Password</Text>
           </View>
@@ -871,7 +877,7 @@ const P1 = ({ navigation }) => {
 
         {/* heading of Ecrew login  */}
         <TouchableOpacity onPress={() => setEcrewLogin(!ecrewLogin)}>
-          <View style={dark ? styles.DarkHeadline : styles.headline}>
+          <View style={dark ? styles.DarkHeadline : modalVisible=== true?{...styles.headline,...{backgroundColor:'rgba(0,0,0,0)'}}: styles.headline}>
             {ecrewLogin === true ? <MaterialCommunityIcons name="chevron-up" color={dark ? '#fff' : '#000'} size={20} style={{}} /> : <MaterialCommunityIcons name="chevron-down" color={dark ? '#fff' : '#000'} size={20} style={{}} />}
             <Text style={dark ? styles.DarkHeadlineText : styles.HeadlineText}> Ecrew-Login</Text>
           </View>
@@ -945,8 +951,18 @@ const P1 = ({ navigation }) => {
           >
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                {/* <Text style={styles.modalText}>Hello World!</Text> */}
-                {/* <Text>Import Roster for 3 months</Text> */}
+              <View style={{backgroundColor:'#fff',width:'100%',borderRadius: 10}}>
+                <View style={{paddingVertical:10, alignItems: 'center'}}>
+                    <MaterialCommunityIcons name="close-circle" color={'#000'} size={20} style={{paddingLeft:300}} onPress={()=>setModalVisible(false)}/>
+                    <MaterialCommunityIcons name="check-circle-outline" color={'#000'} size={50} style={{}}/>
+                    <Text style={styles.modalText}>Set Title</Text>
+                </View>
+              </View>
+                <View style={{flexDirection:'row',paddingTop:10}}>
+                <Text style={{paddingRight:120}}>From</Text>
+                <Text>To</Text>
+                </View>
+              <View style={{flexDirection:'row',padding:10}}>
                 <DatePicker
                   //style={styles.datePickerStyle}
                   date={fromDate} // Initial date from state
@@ -961,12 +977,11 @@ const P1 = ({ navigation }) => {
                   suffixIcon={null}
                   customStyles={{
                     dateInput: {
-                      borderWidth: 0.2,
-                      //borderRadius: 5,
-                      borderColor: '#000',
-                      width: '100%',
-                      //marginRight:-80,
-                      //padding:20,
+                        borderWidth:0.2,
+                        borderRadius: 15,
+                        borderColor: '#EFEFEF',
+                        width: '100%',
+                        backgroundColor: '#fff',
                     },
                     dateIcon: {
                       width: 0,
@@ -991,12 +1006,11 @@ const P1 = ({ navigation }) => {
                   suffixIcon={null}
                   customStyles={{
                     dateInput: {
-                      borderWidth: 0.2,
-                      //borderRadius: 5,
-                      borderColor: '#000',
-                      width: '100%',
-                      //marginRight:-80,
-                      //padding:20,
+                      borderWidth:0.2,
+                        borderRadius: 15,
+                        borderColor: '#EFEFEF',
+                        width: '100%',
+                        backgroundColor: '#fff',
                     },
                     dateIcon: {
                       width: 0,
@@ -1007,25 +1021,20 @@ const P1 = ({ navigation }) => {
                     setToDate(toDate);
                   }}
                 />
+                </View>
                 {dataFetched === true ?
                   <View>
                     <ProgressBar progress={progressValue} color={'#256173'} style={{ width: 200, marginTop: 15 }} />
                   </View> :
                   null}
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                  <Pressable
-                    style={[styles.Modalbutton]}
-                    onPress={() => setModalVisible(!modalVisible)}
-                  >
-                    <Text style={{ color: '#fff' }}>cancel</Text>
-                  </Pressable>
-                  <Pressable
+                <View style={{ flexDirection: 'row', padding:10 }}>
+                  <TouchableOpacity
                     style={[styles.Modalbutton, styles.buttonClose]}
                     onPress={validation}
                   >
                     <Text style={{ color: '#fff' }}>Import Log Data</Text>
-                  </Pressable>
+                  </TouchableOpacity>
                 </View>
 
               </View>
@@ -1189,22 +1198,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    //marginTop: 22
   },
   modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
+        marginLeft: '5%',
+        backgroundColor: "#EFEFEF",
+        borderRadius: 10,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        width: '90%',
+        position: 'absolute',
+        //bottom: '1%',
   },
   activityIndicator: {
     alignItems: 'center',

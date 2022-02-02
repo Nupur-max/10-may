@@ -1,5 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
+import { useIsFocused } from "@react-navigation/native";
 import { View, Text,SafeAreaView, StyleSheet, TouchableOpacity, Dimensions, TextInput, ScrollView, Platform} from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -33,6 +34,8 @@ const db = SQLite.openDatabase(
 
 // create a component
 const EGCAUpload = ({navigation}) => {
+
+  const isFocused = useIsFocused();
 
   const { dark, theme, toggle } = React.useContext(ThemeContext);
   const dataDispatcher = useDispatch();
@@ -233,7 +236,12 @@ const EGCAUpload = ({navigation}) => {
       });
       }
 
-
+      React.useEffect(() => {
+        if(isFocused){
+        SelectQuery()
+        }
+      },[isFocused]);
+      
       //Sql starts
       const SelectQuery = async() => {
         let user = await AsyncStorage.getItem('userdetails');
@@ -259,26 +267,22 @@ const EGCAUpload = ({navigation}) => {
                      setFTOValue(result.rows.item(i).FtoOperator)
                      setEgca(result.rows.item(i).FlightType)
 
-                     egca === "Training" ?
-                     setTraining(result.rows.item(i).Purpose):
-                     egca === "Test" ?
-                     setTest(result.rows.item(i).Purpose): 
-                     egca === "Commercial" ?
-                     setCommercial(result.rows.item(i).Purpose):
-                     []
-                     setAuthValue(result.rows.item(i).AuthVerifier)
-                     setAuthPersonValue(result.rows.item(i).NameOfAuthVerifier)
+                      setTraining(result.rows.item(i).Purpose)
+                      setTest(result.rows.item(i).Purpose)
+                      setCommercial(result.rows.item(i).Purpose)
+
+                      setAuthValue(result.rows.item(i).AuthVerifier)
+                      setAuthPersonValue(result.rows.item(i).NameOfAuthVerifier)
                     }
                 }
             );
         });
     }
-    React.useEffect(() => {SelectQuery()}, [egca]);
 
     const PurposeData = egca==='Training'? training : egca==='Test'? test : egca==='Commercial'?commercial:''
     console.log('purposeData',PurposeData)
 
-      const UpdateQuery = async() => {
+    const UpdateQuery = async() => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
         let temData = [];

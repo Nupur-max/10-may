@@ -27,7 +27,7 @@ const ShowPDF = ({ route, navigation }) => {
     <View style={{ flex: 1 }}>
       {/* Some Controls to change PDF resource */}
       <View style={DgcaLogbookStyles.header}>
-        <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{ padding: 6 }} onPress={() => navigation.goBack()} />
+        <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{ padding: 6 }} onPress={() => navigation.navigate('Docs')} />
         <Text style={DgcaLogbookStyles.aircrafts}>Back</Text>
       </View>
       <View style={{ flex: 1 , backgroundColor:'#000'}}>

@@ -162,7 +162,7 @@ const Register = ({navigation}) => {
                   color: '#256173',
                   width: '100%',
                   //height: 100,
-                  zIndex: 99,
+                  //zIndex: 99999,
                 }}
                 textStyle={{
                   fontSize: 14,
@@ -174,7 +174,7 @@ const Register = ({navigation}) => {
                   marginLeft: 30,
                   //position:'absolute',
                   //left: 40,
-                  zIndex: 99,
+                  //zIndex: 999,
                 
 }} 
               />
@@ -183,7 +183,7 @@ const Register = ({navigation}) => {
               <View style={styles.CountryCodeBox}>
               <MaterialCommunityIcons 
                 name="xml" color='#266173' size={20} style={styles.icon}/>
-              <Text style={{marginLeft:30, lineHeight:50, color: Colors.primary}}>{value==='india' ? cc : 'Country Code' }</Text>
+              <Text style={{marginLeft:30, lineHeight:50, color: Colors.primary}}>{value==='india' ? '+91' : '+93' }</Text>
               </View>
               </View>
 
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
         // minWidth: 100,
         width:'50%',
         position:'relative',
-        zIndex: 9999,
+        //zIndex: 9999,
         //minHeight: Dimensions.get('window').height*0.0,
         // maxWidth:'90%'
         //position: 'relative',

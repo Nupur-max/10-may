@@ -38,6 +38,7 @@ const Docs = ({ navigation }) => {
   const [open, setOpen] = React.useState(false)
   const [selected, setSelected] = React.useState(false)
   const [data, setData] = React.useState(null)
+  const [ATPLData, setATPLData] = React.useState(null)
   const [selectedItem, setSelectedItem] = React.useState([]);
   const [selectedIndex, setSelectedIndex] = React.useState(0)
   const [offset, setOffset] = React.useState(0);
@@ -213,6 +214,7 @@ const Docs = ({ navigation }) => {
   };
 
   React.useEffect(() => { getLogbookData() }, [getReduxDocData]);
+  React.useEffect(() => { getATPLData() });
 
 
   const getLogbookData = async () => {
@@ -280,6 +282,74 @@ const Docs = ({ navigation }) => {
           });
           setData(temData);
           dataDispatcher(DocListData({ data: temData }))
+        }
+      });
+    });
+  };
+  const getATPLData = async () => {
+    let user = await AsyncStorage.getItem('userdetails');
+    user = JSON.parse(user);
+    let temData = (getReduxDocData.data === undefined) ? [] : getReduxDocData.data;
+    //let temData = []
+    //dataDispatcher(DocListData({data: []}))
+    prePopulateddb.transaction(tx => {
+      tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND tag= "server" ORDER BY orderedDate DESC , inTime DESC LIMIT 5 OFFSET "' + offset + '"', [], (tx, result) => {
+        if (result.rows.length == 0) {
+          console.log('no data to load')
+          return false;
+        }
+        //console.log(result)
+        setOffset(offset + 5);
+        for (let i = 0; i <= result.rows.length; i++) {
+          temData.push({
+            id: result.rows.item(i).id,
+            tag: result.rows.item(i).tag,
+            user_id: result.rows.item(i).user_id,
+            flight_no: result.rows.item(i).flight_no,
+            date: result.rows.item(i).date,
+            day: result.rows.item(i).day,
+            actual_Instrument: result.rows.item(i).actual_Instrument,
+            aircraftReg: result.rows.item(i).aircraftReg,
+            aircraftType: result.rows.item(i).aircraftType,
+            dayLanding: result.rows.item(i).dayLanding,
+            dual_day: result.rows.item(i).dual_day,
+            dual_night: result.rows.item(i).dual_night,
+            flight: result.rows.item(i).flight,
+            from: result.rows.item(i).from_nameICAO,
+            ifr_vfr: result.rows.item(i).ifr_vfr,
+            instructional: result.rows.item(i).instructional,
+            instructor: result.rows.item(i).instructor,
+            landing: result.rows.item(i).inTime,
+            night: result.rows.item(i).night,
+            chocksOffTime: result.rows.item(i).offTime,
+            nightLanding: result.rows.item(i).nightLanding,
+            chocksOnTime: result.rows.item(i).onTime,
+            takeOff: result.rows.item(i).outTime,
+            p1: result.rows.item(i).p1,
+            p1_us_day: result.rows.item(i).p1_us_day,
+            p1_us_night: result.rows.item(i).p1_us_night,
+            p2: result.rows.item(i).p2,
+            pic_day: result.rows.item(i).pic_day,
+            pic_night: result.rows.item(i).pic_night,
+            stl: result.rows.item(i).stl,
+            route: result.rows.item(i).route,
+            sic_day: result.rows.item(i).sic_day,
+            sic_night: result.rows.item(i).sic_night,
+            sim_instructional: result.rows.item(i).sim_instructional,
+            sim_instrument: result.rows.item(i).sim_instrument,
+            selected_role: result.rows.item(i).selected_role,
+            student: result.rows.item(i).student,
+            to: result.rows.item(i).to_nameICAO,
+            totalTime: result.rows.item(i).totalTime,
+            x_country_day: result.rows.item(i).x_country_day,
+            x_country_night: result.rows.item(i).x_country_night,
+            x_country_day_leg: result.rows.item(i).x_country_day_leg,
+            x_country_night_leg: result.rows.item(i).x_country_night_leg,
+            p1_ut_day: result.rows.item(i).p1_ut_day,
+            p1_ut_night: result.rows.item(i).p1_ut_night,
+            remark: result.rows.item(i).remark,
+          });
+          setATPLData(temData);
         }
       });
     });
@@ -420,8 +490,7 @@ const Docs = ({ navigation }) => {
     var Final_PIC_Time = ''
     var total_instrument1 = ''
     var Total_Time = ''
-    console.log(data)
-    data.map((d) => {
+    ATPLData.map((d) => {
       //--------  nightTime flying hours --------//
       if(d.night !== ""){
       var Night = d.night.split(":")

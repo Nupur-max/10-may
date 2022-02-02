@@ -127,9 +127,11 @@ const LogBookListing = ({ navigation }) => {
 
 
   React.useEffect(() => {
+    if(isFocused){
   GetUserDetails();
+    }
   //console.log('Tarun')
-  }, []);
+  }, [isFocused]);
 
   const GetUserDetails = async () => {
     //console.log('hello')
@@ -636,7 +638,11 @@ const LogBookListing = ({ navigation }) => {
     console.log('reached end')
   }
 
-
+  React.useEffect(() => {
+    if(isFocused){
+    onRefresh();
+  }
+  }, [isFocused]);
 
   const getLogbookData = async () => {
    //console.log('First')
@@ -644,69 +650,7 @@ const LogBookListing = ({ navigation }) => {
     user = JSON.parse(user);
     let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,totalTime,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
-        if (result.rows.length == 0) {
-          console.log('no data to load')
-          //dataDispatcher(LogListData({ data: [], inProgress: false }))
-          setLoadmore(false)
-          return false;
-        }
-        setOffset(offset + 10);
-        //if (result.rows.length > 1){
-        for (let i = 0; i <= result.rows.length; i++) {
-          if (result.rows.length !== 0){
-          setModalVisible(true)
-          temData.push({
-            id: result.rows.item(i).id,
-            tag: result.rows.item(i).tag,
-            date: result.rows.item(i).date,
-            aircraftType: result.rows.item(i).aircraftType,
-            from_lat: result.rows.item(i).from_lat,
-            from_long: result.rows.item(i).from_long,
-            from: result.rows.item(i).from_nameICAO,
-            chocksOffTime: result.rows.item(i).offTime,
-            chocksOnTime: result.rows.item(i).onTime,
-            p1: result.rows.item(i).p1,
-            p2: result.rows.item(i).p2,
-            to: result.rows.item(i).to_nameICAO,
-            to_lat: result.rows.item(i).to_lat,
-            to_long: result.rows.item(i).to_long,
-            totalTime: result.rows.item(i).totalTime,
-            orderedDate: result.rows.item(i).orderedDate,
-
-          });
-          //console.log('checkdata', temData);
-          setLocalLogbookData(temData);
-          var arr = temData;
-          var clean = arr.filter((arr, index, self) =>
-          index === self.findIndex((t) => (t.chocksOffTime === arr.chocksOffTime && t.date === arr.date && t.from === arr.from)))
-
-          //console.log('imp-data',clean);
-          dataDispatcher(LogListData({ data: clean, inProgress: false }))
-          setLoadmore(false)
-          setFindTag(result.rows.item(i).tag);
-        }
-        else {
-          console.log('no data to show')
-          dataDispatcher(LogListData({ data: [], inProgress: false }))
-        }
-        }
-    });
-    });
-  };
-
-  React.useEffect(() => {
-    getLogbookData();
-    //console.log('loadingggggg')
-  }, [getReduxData]);
-
-  const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
-    let user = await AsyncStorage.getItem('userdetails');
-    user = JSON.parse(user);
-    let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
-    prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,totalTime,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,totalTime,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC, onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           //dataDispatcher(LogListData({ data: [], inProgress: false }))
@@ -752,13 +696,19 @@ const LogBookListing = ({ navigation }) => {
         else {
           console.log('no data to show')
           dataDispatcher(LogListData({ data: [], inProgress: false }))
+          setRefreshing(false);
         }
         }
     });
     });
-  }, [refreshing]);
+  };
 
-  const getTotalTime = async () => {
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    getLogbookData();
+  }, [getReduxData]);
+
+const getTotalTime = async () => {
     //console.log('First')
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
@@ -1040,11 +990,11 @@ const LogBookListing = ({ navigation }) => {
     }
   };
   React.useEffect(() => {
-    if (getReduxData.data) {
+    if (getReduxData.data&&isFocused) {
       //localLogbookData
       renderFooter()
     }
-  }, [getReduxData.data]);
+  }, [getReduxData.data,isFocused]);
 
   return (
     <SafeAreaView style={[styles.container,{backgroundColor:theme.backgroundColor}]}>

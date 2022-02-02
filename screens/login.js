@@ -39,8 +39,8 @@ const db = SQLite.openDatabase(
 
 const Login = ({navigation}) => {
 
-  const [email, setEmail] = React.useState('anantmathur1@yahoo.co.in'); //nupur1@gmail.com //aviatorrishabh@gmail.com
-  const [pwd, setPwd] = React.useState('Fighters12'); //1234 //riturishi
+  const [email, setEmail] = React.useState(''); //anantmathur1@yahoo.co.in//nupur1@gmail.com //aviatorrishabh@gmail.com
+  const [pwd, setPwd] = React.useState(''); //Fighters12//1234 //riturishi
   const [loading, setLoading] = React.useState(true)
   const [offset, setOffset] = React.useState(1)
   const [forgotModalVisible, setForgotModalVisible] = React.useState(false)
@@ -200,7 +200,7 @@ const Login = ({navigation}) => {
             if((index+1) == syncData.data.length ){
             let temData = [];
             db.transaction(tx => {
-            tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,outTime,inTime,orderedDate from logbook WHERE user_id = "'+resData.data.id+'" ORDER BY orderedDate DESC limit 10', [], (tx, result) => {
+            tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,outTime,inTime,orderedDate from logbook WHERE user_id = "'+resData.data.id+'" ORDER BY orderedDate DESC, onTime DESC limit 10', [], (tx, result) => {
                 //setOffset(offset + 10);
                 for (let i = 0; i < result.rows.length; i++) {
                   console.log('rows', result.rows.length)

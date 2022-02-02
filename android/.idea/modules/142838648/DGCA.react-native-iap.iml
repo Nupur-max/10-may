@@ -34,6 +34,8 @@
       <sourceFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/play/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/ap_generated_sources/playDebug/out" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/ap_generated_sources/playDebug/out" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/source/buildConfig/play/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/source/buildConfig/play/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/res/resValues/play/debug" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/.gradle" />

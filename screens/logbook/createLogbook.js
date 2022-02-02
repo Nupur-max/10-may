@@ -1481,83 +1481,85 @@ React.useEffect(() => {
 
         prePopulateddb.transaction(tx => {
         if (rosterId && rosterAId !== 'SIMU') {
+           //let temData = [];
             tx.executeSql(
                 'UPDATE logbook set tag="manual", user_id="'+user.id+'" , flight_no="", date="'+originalDate+'", day="'+dayTime+'", actual_Instrument="'+ai+'", aircraftReg="'+rosterAId+'", aircraftType="'+rosterAType+'", approach1="'+Approach1+'", approach2="'+approach2+'", approach3="", approach4="", approach5="", approach6="", approach7="", approach8="", approach9="", approach10="", crewCustom1="", crewCustom2="", crewCustom3="", crewCustom4="", crewCustom5="", dayLanding="'+dayLanding+'", dayTO="'+day_to+'", dual_day="'+dual_day+'", dual_night="'+dual_night+'", flight="'+flight+'", from_airportID="'+fromAirportid+'", from_altitude="'+fromElevation+'", from_city="", from_country="'+fromCountry+'", from_dayLightSaving="'+fromDst+'", from_source="'+fromSource+'", from_lat="'+fromLatitude+'", from_long="'+fromLongitude+'", from_name="'+fromAirportname+'", from_nameIATA="", from_nameICAO="'+rosterFrom+'", from_timeZone="'+fromTimeZone+'", from_type="'+fromType+'", from_dst_status="'+fromDstStatus+'", fullStop="'+fullStop+'", ifr_vfr="'+fr+'", instructional="'+instructional+'", instructor="'+instructor+'", inTime="'+landing+'", landingCustom1="", landingCustom2="", landingCustom3="", landingCustom4="", landingCustom5="", landingCustom6="", landingCustom7="", landingCustom8="", landingCustom9="", landingCustom10="", night="'+nightTime+'", nightLanding="'+nightLanding+'", nightTO="'+night_to+'", offTime="'+rosterChocksOff+'", onTime="'+rosterChocksOn+'", outTime="'+takeOff+'", p1="'+rosterNamePic+'", p1_us_day="'+p1_us_day+'", p1_us_night="'+p1_us_night+'", p2="'+rosterNameSic+'", pic_day="'+selfPICday+'", pic_night="'+selfPICnight+'", stl="'+stl+'", reliefCrew1="'+reliefCrew1+'", reliefCrew2="'+reliefCrew2+'", reliefCrew3="'+reliefCrew3+'", reliefCrew4="'+reliefCrew4+'", route="'+route+'", sic_day="'+SelfSICday+'", sic_night="'+SelfSICnight+'", sim_instructional="", sim_instrument="'+SimulatedInstrument+'", selected_role="", student="'+student+'", timeCustom1="", timeCustom2="", timeCustom3="", timeCustom4="", timeCustom5="", timeCustom6="", timeCustom7="", timeCustom8="", timeCustom9="", timeCustom10="", to_airportID="'+toAirportid+'", to_altitude="'+toElevation+'", to_city="", to_country="'+toCountry+'", to_dayLightSaving="'+toDst+'", to_source="'+toSource+'", to_lat="'+toLatitude+'", to_long="'+toLongitude+'", to_name="'+toAirportname+'", to_nameIATA="", to_nameICAO="'+rosterTo+'", to_timeZone="'+toTimeZone+'", to_type="'+toType+'", to_dst_status="'+toDstStatus+'", totalTime="'+filghtTimeM+'", touch_n_gos="'+touchGo+'", waterLanding="'+waterLanding+'", waterTO="'+water_to+'", x_country_day="'+xc_day+'", x_country_night="'+xc_night+'", x_country_day_leg="'+xc_day_leg+'", x_country_night_leg="'+xc_night_leg+'", outTime_LT="", offTime_LT="", onTime_LT="", inTime_LT="", sim_type="'+St+'", sim_exercise="'+Sim_exercise+'", pf_time="'+pfHours+'", pm_time="'+pmHours+'", sfi_sfe="'+sf+'", simCustom1="", simCustom2="", simCustom3="", simCustom4="", simCustom5="", simLocation="'+location+'", p1_ut_day="'+p1_ut_day+'", p1_ut_night="'+p1_ut_night+'", remark="'+remark+'", autolanding="'+autoLanding+'", flight_date="", selected_flight_timelog="", imported_log="", orderedDate="'+sortedDate+'" where id="'+rosterId+'"');
 
-                tx.executeSql(
-                    'SELECT * from logbook  WHERE user_id = "'+user.id+'" and id = "'+rosterId+'" ORDER BY orderedDate DESC limit 5', [], (tx, result) => {
-                    //setOffset(offset + 10);
-                          if (result.rows.length > 0) {
-                              //alert('data available ');
-                              //console.log('result', result)
-                          }
-                          for (let i = 0; i <= result.rows.length; i++) {
-                              temData.push({
-                                  id : result.rows.item(i).id,
-                                  tag : result.rows.item(i).tag,
-                                  user_id: result.rows.item(i).user_id,
-                                  date: result.rows.item(i).date,
-                                  from : result.rows.item(i).from_nameICAO,
-                                  to : result.rows.item(i).to_nameICAO,
-                                  from_lat : result.rows.item(i).from_lat,
-                                  from_long : result.rows.item(i).from_long,
-                                  to_lat : result.rows.item(i).to_lat, 
-                                  to_long : result.rows.item(i).to_long,
-                                  chocksOffTime : result.rows.item(i).offTime, 
-                                  chocksOnTime : result.rows.item(i).onTime,
-                                  approach1 : result.rows.item(i).approach1,
-                                  from_airportID : result.rows.item(i).from_airportID,
-                                  p1 : result.rows.item(i).p1,
-                                  p2 : result.rows.item(i).p2,
-                                  aircraftType : result.rows.item(i).aircraftType,
-                                  aircraftReg : result.rows.item(i).aircraftReg,
-                              });
-                                console.log('logbook data', temData);
-                               //setLocalLogbookData(temData);
-                              dataDispatcher(LogListData({data: temData, inProgress: false}))
-                              //dataDispatcher(DocListData({data: temData}))
+                // tx.executeSql(
+                //     'SELECT * from logbook  WHERE user_id = "'+user.id+'" ORDER BY orderedDate DESC, onTime DESC limit 5', [], (tx, result) => {
+                //     //setOffset(offset + 10);
+                //           if (result.rows.length > 0) {
+                //               //alert('data available ');
+                //               //console.log('result', result)
+                //           }
+                //           for (let i = 0; i <= result.rows.length; i++) {
+                //               temData.push({
+                //                   id : result.rows.item(i).id,
+                //                   tag : result.rows.item(i).tag,
+                //                   user_id: result.rows.item(i).user_id,
+                //                   date: result.rows.item(i).date,
+                //                   from : result.rows.item(i).from_nameICAO,
+                //                   to : result.rows.item(i).to_nameICAO,
+                //                   from_lat : result.rows.item(i).from_lat,
+                //                   from_long : result.rows.item(i).from_long,
+                //                   to_lat : result.rows.item(i).to_lat, 
+                //                   to_long : result.rows.item(i).to_long,
+                //                   chocksOffTime : result.rows.item(i).offTime, 
+                //                   chocksOnTime : result.rows.item(i).onTime,
+                //                   approach1 : result.rows.item(i).approach1,
+                //                   from_airportID : result.rows.item(i).from_airportID,
+                //                   p1 : result.rows.item(i).p1,
+                //                   p2 : result.rows.item(i).p2,
+                //                   aircraftType : result.rows.item(i).aircraftType,
+                //                   aircraftReg : result.rows.item(i).aircraftReg,
+                //               });
+                //                 console.log('logbook data', temData);
+                //                //setLocalLogbookData(temData);
+                //               dataDispatcher(LogListData({data: temData, inProgress: false}))
+                //               //dataDispatcher(DocListData({data: temData}))
             
-                          }
-                      });
+                //           }
+                //       });
         }
         else if(rosterAId !== 'SIMU'){
             //console.log('INSERTING WITHOUT SIMU')
+            //let temDataSIMU = [];
             tx.executeSql(
             'INSERT INTO logbook (tag, user_id, flight_no, date, day,  actual_Instrument, aircraftReg, aircraftType, approach1, approach2, approach3, approach4, approach5, approach6, approach7, approach8, approach9, approach10, crewCustom1, crewCustom2, crewCustom3, crewCustom4, crewCustom5, dayLanding, dayTO, dual_day, dual_night, flight, from_airportID, from_altitude, from_city, from_country, from_dayLightSaving, from_source, from_lat, from_long, from_name, from_nameIATA, from_nameICAO, from_timeZone, from_type, from_dst_status, fullStop, ifr_vfr, instructional, instructor, inTime, landingCustom1, landingCustom2, landingCustom3, landingCustom4, landingCustom5, landingCustom6, landingCustom7, landingCustom8, landingCustom9, landingCustom10, night, nightLanding, nightTO, offTime, onTime, outTime, p1, p1_us_day, p1_us_night, p2, pic_day, pic_night, stl, reliefCrew1, reliefCrew2, reliefCrew3, reliefCrew4, route, sic_day, sic_night, sim_instructional, sim_instrument, selected_role, student, timeCustom1, timeCustom2, timeCustom3, timeCustom4, timeCustom5, timeCustom6, timeCustom7, timeCustom8, timeCustom9, timeCustom10, to_airportID, to_altitude, to_city, to_country, to_dayLightSaving, to_source, to_lat, to_long, to_name, to_nameIATA, to_nameICAO, to_timeZone, to_type, to_dst_status, totalTime, touch_n_gos, waterLanding, waterTO, x_country_day, x_country_night, x_country_day_leg, x_country_night_leg, outTime_LT, offTime_LT, onTime_LT, inTime_LT, sim_type, sim_exercise, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, simLocation, p1_ut_day, p1_ut_night, remark, autolanding, flight_date, selected_flight_timelog, imported_log, orderedDate)  VALUES ("manual","'+user.id+'", "" ,"'+originalDate+'" , "'+dayTime+'" , "'+ai+'" , "'+rosterAId+'" , "'+rosterAType+'" , "'+Approach1+'" , "'+approach2+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+dayLanding+'" , "'+day_to+'" , "'+dual_day+'" , "'+dual_night+'" , "'+flight+'" , "'+fromAirportid+'" , "'+fromElevation+'" , "" , "'+fromCountry+'" , "'+fromDst+'" , "'+fromSource+'" , "'+fromLatitude+'" , "'+fromLongitude+'" , "'+fromAirportname+'" , "" , "'+rosterFrom+'", "'+fromTimeZone+'" , "'+fromType+'" , "'+fromDstStatus+'" , "'+fullStop+'" , "'+fr+'" , "'+instructional+'" , "'+instructor+'" , "'+landing+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+nightTime+'" , "'+nightLanding+'" , "'+night_to+'" , "'+rosterChocksOff+'" , "'+rosterChocksOn+'" , "'+takeOff+'" , "'+rosterNamePic+'" , "'+p1_us_day+'" , "'+p1_us_night+'" , "'+rosterNameSic+'" , "'+selfPICday+'" , "'+selfPICnight+'" , "'+stl+'" , "'+reliefCrew1+'" , "'+reliefCrew2+'" , "'+reliefCrew3+'" , "'+reliefCrew4+'" , "'+route+'" , "'+SelfSICday+'" , "'+SelfSICnight+'" , "" , "'+SimulatedInstrument+'" , "" , "'+student+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+toAirportid+'" , "'+toElevation+'" , "" , "'+toCountry+'" , "'+toDst+'" , "'+toSource+'" , "'+toLatitude+'" , "'+toLongitude+'" , "'+toAirportname+'" , "" , "'+rosterTo+'" , "'+toTimeZone+'" , "'+toType+'" , "'+toDstStatus+'" , "'+filghtTimeM+'" , "'+touchGo+'" , "'+waterLanding+'" , "'+water_to+'" , "'+xc_day+'" , "'+xc_night+'" , "'+xc_day_leg+'" , "'+xc_night_leg+'" , "" , "" , "" , "" , "'+St+'" , "'+Sim_exercise+'" , "'+pfHours+'" , "'+pmHours+'" , "'+sf+'" , "" , "" , "" , "" , "" , "'+location+'" , "'+p1_ut_day+'" , "'+p1_ut_night+'" , "'+remark+'" , "'+autoLanding+'" , "" , "" , "" , "'+sortedDate+'" )',
           );
 
-          tx.executeSql(
-            'SELECT * from logbook  WHERE user_id = "'+user.id+'" limit 5', [], (tx, result) => {
-            //setOffset(offset + 10);
-                  if (result.rows.length > 0) {
-                      //alert('data available ');
-                      //console.log('result', result)
-                  }
-                  for (let i = 0; i <= result.rows.length; i++) {
-                    temDataSIMU.push({
-                          id : result.rows.item(i).id,
-                          tag : result.rows.item(i).tag,
-                          aircraftReg : result.rows.item(i).aircraftReg,
-                          user_id: result.rows.item(i).user_id,
-                          date: result.rows.item(i).date,
-                          from : result.rows.item(i).from_nameICAO,
-                          to : result.rows.item(i).to_nameICAO,
-                        //   from_lat : result.rows.item(i).from_lat,
-                        //   from_long : result.rows.item(i).from_long,
-                        //   to_lat : result.rows.item(i).to_lat, 
-                        //   to_long : result.rows.item(i).to_long,
-                        outTime : result.rows.item(i).outTime, 
-                        inTime : result.rows.item(i).inTime,
-                        aircraftType : result.rows.item(i).aircraftType,
-                        aircraftReg : result.rows.item(i).aircraftReg,
-                        //   approach1 : result.rows.item(i).approach1,
-                        //   from_airportID : result.rows.item(i).from_airportID,
-                      });
-                       //console.log('logbook data', result.rows.item(i).from_lat,);
-                       //setLocalLogbookData(temData);
-                      dataDispatcher(LogListData({data: temDataSIMU, inProgress: false}))
-                  }
-              });
+        //   tx.executeSql(
+        //     'SELECT * from logbook  WHERE user_id = "'+user.id+'" limit 5', [], (tx, result) => {
+        //     //setOffset(offset + 10);
+        //           if (result.rows.length > 0) {
+        //               //alert('data available ');
+        //               //console.log('result', result)
+        //           }
+        //           for (let i = 0; i <= result.rows.length; i++) {
+        //             temDataSIMU.push({
+        //                   id : result.rows.item(i).id,
+        //                   tag : result.rows.item(i).tag,
+        //                   aircraftReg : result.rows.item(i).aircraftReg,
+        //                   user_id: result.rows.item(i).user_id,
+        //                   date: result.rows.item(i).date,
+        //                   from : result.rows.item(i).from_nameICAO,
+        //                   to : result.rows.item(i).to_nameICAO,
+        //                 //   from_lat : result.rows.item(i).from_lat,
+        //                 //   from_long : result.rows.item(i).from_long,
+        //                 //   to_lat : result.rows.item(i).to_lat, 
+        //                 //   to_long : result.rows.item(i).to_long,
+        //                 outTime : result.rows.item(i).outTime, 
+        //                 inTime : result.rows.item(i).inTime,
+        //                 aircraftType : result.rows.item(i).aircraftType,
+        //                 aircraftReg : result.rows.item(i).aircraftReg,
+        //                 //   approach1 : result.rows.item(i).approach1,
+        //                 //   from_airportID : result.rows.item(i).from_airportID,
+        //               });
+        //                //console.log('logbook data', result.rows.item(i).from_lat,);
+        //                //setLocalLogbookData(temData);
+        //               dataDispatcher(LogListData({data: temDataSIMU, inProgress: false}))
+        //           }
+        //       });
           //console.log('AIRCRAFFFFT ID', NIGHTtemp)
         }
         else {
@@ -3788,11 +3790,12 @@ React.useEffect(() => {
             <View style={styles.modalView}>
               <View style={{backgroundColor:'#fff',width:'100%',borderRadius: 10}}>
                 <View style={{paddingVertical:10, alignItems: 'center'}}>
+                    <MaterialCommunityIcons name="close-circle" color={'#000'} size={20} style={{paddingLeft:300}} onPress={()=>setRosterModalVisible(false)}/>
                     <MaterialCommunityIcons name="check-circle-outline" color={'#000'} size={50} style={{}}/>
                     <Text style={styles.modalText} onPress={removeTextInput}>Set Title</Text>
                 </View>
             </View>
-            <View style={{flexDirection:'row'}}>
+            <View style={{flexDirection:'row', paddingTop:10}}>
             <Text style={{paddingRight:120}}>From</Text>
             <Text>To</Text>
             </View>
@@ -3863,18 +3866,12 @@ React.useEffect(() => {
                     null}
               
               <View style={{flexDirection:'row', padding:10}}>
-              <Pressable
-              style={[styles.Modalbutton]}
-              onPress={() => setRosterModalVisible(!RostermodalVisible)}
-              >
-              <Text style={{color: '#fff'}}>cancel</Text>
-              </Pressable>
-              <Pressable
+              <TouchableOpacity
               style={[styles.Modalbutton, styles.buttonClose]}
               onPress={Roaster}
               >
               <Text style={{color: '#fff'}}>Import Log Data</Text>
-              </Pressable>
+              </TouchableOpacity>
               </View>
 
               </View>

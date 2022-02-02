@@ -7,11 +7,15 @@ import Colors from '../components/colors';
 import { ThemeContext } from '../theme-context';
 import AsyncStorage from '@react-native-community/async-storage';
 import {BaseUrl} from '../components/url.json';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 // create a component
 const Gallery = ({navigation}) => {
-
+    const [modalVisible1 , setModalVisible1] = React.useState(true)
+    const [modalVisible2 , setModalVisible2] = React.useState(true)
+    const [modalVisible3 , setModalVisible3] = React.useState(true)
+    const [modalVisible4 , setModalVisible4] = React.useState(true)
     const { dark, theme, toggle } = React.useContext(ThemeContext);
     const [profileImage, setProfileImage] = React.useState(null)
     const [data, setData] = React.useState([]);
@@ -43,6 +47,7 @@ const Gallery = ({navigation}) => {
             //console.log(resData);
             console.log('profile_pic ---->', resData.message.profile_pic)
             setProfileImage(resData.message.profile_pic)
+            setModalVisible1(false)
         })
     }
 
@@ -64,6 +69,7 @@ const Gallery = ({navigation}) => {
             //console.log(resData);
             
             setData(resData.message)
+            setModalVisible2(false)
             //console.log('People  ---->', data)
             let temp_img = [];
             for(let i=0; i<resData.message.length; i++) 
@@ -99,6 +105,7 @@ const Gallery = ({navigation}) => {
         .then(resData => {
             //console.log(resData);
             setAircraftData(resData.message)
+            setModalVisible3(false)
         })
     }
    
@@ -119,6 +126,7 @@ const Gallery = ({navigation}) => {
         .then(resData => {
             //console.log(resData);
             setAirportData(resData.message)
+            setModalVisible4(false)
         })
     }   
   
@@ -145,10 +153,16 @@ const Gallery = ({navigation}) => {
         </View>
         {Profilearrow === true ?
         <View>
+            {modalVisible1 === true ? 
+             <View style={{flex:1 , alignItems:"center" , justifyContent:"center"}}>
+             <ActivityIndicator size="small" color={Colors.primary} /> 
+             </View>
+            :
                 <Image
                     source={{ uri: profileImage }}
                     style={{ width: 60, height: 60, margin: 10 }}
                 />
+            }
         </View> : null
         }
         {/* People pictures */}
@@ -156,7 +170,12 @@ const Gallery = ({navigation}) => {
           {Peoplearrow === true ? <MaterialCommunityIcons name="chevron-up" color={Colors.primary} size={20} style={{}} onPress={()=>setPeopleArrow(!Peoplearrow)} /> : <MaterialCommunityIcons name="chevron-down" color={Colors.primary} size={20} style={{}} onPress={()=>setPeopleArrow(!Peoplearrow)} /> }
           <Text style={styles.HeadlineText} >People</Text>
         </View>
-        {Peoplearrow === true ? 
+        {Peoplearrow === true ?
+          modalVisible2 === true ? 
+          <View style={{flex:1 , alignItems:"center" , justifyContent:"center"}}>
+          <ActivityIndicator size="small" color={Colors.primary} /> 
+          </View>
+            : 
         <FlatList
         data = {data}
         numColumns={4}
@@ -176,13 +195,17 @@ const Gallery = ({navigation}) => {
         </View>
 
         {Aircraftarrow === true ?
+          modalVisible3 === true ? 
+          <View style={{flex:1 , alignItems:"center" , justifyContent:"center"}}>
+            <ActivityIndicator size="small" color={Colors.primary} /> 
+            </View>
+          : 
         <FlatList
         data = {aircraftData}
         numColumns={4}
         renderItem={(item) =>
-        //console.log(item)
         <View style={{flexDirection: 'row'}}>
-            <Image
+                <Image
                 source={{ uri: item.item.aircraftPhoto }}
                 style={{ width: 60, height: 60, margin: 10}}
            />
@@ -196,11 +219,15 @@ const Gallery = ({navigation}) => {
         </View>
 
         {Airportarrow === true ?
+         modalVisible4 === true ? 
+         <View style={{flex:1 , alignItems:"center" , justifyContent:"center"}}>
+            <ActivityIndicator size="small" color={Colors.primary} /> 
+            </View>
+            :
         <FlatList
         data = {airportData}
         numColumns={4}
         renderItem={(item) =>
-        //console.log(item)}
         <View style={{flexDirection: 'row'}}>
             <Image
                 source={{ uri: item.item.aircraftPhoto }}
@@ -224,7 +251,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         //justifyContent: 'center',
-        alignItems: 'flex-start',
+        // alignItems: 'flex-start',
         backgroundColor: '#fff',
     },
     photos:{

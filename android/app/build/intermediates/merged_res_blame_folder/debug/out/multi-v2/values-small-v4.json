@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/gadgetzone/Desktop/react-native/cojonew/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-small-v4/values-small-v4.xml",
+            "outputFile": "/Users/apple/Desktop/11-feb/cojo-21-01-2020/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-small-v4/values-small-v4.xml",
             "map": [
                 {
-                    "source": "/Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/dcb71d9e241694395b1f513d3d3a8b55/material-1.1.0/res/values-small-v4/values-small-v4.xml",
+                    "source": "/Users/apple/.gradle/caches/transforms-2/files-2.1/dcb71d9e241694395b1f513d3d3a8b55/material-1.1.0/res/values-small-v4/values-small-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",

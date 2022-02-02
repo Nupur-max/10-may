@@ -386,6 +386,8 @@ const JEU = ({ navigation }) => {
         var Final_SIC_Time = '';
         var Total_Time = '';
         var TotalInst = '';
+        var totalDur = 0
+        var final_TotalDur = ''
 
         monthData.map(d => {
             if(d.aircraftReg !== "SIMU"){
@@ -442,10 +444,28 @@ const JEU = ({ navigation }) => {
                 TotalInst = '00:00'
             }
         }
+        else if (d.aircraftReg == "SIMU") {
+            //--------  Duration flying hours --------//
+            var Dur = d.totalTime.split(":")
+            var total_Dur = Number(Dur[0] * 60) + Number(Dur[1])
+            totalDur += total_Dur
+            var total_Dur_Hours = Math.floor(totalDur / 60);
+            var total_Dur_Min = totalDur % 60;
+            if (total_Dur_Hours < 10) {
+                total_Dur_Hours = '0' + total_Dur_Hours;
+            }
+            if (total_Dur_Min < 10) {
+               total_Dur_Min = '0' + total_Dur_Min;
+            }
+            final_TotalDur = total_Dur_Hours + ":" + total_Dur_Min;
+            if (isNaN(final_TotalDur[1])) {
+                final_TotalDur = '00:00'
+            }
+        }
         })
         let htmlContent = '<html><body>'
 
-        htmlContent += '<tr style="height: 20px">                <td class="s0" dir="ltr">' + Final_Night_Time + '</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + Final_PIC_Time + '</td>                <td class="s0" dir="ltr">' + Final_SIC_Time + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + TotalInst + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + Total_Time + '</td>                <td style="padding:0px 3px; font-size:8px" rowspan="3">I certifiy that the all entries are true <br> -------------- <br> Pilot\'s Signature</td></tr>'
+        htmlContent += '<tr style="height: 20px">                <td class="s0" dir="ltr">' + Final_Night_Time + '</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + Final_PIC_Time + '</td>                <td class="s0" dir="ltr">' + Final_SIC_Time + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + TotalInst + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + final_TotalDur + '</td>                <td style="padding:0px 3px; font-size:8px" rowspan="3">I certifiy that the all entries are true <br> -------------- <br> Pilot\'s Signature</td></tr>'
         htmlContent += '</body></html>'
         return htmlContent
     }
@@ -453,7 +473,7 @@ const JEU = ({ navigation }) => {
     //---------- total from Previous page calculation of right data --------//
     const fromPrevRight = () => {
         let htmlContent = '<html><body>'
-        htmlContent += '<tr style="height: 20px">                <td class="s0" dir="ltr">'+totalNight_array.splice(-1)+'</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">'+totalPIC_array.splice(-1)+'</td>                <td class="s0" dir="ltr">'+totalSIC_array.splice(-1)+'</td>                <td class="s0" dir="ltr"dual</td>                <td class="s0" dir="ltr">'+instructor_array.splice(-1)+'</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">'+totalSession_array.splice(-1)+'</td>                </tr>'
+        htmlContent += '<tr style="height: 20px">                <td class="s0" dir="ltr">'+totalNight_array.splice(-1)+'</td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr">'+totalPIC_array.splice(-1)+'</td>                <td class="s0" dir="ltr">'+totalSIC_array.splice(-1)+'</td>                <td class="s0" dir="ltr"dual</td>                <td class="s0" dir="ltr">'+instructor_array.splice(-1)+'</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">'+date_final_Dur.splice(-1)+'</td>                </tr>'
         htmlContent += '</body></html>'
         return htmlContent
     }
@@ -466,6 +486,8 @@ const JEU = ({ navigation }) => {
     var time_Final_SIC_Time = '';
     var time_Total_Time = '';
     var time_TotalInst = '';
+    var date_totalDur = 0 
+    var date_total_Dur = ""
 
     var totalNight_array = ["00:00",]
     // ifr
@@ -474,6 +496,7 @@ const JEU = ({ navigation }) => {
     // dual
     var instructor_array = ["00:00",]
     var totalSession_array = ["00:00",]
+    var date_final_Dur = ["00:00"]
 
     const rightPageTotalTime = (monthData) => {
         monthData.map(d => {
@@ -540,9 +563,28 @@ const JEU = ({ navigation }) => {
             }
             instructor_array.push(time_TotalInst)
         }
+        else if (d.aircraftReg == "SIMU") {
+            //--------  Duration flying hours --------//
+            var duration = d.totalTime.split(":")
+            var total_duration = Number(duration[0] * 60) + Number(duration[1])
+            date_totalDur += total_duration
+            var Dur_Hours = Math.floor(date_totalDur / 60);
+            var Dur_Min = date_totalDur % 60;
+            if (Dur_Hours < 10) {
+                Dur_Hours = '0' + Dur_Hours;
+            }
+            if (Dur_Min < 10) {
+                Dur_Min = '0' + Dur_Min;
+            }
+            date_total_Dur = Dur_Hours + ":" + Dur_Min;
+            if (isNaN(date_total_Dur[1])) {
+                date_total_Dur = '00:00'
+            }
+            date_final_Dur.push(date_total_Dur)
+        }
         })
         let htmlContent = '<html><body>'
-        htmlContent += '<tr style="height: 20px">       <td class="s0" dir="ltr">' + time_Final_Night_Time + '</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + time_Final_PIC_Time + '</td>                <td class="s0" dir="ltr">' + time_Final_SIC_Time + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + time_TotalInst + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + time_Total_Time + '</td>                </tr>'
+        htmlContent += '<tr style="height: 20px">       <td class="s0" dir="ltr">' + time_Final_Night_Time + '</td>                <td class="s0" dir="ltr">0:00</td>                <td class="s0" dir="ltr">' + time_Final_PIC_Time + '</td>                <td class="s0" dir="ltr">' + time_Final_SIC_Time + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + time_TotalInst + '</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">-</td>                <td class="s0" dir="ltr">' + date_total_Dur + '</td>                </tr>'
         htmlContent += '</body></html>'
         return htmlContent
     }
@@ -595,16 +637,21 @@ const JEU = ({ navigation }) => {
             }
             htmlContent += leftPageTotal(monthData) + prevTotalLeft(monthData) + leftPageTotalTime(monthData) + '        </tbody> ' + breakTag() + ' '+brTag+' </table>'+page1+'<table class="waffle" cellspacing="0" cellpadding="0" >' + breakTag() + '    <br>             <tr style="height: 20px">                <td class="s0" dir="ltr" colspan="2">OPERATIONAL CONDITION</td>                <td class="s0" dir="ltr" colspan="4">PILOT FUNCTION</td>                <td class="s0" dir="ltr" colspan="3">SYNTHETIC TRAINING DEVICES SESSION</td>                <td class="s0" dir="ltr" rowspan="2">REMARKS AND ENDORSMENTS</td>             </tr>            <tr style="height: 20px">                <td class="s0" dir="ltr">NIGHT</td>                <td class="s0" dir="ltr">IFR</td>                <td class="s0" dir="ltr">PILOT-IN-COMMAND</td>                <td class="s0" dir="ltr">CO- PILOT</td>                <td class="s0" dir="ltr">DUAL</td>        <td class="s0" dir="ltr">INSTRUCTOR</td>                <td class="s0" dir="ltr">DATE (DD/MM/YY)</td>                <td class="s0" dir="ltr">TYPE</td>                <td class="s0" dir="ltr">TOTAL TIME OF SESSION</td>           </tr> <tbody>'
             monthData.map(d => {
+                var totalSim = d.aircraftReg == 'SIMU' ? d.totalTime : ""  ;
                 if(d.aircraftReg !== "SIMU"){
+                var dataDate =  d.date
+                var dataType =  d.aircraftType
                 var sic_Time = d.p2 == 'Self' ? d.totalTime : d.p2.slice(0, 10) + '...'
                 var pic_Time = d.p1 == 'Self' ? d.totalTime : d.p1.slice(0, 10) + '...'
                 }
                 else{
                     var sic_Time = ""
                     var pic_Time = ""
+                    var dataDate =  ""
+                    var dataType = ""
                 }
 
-                htmlContent += '<tr class="j_ue" style="height: 20px">                <td class="s0" dir="ltr">' + d.night + '</td>                <td class="s0" dir="ltr">' + d.ifr_vfr + '</td>                <td class="s0" dir="ltr">' + pic_Time + '</td>                <td class="s0" dir="ltr" style="width: 90px">' + sic_Time + '</td>                <td class="s0" dir="ltr">' + d.dual_day  + '</td>                <td class="s0" dir="ltr">' + d.instructional + '</td>                <td class="s0" dir="ltr">' + d.date + '</td>                <td class="s0" dir="ltr">'+d.aircraftType+'</td>                <td class="s0" dir="ltr">' + d.totalTime + '</td>                <td class="s0" dir="ltr"></td>  </tr>'
+                htmlContent += '<tr class="j_ue" style="height: 20px">                <td class="s0" dir="ltr">' + d.night + '</td>                <td class="s0" dir="ltr">' + d.ifr_vfr + '</td>                <td class="s0" dir="ltr">' + pic_Time + '</td>                <td class="s0" dir="ltr" style="width: 90px">' + sic_Time + '</td>                <td class="s0" dir="ltr">' + d.dual_day  + '</td>                <td class="s0" dir="ltr">' + d.instructional + '</td>                <td class="s0" dir="ltr">' + dataDate + '</td>                <td class="s0" dir="ltr">'+ dataType +'</td>                <td class="s0" dir="ltr">' + totalSim + '</td>                <td class="s0" dir="ltr"></td>  </tr>'
             })
             for (let i = 0; i < rows - monthData.length; i++) {
                 htmlContent += '<tr class="j_ue" style="height: 20px" id=' + i + '>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                </tr> '
