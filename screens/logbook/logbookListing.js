@@ -644,13 +644,73 @@ const LogBookListing = ({ navigation }) => {
   }
   }, [isFocused]);
 
+  const test = async () => {
+    console.log('GHGHHM')
+    let user = await AsyncStorage.getItem('userdetails');
+    user = JSON.parse(user);
+    let testtemData = []
+    prePopulateddb.transaction(tx => {
+      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" AND date = "02-02-2022"', [], (tx, result) => {
+        if (result.rows.length == 0) {
+          console.log('no data to load')
+          //dataDispatcher(LogListData({ data: [], inProgress: false }))
+          setLoadmore(false)
+          return false;
+        }
+        setOffset(offset + 10);
+        console.log('leng',result.rows.length)
+        //return;
+        //if (result.rows.length > 1){
+        for (let i = 0; i <= result.rows.length; i++) {
+          if (result.rows.length !== 0){
+          //setModalVisible(true)
+          testtemData.push({
+            id: result.rows.item(i).id,
+            tag: result.rows.item(i).tag,
+            date: result.rows.item(i).date,
+            //aircraftType: result.rows.item(i).aircraftType,
+            //from_lat: result.rows.item(i).from_lat,
+            //from_long: result.rows.item(i).from_long,
+            //from: result.rows.item(i).from_nameICAO,
+            chocksOffTime: result.rows.item(i).offTime,
+            chocksOnTime: result.rows.item(i).onTime,
+            //p1: result.rows.item(i).p1,
+            //p2: result.rows.item(i).p2,
+            //to: result.rows.item(i).to_nameICAO,
+            // to_lat: result.rows.item(i).to_lat,
+            // to_long: result.rows.item(i).to_long,
+            // totalTime: result.rows.item(i).totalTime,
+            // orderedDate: result.rows.item(i).orderedDate,
+
+          });
+          //console.log('checkdata', temData);
+          //setLocalLogbookData(temData);
+          // var arr = temData;
+          // var clean = arr.filter((arr, index, self) =>
+          //index === self.findIndex((t) => (t.chocksOffTime === arr.chocksOffTime && t.date === arr.date && t.from === arr.from)))
+
+          console.log('test data',testtemData);
+          //dataDispatcher(LogListData({ data: clean, inProgress: false }))
+          
+        }
+        else {
+          console.log('no data to show')
+          dataDispatcher(LogListData({ data: [], inProgress: false }))
+          setRefreshing(false);
+        }
+        }
+    });
+    });
+  }
+
   const getLogbookData = async () => {
-   //console.log('First')
+    //console.log('First')
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
     let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
+    //let temData =  []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,totalTime,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC, onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,totalTime,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           //dataDispatcher(LogListData({ data: [], inProgress: false }))
@@ -681,14 +741,14 @@ const LogBookListing = ({ navigation }) => {
             orderedDate: result.rows.item(i).orderedDate,
 
           });
-          //console.log('checkdata', temData);
+          console.log('checkdata', temData[0]);
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>
           index === self.findIndex((t) => (t.chocksOffTime === arr.chocksOffTime && t.date === arr.date && t.from === arr.from)))
 
-          //console.log('imp-data',clean);
-          dataDispatcher(LogListData({ data: clean, inProgress: false }))
+          //console.log('imp-data',clean[0]);
+          dataDispatcher(LogListData({ data: temData, inProgress: false }))
           setLoadmore(false)
           setFindTag(result.rows.item(i).tag);
           setRefreshing(false);
@@ -704,8 +764,66 @@ const LogBookListing = ({ navigation }) => {
   };
 
   const onRefresh = React.useCallback(async () => {
+    dataDispatcher(LogListData({ data: [], inProgress: false }))
     setRefreshing(true);
-    getLogbookData();
+    //console.log('First')
+    let user = await AsyncStorage.getItem('userdetails');
+    user = JSON.parse(user);
+    //let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
+    let temData =  []
+    prePopulateddb.transaction(tx => {
+      tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,totalTime,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+        if (result.rows.length == 0) {
+          console.log('no data to load')
+          //dataDispatcher(LogListData({ data: [], inProgress: false }))
+          setLoadmore(false)
+          return false;
+        }
+        setOffset(offset + 10);
+        //if (result.rows.length > 1){
+        for (let i = 0; i <= result.rows.length; i++) {
+          if (result.rows.length !== 0){
+          setModalVisible(true)
+          temData.push({
+            id: result.rows.item(i).id,
+            tag: result.rows.item(i).tag,
+            date: result.rows.item(i).date,
+            aircraftType: result.rows.item(i).aircraftType,
+            from_lat: result.rows.item(i).from_lat,
+            from_long: result.rows.item(i).from_long,
+            from: result.rows.item(i).from_nameICAO,
+            chocksOffTime: result.rows.item(i).offTime,
+            chocksOnTime: result.rows.item(i).onTime,
+            p1: result.rows.item(i).p1,
+            p2: result.rows.item(i).p2,
+            to: result.rows.item(i).to_nameICAO,
+            to_lat: result.rows.item(i).to_lat,
+            to_long: result.rows.item(i).to_long,
+            totalTime: result.rows.item(i).totalTime,
+            orderedDate: result.rows.item(i).orderedDate,
+
+          });
+          console.log('checkdata', temData[0]);
+          setLocalLogbookData(temData);
+          var arr = temData;
+          var clean = arr.filter((arr, index, self) =>
+          index === self.findIndex((t) => (t.chocksOffTime === arr.chocksOffTime && t.date === arr.date && t.from === arr.from)))
+
+          //console.log('imp-data',clean[0]);
+          dataDispatcher(LogListData({ data: temData, inProgress: false }))
+          setLoadmore(false)
+          setFindTag(result.rows.item(i).tag);
+          setRefreshing(false);
+        }
+        else {
+          console.log('no data to show')
+          dataDispatcher(LogListData({ data: [], inProgress: false }))
+          setRefreshing(false);
+        }
+        }
+    });
+    });
+    //test()
   }, [getReduxData]);
 
 const getTotalTime = async () => {

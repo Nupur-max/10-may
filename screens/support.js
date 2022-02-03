@@ -31,40 +31,40 @@ const Support = ({navigation}) => {
             </Text>
             
             {/* supports */}
-            <View style={{flexDirection: 'row', marginTop:50, marginHorizontal:15,}}>
+            <View style={{flexDirection: 'row', marginTop:30, paddingHorizontal:5,}}>
                 <Text style={styles.supportText}>Techsupport:</Text>
-                <Text style={{color: 'blue', paddingHorizontal:50}}
+                <Text style={{color: 'blue', paddingHorizontal: Platform.OS == 'android' ? 84 : 64}}
                       onPress={() => Linking.openURL('mailto:techsupport@autoflightlog.com')}>techsupport@autoflightlog.com
                 </Text>
             </View>
 
-            <View style={{flexDirection: 'row', marginTop:30, marginHorizontal:15,}}>
+            <View style={{flexDirection: 'row', marginTop:30, paddingHorizontal:5,}}>
                 <Text style={styles.supportText}>Subscriptions:</Text>
-                <Text style={{color: 'blue', paddingHorizontal:46}}
+                <Text style={{color: 'blue', paddingHorizontal: Platform.OS == 'android' ? 68 : 46}}
                       onPress={() => Linking.openURL('mailto:subscriptions@autoflightlog.com')}>subscriptions@autoflightlog.com
                 </Text>
             </View>
 
-            <View style={{flexDirection: 'row', marginTop:30, marginHorizontal:15,}}>
-                <Text style={styles.supportText}>Youtube{'\n'}Tutorials:</Text>
-                <Text style={{color: 'blue', paddingLeft:20}}
+            <View style={{flexDirection: 'row', marginTop:30, paddingHorizontal:5, }}>
+                <Text style={styles.supportText }>Youtube Tutorials:</Text>
+                <Text style={{color: 'blue', paddingHorizontal: Platform.OS == 'android' ? 48 : 24}}
                       onPress={() => Linking.openURL('https://m.youtube.com/channel/UCEC6vnb1_C1Dyw7ncqpQRCQ')}>https://m.youtube.com/channel/UCEC6vnb1_C1Dyw7ncqpQRCQ
                 </Text>
             </View>
 
-            <View style={{flexDirection: 'row', marginTop:30, marginHorizontal:15,}}>
+            <View style={{flexDirection: 'row', marginTop:30, paddingHorizontal:5,}}>
                 <Text style={styles.supportText}>Whatsapp Tech Support:</Text>
-                <Text style={{color: 'blue', paddingHorizontal:64}}
+                <Text style={{color: 'blue', paddingHorizontal: Platform.OS == 'android' ? 104 : 64}}
                       onPress={() => Linking.openURL('tel:+91-6366403020')}>+91-6366403020
                 </Text>
             </View>
 
-            <Text style={{...styles.supportText , ...{marginTop:50, marginHorizontal:15}}}>
-            Please Help us improve the app with {'\n'}your valuable Feedback
+            <Text style={{...styles.supportText , ...{marginTop:50, paddingHorizontal:5}}}>
+            Please Help us improve the app with your valuable Feedback
             </Text>
-            <View style={{flexDirection: 'row', marginTop:20, marginHorizontal:15,}}>
+            <View style={{flexDirection: 'row', marginTop:20, paddingHorizontal:5,}}>
                 <Text style={styles.supportText}>Feedback:</Text>
-                <Text style={{color: 'blue', paddingHorizontal:64}}
+                <Text style={{color: 'blue', paddingHorizontal: Platform.OS == 'android' ? 84 : 64}}
                       onPress={() => Linking.openURL('mailto:feedback@autoflightlog.com')}>feedback@autoflightlog.com
                 </Text>
             </View>
@@ -89,12 +89,12 @@ const styles = StyleSheet.create({
         //justifyContent: 'center',
         alignItems: 'flex-start',
         backgroundColor: '#fff',
-        padding: 10,
+        padding: 5,
         width:'100%'
     },
     Email:{
         fontSize: 28,
-        //marginTop:10,
+        marginTop:10,
         //fontWeight: 'bold',
         marginHorizontal:15,
         color: Colors.primary,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     },
     mainText: {
         color: Colors.primary,
-        marginHorizontal:15,
+        paddingHorizontal:5,
         marginTop:30,
         fontSize: 15,
         fontFamily: 'WorkSans-Regular', 
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
       color: '#fff',
     },
     supportText:{
-        fontWeight: '600',
+        fontWeight: Platform.OS == 'android' ? '700' : '600',
         fontFamily: 'WorkSans-Regular',
         color: Colors.primary,
     },
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
         color: Colors.primary,
     },
     headerIos: {
-        padding:15, 
+        padding:5, 
         fontFamily:'WorkSans-Regular', 
         fontSize: 20, 
         color: Colors.primary, 

@@ -96,7 +96,7 @@ const Register = ({navigation}) => {
              <TextInput style={styles.textInputBox}
              placeholder='Name' 
              placeholderTextColor = "#266173"
-             textStyle = {{color: '#000'}}
+             style={{color:'#000'}}
              value={name}
              onChangeText={name => setName(name)}/>
            </View>
@@ -107,7 +107,8 @@ const Register = ({navigation}) => {
              placeholder='Email' 
              placeholderTextColor = "#266173"
              value={email}
-             onChangeText={email => setEmail(email)}/>
+             onChangeText={email => setEmail(email)}
+             style={{color:'#000'}}/>
            </View>
 
            <View style = {styles.inputBox}>
@@ -127,7 +128,8 @@ const Register = ({navigation}) => {
              placeholder='Confirm Password' 
              placeholderTextColor = "#266173"
              value={cp}
-             onChangeText={cp => setCp(cp)}/>
+             onChangeText={cp => setCp(cp)}
+             style={{color:'#000'}}/>
            </View>
 
           {/* country, CountryCode */}
@@ -195,6 +197,7 @@ const Register = ({navigation}) => {
              placeholderTextColor = "#266173"
              value={mobile}
              onChangeText={mobile => setMobile(mobile)}
+             style={{color:'#000'}}
              />
            </View>
 

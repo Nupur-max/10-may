@@ -1649,7 +1649,7 @@ React.useEffect(() => {
 
         });
         alert('Inserted successfully');
-        navigation.goBack();
+        // navigation.goBack();
       };
 
     //sqlite ends

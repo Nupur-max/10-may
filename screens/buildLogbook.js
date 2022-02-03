@@ -768,7 +768,7 @@ const { dark, theme, toggle } = React.useContext(ThemeContext);
       // console.log('INSERT INTO buildLogbook (user_id,aircraft_id,aircraft_type,image,category,engine,engine_name,engine_class,engine_crew,day_pic,day_sic,day_p1_us,day_p1_ut,total,night_pic,night_sic,night_p1_us,night_p1_ut,night_total,total_flying_time,instrumental_time_actual,instrumental_time_simulated,simulator,instructional_flying_day,instructional_flying_night,instructional_flying_total,day_to,night_to,day_landing,night_landing,day_dual, night_dual, remark, key, lastUpdatedDate, stl_day, stl_night, stl_total) VALUES("'+user.id+'","'+params.BuildlogBookAirId+'","'+params.BuildlogBookAirType+'","hello","'+category+'","'+engine+'","'+engineName+'","'+Class+'","hello","'+day_pic+'","'+day_sic+'","'+dayp1_us+'","'+dayp1_ut+'","'+localTotalDayTime+'","'+night_pic+'","'+night_sic+'","'+nightp1_us+'","'+nightp1_ut+'","'+localTotalNightTime+'","'+
       // localTotalFlyingTime+'","'+actual+'","'+simulated+'","'+simulator+'","'+instructional_day+'","'+instructional_night+'","'+TotalInsTime+'","'+day_to+'","'+night_to+'","'+dayLanding+'","'+nightLanding+'","'+day_dual+'","'+night_dual+'","'+remark+'","hello","hello","'+stl_day+'","'+stl_night+'","'+TotalStlTime+'")')
     });
-    alert('Inserted successfully');
+    alert('Saved successfully');
   };
 
   React.useEffect(() => {WholeBuildLogbookData()},[]);
@@ -1149,7 +1149,7 @@ return (
            <TextInput 
             placeholder='Engine Name'
             placeholderTextColor='#393F45'
-            value={edit?editEngineName:engineName.toString()}
+            value={edit?editEngineName:engineName}
             onChangeText={edit?inputText=>editSetEngineName(inputText):inputText=>setEngineName(inputText)}
             style={{marginTop: -5, color:dark?'#fff':'#000'}} />
         </View>

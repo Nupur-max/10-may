@@ -17,6 +17,7 @@ import { EGCADetailsData } from '../../store/actions/egcaDetailsAction';
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import { DocListData } from '../../store/actions/DocListAction';
 import { DocData } from '../../store/actions/docAction';
+import { useIsFocused } from "@react-navigation/native";
 
 
 const prePopulateddb = SQLite.openDatabase(
@@ -35,6 +36,7 @@ const prePopulateddb = SQLite.openDatabase(
 
 // create a component
 const Docs = ({ navigation }) => {
+  const isFocused = useIsFocused();
   const [open, setOpen] = React.useState(false)
   const [selected, setSelected] = React.useState(false)
   const [data, setData] = React.useState(null)
@@ -213,8 +215,12 @@ const Docs = ({ navigation }) => {
     setSelectedIndex(index);
   };
 
-  React.useEffect(() => { getLogbookData() }, [getReduxDocData]);
-  React.useEffect(() => { getATPLData() });
+  React.useEffect(() => { 
+    if(isFocused){
+    getLogbookData() 
+    }
+  }, [getReduxDocData,isFocused]);
+  //React.useEffect(() => { getATPLData() });
 
 
   const getLogbookData = async () => {
@@ -280,6 +286,7 @@ const Docs = ({ navigation }) => {
             p1_ut_night: result.rows.item(i).p1_ut_night,
             remark: result.rows.item(i).remark,
           });
+          console.log(temData.length)
           setData(temData);
           dataDispatcher(DocListData({ data: temData }))
         }

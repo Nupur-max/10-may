@@ -98,13 +98,13 @@ const P1 = ({ navigation }) => {
 
   const [pilotListProgress, setPilotListProgress] = React.useState('');
   const [progressValue, setProgressValue] = React.useState('')
-  //const [error, setError] = React.useState('')
+  const [showProgress, setShowProgress] = React.useState(true)
 
 
   //console.log('dhfshgfghghdjg', name)
 
   const checkEcrewFields = () => {
-    if (eId !== '' || ePwd !== '' || airlineValue !== null) {
+    if (eId !== '' && ePwd !== '' && airlineValue !== null) {
       setModalVisible(true)
     }
     else {
@@ -112,7 +112,7 @@ const P1 = ({ navigation }) => {
     }
   }
 
-  React.useEffect(() => { GetUserDetails() }, []);
+  React.useEffect(() => { GetUserDetails()}, []);
 
   const GetUserDetails = async () => {
     //console.log('hello')
@@ -120,7 +120,7 @@ const P1 = ({ navigation }) => {
     user = JSON.parse(user);
     let temData = [];
     db.transaction(tx => {
-      tx.executeSql('SELECT user_id,name,email,Contact,roster_id,roster_pwd,airline_type,LicenceNumber,LicenceType,validity ,Country FROM userProfileData Where user_id = "' + user.id + '"', [], (tx, result) => {
+      tx.executeSql('SELECT user_id,name,email,Contact,roster_id,roster_pwd,airline_type,LicenceNumber,LicenceType,validity ,Country, profile_pic FROM userProfileData Where user_id = "' + user.id + '"', [], (tx, result) => {
         //setOffset(offset + 10);
         if (result.rows.length > 0) {
           //alert('data available '); 
@@ -142,9 +142,10 @@ const P1 = ({ navigation }) => {
             Lt: result.rows.item(i).LicenceType,
             Ln: result.rows.item(i).LicenceNumber,
             validity: result.rows.item(i).validity,
-            country: result.rows.item(i).Country
+            country: result.rows.item(i).Country,
+            profile_pic : result.rows.item(i).profile_pic,
           });
-          console.log('user Data', temData);
+          //console.log('user Data', temData);
           setDate(result.rows.item(i).validity)
           setLt(result.rows.item(i).LicenceType)
           setLn(result.rows.item(i).LicenceNumber)
@@ -154,7 +155,7 @@ const P1 = ({ navigation }) => {
           setEPwd(result.rows.item(i).roster_pwd);
           setAirlineValue(result.rows.item(i).airline_type)
           setCountryName(result.rows.item(i).Country)
-
+          setImage({uri:result.rows.item(i).profile_pic})
         }
       });
     });
@@ -198,6 +199,7 @@ const P1 = ({ navigation }) => {
   }
 
   const Roaster = async () => {
+    setShowProgress(true)
     setProgressValue(0.3)
     dataDispatcher(LogListData({ data: [], inProgress: false }))
     setDataFetched(true)
@@ -243,6 +245,7 @@ const P1 = ({ navigation }) => {
         //     Alert.alert(resData.message);
         //   });
 
+        if(resData.msg!==false){
         for (let i = 0; i < resData.data.length; i++) {
 
           //console.log('Aircraft id', resData.data[i] )
@@ -368,17 +371,23 @@ const P1 = ({ navigation }) => {
             }
           }
             //Select Query end
-            else{
-              alert(resData.data)
-            }
+            // else{
+            //   if(resData.msg === false)
+            //   alert('Invalid Credentials')
+            // }
           });
         }
+      }
+      else {
+        alert('Invalid Credentials')
+        setShowProgress(false)
+      }
        })
-      .catch((error) => {
-        console.log(error)
-        alert(error)
-        setModalVisible(false)
-      });
+      // .catch((error) => {
+      //   console.log(error)
+      //   alert(error)
+      //   setModalVisible(false)
+      // });
   }
 
   const validation = () => {
@@ -473,7 +482,7 @@ const P1 = ({ navigation }) => {
     const splittedBase64 = imageData.split(';base64');
     formData.append('profile_pic', splittedBase64[1]);
     // console.log('form data' , data._parts[0][1].uri)
-    console.log('form data', formData)
+    //console.log('form data', formData)
     var Url = BaseUrl + 'edit_profile'
     fetch(Url, {
       method: 'POST',
@@ -484,6 +493,7 @@ const P1 = ({ navigation }) => {
     }).then(response => response.json())
       .then(response => {
         console.log('On task Creation: ', response);
+        //setImage(response.data.profile_pic)
       })
       .catch(error => {
         console.log('You can not proceed', error);
@@ -519,7 +529,7 @@ const P1 = ({ navigation }) => {
     //  Alert.alert('Hello')
     db.transaction(tx => {
       tx.executeSql(
-        'INSERT INTO userProfileData (user_id, name, LicenceType, LicenceNumber, validity, Country, CountryCode, Contact)  VALUES ("' + user.id + '", "' + name + '", "' + lt + '", "' + ln + '", "' + date + '", "' + countryName + '", "' + code + '", "' + mn + '")',
+        'INSERT INTO userProfileData (user_id, name, LicenceType, LicenceNumber, validity, Country, CountryCode, Contact,roster_id,roster_pwd,airline_type)  VALUES ("' + user.id + '", "' + name + '", "' + lt + '", "' + ln + '", "' + date + '", "' + countryName + '", "' + code + '", "' + mn + '","'+eId+'","'+ePwd+'","'+airlineValue+'")',
         // console.log('INSERT INTO userProfileData (user_id, name, LicenceType, LicenceNumber, validity, Country, CountryCode, Contact)  VALUES ("'+user.id+'", "'+name+'", "'+lt+'", "'+ln+'", "'+date+'", "'+value+'", "'+code+'", "'+mn+'")')
         //Alert.alert('InSERTED Successfully')
       );
@@ -541,8 +551,12 @@ const P1 = ({ navigation }) => {
             country: result.rows.item(i).Country,
             CountryCode: result.rows.item(i).CountryCode,
             Contact: result.rows.item(i).Contact,
+            //image : result.rows.item(i).profile_pic,
+            roster_id: result.rows.item(i).roster_id,
+            roster_pwd: result.rows.item(i).roster_pwd,
+            airline_type: result.rows.item(i).airline_type,
           });
-          //console.log('logbook data', temData);
+          // console.log('logbook data', result.rows.item(i).profile_pic);
           //setLocalLogbookData(temData);
           //dataDispatcher(LogListData({data: temData}))
           setName(result.rows.item(i).name)
@@ -551,7 +565,10 @@ const P1 = ({ navigation }) => {
           setMn(result.rows.item(i).Contact)
           setDate(result.rows.item(i).validity)
           setCountryName(result.rows.item(i).country)
-
+          //console.log(require(result.rows.item(i).profile_pic))
+          setEId(result.rows.item(i).roster_id)
+          setEPwd(result.rows.item(i).roster_pwd)
+          setAirlineValue(result.rows.item(i).airline_type)
         }
       });
     });
@@ -562,6 +579,7 @@ const P1 = ({ navigation }) => {
   console.log('imageeē', image);
 
   const importPilotList = async () => {
+    if(airlineValue!==null){
     setPilotListProgress(0.3)
     setPilotsFetched(true)
     await fetch(BaseUrl + 'fetch_pilots', {
@@ -649,6 +667,10 @@ const P1 = ({ navigation }) => {
         setPilotsFetched(true);
       });
   }
+  else {
+    alert('Please Select Airline before')
+  }
+}
 
   const AirlineDispatch = () => {
     dataDispatcher(ProfileData({ SelectedAirline: airlineValue }))
@@ -692,20 +714,20 @@ const P1 = ({ navigation }) => {
                 ? require('../images/userWhite.png')
                 : image
             }
-              style={{ height: 70, width: 70 }} />
+              style={{ height: 70, width: 70, borderColor:'#000',borderWidth:1 }} />
               : <Image source={
                 image === null
                   ? require('../images/user.png')
                   : image
               }
-                style={{ height: 70, width: 70 }} />}
+                style={{ height: 70, width: 70, borderColor:'#000',borderWidth:1 }} />}
           </TouchableOpacity>
 
           <View style={styles.fields}>
             <TextInput
               placeholder='Name'
               placeholderTextColor="#266173"
-              value={name.toUpperCase()}
+              value={name===null?'':name.toUpperCase()}
               onChangeText={(inputText) => { setName(inputText) }}
               style={{ color: dark ? '#fff' : '#000' }}
             />
@@ -1024,7 +1046,7 @@ const P1 = ({ navigation }) => {
                 </View>
                 {dataFetched === true ?
                   <View>
-                    <ProgressBar progress={progressValue} color={'#256173'} style={{ width: 200, marginTop: 15 }} />
+                    <ProgressBar progress={progressValue} color={'#256173'} style={{ width: 200, marginTop: 15 }} visible={showProgress}/>
                   </View> :
                   null}
 

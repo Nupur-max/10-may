@@ -39,8 +39,8 @@ const db = SQLite.openDatabase(
 
 const Login = ({navigation}) => {
 
-  const [email, setEmail] = React.useState(''); //anantmathur1@yahoo.co.in//nupur1@gmail.com //aviatorrishabh@gmail.com
-  const [pwd, setPwd] = React.useState(''); //Fighters12//1234 //riturishi
+  const [email, setEmail] = React.useState('anantmathur1@yahoo.co.in'); //anantmathur1@yahoo.co.in//nupur1@gmail.com //aviatorrishabh@gmail.com
+  const [pwd, setPwd] = React.useState('Fighters12'); //Fighters12//1234 //riturishi
   const [loading, setLoading] = React.useState(true)
   const [offset, setOffset] = React.useState(1)
   const [forgotModalVisible, setForgotModalVisible] = React.useState(false)
@@ -82,12 +82,17 @@ const Login = ({navigation}) => {
             mobile : resData.data.mobile_number,
             profile_pic : resData.data.profile_pic,
             registrationDate : resData.data.registrationDate,
+            lT : resData.data.licance_type,
+            lN : resData.data.licance_number,
+            country : resData.data.country,
+            validity : resData.data.validity,
+            profile_pic : resData.data.profile_pic,
           }),
         )
         console.log('reg-date',resData.data.registrationDate )
         db.transaction((tx) => {
           tx.executeSql(
-        'INSERT INTO userProfileData (user_id,name,email,Contact,roster_id,roster_pwd,airline_type,reg_date) VALUES ("'+resData.data.id+'","'+resData.data.name+'","'+resData.data.email+'","'+resData.data.mobile_number+'","'+resData.data.roaster_id+'","'+resData.data.roaster_pass+'","'+resData.data.airline_type+'","'+resData.data.registrationDate+'" )',
+        'INSERT INTO userProfileData (user_id,name,email,Contact,roster_id,roster_pwd,airline_type,reg_date,LicenceNumber,LicenceType,Country,validity,profile_pic) VALUES ("'+resData.data.id+'","'+resData.data.name+'","'+resData.data.email+'","'+resData.data.mobile_number+'","'+resData.data.roaster_id+'","'+resData.data.roaster_pass+'","'+resData.data.airline_type+'","'+resData.data.registrationDate+'","'+resData.data.licance_number+'","'+resData.data.licance_type+'","'+resData.data.country+'","'+resData.data.validity+'","'+resData.data.profile_pic+'")',
         );
 
         // console.log('INSERT INTO userProfileData (user_id,name,email,Contact,roster_id,roster_pwd,airline_type) VALUES ("'+resData.data.id+'","'+resData.data.name+'","'+resData.data.email+'","'+resData.data.mobile_number+'","'+resData.data.roaster_id+'","'+resData.data.roaster_pass+'","'+resData.data.airline_type+'")')
@@ -495,7 +500,8 @@ textStyle:{
 modalViewTextInput:{
   padding:10,
   backgroundColor:'#fff',
-  borderRadius:5
+  borderRadius:5,
+  color:'#000',
 },
 });
 

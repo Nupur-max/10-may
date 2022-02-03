@@ -1,7 +1,7 @@
 //import liraries
 import React, { Component } from 'react';
 import { useIsFocused } from "@react-navigation/native";
-import { View, Text,SafeAreaView, StyleSheet, TouchableOpacity, Dimensions, TextInput, ScrollView, Platform} from 'react-native';
+import { View, Text,SafeAreaView, StyleSheet, TouchableOpacity, Dimensions, TextInput, ScrollView, Platform, KeyboardAvoidingView} from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from '../components/colors';
@@ -40,8 +40,8 @@ const EGCAUpload = ({navigation}) => {
   const { dark, theme, toggle } = React.useContext(ThemeContext);
   const dataDispatcher = useDispatch();
 
-    const [egca_user,setEGCAUSER] = React.useState('IPLTM2020023010');
-    const [egca_pwd,setEGCAPWD] = React.useState('Fighters12!');
+    const [egca_user,setEGCAUSER] = React.useState('IPLTM2020023010'); //IPLTM2020023010
+    const [egca_pwd,setEGCAPWD] = React.useState('Fighters12');//Fighters12!
     const [arrow,setArrow] = React.useState(true);
     const [arrowSettings, setArrowSettings] = React.useState(false)
     const [FTOopen, setFTOOpen] = React.useState(false);
@@ -338,7 +338,9 @@ const EGCAUpload = ({navigation}) => {
       //Sql ends
 
     return (
+      
       <SafeAreaView style={[styles.container,{ backgroundColor: theme.backgroundColor }]}>
+        <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
         <ScrollView nestedScrollEnabled={true} >
 
         <View style={styles.mainHeader}>
@@ -397,7 +399,7 @@ const EGCAUpload = ({navigation}) => {
         <View>
         <Text style = {dark?styles.DarkInnnerHeadings:styles.InnnerHeadings}>Name of FTO/OPERATOR</Text>
         </View>
-        <View style={Platform.OS==='ios'?{padding: 20,zIndex:99}:{padding: 20}}>
+        <View style={Platform.OS==='ios'?{padding: 20,zIndex:666}:{padding: 20}}>
         <DropDownPicker
           searchable={true}
           open={FTOopen}
@@ -512,10 +514,11 @@ const EGCAUpload = ({navigation}) => {
           style = {{width: '100%',}}
           dropDownContainerStyle={{
             width: '100%',
-            //zIndex: 100,
+            height: 50
+            //zIndex: 999,
             //elevation:10,
           }}
-          // listMode="SCROLLVIEW"
+           listMode="SCROLLVIEW"
           // scrollViewProps={{
           //   nestedScrollEnabled: true,
           // }}
@@ -586,7 +589,9 @@ const EGCAUpload = ({navigation}) => {
       </TouchableOpacity>
       
       </ScrollView>
+      </KeyboardAvoidingView>
       </SafeAreaView>
+      
     );
 };
 

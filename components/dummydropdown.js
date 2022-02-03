@@ -246,6 +246,7 @@ export const FTOData = [
 ];
 
 export const Elog_verifiers = [
+    {label: 'Select', value : 'Select'},
     {label: 'Posina Pramod Kumar Rao(OOPRM20200000110002)' , value:'Posina Pramod Kumar Rao(OOPRM20200000110002)'},
     {label: 'RAJIV KUMAR SINGH(OOPRM20200000110005)' , value:'RAJIV KUMAR SINGH(OOPRM20200000110005)'},
     {label: 'Abhas Gupta(OOPRM20200000110006)' , value:'Abhas Gupta(OOPRM20200000110006)'},
@@ -322,7 +323,7 @@ export const Elog_verifiers = [
     {label: 'Franz Joseph Dsa(OOPRM20200000110098)' , value:'Franz Joseph Dsa(OOPRM20200000110098)'},
     {label: 'Jasmine Massey(OOPRM20200000110100)' , value:'Jasmine Massey(OOPRM20200000110100)'},
     {label: 'Anuraag Arun Mehta(OOPRM20200000110101)' , value:'Anuraag Arun Mehta(OOPRM20200000110101)'},
-    {label: 'Malkannagari Sai Prashant Reddy(OOPRM20200000110102)' , value:''},
+    {label: 'Malkannagari Sai Prashant Reddy(OOPRM20200000110102)' , value:'Malkannagari Sai Prashant Reddy(OOPRM20200000110102)'},
     {label: 'Anil Chopra(OOPRM20200000110103)' , value:'Anil Chopra(OOPRM20200000110103)'},
     {label: 'Abhijit Prakash Dubal(OOPRM20200000110104)' , value:'Abhijit Prakash Dubal(OOPRM20200000110104)'},
     {label: 'Rashid Kanga(OOPRM20200000110105)' , value:'Rashid Kanga(OOPRM20200000110105)'},

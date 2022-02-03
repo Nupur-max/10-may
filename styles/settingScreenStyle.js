@@ -3,12 +3,13 @@ import Colors from  '../components/colors';
 
 const SsStyle = StyleSheet.create({
     container: {
-        flex: 1,
+        //flex: 1,
         //justifyContent: 'center',
-        alignItems: 'flex-start',
+        //alignItems: 'flex-start',
         backgroundColor: '#fff',
         padding: 25,
         height: Dimensions.get('window').height,
+        //marginTop: 8,
     },
     settings:{
         fontSize: 28,
@@ -34,7 +35,7 @@ const SsStyle = StyleSheet.create({
         fontFamily: 'WorkSans-VariableFont_wght',
     },
     fields: {
-        marginTop: Platform.OS=== 'ios' ? 50 : 30,
+        marginTop: Platform.OS=== 'ios' ? 40: 30,
         borderBottomWidth: 0.2,
         borderBottomColor: Colors.accent,
         width:'100%',
