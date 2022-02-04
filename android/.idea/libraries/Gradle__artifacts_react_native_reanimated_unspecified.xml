@@ -40,6 +40,9 @@
       <root url="file://$PROJECT_DIR$/../node_modules/react-native-reanimated/android/build/.transforms/59f491bf8557f7ee6bde7ec58421cf2a/jetified-react-native-reanimated-64-jsc/res" />
       <root url="file://$PROJECT_DIR$/../node_modules/react-native-reanimated/android/build/.transforms/59f491bf8557f7ee6bde7ec58421cf2a/jetified-react-native-reanimated-64-jsc/AndroidManifest.xml" />
       <root url="jar://$PROJECT_DIR$/../node_modules/react-native-reanimated/android/build/.transforms/59f491bf8557f7ee6bde7ec58421cf2a/jetified-react-native-reanimated-64-jsc/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../node_modules/react-native-reanimated/android/build/.transforms/dbdd4c364ada24542a7e0a2031ded59e/jetified-react-native-reanimated-64-jsc/res" />
+      <root url="file://$PROJECT_DIR$/../node_modules/react-native-reanimated/android/build/.transforms/dbdd4c364ada24542a7e0a2031ded59e/jetified-react-native-reanimated-64-jsc/AndroidManifest.xml" />
+      <root url="jar://$PROJECT_DIR$/../node_modules/react-native-reanimated/android/build/.transforms/dbdd4c364ada24542a7e0a2031ded59e/jetified-react-native-reanimated-64-jsc/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

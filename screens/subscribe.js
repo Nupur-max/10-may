@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ImageBackground, Dimensions, TextInput, TouchableOpacity, Alert } from 'react-native';
 //import { View, Text, StyleSheet,ImageBackground } from "react-native";
 import Colors from '../components/colors';
@@ -60,6 +60,28 @@ const getItems = async () => {
     }
 };
 
+const getPurchases = async () => {
+  try {
+    const purchases = await RNIap.getAvailablePurchases();
+    const newState = { premium: false, ads: true }
+    let restoredTitles = [];
+    purchases.forEach(purchase => {
+      switch (purchase.productId) {
+      case 'com.aviation.AutoFlightLog.sub.Annual':
+        newState.premium = true
+        restoredTitles.push('Premium Version');
+        break
+      case 'com.example.coins100':
+         RNIap.consumePurchaseAndroid(purchase.purchaseToken);
+        CoinStore.addCoins(100);
+      }
+    })
+    Alert.alert('Restore Successful', 'You successfully restored the following purchases: ' + restoredTitles.join(', '));
+  } catch(err) {
+    console.warn(err); // standardized err.code and err.message available
+    Alert.alert(err.message);
+  }
+}
 
 useEffect(() => {
     purchaseUpdateSubscription = RNIap.purchaseUpdatedListener(
@@ -108,7 +130,7 @@ const requestSubscription = async (sku) => {
                     console.log(result.productId)
                     // can do your API call here to save the purchase details of particular user
                 } else if (Platform.OS === 'ios') {
-                    console.log(result.transactionReceipt)
+                    console.log('reciept' ,result.transactionReceipt)
                     // setProductId(result.productId);
                     // setReceipt(result.transactionReceipt);
                     // can do your API call here to save the purchase details of particular user
@@ -148,11 +170,11 @@ const requestSubscription = async (sku) => {
                 {/* <Text style={styles.mainLine}>Don't have account? </Text> */}
                 {/* <TouchableOpacity onPress={()=>navigation.navigate('Register')}><Text style={[styles.mainLine, styles.link]}>Signup</Text></TouchableOpacity> */}
               </View>
-              <TouchableOpacity onPress={()=>navigation.navigate('subscribe')}><Text style={[styles.mainLine, styles.link1]}>Restore Purchase</Text></TouchableOpacity>
+              <TouchableOpacity onPress={()=>getPurchases()}><Text style={[styles.mainLine, styles.link1]}>Restore Purchase</Text></TouchableOpacity>
                 <Text style={styles.mainLine}>(in case, Sign in from New/ {'\n'} Second device)</Text>
             </View>
         </View>
-        <TouchableOpacity onPress={()=>navigation.navigate('Login')}><Text style={[styles.mainLine, styles.link1]}>Go Back</Text></TouchableOpacity>
+        <TouchableOpacity onPress={()=>navigation.goBack()}><Text style={[styles.mainLine, styles.link1]}>Go Back</Text></TouchableOpacity>
 
       </ImageBackground>
     );

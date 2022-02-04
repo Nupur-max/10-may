@@ -306,9 +306,9 @@ const P1 = ({ navigation }) => {
 
 
             console.log('data pos ' + i + ' ' + resData.data.length);
-            tx.executeSql(
-              'INSERT INTO userProfileData (user_id,rosterLength) VALUES ("'+user.id+'", "'+resData.data.length+'")',
-            );
+            // tx.executeSql(
+            //   'INSERT INTO userProfileData (user_id,rosterLength) VALUES ("'+user.id+'", "'+resData.data.length+'")',
+            // );
 
              
 

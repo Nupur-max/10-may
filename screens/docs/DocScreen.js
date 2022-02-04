@@ -49,6 +49,7 @@ const Docs = ({ navigation }) => {
   const [logModalVisible, setLogModalVisible] = React.useState(false);
   const [reportModalVisible, setReportModalVisible] = React.useState(false);
   const { dark, theme, toggle } = React.useContext(ThemeContext);
+  const [refreshing, setRefreshing] = React.useState(false)
 
   const dataDispatcher = useDispatch();
   const onFocusChange = () => setFocused(true);
@@ -215,12 +216,102 @@ const Docs = ({ navigation }) => {
     setSelectedIndex(index);
   };
 
-  React.useEffect(() => { 
-    if(isFocused){
-    getLogbookData() 
+  React.useEffect(() => {
+    getLogbookData()
+  }, [getReduxDocData]);
+
+  React.useEffect(() => {
+    if (isFocused) {
+      onRefresh();
     }
-  }, [getReduxDocData,isFocused]);
-  //React.useEffect(() => { getATPLData() });
+  }, [isFocused]);
+
+  React.useEffect(() => { getATPLData() });
+
+  const onRefresh = React.useCallback(async () => {
+    selection()
+    // dataDispatcher(DocListData({ data: [] }))
+    setRefreshing(true);
+    let user = await AsyncStorage.getItem('userdetails');
+    user = JSON.parse(user);
+    //let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
+    let temData = []
+    prePopulateddb.transaction(tx => {
+      tx.executeSql('SELECT * from logbook WHERE  user_id = "' + user.id + '" AND tag= "manual" ORDER BY orderedDate DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+        if (result.rows.length == 0) {
+          console.log('no data to load')
+          //dataDispatcher(LogListData({ data: [], inProgress: false }))
+          setLoadmore(false)
+          return false;
+        }
+        setOffset(offset + 10);
+        //if (result.rows.length > 1){
+        for (let i = 0; i <= result.rows.length; i++) {
+          if (result.rows.length !== 0) {
+            temData.push({
+              id: result.rows.item(i).id,
+              tag: result.rows.item(i).tag,
+              user_id: result.rows.item(i).user_id,
+              flight_no: result.rows.item(i).flight_no,
+              date: result.rows.item(i).date,
+              day: result.rows.item(i).day,
+              actual_Instrument: result.rows.item(i).actual_Instrument,
+              aircraftReg: result.rows.item(i).aircraftReg,
+              aircraftType: result.rows.item(i).aircraftType,
+              dayLanding: result.rows.item(i).dayLanding,
+              dual_day: result.rows.item(i).dual_day,
+              dual_night: result.rows.item(i).dual_night,
+              flight: result.rows.item(i).flight,
+              from: result.rows.item(i).from_nameICAO,
+              ifr_vfr: result.rows.item(i).ifr_vfr,
+              instructional: result.rows.item(i).instructional,
+              instructor: result.rows.item(i).instructor,
+              landing: result.rows.item(i).inTime,
+              night: result.rows.item(i).night,
+              chocksOffTime: result.rows.item(i).offTime,
+              nightLanding: result.rows.item(i).nightLanding,
+              chocksOnTime: result.rows.item(i).onTime,
+              takeOff: result.rows.item(i).outTime,
+              p1: result.rows.item(i).p1,
+              p1_us_day: result.rows.item(i).p1_us_day,
+              p1_us_night: result.rows.item(i).p1_us_night,
+              p2: result.rows.item(i).p2,
+              pic_day: result.rows.item(i).pic_day,
+              pic_night: result.rows.item(i).pic_night,
+              stl: result.rows.item(i).stl,
+              route: result.rows.item(i).route,
+              sic_day: result.rows.item(i).sic_day,
+              sic_night: result.rows.item(i).sic_night,
+              sim_instructional: result.rows.item(i).sim_instructional,
+              sim_instrument: result.rows.item(i).sim_instrument,
+              selected_role: result.rows.item(i).selected_role,
+              student: result.rows.item(i).student,
+              to: result.rows.item(i).to_nameICAO,
+              totalTime: result.rows.item(i).totalTime,
+              x_country_day: result.rows.item(i).x_country_day,
+              x_country_night: result.rows.item(i).x_country_night,
+              x_country_day_leg: result.rows.item(i).x_country_day_leg,
+              x_country_night_leg: result.rows.item(i).x_country_night_leg,
+              p1_ut_day: result.rows.item(i).p1_ut_day,
+              p1_ut_night: result.rows.item(i).p1_ut_night,
+              remark: result.rows.item(i).remark,
+
+            });
+           // console.log('refresh', temData)
+            setData(temData);
+            dataDispatcher(DocListData({ data: temData }))
+            setRefreshing(false);
+          }
+          else {
+            console.log('no data to show')
+            dataDispatcher(DocListData({ data: [], inProgress: false }))
+            setRefreshing(false);
+          }
+        }
+      });
+    });
+    //test()
+  }, [getReduxDocData]);
 
 
   const getLogbookData = async () => {
@@ -286,21 +377,20 @@ const Docs = ({ navigation }) => {
             p1_ut_night: result.rows.item(i).p1_ut_night,
             remark: result.rows.item(i).remark,
           });
-          console.log(temData.length)
+          //console.log('docs data',temData)
           setData(temData);
           dataDispatcher(DocListData({ data: temData }))
         }
       });
     });
   };
+
   const getATPLData = async () => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
-    let temData = (getReduxDocData.data === undefined) ? [] : getReduxDocData.data;
-    //let temData = []
-    //dataDispatcher(DocListData({data: []}))
+    let temData = []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND tag= "server" ORDER BY orderedDate DESC , inTime DESC LIMIT 5 OFFSET "' + offset + '"', [], (tx, result) => {
+      tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND tag= "server" ORDER BY orderedDate DESC , inTime DESC', [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           return false;
@@ -435,6 +525,7 @@ const Docs = ({ navigation }) => {
               NameOfAuthVerifier: result1.rows.item(i).NameOfAuthVerifier,
             }
             Data.push(SingleResult)
+            console.log('',SingleResult)
             dataDispatcher(EGCADetailsData({ data: Data }))
           }
         }
@@ -457,30 +548,30 @@ const Docs = ({ navigation }) => {
   const ItemRenderer = ({ item, index, selected, onUpdateValue }) => {
     return (
       <TouchableOpacity style={[styles.item]}>
-          <ScrollView style={dark?[styles.Darklisting]:[styles.listing]}>
-            <View style={{ width: '100%' }}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={dark?{color:'#fff',fontSize:15, fontFamily:'WorkSans-Bold'}:{color:'#000',fontSize:15, fontFamily:'WorkSans-Bold'}}> {item.date} </Text>
-                <CheckBox
-                  disabled={false}
-                  value={selected}
-                  onValueChange={(value) => { onUpdateValue(index, value); filterSelected(); }}
-                />
-              </View>
-              <Divider />
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={dark?{color:'#fff',fontWeight: 'bold', paddingTop: 10}:{ fontWeight: 'bold', paddingTop: 10 }}>{item.from}</Text>
-                <MaterialCommunityIcons name="airplane-takeoff" color={dark?'#fff':'#000'} size={30} style={{ paddingHorizontal: 10, paddingTop: 10 }} />
-                <Text style={dark?{color:'#fff',fontWeight: 'bold', paddingTop: 10}:{ fontWeight: 'bold', paddingTop: 10 }}>{item.to}</Text>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={{color:dark?'#fff':'#000'}}>{item.chocksOffTime}</Text>
-                <Text style={dark?{color:'#fff', paddingLeft: 28 }:{ paddingLeft: 28 }}>{item.chocksOnTime}</Text>
-              </View>
+        <ScrollView style={dark ? [styles.Darklisting] : [styles.listing]}>
+          <View style={{ width: '100%' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={dark ? { color: '#fff', fontSize: 15, fontFamily: 'WorkSans-Bold' } : { color: '#000', fontSize: 15, fontFamily: 'WorkSans-Bold' }}> {item.date} </Text>
+              <CheckBox
+                disabled={false}
+                value={selected}
+                onValueChange={(value) => { onUpdateValue(index, value); filterSelected(); }}
+              />
             </View>
-          </ScrollView>
-        </TouchableOpacity>
-     );
+            <Divider />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={dark ? { color: '#fff', fontWeight: 'bold', paddingTop: 10 } : { fontWeight: 'bold', paddingTop: 10 }}>{item.from}</Text>
+              <MaterialCommunityIcons name="airplane-takeoff" color={dark ? '#fff' : '#000'} size={30} style={{ paddingHorizontal: 10, paddingTop: 10 }} />
+              <Text style={dark ? { color: '#fff', fontWeight: 'bold', paddingTop: 10 } : { fontWeight: 'bold', paddingTop: 10 }}>{item.to}</Text>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={{ color: dark ? '#fff' : '#000' }}>{item.chocksOffTime}</Text>
+              <Text style={dark ? { color: '#fff', paddingLeft: 28 } : { paddingLeft: 28 }}>{item.chocksOnTime}</Text>
+            </View>
+          </View>
+        </ScrollView>
+      </TouchableOpacity>
+    );
   }
   const openWebView = () => {
     setOpen(false)
@@ -499,81 +590,81 @@ const Docs = ({ navigation }) => {
     var Total_Time = ''
     ATPLData.map((d) => {
       //--------  nightTime flying hours --------//
-      if(d.night !== ""){
-      var Night = d.night.split(":")
-      var total_Nighttime = Number(Night[0] * 60) + Number(Night[1])
-      Night_Hours += total_Nighttime
-      var total_Night_Hours = Math.floor(Night_Hours / 60);
-      var total_Night_Min = Night_Hours % 60;
-      if (total_Night_Hours < 10) {
-        total_Night_Hours = '0' + total_Night_Hours;
+      if (d.night !== "") {
+        var Night = d.night.split(":")
+        var total_Nighttime = Number(Night[0] * 60) + Number(Night[1])
+        Night_Hours += total_Nighttime
+        var total_Night_Hours = Math.floor(Night_Hours / 60);
+        var total_Night_Min = Night_Hours % 60;
+        if (total_Night_Hours < 10) {
+          total_Night_Hours = '0' + total_Night_Hours;
+        }
+        if (total_Night_Min < 10) {
+          total_Night_Min = '0' + total_Night_Min;
+        }
+        Final_Night_Time = total_Night_Hours + ":" + total_Night_Min;
+        if (isNaN(Final_Night_Time[1])) {
+          Final_Night_Time = '00:00'
+        }
       }
-      if (total_Night_Min < 10) {
-        total_Night_Min = '0' + total_Night_Min;
-      }
-      Final_Night_Time = total_Night_Hours + ":" + total_Night_Min;
-      if (isNaN(Final_Night_Time[1])) {
-        Final_Night_Time = '00:00'
-      }
-    }
 
       //--------  total_Time flying hours --------//
-      if(d.totalTime !== ""){
-      var TotalTime = d.totalTime.split(":")
-      var total_time = Number(TotalTime[0] * 60) + Number(TotalTime[1])
-      total_Flying += total_time
-      var total_Hours = Math.floor(total_Flying / 60);
-      var total_Min = total_Flying % 60;
-      if (total_Hours < 10) {
-        total_Hours = '0' + total_Hours;
+      if (d.totalTime !== "") {
+        var TotalTime = d.totalTime.split(":")
+        var total_time = Number(TotalTime[0] * 60) + Number(TotalTime[1])
+        total_Flying += total_time
+        var total_Hours = Math.floor(total_Flying / 60);
+        var total_Min = total_Flying % 60;
+        if (total_Hours < 10) {
+          total_Hours = '0' + total_Hours;
+        }
+        if (total_Min < 10) {
+          total_Min = '0' + total_Min;
+        }
+        Total_Time = total_Hours + ":" + total_Min;
       }
-      if (total_Min < 10) {
-        total_Min = '0' + total_Min;
-      }
-      Total_Time = total_Hours + ":" + total_Min;
-    }
       //--------  total_Pic Time flying hours --------//
-      if(d.totalTime !== ""){
-      var Pic_Hours = d.totalTime.split(":")
-      var pic_hrs = Number(Pic_Hours[0] * 60) + Number(Pic_Hours[1])
-      total_PIC_Time += pic_hrs
-      var pic_total_Hours = Math.floor(total_PIC_Time / 60);
-      var pic_total_Min = total_PIC_Time % 60;
-      if (pic_total_Hours < 10) {
-        pic_total_Hours = '0' + pic_total_Hours;
+      if (d.totalTime !== "") {
+        var Pic_Hours = d.totalTime.split(":")
+        var pic_hrs = Number(Pic_Hours[0] * 60) + Number(Pic_Hours[1])
+        total_PIC_Time += pic_hrs
+        var pic_total_Hours = Math.floor(total_PIC_Time / 60);
+        var pic_total_Min = total_PIC_Time % 60;
+        if (pic_total_Hours < 10) {
+          pic_total_Hours = '0' + pic_total_Hours;
+        }
+        if (pic_total_Min < 10) {
+          pic_total_Min = '0' + pic_total_Min;
+        }
+        Final_PIC_Time = pic_total_Hours + ":" + pic_total_Min;
+        if (isNaN(Final_PIC_Time[1])) {
+          Final_PIC_Time = '00:00'
+        }
       }
-      if (pic_total_Min < 10) {
-        pic_total_Min = '0' + pic_total_Min;
-      }
-      Final_PIC_Time = pic_total_Hours + ":" + pic_total_Min;
-      if (isNaN(Final_PIC_Time[1])) {
-        Final_PIC_Time = '00:00'
-      }
-    }
 
-    //------- instrument flying hours --------//
-    if(d.totalTime !== ""){
-    var sim_instrument = d.sim_instrument.split(":")
-    var act_instrument = d.actual_Instrument.split(":")
-    var total_sim_instrument = Number(sim_instrument[0] * 60) + Number(sim_instrument[1])
-    var total_act_instrument = Number(act_instrument[0] * 60) + Number(act_instrument[1])
-    var instrument = total_sim_instrument + total_act_instrument
-    total_instrument += instrument
-    var sim_instrument_Hours = Math.floor(total_instrument / 60);
-    var sim_instrument_Min = total_instrument % 60;
-    if (sim_instrument_Hours < 10) {
-        sim_instrument_Hours = '0' + sim_instrument_Hours;
-    }
-    if (sim_instrument_Min < 10) {
-        sim_instrument_Min = '0' + sim_instrument_Min;
-    }
-    total_instrument1 = sim_instrument_Hours + ":" + sim_instrument_Min;
-    if (isNaN(total_instrument1[1])) {
-        total_instrument1 = '00:00'
-    }
-  }
-  })
-    const htmldata = '<style type="text/css">td{border: 1px #ccc solid; font-size:12px; padding: 2px;} .ritz{width:100%}</style><div class="ritz grid-container"><table class="waffle" cellspacing="0" cellpadding="0"><tbody><tr style="height: 20px"><td class="s0" colspan="5">Total flying experience till THE DATE OF SUBMISSION OF PAPERS IN DGCA</td></tr><tr style="height: 20px"><td colspan="2">Requirement</td><td>Hrs Req.</td><td>Actual</td><td>Remarks</td></tr><tr style="height: 20px"><td class="s0" colspan="5">Total flying experience details</td></tr><tr style="height: 20px"><td>(i)</td><td>Total flying time (in this 50% of multi co-pilot hrs are counted)</td><td>1500</td><td>' +Total_Time+ '</td><td></td></tr><tr style="height: 20px"><td>(ii)</td><td>Total as PIC (in this P1 U/S and STL hrs are counted 50%)</td><td>500</td><td>' + Final_PIC_Time + '</td><td></td></tr><tr style="height: 20px"><td class="s2">(iii)</td><td>Total Night flying experience (in this 50% of multi co-pilot night hrs are counted)</td><td class="s2">100</td><td>' +Final_Night_Time + '</td><td></td></tr><tr style="height: 20px"><td>(iv)</td><td>Total Instrument Time (not more than 50 synthetic simulator hrs shall be counted)</td><td>100</td><td>'+total_instrument1+'</td><td></td></tr><tr style="height: 20px"><td class="s0" colspan="5">X-country flying time</td></tr><tr style="height: 20px"><td>(i)</td><td>Total X-country by day and night</td><td>1000</td><td></td><td></td></tr><tr style="height: 20px"><td>(ii)</td><td>Total PIC X-country by day and night</td><td>200</td><td></td><td></td></tr><tr style="height: 20px"><td class="s2">(iii)</td><td>Total PIC X-country flying time by Night</td><td>50</td><td></td><td></td></tr></tbody></table></div>';
+      //------- instrument flying hours --------//
+      if (d.totalTime !== "") {
+        var sim_instrument = d.sim_instrument.split(":")
+        var act_instrument = d.actual_Instrument.split(":")
+        var total_sim_instrument = Number(sim_instrument[0] * 60) + Number(sim_instrument[1])
+        var total_act_instrument = Number(act_instrument[0] * 60) + Number(act_instrument[1])
+        var instrument = total_sim_instrument + total_act_instrument
+        total_instrument += instrument
+        var sim_instrument_Hours = Math.floor(total_instrument / 60);
+        var sim_instrument_Min = total_instrument % 60;
+        if (sim_instrument_Hours < 10) {
+          sim_instrument_Hours = '0' + sim_instrument_Hours;
+        }
+        if (sim_instrument_Min < 10) {
+          sim_instrument_Min = '0' + sim_instrument_Min;
+        }
+        total_instrument1 = sim_instrument_Hours + ":" + sim_instrument_Min;
+        if (isNaN(total_instrument1[1])) {
+          total_instrument1 = '00:00'
+        }
+      }
+    })
+    const htmldata = '<style type="text/css">td{border: 1px #ccc solid; font-size:12px; padding: 2px;} .ritz{width:100%}</style><div class="ritz grid-container"><table class="waffle" cellspacing="0" cellpadding="0"><tbody><tr style="height: 20px"><td class="s0" colspan="5">Total flying experience till THE DATE OF SUBMISSION OF PAPERS IN DGCA</td></tr><tr style="height: 20px"><td colspan="2">Requirement</td><td>Hrs Req.</td><td>Actual</td><td>Remarks</td></tr><tr style="height: 20px"><td class="s0" colspan="5">Total flying experience details</td></tr><tr style="height: 20px"><td>(i)</td><td>Total flying time (in this 50% of multi co-pilot hrs are counted)</td><td>1500</td><td>' + Total_Time + '</td><td></td></tr><tr style="height: 20px"><td>(ii)</td><td>Total as PIC (in this P1 U/S and STL hrs are counted 50%)</td><td>500</td><td>' + Final_PIC_Time + '</td><td></td></tr><tr style="height: 20px"><td class="s2">(iii)</td><td>Total Night flying experience (in this 50% of multi co-pilot night hrs are counted)</td><td class="s2">100</td><td>' + Final_Night_Time + '</td><td></td></tr><tr style="height: 20px"><td>(iv)</td><td>Total Instrument Time (not more than 50 synthetic simulator hrs shall be counted)</td><td>100</td><td>' + total_instrument1 + '</td><td></td></tr><tr style="height: 20px"><td class="s0" colspan="5">X-country flying time</td></tr><tr style="height: 20px"><td>(i)</td><td>Total X-country by day and night</td><td>1000</td><td></td><td></td></tr><tr style="height: 20px"><td>(ii)</td><td>Total PIC X-country by day and night</td><td>200</td><td></td><td></td></tr><tr style="height: 20px"><td class="s2">(iii)</td><td>Total PIC X-country flying time by Night</td><td>50</td><td></td><td></td></tr></tbody></table></div>';
     const resulthtml = await RNHTMLtoPDF.convert({
       width: 842,
       height: 595,
@@ -589,14 +680,14 @@ const Docs = ({ navigation }) => {
 
   }
   return (
-    <SafeAreaView style={[DocScreenStyle.container, {backgroundColor: theme.backgroundColor}]}>
+    <SafeAreaView style={[DocScreenStyle.container, { backgroundColor: theme.backgroundColor }]}>
       <Modal animationType='slide' transparent={true} visible={open === true}>
         {/* <TouchableOpacity activeOpacity={1} onPress={closeList} style={{ flex: 1 }}> */}
         <SafeAreaView style={{ flex: 1 }}>
           <View style={styles.listWrapper}>
-            <View style={[styles.listContainer,{backgroundColor:theme.backgroundColor}]}>
-              <MaterialCommunityIcons name="close" color={dark?'#fff':'#000'} size={20} style={{ padding: 6 }} onPress={closeList} />
-              <View style={{ backgroundColor: dark?'#000':'#F3F3F3', padding: 10, flexDirection: 'row' }}>
+            <View style={[styles.listContainer, { backgroundColor: theme.backgroundColor }]}>
+              <MaterialCommunityIcons name="close" color={dark ? '#fff' : '#000'} size={20} style={{ padding: 6 }} onPress={closeList} />
+              <View style={{ backgroundColor: dark ? '#000' : '#F3F3F3', padding: 10, flexDirection: 'row' }}>
                 <View style={(focused) ? styles.searchbar2 : styles.searchbar}>
                   <MaterialCommunityIcons name="magnify" color={'#000'} size={25} style={{ padding: 6 }} />
                   <TextInput
@@ -608,16 +699,16 @@ const Docs = ({ navigation }) => {
                     style={{ marginTop: -7, fontSize: 15, width: 100, lineHeight: 25 }}
                   />
                 </View>
-                {focused ? <Text style={dark?styles.DarkcancelButton:styles.cancelButton} onPress={onFocusCancelled}>Cancel</Text> : null}
+                {focused ? <Text style={dark ? styles.DarkcancelButton : styles.cancelButton} onPress={onFocusCancelled}>Cancel</Text> : null}
               </View>
               {focused ? <SegmentedControlTab
                 values={["Crew", "Place", "Aircraft", "Date", "Flight"]}
                 selectedIndex={selectedIndex}
                 onTabPress={(index) => handleIndexChange(index)}
-                tabsContainerStyle={{padding:10}}
-                tabStyle={{borderColor:'#256173'}}
-                tabTextStyle={{color:'#256173'}}
-                activeTabStyle={{backgroundColor:'#256173'}}
+                tabsContainerStyle={{ padding: 10 }}
+                tabStyle={{ borderColor: '#256173' }}
+                tabTextStyle={{ color: '#256173' }}
+                activeTabStyle={{ backgroundColor: '#256173' }}
               /> : null}
               {data == null ?
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -658,59 +749,59 @@ const Docs = ({ navigation }) => {
         <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{ padding: 6 }} onPress={() => navigation.goBack()} />
         <Text style={DocScreenStyle.aircrafts}>Docs</Text>
       </View>
-      <View style={dark?DocScreenStyle.DarkmainTagLine:DocScreenStyle.mainTagLine}>
-        <Text style={dark?DocScreenStyle.DarktagLine:DocScreenStyle.tagLine}>Logbooks</Text>
+      <View style={dark ? DocScreenStyle.DarkmainTagLine : DocScreenStyle.mainTagLine}>
+        <Text style={dark ? DocScreenStyle.DarktagLine : DocScreenStyle.tagLine}>Logbooks</Text>
         <MaterialCommunityIcons
           name="help-circle-outline" color='#256173' size={25} onPress={() => setLogModalVisible(true)} style={{ lineHeight: 23, position: 'absolute', right: 10, top: 10 }} />
       </View>
       <View style={DocScreenStyle.tabs}>
         <TouchableOpacity onPress={() => navigation.navigate('DgcaLogBook')}>
-          <Text style={dark?DocScreenStyle.DarktabText:DocScreenStyle.tabText}>DGCA LogBook</Text>
+          <Text style={dark ? DocScreenStyle.DarktabText : DocScreenStyle.tabText}>DGCA LogBook</Text>
         </TouchableOpacity>
       </View>
       <View style={DocScreenStyle.tabs}>
-        <TouchableOpacity onPress={() => { getLogbookData(); openList(); selection(); }}>
-          <Text style={dark?DocScreenStyle.DarktabText:DocScreenStyle.tabText}>Upload DGCA LogBook</Text>
+        <TouchableOpacity onPress={() => {getLogbookData();openList();selection();}}>
+          <Text style={dark ? DocScreenStyle.DarktabText : DocScreenStyle.tabText}>Upload DGCA LogBook</Text>
         </TouchableOpacity>
       </View>
       <View style={DocScreenStyle.tabs}>
         <TouchableOpacity onPress={() => navigation.navigate('JUSA')}>
-          <Text style={dark?DocScreenStyle.DarktabText:DocScreenStyle.tabText}>Jeppessen Logbook (USA)</Text>
+          <Text style={dark ? DocScreenStyle.DarktabText : DocScreenStyle.tabText}>Jeppessen Logbook (USA)</Text>
         </TouchableOpacity>
       </View>
       <View style={DocScreenStyle.tabs}>
         <TouchableOpacity onPress={() => navigation.navigate('JEU')}>
-          <Text style={dark?DocScreenStyle.DarktabText:DocScreenStyle.tabText}>Jeppessen Logbook (EU)</Text>
+          <Text style={dark ? DocScreenStyle.DarktabText : DocScreenStyle.tabText}>Jeppessen Logbook (EU)</Text>
         </TouchableOpacity>
       </View>
-      <View style={dark?DocScreenStyle.DarkmainTagLine:DocScreenStyle.mainTagLine}>
-        <Text style={dark?DocScreenStyle.DarktagLine:DocScreenStyle.tagLine}>Reports</Text>
+      <View style={dark ? DocScreenStyle.DarkmainTagLine : DocScreenStyle.mainTagLine}>
+        <Text style={dark ? DocScreenStyle.DarktagLine : DocScreenStyle.tagLine}>Reports</Text>
         <MaterialCommunityIcons
           name="help-circle-outline" color='#256173' size={25} onPress={() => setReportModalVisible(true)} style={{ lineHeight: 23, position: 'absolute', right: 10, top: 10 }} />
       </View>
       <View style={DocScreenStyle.tabs}>
         <TouchableOpacity onPress={() => navigation.navigate('DGCA39')}>
-          <Text style={dark?DocScreenStyle.DarktabText:DocScreenStyle.tabText}>DGCA (CA-39)</Text>
+          <Text style={dark ? DocScreenStyle.DarktabText : DocScreenStyle.tabText}>DGCA (CA-39)</Text>
         </TouchableOpacity>
       </View>
       <View style={DocScreenStyle.tabs}>
         <TouchableOpacity onPress={AtplHours}>
-          <Text style={dark?DocScreenStyle.DarktabText:DocScreenStyle.tabText}>ATPL Hours</Text>
+          <Text style={dark ? DocScreenStyle.DarktabText : DocScreenStyle.tabText}>ATPL Hours</Text>
         </TouchableOpacity>
       </View>
       <View style={DocScreenStyle.tabs}>
         <TouchableOpacity onPress={() => Alert.alert('coming Soon ')}>
-          <Text style={dark?DocScreenStyle.DarktabText:DocScreenStyle.tabText}>Experience Certificate</Text>
+          <Text style={dark ? DocScreenStyle.DarktabText : DocScreenStyle.tabText}>Experience Certificate</Text>
         </TouchableOpacity>
       </View>
       <View style={DocScreenStyle.tabs}>
         <TouchableOpacity onPress={() => Alert.alert('coming Soon ')}>
-          <Text style={dark?DocScreenStyle.DarktabText:DocScreenStyle.tabText}>Flights by city</Text>
+          <Text style={dark ? DocScreenStyle.DarktabText : DocScreenStyle.tabText}>Flights by city</Text>
         </TouchableOpacity>
       </View>
       <View style={DocScreenStyle.lastTab}>
         <TouchableOpacity onPress={() => Alert.alert('coming Soon ')}>
-          <Text style={dark?DocScreenStyle.DarktabText:DocScreenStyle.tabText}>Flights by country</Text>
+          <Text style={dark ? DocScreenStyle.DarktabText : DocScreenStyle.tabText}>Flights by country</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.centeredView} >
@@ -724,8 +815,8 @@ const Docs = ({ navigation }) => {
           }}
         >
           <View style={styles.centeredView}>
-            <View style={ styles.modalView}>
-              <View style={{ width: '100%', backgroundColor:'#EFEFEF', padding: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={styles.modalView}>
+              <View style={{ width: '100%', backgroundColor: '#EFEFEF', padding: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text >LOGBOOKS</Text>
                 <MaterialCommunityIcons
                   name="close" color='#256173' size={25} onPress={() => setLogModalVisible(!logModalVisible)} />
@@ -735,7 +826,7 @@ const Docs = ({ navigation }) => {
                   1. Create your logbook as per DGCA/ Jepp US/ Jepp EU format.{"\n"}
                   2. DGCA Logbook - Select STL to generate your STL logbook. P2 hours of STL flights will be automatically reflected in P1 (U/S)column.{"\n"}
                   3. You can number the Logbook page to ensure continuity of printed logbook pages{"\n"}
-                  <Text style={{ color: 'blue' }}onPress={() => Linking.openURL('https://youtu.be/mMgHI2Z9Dok')}>(https://youtu.be/mMgHI2Z9Dok)</Text>
+                  <Text style={{ color: 'blue' }} onPress={() => Linking.openURL('https://youtu.be/mMgHI2Z9Dok')}>(https://youtu.be/mMgHI2Z9Dok)</Text>
                 </Text>
               </View>
             </View>
@@ -754,7 +845,7 @@ const Docs = ({ navigation }) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <View style={{ width: '100%', backgroundColor:'#EFEFEF', padding: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={{ width: '100%', backgroundColor: '#EFEFEF', padding: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text >REPORTS</Text>
                 <MaterialCommunityIcons
                   name="close" color='#256173' size={25} onPress={() => setReportModalVisible(!reportModalVisible)} />
@@ -857,7 +948,7 @@ const styles = StyleSheet.create({
   Darklisting: {
     borderRadius: 10,
     borderWidth: 0.3,
-    borderColor:'#fff',
+    borderColor: '#fff',
     width: '100%',
     paddingHorizontal: 10,
     paddingVertical: 10,

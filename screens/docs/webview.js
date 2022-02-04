@@ -413,7 +413,7 @@ class Sample extends Component {
           document.querySelector('#verificationStatus').click();
           window.confirm = function(){return true;};
           document.querySelector('#btnAddSubmit').click();
-          window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos}, success:false, error:true ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,visible: true}));
+          window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} + 1, success:false, error:true ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,visible: true}));
           }, 60000)
         
         setTimeout(function () {

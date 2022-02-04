@@ -273,12 +273,11 @@ const SettingScreen = ({navigation}) => {
                 <Text style={SsStyle.text}> Invite & Earn</Text>
             </TouchableOpacity>
 
-            {/* <TouchableOpacity style={SsStyle.fields} onPress={()=>{ AsyncStorage.clear();
-                navigation.replace('Auth');}}>
+            <TouchableOpacity style={SsStyle.fields} onPress={()=>navigation.navigate('subscribe')}>
                 <MaterialCommunityIcons  
                 name="logout" color='#256173' size={20} style={{lineHeight:23,}} />
-                <Text style={SsStyle.text}> Logout</Text>
-            </TouchableOpacity> */}
+                <Text style={SsStyle.text}> Subscribe</Text>
+            </TouchableOpacity>
 
             <View>
             </View>

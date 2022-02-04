@@ -1019,7 +1019,7 @@ const removeApproachInputTime = (ApproachIndex) => {
             setListInstructor(params.RoasterInstructor)
 }, [params]);
 
- console.log('rosterId', rosterId )
+ console.log('rosterchocksOff', rosterFromLat )
 // console.log('selfPICday', rosterNamePic === 'Self' ? dayTime : pic_day )
 // console.log('selfPICnight', rosterNamePic === 'Self' ? nightTime : pic_night )
 // console.log('SelfSICday', rosterNameSic === 'Self' ? dayTime : sic_day )
@@ -1648,8 +1648,8 @@ React.useEffect(() => {
     //   });
 
         });
-        alert('Inserted successfully');
-        // navigation.goBack();
+        alert('Saved Successfully');
+        navigation.goBack();
       };
 
     //sqlite ends
@@ -1678,6 +1678,7 @@ React.useEffect(() => {
     //day_night calculation
     const day_night_calc = () => {
 
+        console.log('hello')
         var depT = rosterChocksOff; 
         let onlyDate1 = '';
         var depTemp = depT.split(":");

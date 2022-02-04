@@ -179,6 +179,8 @@ const HomeTabs = () => {
         <SettingStack.Screen name="Gallery" component={Gallery} options={{headerShown:false}} />
         <SettingStack.Screen name="Support" component={Support} options={{headerShown:false}} />
         <SettingStack.Screen name="Backup" component={Backup} options={{headerShown:false}} />
+        <SettingStack.Screen name="subscribe" component={Subscribe} options={{headerShown: false}} />
+    
     </SettingStack.Navigator>
     );
     }
