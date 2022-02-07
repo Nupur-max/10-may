@@ -222,9 +222,9 @@ const P1 = ({ navigation }) => {
       })
     }).then(res => res.json())
       .then(resData => {
-        console.log(resData);
-        console.log('data ---->', resData.data)
-        console.log('roaster data--->', roasterData)
+        //console.log(resData);
+        //console.log('data ---->', resData.data)
+        //console.log('roaster data--->', roasterData)
         //setError(resData.data)
 
         // fetch(BaseUrl + 'edit_profile', {
@@ -272,16 +272,16 @@ const P1 = ({ navigation }) => {
 
           const RealAircraftType = AircraftType === '320' || AircraftType === '321' ? 'A-' + AircraftType : AircraftType;
 
-          console.log('orginal date', date)
+          //console.log('orginal date', date)
 
           let text = date;
           const myArray = text.split("-");
           const day = myArray[2] + myArray[1] + myArray[0]
-          console.log('sorted date', day);
+          //console.log('sorted date', day);
 
-          console.log('Pilot_Pic====', Pilot_Pic);
-          console.log('Pilot_Copilot====', Pilot_Copilot)
-          console.log('Pilot_Instructor===', Pilot_Instructor)
+          //console.log('Pilot_Pic====', Pilot_Pic);
+          //console.log('Pilot_Copilot====', Pilot_Copilot)
+          //console.log('Pilot_Instructor===', Pilot_Instructor)
 
           db.transaction((tx) => {
             if (Pilot_Pic !== '') {

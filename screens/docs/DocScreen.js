@@ -216,9 +216,9 @@ const Docs = ({ navigation }) => {
     setSelectedIndex(index);
   };
 
-  React.useEffect(() => {
-    getLogbookData()
-  }, [getReduxDocData]);
+  // React.useEffect(() => {
+  //   getLogbookData()
+  // }, [getReduxDocData]);
 
   React.useEffect(() => {
     if (isFocused) {
@@ -226,7 +226,7 @@ const Docs = ({ navigation }) => {
     }
   }, [isFocused]);
 
-  React.useEffect(() => { getATPLData() });
+  // React.useEffect(() => { getATPLData() });
 
   const onRefresh = React.useCallback(async () => {
     selection()

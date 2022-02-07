@@ -47,6 +47,7 @@ const EGCAUpload = ({navigation}) => {
     const [FTOopen, setFTOOpen] = React.useState(false);
     const [FTOvalue, setFTOValue] = React.useState('');
     const [FTOitems, setFTOItems] = React.useState(FTOData);
+    const [selectedPurpose, setSelectedPurpose] = React.useState([]);
 
     const [AuthOpen, setAuthOpen] = React.useState(false);
     const [Authvalue, setAuthValue] = React.useState('')
@@ -63,7 +64,7 @@ const EGCAUpload = ({navigation}) => {
     const [egca, setEgca] = React.useState('');
     const [choice, setChoice] = React.useState('');
     const [open, setOpen] = React.useState(false);
-    const [training, setTraining] = React.useState('');
+    const [training, setTraining] = React.useState([]);
     const [trainingValue, setTrainingValue] = React.useState([
     {label: 'Select', value : 'Select'},
     {label: '300 NM Cross-Country (for CPL)', value: '300 NM Cross-Country (for CPL)'},
@@ -182,7 +183,7 @@ const EGCAUpload = ({navigation}) => {
     {label: 'Patter Flying - Spot turns', value: 'Patter Flying - Spot turns'},
     {label: 'Patter Flying - Circuit and Rotor Emergencies', value: 'Patter Flying - Circuit and Rotor Emergencies'},
 ]);
-    const [test, setTest] = React.useState('');
+    const [test, setTest] = React.useState([]);
     const [testValue, setTestValue] = React.useState([
     {label: 'Select', value : 'Select'},
     {label: '120 NM Cross-country (for CPL)', value: '120 NM Cross-country (for CPL)'},
@@ -196,7 +197,7 @@ const EGCAUpload = ({navigation}) => {
     {label: 'Skill Test by Day', value: 'Skill Test by Day'},
     {label: 'Skill Test by Night', value: 'Skill Test by Night'},
     ]);
-    const [commercial, setCommercial] = React.useState(''); 
+    const [commercial, setCommercial] = React.useState([]); 
     const [commercialValue, setCommercialValue] = React.useState([
     {label: 'Select', value : 'Select'},
     {label: 'Cross-country flight (day)', value: 'Cross-country flight (day)'},
@@ -279,7 +280,7 @@ const EGCAUpload = ({navigation}) => {
         });
     }
 
-    const PurposeData = egca==='Training'? training : egca==='Test'? test : egca==='Commercial'?commercial:''
+    const PurposeData = egca==='Training'? training : egca==='Test'? test : egca==='Commercial'?commercial:[]
     console.log('purposeData',PurposeData)
 
     const UpdateQuery = async() => {
@@ -473,12 +474,23 @@ const EGCAUpload = ({navigation}) => {
         </View>
       </View>
 
+      {PurposeData!==[]?<View style={{paddingLeft:20,paddingBottom: 5}}>
+        <Text>{PurposeData[0]}</Text>
+        <Text>{PurposeData[1]}</Text>
+        <Text>{PurposeData[2]}</Text>
+        <Text>{PurposeData[3]}</Text>
+        <Text>{PurposeData[4]}</Text>
+      </View>:null}
+
         {egca !== "Non-commercial" ?<View>
         <Text style = {dark?styles.DarkInnnerHeadings:styles.InnnerHeadings}>Purpose</Text>
         </View>: null}
         {egca !== "Non-commercial" ? <View style={Platform.OS==='ios'?{padding: 20,zIndex:888}:{padding:20,}}>
           <DropDownPicker
             searchable={true}
+            multiple={true}
+            min={0}
+            max={5}
             open={open}
             value={PurposeData}
             items={egca === "Training" ? trainingValue : egca === "Test" ? testValue : egca === "Commercial" ? commercialValue : []}
@@ -496,6 +508,7 @@ const EGCAUpload = ({navigation}) => {
           scrollViewProps={{
             nestedScrollEnabled: true,
           }}
+          //onChangeItem={(value)=> setSelectedPurpose(value)}
         />
         </View> : null}
 

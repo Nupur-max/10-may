@@ -43,16 +43,6 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>Camera</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to use your microphone (for videos)</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like access to your photo gallery</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto_medium.ttf</string>
@@ -99,5 +89,11 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>For choosing a photo</string>
+	<key>NSCameraUsageDescription</key>
+	<string>For taking a photo</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>For Saving a photo</string>
 </dict>
 </plist>

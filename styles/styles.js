@@ -22,14 +22,14 @@ const Logbook = StyleSheet.create({
     paddingTop: 42,
     },
     headline: {
-        padding: 20,
+        padding: 10,
         backgroundColor: "#F3F3F3",
         width: '100%',
         //justifyContent:'center',
         flexDirection: 'row'
     },
     Darkheadline: {
-        padding: 20,
+        padding: 10,
         backgroundColor: "#000",
         width: '100%',
         //justifyContent:'center',
@@ -109,19 +109,25 @@ const Logbook = StyleSheet.create({
         borderRadius:10,
         borderColor: Colors.accent, 
         width: Dimensions.get('window').width * 0.9,
-        padding: Platform.OS=== 'android' ? 10: 20,
+        padding:10,
+        
       },
       buttonView:{
+          flex:2,
           padding:10,
           backgroundColor: '#c0c0c0',
           width: '100%',
           alignItems: 'center',
+          position:'absolute',
+          bottom:0,
       },
       DarkbuttonView:{
         padding:10,
         backgroundColor: '#000',
         width: '100%',
         alignItems: 'center',
+        position:'absolute',
+        bottom:0,
     },
       button: {
         backgroundColor: Colors.primary,

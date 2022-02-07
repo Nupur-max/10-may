@@ -1443,6 +1443,15 @@ React.useEffect(() => {
             SelectQuery()}}
         , [rosterAType]);
 
+    constUpdateP2 = () => {
+        prePopulateddb.transaction(tx => {
+            if (rosterNameSic !== '') {
+                tx.executeSql(
+                    'UPDATE logbook set p2="'+rosterNameSic+'" where date="'+originalDate+'"',
+                );
+            }
+        });
+    }
 
     const insertQuery = async() => {
 
@@ -3749,34 +3758,22 @@ React.useEffect(() => {
                     <Text style={dark?Logbook.DarkHeadlineText:Logbook.HeadlineText}>Remark</Text>
                 </View>
 
-                <View style={{ padding: 20, }}>
+                <View style={{padding:10}}>
                     <View style={Logbook.remarksBox}>
                         <TextInput
                             placeholder=' Your Remarks'
                             placeholderTextColor='#393F45'
                             value={remark}
                             onChangeText={(inputText) => setRemark(inputText)}
-                            style={Platform.OS === 'android' ? { marginTop: -20, color:dark?'#fff':'#000' } : { marginTop: -10, color:dark?'#fff':'#000' }} />
+                            style={Platform.OS === 'android' ? { marginTop: -20, color:dark?'#fff':'#000' } : { marginTop: -10, color:dark?'#fff':'#000' }} 
+                            />
                     </View>
                 </View>
 
             </ScrollView>
 
 
-            <View style={dark?Logbook.DarkbuttonView:Logbook.buttonView}>
-                <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={()=>{insertQuery();}}> 
-                        <View style={Logbook.button}>
-                            <Text style={Logbook.buttonText}>Save</Text>
-                        </View>
-                    </TouchableOpacity>
-                    {/* } */}
-                    <TouchableOpacity onPress={() => setModalVisible(true)}>
-                        <MaterialCommunityIcons
-                            name="menu" color={dark?'#fff':'#000'} size={30} style={{ marginLeft: 10 }} />
-                    </TouchableOpacity>
-                </View>
-            </View>
+            
             
             <Modal
             animationType="fade"
@@ -3988,10 +3985,23 @@ React.useEffect(() => {
 
                 </Modal>
             </View>
-            
-            
+        
         </SafeAreaView>
         </ScrollView>
+        <View style={dark?Logbook.DarkbuttonView:Logbook.buttonView}>
+                <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity onPress={()=>{insertQuery();constUpdateP2()}}> 
+                        <View style={Logbook.button}>
+                            <Text style={Logbook.buttonText}>Save</Text>
+                        </View>
+                    </TouchableOpacity>
+                    {/* } */}
+                    <TouchableOpacity onPress={() => setModalVisible(true)}>
+                        <MaterialCommunityIcons
+                            name="menu" color={dark?'#fff':'#000'} size={30} style={{ marginLeft: 10 }} />
+                    </TouchableOpacity>
+                </View>
+            </View>
         </KeyboardAvoidingView>
        
     );

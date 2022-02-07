@@ -710,7 +710,7 @@ const LogBookListing = ({ navigation }) => {
     let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
     //let temData =  []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           //dataDispatcher(LogListData({ data: [], inProgress: false }))
@@ -774,7 +774,7 @@ const LogBookListing = ({ navigation }) => {
             to_lat: result.rows.item(i).to_lat,
             to_long: result.rows.item(i).to_long,
           });
-          console.log('checkdata', temData[0]);
+          //console.log('checkdata', temData[0]);
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>
@@ -805,7 +805,7 @@ const LogBookListing = ({ navigation }) => {
     //let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
     let temData =  []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           //dataDispatcher(LogListData({ data: [], inProgress: false }))
