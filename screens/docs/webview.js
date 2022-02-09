@@ -441,8 +441,8 @@ class Sample extends Component {
             <Modal
               animationType="slide"
               transparent={true}
-              visible={this.state.visible}
-              // visible={false}
+             visible={this.state.visible}
+             //visible={false}
             >
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>

@@ -710,14 +710,14 @@ const LogBookListing = ({ navigation }) => {
     let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
     //let temData =  []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC,onTime DESC LIMIT 50 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           //dataDispatcher(LogListData({ data: [], inProgress: false }))
           setLoadmore(false)
           return false;
         }
-        setOffset(offset + 10);
+        setOffset(offset + 50);
         //if (result.rows.length > 1){
         for (let i = 0; i <= result.rows.length; i++) {
           if (result.rows.length !== 0){

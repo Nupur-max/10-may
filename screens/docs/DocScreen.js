@@ -229,23 +229,20 @@ const Docs = ({ navigation }) => {
   // React.useEffect(() => { getATPLData() });
 
   const onRefresh = React.useCallback(async () => {
-    selection()
-    // dataDispatcher(DocListData({ data: [] }))
+    // getATPLData()
+    //selection()
     setRefreshing(true);
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
-    //let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
     let temData = []
     prePopulateddb.transaction(tx => {
       tx.executeSql('SELECT * from logbook WHERE  user_id = "' + user.id + '" AND tag= "manual" ORDER BY orderedDate DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
-          //dataDispatcher(LogListData({ data: [], inProgress: false }))
           setLoadmore(false)
           return false;
         }
         setOffset(offset + 10);
-        //if (result.rows.length > 1){
         for (let i = 0; i <= result.rows.length; i++) {
           if (result.rows.length !== 0) {
             temData.push({
@@ -297,7 +294,6 @@ const Docs = ({ navigation }) => {
               remark: result.rows.item(i).remark,
 
             });
-           // console.log('refresh', temData)
             setData(temData);
             dataDispatcher(DocListData({ data: temData }))
             setRefreshing(false);
@@ -377,7 +373,6 @@ const Docs = ({ navigation }) => {
             p1_ut_night: result.rows.item(i).p1_ut_night,
             remark: result.rows.item(i).remark,
           });
-          //console.log('docs data',temData)
           setData(temData);
           dataDispatcher(DocListData({ data: temData }))
         }
@@ -402,48 +397,24 @@ const Docs = ({ navigation }) => {
             id: result.rows.item(i).id,
             tag: result.rows.item(i).tag,
             user_id: result.rows.item(i).user_id,
-            flight_no: result.rows.item(i).flight_no,
             date: result.rows.item(i).date,
             day: result.rows.item(i).day,
             actual_Instrument: result.rows.item(i).actual_Instrument,
-            aircraftReg: result.rows.item(i).aircraftReg,
-            aircraftType: result.rows.item(i).aircraftType,
-            dayLanding: result.rows.item(i).dayLanding,
-            dual_day: result.rows.item(i).dual_day,
-            dual_night: result.rows.item(i).dual_night,
-            flight: result.rows.item(i).flight,
-            from: result.rows.item(i).from_nameICAO,
-            ifr_vfr: result.rows.item(i).ifr_vfr,
-            instructional: result.rows.item(i).instructional,
-            instructor: result.rows.item(i).instructor,
-            landing: result.rows.item(i).inTime,
             night: result.rows.item(i).night,
-            chocksOffTime: result.rows.item(i).offTime,
-            nightLanding: result.rows.item(i).nightLanding,
-            chocksOnTime: result.rows.item(i).onTime,
-            takeOff: result.rows.item(i).outTime,
             p1: result.rows.item(i).p1,
-            p1_us_day: result.rows.item(i).p1_us_day,
-            p1_us_night: result.rows.item(i).p1_us_night,
             p2: result.rows.item(i).p2,
             pic_day: result.rows.item(i).pic_day,
             pic_night: result.rows.item(i).pic_night,
-            stl: result.rows.item(i).stl,
-            route: result.rows.item(i).route,
             sic_day: result.rows.item(i).sic_day,
             sic_night: result.rows.item(i).sic_night,
             sim_instructional: result.rows.item(i).sim_instructional,
             sim_instrument: result.rows.item(i).sim_instrument,
-            selected_role: result.rows.item(i).selected_role,
-            student: result.rows.item(i).student,
             to: result.rows.item(i).to_nameICAO,
             totalTime: result.rows.item(i).totalTime,
             x_country_day: result.rows.item(i).x_country_day,
             x_country_night: result.rows.item(i).x_country_night,
             x_country_day_leg: result.rows.item(i).x_country_day_leg,
             x_country_night_leg: result.rows.item(i).x_country_night_leg,
-            p1_ut_day: result.rows.item(i).p1_ut_day,
-            p1_ut_night: result.rows.item(i).p1_ut_night,
             remark: result.rows.item(i).remark,
           });
           setATPLData(temData);

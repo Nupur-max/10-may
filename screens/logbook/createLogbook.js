@@ -1443,7 +1443,7 @@ React.useEffect(() => {
             SelectQuery()}}
         , [rosterAType]);
 
-    constUpdateP2 = () => {
+    const constUpdateP2 = () => {
         prePopulateddb.transaction(tx => {
             if (rosterNameSic !== '') {
                 tx.executeSql(
@@ -2397,7 +2397,7 @@ React.useEffect(() => {
 
     return (
         <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
-        <ScrollView>
+        <ScrollView contentContainerStyle={{paddingBottom: 60}}>
         <SafeAreaView style={modalVisible || FlightmodalVisible || TimemodalVisible || LandingmodalVisible || ApproachmodalVisible || FlightAlertmodalVisible || TimeAlertmodalVisible || AppAlertmodalVisible || lndgAlertmodalVisible || importModal || RostermodalVisible ? {...Logbook.container, ...{backgroundColor: 'rgba(0,0,0,0.4)'}} : [Logbook.container, {backgroundColor: theme.backgroundColor}]}>
     
         <View style={styles.header}>

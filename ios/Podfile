@@ -13,8 +13,12 @@ target 'DGCA' do
   )
 
   permissions_path = '../node_modules/react-native-permissions/ios'
+
+  pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
   
-  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+  # pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera/Permission-Camera.podspec"
 
   pod 'react-native-sqlite-storage', :path => '../node_modules/react-native-sqlite-storage'
 

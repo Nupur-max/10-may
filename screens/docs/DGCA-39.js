@@ -1,6 +1,6 @@
 //import liraries
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Platform, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Platform, SafeAreaView, ScrollView, Modal, ActivityIndicator } from 'react-native';
 import DgcaLogbookStyles from '../../styles/dgcaLogbookStyles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RadioButton } from 'react-native-paper'
@@ -19,6 +19,7 @@ import {
     endOfYear,
     addYears
 } from 'date-fns';
+import BackupStyle from '../../styles/backupStyles';
 
 const db = SQLite.openDatabase(
     {
@@ -79,6 +80,8 @@ const DGCA39 = ({ navigation }) => {
     const [data, setData] = React.useState(null)
     const [rows, setRows] = React.useState(12);
     const [monthWise, setMonthWise] = React.useState([]);
+    const [loader, setLoader] = React.useState(false);
+    const [loadData, setLoadData] = React.useState(false);
     const { dark, theme, toggle } = React.useContext(ThemeContext);
     const [licenseHolderName, setlicenseHolderName] = useState('');
     const [LicenceNumber, setLicenceNumber] = useState('');
@@ -110,10 +113,10 @@ const DGCA39 = ({ navigation }) => {
     }, [value]);
 
     React.useEffect(() => {
-        if (orderStart !== '' || orderEnd !== '') {
-            getLogbookData();
+        if (loadData == true) {
+            validate();
         }
-    }, [orderStart, orderEnd]);
+    }, [loadData]);
 
     //-------- Pre-defined dates --------//    
     const preDefinedDates = () => {
@@ -150,11 +153,9 @@ const DGCA39 = ({ navigation }) => {
         let temData = [];
         db.transaction(tx => {
             tx.executeSql('SELECT user_id,name,email,Contact,roster_id,roster_pwd,airline_type,LicenceNumber,LicenceType,validity ,Country FROM userProfileData Where user_id = "' + user.id + '"', [], (tx, result) => {
-                if (result.rows.length > 0) {
-                    console.log('result', result)
-                }
-                else {
-                    console.log('error')
+                if(result.rows.length <= 0){
+                    setLoader(false)
+                    alert("no data found")
                 }
                 for (let i = 0; i <= result.rows.length; i++) {
                     temData.push({
@@ -182,6 +183,7 @@ const DGCA39 = ({ navigation }) => {
 
     //-------------  Get Data from database ------------//
     const getLogbookData = async () => {
+        setLoader(true)
         GetUserDetails()
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
@@ -280,6 +282,11 @@ const DGCA39 = ({ navigation }) => {
                     if (!ordered[months[m] + " " + [y]]) { ordered[months[m] + " " + [y]] = []; }
                     ordered[months[m] + " " + [y]].push(entry);
                     setMonthWise(ordered)
+                    setLoader(false)
+                    //console.log('sdhgs',i+1===result.rows.length)
+                    if(i+1===result.rows.length){
+                    setLoadData(true)
+                    }
                 }
             });
 
@@ -953,6 +960,7 @@ const DGCA39 = ({ navigation }) => {
 
     //-------- Print To Pdf --------//
     const printPDF = async () => {
+        setLoader(true)
         if (data !== null) {
             const beforeTable =
                 '<p style="text-align:center;">Flying experience for period from <strong>' +
@@ -992,8 +1000,10 @@ const DGCA39 = ({ navigation }) => {
             setValue(null)
             settoPeriod('')
             setfromPeriod('')
+            setLoader(false)
         } else {
             alert("No Data Found")
+            setLoader(false)
         }
     };
 
@@ -1137,12 +1147,29 @@ const DGCA39 = ({ navigation }) => {
                 </View>
 
                 <View style={DgcaLogbookStyles.footer}>
-                    <TouchableOpacity onPress={validate}>
+                    <TouchableOpacity onPress={getLogbookData}>
                         <View style={DgcaLogbookStyles.button}>
                             <Text style={DgcaLogbookStyles.buttonText}>View/Download</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
+                {loader ===true ?
+                      <View style={BackupStyle.centeredView}>
+                      <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={loader}
+                      >
+                        <View style={BackupStyle.centeredView}>
+                          <View style={BackupStyle.modalView}>
+                            <ActivityIndicator color={'#fff'} />
+                            <Text style={{ color: '#fff' }}>Please Wait ....</Text>
+                          </View>
+                        </View>
+                      </Modal>
+                    </View>
+                    :  null
+                    }
 
             </ScrollView>
         </SafeAreaView>

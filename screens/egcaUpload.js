@@ -262,15 +262,16 @@ const EGCAUpload = ({navigation}) => {
                       NameOfAuthVerifier :  result.rows.item(i).NameOfAuthVerifier,
 
                      });
-                     console.log('setRosterAId', selectedData)
+                     console.log('setRosterAId', selectedPurpose)
+                     setSelectedPurpose(selectedData)
                      setEGCAUSER(result.rows.item(i).egcaId)
                      setEGCAPWD(result.rows.item(i).egcaPwd)
                      setFTOValue(result.rows.item(i).FtoOperator)
                      setEgca(result.rows.item(i).FlightType)
 
-                      setTraining(result.rows.item(i).Purpose)
-                      setTest(result.rows.item(i).Purpose)
-                      setCommercial(result.rows.item(i).Purpose)
+                      // setTraining(result.rows.item(i).Purpose)
+                      // setTest(result.rows.item(i).Purpose)
+                      // setCommercial(result.rows.item(i).Purpose)
 
                       setAuthValue(result.rows.item(i).AuthVerifier)
                       setAuthPersonValue(result.rows.item(i).NameOfAuthVerifier)
@@ -282,6 +283,7 @@ const EGCAUpload = ({navigation}) => {
 
     const PurposeData = egca==='Training'? training : egca==='Test'? test : egca==='Commercial'?commercial:[]
     console.log('purposeData',PurposeData)
+    //setSelectedPurpose(PurposeData)
 
     const UpdateQuery = async() => {
         let user = await AsyncStorage.getItem('userdetails');
@@ -480,7 +482,11 @@ const EGCAUpload = ({navigation}) => {
         <Text>{PurposeData[2]}</Text>
         <Text>{PurposeData[3]}</Text>
         <Text>{PurposeData[4]}</Text>
-      </View>:null}
+      </View>: null}
+
+      {selectedPurpose!==[]?<View style={{paddingLeft:20,paddingBottom: 5}}>
+        <Text>{selectedPurpose.Purpose}</Text>
+       </View>:null}
 
         {egca !== "Non-commercial" ?<View>
         <Text style = {dark?styles.DarkInnnerHeadings:styles.InnnerHeadings}>Purpose</Text>

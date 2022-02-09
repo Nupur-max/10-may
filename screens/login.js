@@ -205,7 +205,7 @@ const Login = ({navigation}) => {
             if((index+1) == syncData.data.length ){
             let temData = [];
             db.transaction(tx => {
-            tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,outTime,inTime,orderedDate from logbook WHERE user_id = "'+resData.data.id+'" ORDER BY orderedDate DESC, onTime DESC limit 10', [], (tx, result) => {
+            tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,outTime,inTime,orderedDate from logbook WHERE user_id = "'+resData.data.id+'" ORDER BY orderedDate DESC, onTime DESC limit 50', [], (tx, result) => {
                 //setOffset(offset + 10);
                 for (let i = 0; i < result.rows.length; i++) {
                   console.log('rows', result.rows.length)

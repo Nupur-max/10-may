@@ -43,6 +43,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>For taking a photo</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>For Saving a photo</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>For choosing a photo</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto_medium.ttf</string>
@@ -89,11 +95,5 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>For choosing a photo</string>
-	<key>NSCameraUsageDescription</key>
-	<string>For taking a photo</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>For Saving a photo</string>
 </dict>
 </plist>

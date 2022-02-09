@@ -1,6 +1,6 @@
 //import liraries
 import React, { useState } from 'react';
-import { View, Text, KeyboardAvoidingView, TextInput, TouchableOpacity, Platform, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, KeyboardAvoidingView, TextInput, TouchableOpacity, Platform, SafeAreaView, ScrollView, Modal, ActivityIndicator } from 'react-native';
 import DgcaLogbookStyles from '../../styles/dgcaLogbookStyles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RadioButton, ThemeProvider } from 'react-native-paper'
@@ -18,6 +18,7 @@ import {
 } from 'date-fns';
 import SQLite from 'react-native-sqlite-storage';
 import { ThemeContext } from '../../theme-context';
+import BackupStyle from '../../styles/backupStyles';
 
 
 const prePopulateddb = SQLite.openDatabase(
@@ -66,7 +67,8 @@ const JUSA = ({ navigation }) => {
     const [orderEnd, setOrderEnd] = React.useState('')
     const [rows, setRows] = React.useState(10);
     const [page, setPage] = React.useState(1);
-    const [monthWise, setMonthWise] = React.useState([]);
+    const [loader, setLoader] = React.useState(false);
+    const [loadData, setLoadData] = React.useState(false);
     const { dark, theme, toggle } = React.useContext(ThemeContext);
 
     const [items, setItems] = React.useState([
@@ -128,10 +130,10 @@ const JUSA = ({ navigation }) => {
     }, [value]);
 
     React.useEffect(() => {
-        if (orderStart !== '' || orderEnd !== '') {
-            getLogbookData();
+        if (loadData == true) {
+            validate();
         }
-    }, [orderStart, orderEnd]);
+    }, [loadData]);
 
     //-------- Pre-defined dates --------//
     const preDefinedDates = () => {
@@ -164,6 +166,7 @@ const JUSA = ({ navigation }) => {
 
     //-------------  Get Data from database ------------//
     const getLogbookData = async () => {
+        setLoader(true)
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -172,6 +175,10 @@ const JUSA = ({ navigation }) => {
         let array = []
         prePopulateddb.transaction(tx => {
             tx.executeSql('Select * from logbook WHERE user_id == "' + user.id + '" AND orderedDate BETWEEN "' + orderStart + '" AND "' + orderEnd + '" AND tag == "server" ORDER BY orderedDate ASC', [], (tx, result) => {
+                if(result.rows.length <= 0){
+                    setLoader(false)
+                    alert("no data found")
+                }
                 for (let i = 0; i <= result.rows.length; i++) {
                     temData.push({
                         id: result.rows.item(i).id,
@@ -252,16 +259,10 @@ const JUSA = ({ navigation }) => {
                         Class: result.rows.item(i).Class,
                     });
                     setData(temData);
-                    //-------- Converted Data into monthWise -------//
-                    var entry = temData[i];
-                    var m = parseInt(entry.date.split("-")[1]) - 1;
-                    var y = parseInt(entry.date.split("-")[2]);
-                    if (!ordered[months[m] + " " + [y]]) { ordered[months[m] + " " + [y]] = []; }
-                    ordered[months[m] + " " + [y]].push(entry);
-                    setMonthWise(ordered)
-
-
-
+                    setLoader(false)
+                    if(i+1===result.rows.length){
+                        setLoadData(true)
+                        }
                 }
             });
         })
@@ -821,6 +822,7 @@ const JUSA = ({ navigation }) => {
 
     //----- Print to pdf  -----//
     const printPDF = async () => {
+        setLoader(false)
         if (data !== null) {
             const beforeTable =
                 '<p style="text-align:center;">Flying experience for period from <strong>' +
@@ -845,8 +847,10 @@ const JUSA = ({ navigation }) => {
             setValue(null)
             settoPeriod('')
             setfromPeriod('')
+            setLoader(false)
         } else {
             alert("No Data Found")
+            setLoader(false)
         }
     };
 
@@ -1029,12 +1033,29 @@ const JUSA = ({ navigation }) => {
                     </View>
 
                     <View style={DgcaLogbookStyles.footer}>
-                        <TouchableOpacity onPress={() => { validate() }}>
+                        <TouchableOpacity onPress={() => { getLogbookData() }}>
                             <View style={DgcaLogbookStyles.button}>
                                 <Text style={DgcaLogbookStyles.buttonText}>View/Download</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
+                    {loader ===true ?
+                      <View style={BackupStyle.centeredView}>
+                      <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={loader}
+                      >
+                        <View style={BackupStyle.centeredView}>
+                          <View style={BackupStyle.modalView}>
+                            <ActivityIndicator color={'#fff'} />
+                            <Text style={{ color: '#fff' }}>Please Wait ....</Text>
+                          </View>
+                        </View>
+                      </Modal>
+                    </View>
+                    :  null
+                    }
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>

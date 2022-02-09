@@ -458,7 +458,7 @@ const P1 = ({ navigation }) => {
 
 
   const selectingImage = () => {
-    ImagePicker.showImagePicker({ quality: 0.3 }, responseGet => {
+    ImagePicker.showImagePicker({quality: 0.3}, responseGet => {
       // console.log('Response = ', responseGet);
       if (responseGet.didCancel) {
         console.log('User cancelled image picker');

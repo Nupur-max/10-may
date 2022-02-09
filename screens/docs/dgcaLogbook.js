@@ -1,6 +1,6 @@
 //import liraries
 import React, { useState } from 'react';
-import { View, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, Platform, SafeAreaView, StatusBar, ScrollView } from 'react-native';
+import { View, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, Platform, SafeAreaView, StatusBar, ScrollView, Modal, ActivityIndicator } from 'react-native';
 import DgcaLogbookStyles from '../../styles/dgcaLogbookStyles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RadioButton } from 'react-native-paper'
@@ -18,6 +18,7 @@ import {
     addYears
 } from 'date-fns';
 import SQLite from 'react-native-sqlite-storage';
+import BackupStyle from '../../styles/backupStyles';
 
 
 const prePopulateddb = SQLite.openDatabase(
@@ -63,7 +64,8 @@ const DgcaLogBook = ({ navigation }) => {
     const [orderStart, setOrderStart] = React.useState('')
     const [orderEnd, setOrderEnd] = React.useState('')
     const [rows, setRows] = React.useState(10);
-    const [monthWise, setMonthWise] = React.useState([]);
+    const [loader, setLoader] = React.useState(false);
+    const [loadData, setLoadData] = React.useState(false);
     const [page, setPage] = React.useState(1)
     const { dark, theme, toggle } = React.useContext(ThemeContext);
 
@@ -127,10 +129,10 @@ const DgcaLogBook = ({ navigation }) => {
     }, [value]);
 
     React.useEffect(() => {
-        if (orderStart !== '00:00' || orderEnd !== '00:00') {
-            getLogbookData();
+        if (loadData == true) {
+            validate();
         }
-    }, [orderStart, orderEnd]);
+    }, [loadData]);
 
     //-------- Pre-defined dates --------//
     const preDefinedDates = () => {
@@ -161,15 +163,18 @@ const DgcaLogBook = ({ navigation }) => {
 
     //-------------  Get Data from database ------------//
     const getLogbookData = async () => {
+        setLoader(true)
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         let temData = [];
-        var ordered = {};
-        let array = []
         prePopulateddb.transaction(tx => {
             if (logOption == 'Logbook') {
                 tx.executeSql('SELECT * from logbook WHERE user_id == "' + user.id + '" AND orderedDate BETWEEN "' + orderStart + '" AND "' + orderEnd + '" AND tag == "server" AND aircraftReg != "SIMU" ORDER BY orderedDate ASC', [], (tx, result) => {
+                    if(result.rows.length <= 0){
+                        setLoader(false)
+                        alert("no data found")
+                    }
                     for (let i = 0; i <= result.rows.length; i++) {
                         temData.push({
                             id: result.rows.item(i).id,
@@ -226,18 +231,19 @@ const DgcaLogBook = ({ navigation }) => {
                             oredeDate: result.rows.item(i).orderedDate
                         });
                         setData(temData);
-                        //-------- Converted Data into monthWise -------//
-                        var entry = temData[i];
-                        var m = parseInt(entry.date.split("-")[1]) - 1;
-                        var y = parseInt(entry.date.split("-")[2]);
-                        if (!ordered[months[m] + " " + [y]]) { ordered[months[m] + " " + [y]] = []; }
-                        ordered[months[m] + " " + [y]].push(entry);
-                        setMonthWise(ordered)
+                        setLoader(false)
+                        if(i+1===result.rows.length){
+                            setLoadData(true)
+                            }
                     }
                 });
             }
             else if (logOption == 'Sim') {
                 tx.executeSql('SELECT * from logbook WHERE user_id == "' + user.id + '" AND orderedDate BETWEEN "' + orderStart + '" AND "' + orderEnd + '" AND tag == "server" AND aircraftReg = "SIMU" ORDER BY orderedDate ASC', [], (tx, result) => {
+                    if(result.rows.length <= 0){
+                        setLoader(false)
+                        alert("no data found")
+                    }
                     for (let i = 0; i <= result.rows.length; i++) {
                         temData.push({
                             id: result.rows.item(i).id,
@@ -257,18 +263,19 @@ const DgcaLogBook = ({ navigation }) => {
 
                         });
                         setData(temData);
-                        //-------- Converted Data into monthWise -------//
-                        var entry = temData[i];
-                        var m = parseInt(entry.date.split("-")[1]) - 1;
-                        var y = parseInt(entry.date.split("-")[2]);
-                        if (!ordered[months[m] + " " + [y]]) { ordered[months[m] + " " + [y]] = []; }
-                        ordered[months[m] + " " + [y]].push(entry);
-                        setMonthWise(ordered)
+                        setLoader(false)
+                        if(i+1===result.rows.length){
+                            setLoadData(true)
+                            }
                     }
                 });
             }
             else if (logOption == 'Stl') {
                 tx.executeSql('SELECT * from logbook WHERE user_id == "' + user.id + '" AND orderedDate BETWEEN "' + orderStart + '" AND "' + orderEnd + '" AND tag == "server" AND stl == "true" ORDER BY orderedDate ASC', [], (tx, result) => {
+                    if(result.rows.length <= 0){
+                        setLoader(false)
+                        alert("no data found")
+                    }
                     for (let i = 0; i <= result.rows.length; i++) {
                         temData.push({
                             id: result.rows.item(i).id,
@@ -325,12 +332,10 @@ const DgcaLogBook = ({ navigation }) => {
                             oredeDate: result.rows.item(i).orderedDate
                         });
                         setData(temData);
-                        //-------- Converted Data into monthWise -------//
-                        var m = parseInt(entry.date.split("-")[1]) - 1;
-                        var y = parseInt(entry.date.split("-")[2]);
-                        if (!ordered[months[m] + " " + [y]]) { ordered[months[m] + " " + [y]] = []; }
-                        ordered[months[m] + " " + [y]].push(entry);
-                        setMonthWise(ordered)
+                        setLoader(false)
+                        if(i+1===result.rows.length){
+                            setLoadData(true)
+                            }
                     }
                 });
             }
@@ -1064,6 +1069,7 @@ const DgcaLogBook = ({ navigation }) => {
 
     // ------- print dat as pdf  ------- //
     const printPDF = async () => {
+        setLoader(true)
         if (data !== null) {
             const beforeTable =
                 '<p style="text-align:center;">Flying experience for period from <strong>' +
@@ -1109,18 +1115,19 @@ const DgcaLogBook = ({ navigation }) => {
                 filepath: results.filePath,
                 base64: results.base64,
             });
-            setValue(null)
             settoPeriod('')
             setfromPeriod('')
+            setLoader(false)
         } else {
             alert("No Data Found")
+            setLoader(false)
         }
     };
 
     // ------------ Validation --------- //
     const validate = () => {
         if (period == "preDefined") {
-            if (value == null) {
+            if (value === null) {
                 alert("please Select Duration");
             }
             else {
@@ -1342,12 +1349,29 @@ const DgcaLogBook = ({ navigation }) => {
                 </View>
 
                 <View style={DgcaLogbookStyles.footer}>
-                    <TouchableOpacity onPress={() => { validate(); }}>
+                    <TouchableOpacity onPress={() => { getLogbookData(); }}>
                         <View style={DgcaLogbookStyles.button}>
                             <Text style={DgcaLogbookStyles.buttonText}>View/Download</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
+                {loader ===true ?
+                      <View style={BackupStyle.centeredView}>
+                      <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={loader}
+                      >
+                        <View style={BackupStyle.centeredView}>
+                          <View style={BackupStyle.modalView}>
+                            <ActivityIndicator color={'#fff'} />
+                            <Text style={{ color: '#fff' }}>Please Wait ....</Text>
+                          </View>
+                        </View>
+                      </Modal>
+                    </View>
+                    :  null
+                    }
             </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>
