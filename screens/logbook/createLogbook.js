@@ -1019,7 +1019,7 @@ const removeApproachInputTime = (ApproachIndex) => {
             setListInstructor(params.RoasterInstructor)
 }, [params]);
 
- console.log('rosterchocksOff', rosterFromLat )
+ console.log('rosterchocksOff', rosterAType )
 // console.log('selfPICday', rosterNamePic === 'Self' ? dayTime : pic_day )
 // console.log('selfPICnight', rosterNamePic === 'Self' ? nightTime : pic_night )
 // console.log('SelfSICday', rosterNameSic === 'Self' ? dayTime : sic_day )
@@ -1463,7 +1463,7 @@ React.useEffect(() => {
           alert('Please select Date');
           return;
         }
-        if (!rosterAType && rosterAId!=='SIMU') {
+        if (rosterAType==='' && rosterAId!=='SIMU') {
           alert('Please select Aircraft Type');
           return;
         }
@@ -2587,7 +2587,7 @@ React.useEffect(() => {
                             <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Aircraft Type <Text style={{ color: 'red' }}>*</Text></Text>
                             <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                                 {/* <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{ ListingParam === rosterFromParams ? rosterAType : AircraftParam === params.childParam2 ? aircraft_name : '' }</Text> */}
-                                <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterAId===undefined?'':rosterAType }</Text>
+                                <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterAType===''?alert('please select Aircraft type first'):rosterAType }</Text>
                                 <TouchableOpacity onPress={() => { navigation.navigate('SetAircraft', {itemAtype : rosterAType , itemAId : rosterAId , from : 'ATCreateLogbook'  }) }}>
                                     <MaterialCommunityIcons
                                         name="alert-circle-outline" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
@@ -2605,7 +2605,7 @@ React.useEffect(() => {
                             autoCapitalize={'characters'}
                             placeholder='Aircraft ID'
                             placeholderTextColor='grey'
-                            value={ rosterAId.toUpperCase() }
+                            value={rosterAId==='undefined'?'':rosterAId.toUpperCase() }
                             onChangeText={(inputText) => setRosterAId(inputText)}
                             keyboardType= "default"
                             style={{color:dark?'#fff':'#000'}} 
@@ -3990,7 +3990,7 @@ React.useEffect(() => {
         </ScrollView>
         <View style={dark?Logbook.DarkbuttonView:Logbook.buttonView}>
                 <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={()=>{insertQuery();constUpdateP2()}}> 
+                    <TouchableOpacity onPress={()=>{insertQuery();constUpdateP2();Add_Logbook()}}> 
                         <View style={Logbook.button}>
                             <Text style={Logbook.buttonText}>Save</Text>
                         </View>

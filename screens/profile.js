@@ -78,7 +78,7 @@ const P1 = ({ navigation }) => {
   const [ePwd, setEPwd] = React.useState('')/// 7325211
   const [airlineValue, setAirlineValue] = React.useState('');
   const [airline, setAirline] = React.useState([
-    { label: 'spicejet', value: 'spicejet' },
+    { label: 'Spicejet', value: 'Spicejet' },
     { label: 'indigo', value: 'indigo' },
   ]);
   //const [airline, setAirline] = React.useState([]);
@@ -99,6 +99,7 @@ const P1 = ({ navigation }) => {
   const [pilotListProgress, setPilotListProgress] = React.useState('');
   const [progressValue, setProgressValue] = React.useState('')
   const [showProgress, setShowProgress] = React.useState(true)
+  const [showPilotsProgress, setShowPilotsProgress] = React.useState(true)
 
 
   //console.log('dhfshgfghghdjg', name)
@@ -322,7 +323,7 @@ const P1 = ({ navigation }) => {
               //selection from table logbook
               let temData = [];
               db.transaction(tx => {
-                tx.executeSql('SELECT id,tag,aircraftType,aircraftReg,user_id,date,from_nameICAO,to_nameICAO,offTime,onTime,from_lat,from_long,to_lat,to_long,p1,p2,dayLanding,nightLanding,dayTO,nightTO from logbook WHERE user_id = "' + user.id + '" AND tag ="roster" ORDER BY orderedDate DESC, onTime DESC', [], (tx, result) => {
+                tx.executeSql('SELECT id,tag,aircraftType,aircraftReg,user_id,date,from_nameICAO,to_nameICAO,offTime,onTime,from_lat,from_long,to_lat,to_long,p1,p2,dayLanding,nightLanding,dayTO,nightTO from logbook WHERE user_id = "' + user.id + '" AND tag ="roster" AND from_nameICAO != "null" ORDER BY orderedDate DESC, onTime DESC', [], (tx, result) => {
                   setOffset(offset + 10);
                   
                   for (let j = 0; j < result.rows.length; j++) {
@@ -383,11 +384,11 @@ const P1 = ({ navigation }) => {
         setShowProgress(false)
       }
        })
-      // .catch((error) => {
-      //   console.log(error)
-      //   alert(error)
-      //   setModalVisible(false)
-      // });
+      .catch((error) => {
+        //console.log(error)
+        setShowProgress(false)
+        setModalVisible(false)
+      });
   }
 
   const validation = () => {
@@ -478,7 +479,15 @@ const P1 = ({ navigation }) => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
     let formData = new FormData();
-    formData.append('user_id', user.id);
+    formData.append('user_id', user.id); 
+    formData.append('name', name);
+    formData.append('licance_type', lt);
+    formData.append('licance_number', ln);
+    formData.append('validity', date);
+    formData.append('country', countryName);
+    formData.append('country_code', code);
+    formData.append('mobile', mn);
+    //formData.append('licance_number', ln);
     const splittedBase64 = imageData.split(';base64');
     formData.append('profile_pic', splittedBase64[1]);
     // console.log('form data' , data._parts[0][1].uri)
@@ -493,10 +502,13 @@ const P1 = ({ navigation }) => {
     }).then(response => response.json())
       .then(response => {
         console.log('On task Creation: ', response);
-        //setImage(response.data.profile_pic)
+        if(response.success === true){
+          alert('Updated Successfully')
+        }
       })
       .catch(error => {
         console.log('You can not proceed', error);
+        Alert.alert('Something Went wrong');
       });
   };
 
@@ -579,6 +591,7 @@ const P1 = ({ navigation }) => {
   console.log('imageeē', image);
 
   const importPilotList = async () => {
+    setShowPilotsProgress(true)
     if(airlineValue!==null){
     setPilotListProgress(0.3)
     setPilotsFetched(true)
@@ -649,6 +662,7 @@ const P1 = ({ navigation }) => {
                       setPilotListProgress(1)
                       Alert.alert("Message", 'Pilot List imported successfully');
                       setPilotsFetched(false)
+                      setShowPilotsProgress(false)
                       //setModalVisible(false)
                       return false;
                     }
@@ -665,6 +679,7 @@ const P1 = ({ navigation }) => {
         console.log(error)
         alert(error);
         setPilotsFetched(true);
+        setShowPilotsProgress(false)
       });
   }
   else {
@@ -845,7 +860,7 @@ const P1 = ({ navigation }) => {
             </View>
           </View>
 
-          <TouchableOpacity onPress={() => { profile(); InsertInUserProfileData(); uploadImageToServer() }}>
+          <TouchableOpacity onPress={() => {InsertInUserProfileData(); uploadImageToServer()}}>
             <View style={styles.button}>
               <Text style={styles.buttonText}>Save</Text>
             </View>
@@ -1072,7 +1087,7 @@ const P1 = ({ navigation }) => {
                     style={styles.activityIndicator}
                     /> */}
               <Text style={{ color: dark ? '#fff' : '#000' }}>Pilot list is uploading....</Text>
-              <ProgressBar progress={pilotListProgress} color={'#256173'} style={{ width: 200, marginTop: 15 }} />
+              <ProgressBar progress={pilotListProgress} color={'#256173'} style={{ width: 200, marginTop: 15 }} visible={showPilotsProgress}/>
             </View> : null}
 
 

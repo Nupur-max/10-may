@@ -50,137 +50,135 @@
 26-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:10:22-64
 27
 28    <application
-28-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:11:5-30:19
+28-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:11:5-29:19
 29        android:name="com.dgca.MainApplication"
-29-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:13:7-38
+29-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:12:7-38
 30        android:allowBackup="false"
-30-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:17:7-34
+30-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:16:7-34
 31        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 31-->[androidx.core:core:1.2.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/87aa3b8d67c582e8dc7adee7edfa0fa3/core-1.2.0/AndroidManifest.xml:24:18-86
 32        android:debuggable="true"
 33        android:icon="@mipmap/ic_launcher"
-33-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:15:7-41
+33-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:14:7-41
 34        android:label="@string/app_name"
-34-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:14:7-39
-35        android:requestLegacyExternalStorage="true"
-35-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:12:7-50
-36        android:roundIcon="@mipmap/ic_launcher_round"
-36-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:16:7-52
-37        android:theme="@style/AppTheme"
-37-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:18:7-38
-38        android:usesCleartextTraffic="true" >
-38-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:13:9-44
-39        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-39-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:16:9-86
-39-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:16:19-83
-40        <activity
-40-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:19:7-29:18
-41            android:name="com.dgca.MainActivity"
-41-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:20:9-37
-42            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-42-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:22:9-86
-43            android:label="@string/app_name"
-43-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:21:9-41
-44            android:launchMode="singleTask"
-44-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:23:9-40
-45            android:windowSoftInputMode="adjustResize" >
-45-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:24:9-51
-46            <intent-filter>
-46-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:25:9-28:25
-47                <action android:name="android.intent.action.MAIN" />
-47-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:26:13-65
-47-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:26:21-62
-48
-49                <category android:name="android.intent.category.LAUNCHER" />
-49-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:27:13-73
-49-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:27:23-70
-50            </intent-filter>
-51        </activity>
-52
-53        <provider
-53-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
-54            android:name="com.imagepicker.FileProvider"
-54-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-56
-55            android:authorities="com.dgca.provider"
-55-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-60
-56            android:exported="false"
-56-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
-57            android:grantUriPermissions="true" >
-57-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
-58            <meta-data
-58-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:58
-59                android:name="android.support.FILE_PROVIDER_PATHS"
-59-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
-60                android:resource="@xml/provider_paths" />
-60-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-55
-61        </provider>
-62        <provider
-62-->[:react-native-webview] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
-63            android:name="com.reactnativecommunity.webview.RNCWebViewFileProvider"
-63-->[:react-native-webview] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-83
-64            android:authorities="com.dgca.fileprovider"
-64-->[:react-native-webview] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-64
-65            android:exported="false"
-65-->[:react-native-webview] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
-66            android:grantUriPermissions="true" >
-66-->[:react-native-webview] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
-67            <meta-data
-67-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:58
-68                android:name="android.support.FILE_PROVIDER_PATHS"
-68-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
-69                android:resource="@xml/file_provider_paths" />
-69-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-55
-70        </provider>
-71        <provider
-71-->[:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:34:9-42:20
-72            android:name="com.RNFetchBlob.Utils.FileProvider"
-72-->[:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:35:13-62
-73            android:authorities="com.dgca.provider"
-73-->[:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:36:13-60
-74            android:exported="false"
-74-->[:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:37:13-37
-75            android:grantUriPermissions="true" >
-75-->[:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:38:13-47
-76            <meta-data
-76-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:58
-77                android:name="android.support.FILE_PROVIDER_PATHS"
-77-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
-78                android:resource="@xml/provider_paths" />
-78-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-55
-79        </provider>
-80
-81        <activity
-81-->[com.google.android.gms:play-services-base:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/2d7bcf9b8d1b19f42adfdb3b06ba9f99/jetified-play-services-base-17.6.0/AndroidManifest.xml:23:9-26:75
-82            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-82-->[com.google.android.gms:play-services-base:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/2d7bcf9b8d1b19f42adfdb3b06ba9f99/jetified-play-services-base-17.6.0/AndroidManifest.xml:24:13-79
-83            android:exported="false"
-83-->[com.google.android.gms:play-services-base:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/2d7bcf9b8d1b19f42adfdb3b06ba9f99/jetified-play-services-base-17.6.0/AndroidManifest.xml:25:13-37
-84            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-84-->[com.google.android.gms:play-services-base:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/2d7bcf9b8d1b19f42adfdb3b06ba9f99/jetified-play-services-base-17.6.0/AndroidManifest.xml:26:13-72
-85
-86        <meta-data
-86-->[com.google.android.gms:play-services-basement:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/05e66e15a69fa7b37fe5944ea963478e/jetified-play-services-basement-17.6.0/AndroidManifest.xml:23:9-25:69
-87            android:name="com.google.android.gms.version"
-87-->[com.google.android.gms:play-services-basement:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/05e66e15a69fa7b37fe5944ea963478e/jetified-play-services-basement-17.6.0/AndroidManifest.xml:24:13-58
-88            android:value="@integer/google_play_services_version" />
-88-->[com.google.android.gms:play-services-basement:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/05e66e15a69fa7b37fe5944ea963478e/jetified-play-services-basement-17.6.0/AndroidManifest.xml:25:13-66
-89        <meta-data
-89-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:13:9-15:37
-90            android:name="com.google.android.play.billingclient.version"
-90-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:14:13-73
-91            android:value="4.0.0" />
-91-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:15:13-34
-92
-93        <activity
-93-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:17:9-21:75
-94            android:name="com.android.billingclient.api.ProxyBillingActivity"
-94-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:18:13-78
-95            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-95-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:19:13-96
-96            android:exported="false"
-96-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:20:13-37
-97            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-97-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:21:13-72
-98    </application>
-99
-100</manifest>
+34-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:13:7-39
+35        android:roundIcon="@mipmap/ic_launcher_round"
+35-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:15:7-52
+36        android:theme="@style/AppTheme"
+36-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:17:7-38
+37        android:usesCleartextTraffic="true" >
+37-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:13:9-44
+38        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+38-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:16:9-86
+38-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:16:19-83
+39        <activity
+39-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:18:7-28:18
+40            android:name="com.dgca.MainActivity"
+40-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:19:9-37
+41            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+41-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:21:9-86
+42            android:label="@string/app_name"
+42-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:20:9-41
+43            android:launchMode="singleTask"
+43-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:22:9-40
+44            android:windowSoftInputMode="adjustResize" >
+44-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:23:9-51
+45            <intent-filter>
+45-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:24:9-27:25
+46                <action android:name="android.intent.action.MAIN" />
+46-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:25:13-65
+46-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:25:21-62
+47
+48                <category android:name="android.intent.category.LAUNCHER" />
+48-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:26:13-73
+48-->/Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:26:23-70
+49            </intent-filter>
+50        </activity>
+51
+52        <provider
+52-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
+53            android:name="com.imagepicker.FileProvider"
+53-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-56
+54            android:authorities="com.dgca.provider"
+54-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-60
+55            android:exported="false"
+55-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
+56            android:grantUriPermissions="true" >
+56-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
+57            <meta-data
+57-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:58
+58                android:name="android.support.FILE_PROVIDER_PATHS"
+58-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
+59                android:resource="@xml/provider_paths" />
+59-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-55
+60        </provider>
+61        <provider
+61-->[:react-native-webview] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
+62            android:name="com.reactnativecommunity.webview.RNCWebViewFileProvider"
+62-->[:react-native-webview] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-83
+63            android:authorities="com.dgca.fileprovider"
+63-->[:react-native-webview] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-64
+64            android:exported="false"
+64-->[:react-native-webview] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
+65            android:grantUriPermissions="true" >
+65-->[:react-native-webview] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
+66            <meta-data
+66-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:58
+67                android:name="android.support.FILE_PROVIDER_PATHS"
+67-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
+68                android:resource="@xml/file_provider_paths" />
+68-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-55
+69        </provider>
+70        <provider
+70-->[:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:34:9-42:20
+71            android:name="com.RNFetchBlob.Utils.FileProvider"
+71-->[:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:35:13-62
+72            android:authorities="com.dgca.provider"
+72-->[:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:36:13-60
+73            android:exported="false"
+73-->[:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:37:13-37
+74            android:grantUriPermissions="true" >
+74-->[:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:38:13-47
+75            <meta-data
+75-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:58
+76                android:name="android.support.FILE_PROVIDER_PATHS"
+76-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
+77                android:resource="@xml/provider_paths" />
+77-->[:react-native-image-picker] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-55
+78        </provider>
+79
+80        <activity
+80-->[com.google.android.gms:play-services-base:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/2d7bcf9b8d1b19f42adfdb3b06ba9f99/jetified-play-services-base-17.6.0/AndroidManifest.xml:23:9-26:75
+81            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+81-->[com.google.android.gms:play-services-base:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/2d7bcf9b8d1b19f42adfdb3b06ba9f99/jetified-play-services-base-17.6.0/AndroidManifest.xml:24:13-79
+82            android:exported="false"
+82-->[com.google.android.gms:play-services-base:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/2d7bcf9b8d1b19f42adfdb3b06ba9f99/jetified-play-services-base-17.6.0/AndroidManifest.xml:25:13-37
+83            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+83-->[com.google.android.gms:play-services-base:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/2d7bcf9b8d1b19f42adfdb3b06ba9f99/jetified-play-services-base-17.6.0/AndroidManifest.xml:26:13-72
+84
+85        <meta-data
+85-->[com.google.android.gms:play-services-basement:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/05e66e15a69fa7b37fe5944ea963478e/jetified-play-services-basement-17.6.0/AndroidManifest.xml:23:9-25:69
+86            android:name="com.google.android.gms.version"
+86-->[com.google.android.gms:play-services-basement:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/05e66e15a69fa7b37fe5944ea963478e/jetified-play-services-basement-17.6.0/AndroidManifest.xml:24:13-58
+87            android:value="@integer/google_play_services_version" />
+87-->[com.google.android.gms:play-services-basement:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/05e66e15a69fa7b37fe5944ea963478e/jetified-play-services-basement-17.6.0/AndroidManifest.xml:25:13-66
+88        <meta-data
+88-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:13:9-15:37
+89            android:name="com.google.android.play.billingclient.version"
+89-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:14:13-73
+90            android:value="4.0.0" />
+90-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:15:13-34
+91
+92        <activity
+92-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:17:9-21:75
+93            android:name="com.android.billingclient.api.ProxyBillingActivity"
+93-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:18:13-78
+94            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+94-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:19:13-96
+95            android:exported="false"
+95-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:20:13-37
+96            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+96-->[com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:21:13-72
+97    </application>
+98
+99</manifest>

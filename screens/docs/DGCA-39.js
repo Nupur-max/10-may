@@ -114,7 +114,7 @@ const DGCA39 = ({ navigation }) => {
 
     React.useEffect(() => {
         if (loadData == true) {
-            validate();
+            printPDF();
         }
     }, [loadData]);
 
@@ -153,10 +153,6 @@ const DGCA39 = ({ navigation }) => {
         let temData = [];
         db.transaction(tx => {
             tx.executeSql('SELECT user_id,name,email,Contact,roster_id,roster_pwd,airline_type,LicenceNumber,LicenceType,validity ,Country FROM userProfileData Where user_id = "' + user.id + '"', [], (tx, result) => {
-                if(result.rows.length <= 0){
-                    setLoader(false)
-                    alert("no data found")
-                }
                 for (let i = 0; i <= result.rows.length; i++) {
                     temData.push({
                         user_id: result.rows.item(i).user_id,
@@ -192,6 +188,10 @@ const DGCA39 = ({ navigation }) => {
         var ordered = {};
         prePopulateddb.transaction(tx => {
             tx.executeSql('SELECT * from logbook WHERE user_id == "' + user.id + '" AND orderedDate BETWEEN "' + orderStart + '" AND "' + orderEnd + '" AND tag = "server" ORDER BY orderedDate ASC', [], (tx, result) => {
+                if(result.rows.length <= 0){
+                    setLoader(false)
+                    alert("no data found")
+                }
                 for (let i = 0; i <= result.rows.length; i++) {
                     temData.push({
                         id: result.rows.item(i).id,
@@ -282,10 +282,8 @@ const DGCA39 = ({ navigation }) => {
                     if (!ordered[months[m] + " " + [y]]) { ordered[months[m] + " " + [y]] = []; }
                     ordered[months[m] + " " + [y]].push(entry);
                     setMonthWise(ordered)
-                    setLoader(false)
-                    //console.log('sdhgs',i+1===result.rows.length)
                     if(i+1===result.rows.length){
-                    setLoadData(true)
+                        setLoadData(true)
                     }
                 }
             });
@@ -925,7 +923,6 @@ const DGCA39 = ({ navigation }) => {
                     actual_Instrument_Min = '0' + actual_Instrument_Min;
                 }
                 totalactual_Instrument1 = actual_Instrument_Hours + ":" + actual_Instrument_Min;
-                console.log(totalactual_Instrument1)
                 if (isNaN(totalactual_Instrument1[0])) {
                     totalactual_Instrument1 = '00:00'
                 }
@@ -960,8 +957,9 @@ const DGCA39 = ({ navigation }) => {
 
     //-------- Print To Pdf --------//
     const printPDF = async () => {
-        setLoader(true)
-        if (data !== null) {
+        // setLoader(true)
+        // if (data !== null) {
+            setLoader(false)
             const beforeTable =
                 '<p style="text-align:center;">Flying experience for period from <strong>' +
                 fromPeriod +
@@ -1000,11 +998,12 @@ const DGCA39 = ({ navigation }) => {
             setValue(null)
             settoPeriod('')
             setfromPeriod('')
-            setLoader(false)
-        } else {
-            alert("No Data Found")
-            setLoader(false)
-        }
+            setLoadData(false)
+
+        // } else {
+        //     alert("No Data Found")
+        //     setLoader(false)
+        // }
     };
 
 
@@ -1013,20 +1012,23 @@ const DGCA39 = ({ navigation }) => {
         if (period == "preDefined") {
             if (value == null) {
                 alert("please Select Duration");
+                setLoader(false)
             }
             else {
-                printPDF();
+                getLogbookData();
             }
         }
         else if (period == "calenderDate") {
             if (fromPeriod == '') {
                 alert("Please Select Start Date")
+                setLoader(false)
             }
             else if (toPeriod == '') {
                 alert("Please Select End Date")
+                setLoader(false)
             }
             else {
-                printPDF();
+                getLogbookData();
             }
         }
     }
@@ -1147,7 +1149,7 @@ const DGCA39 = ({ navigation }) => {
                 </View>
 
                 <View style={DgcaLogbookStyles.footer}>
-                    <TouchableOpacity onPress={getLogbookData}>
+                    <TouchableOpacity onPress={() => {validate()}}>
                         <View style={DgcaLogbookStyles.button}>
                             <Text style={DgcaLogbookStyles.buttonText}>View/Download</Text>
                         </View>

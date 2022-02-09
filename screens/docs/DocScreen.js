@@ -229,7 +229,7 @@ const Docs = ({ navigation }) => {
   // React.useEffect(() => { getATPLData() });
 
   const onRefresh = React.useCallback(async () => {
-    // getATPLData()
+    getATPLData()
     //selection()
     setRefreshing(true);
     let user = await AsyncStorage.getItem('userdetails');

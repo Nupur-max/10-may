@@ -134,7 +134,7 @@ const JEU = ({ navigation }) => {
 
     React.useEffect(() => {
         if (loadData == true) {
-            validate();
+            printPDF();
         }
     }, [loadData]);
 
@@ -174,8 +174,6 @@ const JEU = ({ navigation }) => {
         user = JSON.parse(user);
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         let temData = [];
-        var ordered = {};
-        let array = [];
         prePopulateddb.transaction(tx => {
             tx.executeSql('Select * from logbook  WHERE user_id == "' + user.id + '" AND orderedDate BETWEEN "' + orderStart + '" AND "' + orderEnd + '" AND tag == "server" ORDER BY orderedDate ASC', [], (tx, result) => {
                 
@@ -271,10 +269,9 @@ const JEU = ({ navigation }) => {
                         Class: result.rows.item(i).Class,
                     });
                     setData(temData);
-                    setLoader(false)
                     if(i+1===result.rows.length){
                         setLoadData(true)
-                        }
+                    }
                 }
             });
         })
@@ -612,14 +609,14 @@ const JEU = ({ navigation }) => {
             const chunk = data.slice(k, k + chunkSize);
             pdfData.push(chunk)
         }
-        var platForm = Platform.OS === "ios" ? '<br>' : ''
-        var platFormCss = Platform.OS === "ios" ? '.ritz .waffle .s0{padding:0px 9px}' : '.ritz .waffle .s0{padding:2px 9px}'
+        var platForm = Platform.OS === "ios" ? '' : chunkSize <= 18 ? '<br><br><br>' :'<br><br>'
+        var platFormCss = Platform.OS === "ios" ? '.ritz .waffle .s0{padding:0px 9px}' : '.ritz .waffle .s0{padding:0px 9px}'
         let htmlContent = '<html><body>'
         pdfData.map((monthData, index) => {
             var pageNo = Number(page) + index
-            var page1 = Platform.OS == "ios" ? '<p>Page' + pageNo + '-A(AutoFlightLog)</p>' : ''
-            var page2 = Platform.OS == "ios" ? '<p>Page' + pageNo + '-B(AutoFlightLog)</p>' : ''
-            var brTag = Platform.OS == "ios" ? '<br><br><br>' : '<br><br>'
+            var page1 =  '<p>Page' + pageNo + '-A(AutoFlightLog)</p>' 
+            var page2 =  '<p>Page' + pageNo + '-B(AutoFlightLog)</p>' 
+            var brTag = Platform.OS == "ios" ? '<br><br><br>' : '<br><br><br>'
             htmlContent += '<style type="text/css"> @page { size:29.5cm 21cm; }table{"page-break-after: always;"} tr { page-break-inside:avoid !important; page-break-after:auto } .j_ue:nth-child(even) {background-color: #e0ebeb;} .ritz .waffle a { color: inherit; }.ritz .waffle .s0{text-align:center;color:#000000;font-size:10pt;vertical-align:center;white-space:normal;overflow:hidden;word-wrap:break-word;direction:ltr;} ' + platFormCss + ' td{ border: 2px #000 solid}</style><div class="ritz grid-container" dir="ltr"><table class="waffle" cellspacing="0" cellpadding="0">                   <tr style="height: 20px">                <td class="s0" dir="ltr" rowspan="2">DATE (DD/MM/YY)</td>                <td class="s0" dir="ltr" colspan="2">DEPARTURE</td>                <td class="s0" dir="ltr" colspan="2">ARRIVAL</td>                <td class="s0" dir="ltr" colspan="2">AIRCRAFT</td>                <td class="s0" dir="ltr" colspan="2">SP</td>                <td class="s0" dir="ltr" rowspan="2">MULTI- PILOT</td>                <td class="s0" dir="ltr" rowspan="2">TOTAL TIME OF FLIGHT</td>                		<td class="s0" dir="ltr" rowspan="2">NAME PIC</td>                 <td class="s0" dir="ltr" colspan="2">LANDINGS</td>             </tr> <tr style="height: 20px">                <td class="s0" dir="ltr">PLACE</td>                <td class="s0" dir="ltr">TIME</td>                <td class="s0" dir="ltr">PLACE</td>                <td class="s0" dir="ltr">TIME</td>                <td class="s0" dir="ltr">MAKE & MODEL</td>        <td class="s0" dir="ltr">REGISTRATION</td>                <td class="s0" dir="ltr">SE</td>                <td class="s0" dir="ltr">ME</td>                <td class="s0" dir="ltr">DAY</td>                <td class="s0" dir="ltr">NIGHT</td>           </tr><tbody>'
             monthData.map(d => {
                 if(d.aircraftReg !== "SIMU"){
@@ -638,7 +635,7 @@ const JEU = ({ navigation }) => {
             for (let i = 0; i < rows - monthData.length; i++) {
                 htmlContent += '<tr class="j_ue" style="height: 20px" id=' + [i] + '>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td> <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                </tr>'
             }
-            htmlContent += leftPageTotal(monthData) + prevTotalLeft(monthData) + leftPageTotalTime(monthData) + '        </tbody> ' + breakTag() + ' '+brTag+' </table>'+page1+'<table class="waffle" cellspacing="0" cellpadding="0" >' + breakTag() + '    <br>             <tr style="height: 20px">                <td class="s0" dir="ltr" colspan="2">OPERATIONAL CONDITION</td>                <td class="s0" dir="ltr" colspan="4">PILOT FUNCTION</td>                <td class="s0" dir="ltr" colspan="3">SYNTHETIC TRAINING DEVICES SESSION</td>                <td class="s0" dir="ltr" rowspan="2">REMARKS AND ENDORSMENTS</td>             </tr>            <tr style="height: 20px">                <td class="s0" dir="ltr">NIGHT</td>                <td class="s0" dir="ltr">IFR</td>                <td class="s0" dir="ltr">PILOT-IN-COMMAND</td>                <td class="s0" dir="ltr">CO- PILOT</td>                <td class="s0" dir="ltr">DUAL</td>        <td class="s0" dir="ltr">INSTRUCTOR</td>                <td class="s0" dir="ltr">DATE (DD/MM/YY)</td>                <td class="s0" dir="ltr">TYPE</td>                <td class="s0" dir="ltr">TOTAL TIME OF SESSION</td>           </tr> <tbody>'
+            htmlContent += leftPageTotal(monthData) + prevTotalLeft(monthData) + leftPageTotalTime(monthData) + '        </tbody> ' + breakTag() + ' '+brTag+' </table>'+page1+'<table class="waffle" cellspacing="0" cellpadding="0" >' + breakTag() + '   '+platForm+'          <tr style="height: 20px">                <td class="s0" dir="ltr" colspan="2">OPERATIONAL CONDITION</td>                <td class="s0" dir="ltr" colspan="4">PILOT FUNCTION</td>                <td class="s0" dir="ltr" colspan="3">SYNTHETIC TRAINING DEVICES SESSION</td>                <td class="s0" dir="ltr" rowspan="2">REMARKS AND ENDORSMENTS</td>             </tr>            <tr style="height: 20px">                <td class="s0" dir="ltr">NIGHT</td>                <td class="s0" dir="ltr">IFR</td>                <td class="s0" dir="ltr">PILOT-IN-COMMAND</td>                <td class="s0" dir="ltr">CO- PILOT</td>                <td class="s0" dir="ltr">DUAL</td>        <td class="s0" dir="ltr">INSTRUCTOR</td>                <td class="s0" dir="ltr">DATE (DD/MM/YY)</td>                <td class="s0" dir="ltr">TYPE</td>                <td class="s0" dir="ltr">TOTAL TIME OF SESSION</td>           </tr> <tbody>'
             monthData.map(d => {
                 var totalSim = d.aircraftReg == 'SIMU' ? d.totalTime : ""  ;
                 if(d.aircraftReg !== "SIMU"){
@@ -666,16 +663,16 @@ const JEU = ({ navigation }) => {
     }
     //----- Print to pdf  -----//
     const printPDF = async () => {
-        setLoader(true)
-        if (data !== null) {
-            const beforeTable =
-                '<p style="text-align:center;">Flying experience for period from <strong>' +
-                fromPeriod +
-                '</strong> to <strong>' +
-                toPeriod +
-                '</strong> (Preceding 5 years/preceding 6 months/preceding 18 months) <br>Name of Licence Holder: <strong>' +
-                licenseHolderName +
-                '</strong> Licence Name: Licence Number: Valid upto</p>Aircrafts flown :<br><br>';
+        // setLoader(true)
+        // if (data !== null) {
+        //     const beforeTable =
+        //         '<p style="text-align:center;">Flying experience for period from <strong>' +
+        //         fromPeriod +
+        //         '</strong> to <strong>' +
+        //         toPeriod +
+        //         '</strong> (Preceding 5 years/preceding 6 months/preceding 18 months) <br>Name of Licence Holder: <strong>' +
+        //         licenseHolderName +
+        //         '</strong> Licence Name: Licence Number: Valid upto</p>Aircrafts flown :<br><br>';
             const results = await RNHTMLtoPDF.convert({
                 width: 842,
                 height: 595,
@@ -692,11 +689,12 @@ const JEU = ({ navigation }) => {
             settoPeriod('')
             setfromPeriod('')
             setLoader(false)
-        }
-        else {
-            alert("No Data Found")
-            setLoader(false)
-        }
+            setLoadData(false)
+        // }
+        // else {
+        //     alert("No Data Found")
+        //     setLoader(false)
+        // }
     };
 
     // ------------ Validation --------- //
@@ -704,20 +702,23 @@ const JEU = ({ navigation }) => {
         if(period == "preDefined"){
             if (value == null){
                 alert("please Select Duration");
+                setLoader(false)
             }
             else {
-                printPDF();
+                getLogbookData();
             }
         }
         else if(period == "calenderDate"){
             if (fromPeriod == ''){
                 alert("Please Select Start Date")
+                setLoader(false)
             }
             else if (toPeriod == ''){
                 alert("Please Select End Date")
+                setLoader(false)
             }
             else {
-                printPDF();
+                getLogbookData();
             }
         }
     }
@@ -878,7 +879,7 @@ const JEU = ({ navigation }) => {
             </View>
 
             <View style={DgcaLogbookStyles.footer}>
-                <TouchableOpacity onPress={getLogbookData}>
+                <TouchableOpacity onPress={validate}>
                     <View style={DgcaLogbookStyles.button}>
                         <Text style={DgcaLogbookStyles.buttonText}>View/Download</Text>
                     </View>

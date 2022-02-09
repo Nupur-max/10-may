@@ -477,11 +477,11 @@ const EGCAUpload = ({navigation}) => {
       </View>
 
       {PurposeData!==[]?<View style={{paddingLeft:20,paddingBottom: 5}}>
-        <Text>{PurposeData[0]}</Text>
-        <Text>{PurposeData[1]}</Text>
-        <Text>{PurposeData[2]}</Text>
-        <Text>{PurposeData[3]}</Text>
-        <Text>{PurposeData[4]}</Text>
+        <Text style={{color:dark?'#000':'#fff'}}>{PurposeData[0]}</Text>
+        <Text style={{color:dark?'#000':'#fff'}}>{PurposeData[1]}</Text>
+        <Text style={{color:dark?'#000':'#fff'}}>{PurposeData[2]}</Text>
+        <Text style={{color:dark?'#000':'#fff'}}>{PurposeData[3]}</Text>
+        <Text style={{color:dark?'#000':'#fff'}}>{PurposeData[4]}</Text>
       </View>: null}
 
       {selectedPurpose!==[]?<View style={{paddingLeft:20,paddingBottom: 5}}>

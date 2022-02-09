@@ -131,7 +131,7 @@ const JUSA = ({ navigation }) => {
 
     React.useEffect(() => {
         if (loadData == true) {
-            validate();
+            printPDF();
         }
     }, [loadData]);
 
@@ -171,8 +171,6 @@ const JUSA = ({ navigation }) => {
         user = JSON.parse(user);
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         let temData = [];
-        var ordered = {};
-        let array = []
         prePopulateddb.transaction(tx => {
             tx.executeSql('Select * from logbook WHERE user_id == "' + user.id + '" AND orderedDate BETWEEN "' + orderStart + '" AND "' + orderEnd + '" AND tag == "server" ORDER BY orderedDate ASC', [], (tx, result) => {
                 if(result.rows.length <= 0){
@@ -259,10 +257,9 @@ const JUSA = ({ navigation }) => {
                         Class: result.rows.item(i).Class,
                     });
                     setData(temData);
-                    setLoader(false)
                     if(i+1===result.rows.length){
                         setLoadData(true)
-                        }
+                    }
                 }
             });
         })
@@ -774,7 +771,7 @@ const JUSA = ({ navigation }) => {
         pdfData.map((monthData, index) => {
             var pageNo = Number(page) + index
             var brTag = Platform.OS == "ios" ? "<br><br><br><br><br>" : "<br><br><br><br>"
-            var brTag1 =  Platform.OS == "ios" ? "<br>" : "<br>"
+            var brTag1 =  Platform.OS == "ios" ? "<br>" : chunkSize <=17 ? "<br>" : ''
             htmlContent += '<style type="text/css"> @page { size:29.5cm 21cm; }table{"page-break-after: always;"} tr { page-break-inside:avoid !important; page-break-after:auto } .j_usa:nth-child(even) {background-color: #e0ebeb;} .ritz .waffle a { color: inherit; }.ritz .waffle .s0{text-align:center;color:#000000;font-size:10pt;vertical-align:center;white-space:normal;overflow:hidden;word-wrap:break-word;direction:ltr;} ' + platFormCss + ' th, td{ border: 2px #000 solid}</style><div class="ritz grid-container" dir="ltr"> <table class="waffle" cellspacing="0" cellpadding="0" style=" width:100%;">       <tr style="height: 30px">    <th class="s0" dir="ltr" rowspan="3" style="padding:0px 50px;"><b>Date</b></th>    <th class="s0" dir="ltr" rowspan="3"><b>AIRCRAFT MAKE AND MODEL</b></th>    <th class="s0" dir="ltr" rowspan="3"><b>AIRCRAFTIDENT</b></th>    <th class="s0" dir="ltr" colspan="2"><b>ROUTE</b></th>    <th class="s0" dir="ltr" rowspan="3"><b>TOTAL DUR OF FLIGHT</b></th>    <th class="s0" dir="ltr" colspan="8" ><b>AIRCRAFT CATEGORY AND CLASS</b></th>    <th class="s0" dir="ltr" colspan="2"><b>LNDGS</b></th></tr><tr style="height: 30px">    <th class="s0" dir="ltr" rowspan="2">FROM</th>    <th class="s0" dir="ltr" rowspan="2">TO</th>    <th class="s0" dir="ltr" rowspan="2">AIRPLANE SE-LAND</th>    <th class="s0" dir="ltr" rowspan="2">AIRPLANE SE-SEA</th>    <th class="s0" dir="ltr" rowspan="2">AIRPLANE ME-LAND</th>    <th class="s0" dir="ltr" rowspan="2">AIRPLANE ME-SEA</th>    <th class="s0" dir="ltr" rowspan="2">JET</th>    <th class="s0" dir="ltr" rowspan="2">ROTORCRAFT HELICOPTER</th>    <th class="s0" dir="ltr" rowspan="2">GLIDER</th>    <th class="s0" dir="ltr" rowspan="2">PCATD</th>    <th class="s0" dir="ltr" rowspan="2">Day</th>    <th class="s0" dir="ltr" rowspan="2">NIGHT</th></tr><tr></tr> <tbody>'
             monthData.map(d => {
                 var SELand = d.Class == 'SE Land' ? d.totalTime : '';
@@ -822,16 +819,16 @@ const JUSA = ({ navigation }) => {
 
     //----- Print to pdf  -----//
     const printPDF = async () => {
-        setLoader(false)
-        if (data !== null) {
-            const beforeTable =
-                '<p style="text-align:center;">Flying experience for period from <strong>' +
-                fromPeriod +
-                '</strong> to <strong>' +
-                toPeriod +
-                '</strong> (Preceding 5 years/preceding 6 months/preceding 18 months) <br>Name of Licence Holder: <strong>' +
-                licenseHolderName +
-                '</strong> Licence Name: Licence Number: Valid upto</p>Aircrafts flown :<br><br>';
+        setLoader(true)
+        // if (data !== null) {
+        //     const beforeTable =
+        //         '<p style="text-align:center;">Flying experience for period from <strong>' +
+        //         fromPeriod +
+        //         '</strong> to <strong>' +
+        //         toPeriod +
+        //         '</strong> (Preceding 5 years/preceding 6 months/preceding 18 months) <br>Name of Licence Holder: <strong>' +
+        //         licenseHolderName +
+        //         '</strong> Licence Name: Licence Number: Valid upto</p>Aircrafts flown :<br><br>';
             const results = await RNHTMLtoPDF.convert({
                 width: 842,
                 height: 595,
@@ -848,10 +845,11 @@ const JUSA = ({ navigation }) => {
             settoPeriod('')
             setfromPeriod('')
             setLoader(false)
-        } else {
-            alert("No Data Found")
-            setLoader(false)
-        }
+            setLoadData(false)
+        // } else {
+        //     alert("No Data Found")
+        //     setLoader(false)
+        // }
     };
 
     // ------------ Validation --------- //
@@ -859,20 +857,23 @@ const JUSA = ({ navigation }) => {
         if (period == "preDefined") {
             if (value == null) {
                 alert("please Select Duration");
+                setLoader(false)
             }
             else {
-                printPDF();
+                getLogbookData();
             }
         }
         else if (period == "calenderDate") {
             if (fromPeriod == '') {
                 alert("Please Select Start Date")
+                setLoader(false)
             }
             else if (toPeriod == '') {
                 alert("Please Select End Date")
+                setLoader(false)
             }
             else {
-                printPDF();
+                getLogbookData();
             }
         }
     }
@@ -1033,7 +1034,7 @@ const JUSA = ({ navigation }) => {
                     </View>
 
                     <View style={DgcaLogbookStyles.footer}>
-                        <TouchableOpacity onPress={() => { getLogbookData() }}>
+                        <TouchableOpacity onPress={() => { validate() }}>
                             <View style={DgcaLogbookStyles.button}>
                                 <Text style={DgcaLogbookStyles.buttonText}>View/Download</Text>
                             </View>

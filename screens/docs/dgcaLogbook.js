@@ -130,7 +130,7 @@ const DgcaLogBook = ({ navigation }) => {
 
     React.useEffect(() => {
         if (loadData == true) {
-            validate();
+            printPDF();
         }
     }, [loadData]);
 
@@ -231,10 +231,9 @@ const DgcaLogBook = ({ navigation }) => {
                             oredeDate: result.rows.item(i).orderedDate
                         });
                         setData(temData);
-                        setLoader(false)
                         if(i+1===result.rows.length){
                             setLoadData(true)
-                            }
+                        }
                     }
                 });
             }
@@ -263,7 +262,7 @@ const DgcaLogBook = ({ navigation }) => {
 
                         });
                         setData(temData);
-                        setLoader(false)
+                        // setLoader(false)
                         if(i+1===result.rows.length){
                             setLoadData(true)
                             }
@@ -332,7 +331,7 @@ const DgcaLogBook = ({ navigation }) => {
                             oredeDate: result.rows.item(i).orderedDate
                         });
                         setData(temData);
-                        setLoader(false)
+                        // setLoader(false)
                         if(i+1===result.rows.length){
                             setLoadData(true)
                             }
@@ -977,9 +976,9 @@ const DgcaLogBook = ({ navigation }) => {
         let htmlContent = '<html><body>'
         pdfData.map((monthData, index) => {
             var pageNo = Number(page) + index
-            var page1 = Platform.OS == "ios" ? '<p>Page' + pageNo + '-A(AutoFlightLog)</p>' : ''
-            var page2 = Platform.OS == "ios" ? '<p>Page' + pageNo + '-B(AutoFlightLog)</p>' : ''
-            var brTag = Platform.OS == "ios" ? '' : '<br><br><br>'
+            var page1 =  '<p>Page' + pageNo + '-A(AutoFlightLog)</p>' 
+            var page2 =  '<p>Page' + pageNo + '-B(AutoFlightLog)</p>' 
+            var brTag = Platform.OS == "ios" ? '' : chunkSize <= 17 ?'<br>' : ''
             htmlContent += '<style type="text/css"> @page { size:29.5cm 21cm; }table{"page-break-after: always;"} tr { page-break-inside:avoid; page-break-after:auto } .logbook:nth-child(even) {background-color: #e0ebeb;} .ritz .waffle a { color: inherit; }.ritz .waffle .s0{text-align:center;color:#000000;font-size:10pt;vertical-align:center;white-space:normal;overflow:hidden;word-wrap:break-word;direction:ltr; } ' + platFormcss + ' th, td{ border: 2px #000 solid}</style><div class="ritz grid-container" dir="ltr"><table class="waffle" cellspacing="0" cellpadding="0" style="width:100%;">                  <tr style="height: 20px">                <th class="s0" dir="ltr" rowspan="3"><b>Date</b></th>                <th class="s0" dir="ltr" colspan="6"><b>AIRCRAFT</b></th>                <th class="s0" dir="ltr" rowspan="2" colspan="1"><b>PIC/INSTR</b></th>                <th class="s0" dir="ltr" rowspan="2" colspan="1"><b>P2 / PILOT U/T</b></th>                <th class="s0" dir="ltr" colspan="6"><b>ROUTE OF FLIGHT</b></th>                <th class="s0" dir="ltr" rowspan="2" colspan="2"><b>ATD</b></th>                <th class="s0" dir="ltr" rowspan="2" colspan="2"><b>ATA</b></th>                          </tr>            <tr style="height: 20px">                <th class="s0" dir="ltr" colspan="2">Type</th>                <th class="s0" dir="ltr" colspan="2">Engine</th>                <th class="s0" dir="ltr" colspan="2">Ac ID</th>                <th class="s0" dir="ltr" colspan="3">From</th>                <th class="s0" dir="ltr" colspan="3">To</th>            </tr>           <tr style="height: 20px">                <th class="s0" dir="ltr" colspan="2">1</th>                <th class="s0" dir="ltr" colspan="2">2</th>                <th class="s0" dir="ltr" colspan="2">3</th>                <th class="s0" dir="ltr" colspan="1">4</th>                <th class="s0" dir="ltr" colspan="1">5</th>                <th class="s0" dir="ltr" colspan="3">6</th>                <th class="s0" dir="ltr" colspan="3">7</th>                <th class="s0" dir="ltr" colspan="2">8</th>                <th class="s0" dir="ltr" colspan="2">9</th>                          </tr><tbody>'
             monthData.map(d => {
                 htmlContent += '            <tr style="height: 10px;" class="logbook">                <td class="s0" dir="ltr"><b>' + d.date.slice(0, 10) + '</b></td>                <td class="s0" dir="ltr" colspan="2">' + d.aircraftType + '</td>                <td class="s0" dir="ltr" colspan="2"></td>                <td class="s0" dir="ltr" colspan="2">' + d.aircraftReg + '</td>                <td class="s0" dir="ltr" colspan="1">' + d.p1 + '</td>                <td class="s0" dir="ltr" colspan="1">' + d.p2 + '</td>                <td class="s0" dir="ltr" colspan="3">' + d.from + '</td>                <td class="s0" dir="ltr" colspan="3">' + d.to + '</td>                <td class="s0" dir="ltr" colspan="2">' + d.chocksOffTime + '</td>                <td class="s0" dir="ltr" colspan="2">' + d.chocksOnTime + '</td>                          </tr>'
@@ -1069,16 +1068,16 @@ const DgcaLogBook = ({ navigation }) => {
 
     // ------- print dat as pdf  ------- //
     const printPDF = async () => {
-        setLoader(true)
-        if (data !== null) {
-            const beforeTable =
-                '<p style="text-align:center;">Flying experience for period from <strong>' +
-                fromPeriod +
-                '</strong> to <strong>' +
-                toPeriod +
-                '</strong> (Preceding 5 years/preceding 6 months/preceding 18 months) <br>Name of Licence Holder: <strong>' +
-                licenseHolderName +
-                '</strong> Licence Name: Licence Number: Valid upto</p>Aircrafts flown :<br><br>';
+        // setLoader(true)
+        // if (data !== null) {
+        //     const beforeTable =
+        //         '<p style="text-align:center;">Flying experience for period from <strong>' +
+        //         fromPeriod +
+        //         '</strong> to <strong>' +
+        //         toPeriod +
+        //         '</strong> (Preceding 5 years/preceding 6 months/preceding 18 months) <br>Name of Licence Holder: <strong>' +
+        //         licenseHolderName +
+        //         '</strong> Licence Name: Licence Number: Valid upto</p>Aircrafts flown :<br><br>';
 
             if (logOption == 'Logbook') {
 
@@ -1118,10 +1117,11 @@ const DgcaLogBook = ({ navigation }) => {
             settoPeriod('')
             setfromPeriod('')
             setLoader(false)
-        } else {
-            alert("No Data Found")
-            setLoader(false)
-        }
+            setLoadData(false)
+        // } else {
+        //     alert("No Data Found")
+        //     setLoader(false)
+        // }
     };
 
     // ------------ Validation --------- //
@@ -1129,20 +1129,23 @@ const DgcaLogBook = ({ navigation }) => {
         if (period == "preDefined") {
             if (value === null) {
                 alert("please Select Duration");
+                setLoader(false)
             }
             else {
-                printPDF();
+                getLogbookData();
             }
         }
         else if (period == "calenderDate") {
             if (fromPeriod == '') {
                 alert("Please Select Start Date")
+                setLoader(false)
             }
             else if (toPeriod == '') {
                 alert("Please Select End Date")
+                setLoader(false)
             }
             else {
-                printPDF();
+                getLogbookData();
             }
         }
     }
@@ -1349,7 +1352,7 @@ const DgcaLogBook = ({ navigation }) => {
                 </View>
 
                 <View style={DgcaLogbookStyles.footer}>
-                    <TouchableOpacity onPress={() => { getLogbookData(); }}>
+                    <TouchableOpacity onPress={() => { validate(); }}>
                         <View style={DgcaLogbookStyles.button}>
                             <Text style={DgcaLogbookStyles.buttonText}>View/Download</Text>
                         </View>
