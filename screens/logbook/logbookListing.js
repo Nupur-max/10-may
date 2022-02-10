@@ -893,25 +893,36 @@ const LogBookListing = ({ navigation }) => {
     //test()
   }, [getReduxData]);
 
+  React.useEffect(() => {
+    if(isFocused){
+      getTotalTime();
+  }
+  }, [isFocused]);
+
 const getTotalTime = async () => {
     //console.log('First')
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
     let temData = [];
-    //let temData = [];
     //console.log('tempdata', temData);
     //dataDispatcher(LogListData({data: []}))
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT totalTime from logbook WHERE user_id = "' + user.id + '"', [], (tx, result) => {
+      tx.executeSql('SELECT totalTime from logbook WHERE user_id = "' + user.id + '" AND totalTime != "null"', [], (tx, result) => {
 
         for (let i = 0; i <= result.rows.length; i++) {
           temData.push({
             totalTime: result.rows.item(i).totalTime,
           });
           //console.log('single', temData);
-          setLocalData(temData);
-          setDone(true)
+          //setLocalData(temData);
+          //setDone(true)
+          
         }
+        for (let j = 0; i < temData.length; j++) {
+          var counter = temData[j];
+          console.log('tetststtets',counter);
+      }
+        
       });
     });
   };

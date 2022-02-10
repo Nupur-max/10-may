@@ -2545,7 +2545,7 @@ React.useEffect(() => {
                     <View style= {modalVisible || FlightmodalVisible || TimemodalVisible || LandingmodalVisible || ApproachmodalVisible || FlightAlertmodalVisible || TimeAlertmodalVisible || AppAlertmodalVisible || lndgAlertmodalVisible || importModal || RostermodalVisible ? {...Logbook.headline, ...{backgroundColor: 'rgba(0, 0, 0, 0)'}} : dark ? Logbook.Darkheadline:Logbook.headline}>
                         <Text style={dark?Logbook.DarkHeadlineText:Logbook.HeadlineText}>Flight</Text>
                         <MaterialCommunityIcons  
-                        name="help-circle-outline" color='#256173' size={25} onPress={() => setFlightAlertModalVisible(true)} style={{lineHeight:65, position:'absolute', left: 350 }} />
+                        name="help-circle-outline" color='#256173' size={25} onPress={() => setFlightAlertModalVisible(true)} style={{lineHeight:45, position:'absolute', left: 350 }} />
                     </View>
 
                 <TouchableOpacity onPress={showDatepicker} >
@@ -2587,7 +2587,7 @@ React.useEffect(() => {
                             <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Aircraft Type <Text style={{ color: 'red' }}>*</Text></Text>
                             <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                                 {/* <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{ ListingParam === rosterFromParams ? rosterAType : AircraftParam === params.childParam2 ? aircraft_name : '' }</Text> */}
-                                <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterAType===''?alert('please select Aircraft type first'):rosterAType }</Text>
+                                <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterAType }</Text>
                                 <TouchableOpacity onPress={() => { navigation.navigate('SetAircraft', {itemAtype : rosterAType , itemAId : rosterAId , from : 'ATCreateLogbook'  }) }}>
                                     <MaterialCommunityIcons
                                         name="alert-circle-outline" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
@@ -2954,7 +2954,7 @@ React.useEffect(() => {
                 {rosterAId !== 'SIMU' && (<View style= {modalVisible || FlightmodalVisible || TimemodalVisible || LandingmodalVisible || ApproachmodalVisible || FlightAlertmodalVisible || TimeAlertmodalVisible || AppAlertmodalVisible || lndgAlertmodalVisible || importModal || RostermodalVisible ? {...Logbook.headline, ...{backgroundColor: 'rgba(0, 0, 0, 0)'}} : dark ? Logbook.Darkheadline:Logbook.headline}>
                     <Text style={dark?Logbook.DarkHeadlineText:Logbook.HeadlineText}>Time</Text>
                     <MaterialCommunityIcons  
-                name="help-circle-outline" color='#256173' size={25} onPress={() => setTimeAlertModalVisible(true)} style={{lineHeight:65, position:'absolute', left: 350 }} />
+                name="help-circle-outline" color='#256173' size={25} onPress={() => setTimeAlertModalVisible(true)} style={{lineHeight:45, position:'absolute', left: 350 }} />
                 </View>)}
 
                 {totalTimeToggle ? <View style={Logbook.fieldWithoutBottom}>
@@ -3457,7 +3457,7 @@ React.useEffect(() => {
                 {rosterAId!== 'SIMU' && (<View style= {modalVisible || FlightmodalVisible || TimemodalVisible || LandingmodalVisible || ApproachmodalVisible || FlightAlertmodalVisible || TimeAlertmodalVisible || AppAlertmodalVisible || lndgAlertmodalVisible || importModal || RostermodalVisible ? {...Logbook.headline, ...{backgroundColor: 'rgba(0, 0, 0, 0)'}} : dark ? Logbook.Darkheadline:Logbook.headline}>
                     <Text style={dark?Logbook.DarkHeadlineText:Logbook.HeadlineText}>Landing</Text>
                     <MaterialCommunityIcons  
-                name="help-circle-outline" color='#256173' size={25} onPress={() => setlndgAlertModalVisible(true)} style={{lineHeight:65, position:'absolute', left: 350 }} />
+                name="help-circle-outline" color='#256173' size={25} onPress={() => setlndgAlertModalVisible(true)} style={{lineHeight:45, position:'absolute', left: 350 }} />
                 
                 </View>)}
 
@@ -3649,7 +3649,7 @@ React.useEffect(() => {
                 {rosterAId!== 'SIMU' && (<View style= {modalVisible || FlightmodalVisible || TimemodalVisible || LandingmodalVisible || ApproachmodalVisible || FlightAlertmodalVisible || TimeAlertmodalVisible || AppAlertmodalVisible || lndgAlertmodalVisible || importModal || RostermodalVisible ? {...Logbook.headline, ...{backgroundColor: 'rgba(0, 0, 0, 0)'}} : dark ? Logbook.Darkheadline:Logbook.headline}>
                     <Text style={dark?Logbook.DarkHeadlineText:Logbook.HeadlineText}>Approaches</Text>
                     <MaterialCommunityIcons  
-                name="help-circle-outline" color='#256173' size={25} onPress={() => setAppAlertModalVisible(true)} style={{lineHeight:65, position:'absolute', left: 350 }} />
+                name="help-circle-outline" color='#256173' size={25} onPress={() => setAppAlertModalVisible(true)} style={{lineHeight:45, position:'absolute', left: 350 }} />
                 </View>)}
 
                 {rosterAId !== 'SIMU' && (<View style={Logbook.fieldWithoutBottom}>
@@ -3918,7 +3918,7 @@ React.useEffect(() => {
                                 </View>
                             </TouchableOpacity>
                             {rosterId ?
-                                <TouchableOpacity style={ModalView.Modal} onPress={()=>{deleteLogbbok();DeleteLogs()}}>
+                                <TouchableOpacity style={ModalView.Modal} onPress={()=>{DeleteLogs()}}>
                                     <MaterialCommunityIcons name="account-plus" color={dark?'#fff':'#000'} size={20}/>
                                     <View>
                                         <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}>Delete</Text>

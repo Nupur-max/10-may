@@ -480,18 +480,20 @@ const Docs = ({ navigation }) => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
     let Data = [];
+    let pur = []
     let SingleResult = '';
     prePopulateddb.transaction(tx => {
       tx.executeSql('SELECT * FROM EGCADetails WHERE user_id = "' + user.id + '"', [], (tx, result1) => {
         if (result1.rows.length > 0) {
           for (let i = 0; i <= result1.rows.length; i++) {
+            pur.push(result1.rows.item(i).Purpose)
             SingleResult = {
               id: result1.rows.item(i).id,
               egcaId: result1.rows.item(i).egcaId,
               egcaPwd: result1.rows.item(i).egcaPwd,
               FtoOperator: result1.rows.item(i).FtoOperator,
               FlightType: result1.rows.item(i).FlightType,
-              Purpose: result1.rows.item(i).Purpose,
+              Purpose: pur,
               AuthVerifier: result1.rows.item(i).AuthVerifier,
               NameOfAuthVerifier: result1.rows.item(i).NameOfAuthVerifier,
             }

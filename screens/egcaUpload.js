@@ -257,7 +257,7 @@ const EGCAUpload = ({navigation}) => {
                       egcaPwd :  result.rows.item(i).egcaPwd,
                       FtoOperator :  result.rows.item(i).FtoOperator,
                       FlightType :  result.rows.item(i).FlightType,
-                      Purpose :  result.rows.item(i).Purpose,
+                      Purpose :  result.rows.item(i).Purpose,  
                       AuthVerifier :  result.rows.item(i).AuthVerifier,
                       NameOfAuthVerifier :  result.rows.item(i).NameOfAuthVerifier,
 
@@ -336,7 +336,7 @@ const EGCAUpload = ({navigation}) => {
       }
 
       const getReduxData = useSelector(state => state.Egcadata.data);
-      console.log('From EGCADATA', getReduxData);
+      //console.log('From EGCADATA', getReduxData);
 
       //Sql ends
 
@@ -477,11 +477,11 @@ const EGCAUpload = ({navigation}) => {
       </View>
 
       {PurposeData!==[]?<View style={{paddingLeft:20,paddingBottom: 5}}>
-        <Text style={{color:dark?'#000':'#fff'}}>{PurposeData[0]}</Text>
-        <Text style={{color:dark?'#000':'#fff'}}>{PurposeData[1]}</Text>
-        <Text style={{color:dark?'#000':'#fff'}}>{PurposeData[2]}</Text>
-        <Text style={{color:dark?'#000':'#fff'}}>{PurposeData[3]}</Text>
-        <Text style={{color:dark?'#000':'#fff'}}>{PurposeData[4]}</Text>
+        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[0]}</Text>
+        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[1]}</Text>
+        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[2]}</Text>
+        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[3]}</Text>
+        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[4]}</Text>
       </View>: null}
 
       {selectedPurpose!==[]?<View style={{paddingLeft:20,paddingBottom: 5}}>
