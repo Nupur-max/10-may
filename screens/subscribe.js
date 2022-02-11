@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 //import { View, Text, StyleSheet,ImageBackground } from "react-native";
 import Colors from '../components/colors';
 import iap, * as RNIap from 'react-native-iap';
@@ -12,12 +12,16 @@ const itemSubs = Platform.select({
     'com.aviation_autoflight_annual'
   ]
 });
+
 let purchaseUpdateSubscription = null;
 let purchaseErrorSubscription = null;
 
 const Subscribe = ({ navigation }) => {
   const [products, setProducts] = useState([])
+  const [productId, setProductId] = useState('')
   const [purchase, setPurchase] = useState('')
+  const [buyIsLoading, setBuyIsLoading] = useState(false)
+  const [receipt, setReceipt] = useState('')
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -25,39 +29,55 @@ const Subscribe = ({ navigation }) => {
   }, []);
 
   const initilizeIAPConnection = async () => {
-    await RNIap.initConnection().then(() => {
-      RNIap.getSubscriptions(itemSubs).then((res) => {
-        setProducts(res)
-      }).catch((err) => {
-        console.warn("IAP error", err.code, err.message, err);
-        setError(err.message);
+    await RNIap.initConnection()
+      .then(async (connection) => {
+        console.log('IAP result', connection);
+        getItems();
       })
-    }).catch((err) => {
-        console.warn(`IAP ERROR ${err.code}`, err.message);
-      });
-
-    RNIap.getPurchaseHistory().then((res) => {
-      const receipt = res[res.length - 1].transactionReceipt
-      if (receipt) {
-        validate(receipt)
-        // console.log(receipt)
-      }
-    })
       .catch((err) => {
         console.warn(`IAP ERROR ${err.code}`, err.message);
       });
+    // await RNIap.flushFailedPurchasesCachedAsPendingAndroid()
+    //   .then(async (consumed) => {
+    //     console.log('consumed all items?', consumed);
+    //   }).catch((err) => {
+    //     console.warn(`flushFailedPurchasesCachedAsPendingAndroid ERROR ${err.code}`, err.message);
+    //   });
   };
+
+  const getItems = async () => {
+    try {
+      console.log("itemSubs ", itemSubs);
+      const Products = await RNIap.getSubscriptions(itemSubs);
+      console.log(' IAP Su', Products);
+      if (Products.length !== 0) {
+        if (Platform.OS === 'android') {
+          setProducts(Products)
+          //Your logic here to save the products in states etc
+        } else if (Platform.OS === 'ios') {
+          setProducts(Products)
+          // your logic here to save the products in states etc
+          // Make sure to check the response differently for android and ios as it is different for both
+        }
+      }
+    } catch (err) {
+      console.warn("IAP error", err.code, err.message, err);
+      setError(err.message);
+    }
+  };
+
 
   useEffect(() => {
     purchaseUpdateSubscription = RNIap.purchaseUpdatedListener(
       async (purchase) => {
+        console.log("purchase", purchase);
         const receipt = purchase.transactionReceipt;
         if (receipt) {
           try {
             if (Platform.OS === 'ios') {
               RNIap.finishTransactionIOS(purchase.transactionId);
             } else if (Platform.OS === 'android') {
-              RNIap.consumeAllItemsAndroid(purchase.purchaseToken);
+              await RNIap.consumeAllItemsAndroid(purchase.purchaseToken);
               await RNIap.acknowledgePurchaseAndroid(purchase.purchaseToken);
             }
             await RNIap.finishTransaction(purchase, true);
@@ -81,60 +101,44 @@ const Subscribe = ({ navigation }) => {
         purchaseErrorSubscription.remove();
         purchaseErrorSubscription = null;
       }
+
     });
   }, []);
 
 
   const requestSubscription = async (sku) => {
+    setBuyIsLoading(true);
+    console.log("IAP req", sku);
     try {
       await RNIap.requestSubscription(sku)
         .then(async (result) => {
           console.log('IAP req sub', result);
           if (Platform.OS === 'android') {
-            // setProductId(result.productId);
-            console.log(result.productId)
+            setPurchaseToken(result.purchaseToken);
+            setPackageName(result.packageNameAndroid);
+            setProductId(result.productId);
             // can do your API call here to save the purchase details of particular user
           } else if (Platform.OS === 'ios') {
-            console.log('reciept', result.transactionReceipt)
-            // setProductId(result.productId);
-            // setReceipt(result.transactionReceipt);
+            console.log(result.transactionReceipt)
+            setProductId(result.productId);
+            setReceipt(result.transactionReceipt);
             // can do your API call here to save the purchase details of particular user
           }
+          setBuyIsLoading(false);
         })
         .catch((err) => {
-          console.warn(`IAP req ERROR %%%%%`, err.message,);
+          setBuyIsLoading(false);
+          console.warn(`IAP req ERROR %%%%% ${err.code}`, err.message, isModalVisible);
           setError(err.message);
         });
     } catch (err) {
+      setBuyIsLoading(false);
       console.warn(`err ${error.code}`, error.message);
       setError(err.message);
     }
   };
 
-  const validate = (receipt) =>{
-      const receiptBody = {
-       "receipt-data": receipt ,
-       "password": "1f42e3ca18ca4405a31ac71b52df0f41"
-      }
-      const result =  RNIap.validateReceiptIos(receiptBody ,false).then((receipt)=>{
-        try{
-          const renewalHistory = receipt.latest_receipt_info;
-          const expiration = renewalHistory[renewalHistory.length -1].expires_date.ms;
-          const expired = Date.now() > expiration
 
-          if(!expired){
-            setPurchase(true)
-          }else{
-            Alert.alert("Your subscription is expired")
-          }
-        }catch{
-
-        }
-
-      }).catch(()=>{
-
-      })
-  }
   return (
     <ImageBackground source={require('../images/loginbg.png')}
       imageStyle={{
@@ -149,15 +153,13 @@ const Subscribe = ({ navigation }) => {
           <Text style={styles.mainLine}>App Access {'\n'} (1 year)</Text>
           <Text style={styles.mainLine}>App Access (1 year) {'\n'} Subscription</Text>
           <Text style={styles.mainLine}>1,599.00/- Rupees</Text>
-          <TouchableOpacity >
-            <View style={styles.button} >
-              <Text style={styles.buttonText} onPress={() => requestSubscription(products.Products[0].productId)}>Subscribe Now</Text>
-            </View>
-          </TouchableOpacity>
+            <TouchableOpacity >
+              <View style={styles.button} >
+                <Text style={styles.buttonText} onPress={() => requestSubscription(products[0].productId)}>Subscribe Now</Text>
+              </View>
+            </TouchableOpacity>
 
           <View style={{ flexDirection: 'row' }}>
-            {/* <Text style={styles.mainLine}>Don't have account? </Text> */}
-            {/* <TouchableOpacity onPress={()=>navigation.navigate('Register')}><Text style={[styles.mainLine, styles.link]}>Signup</Text></TouchableOpacity> */}
           </View>
           <TouchableOpacity><Text style={[styles.mainLine, styles.link1]}>Restore Purchase</Text></TouchableOpacity>
           <Text style={styles.mainLine}>(in case, Sign in from New/ {'\n'} Second device)</Text>

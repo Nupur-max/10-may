@@ -127,10 +127,12 @@ MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2
 MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:5-67
 	android:name
 		ADDED from /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:4:22-64
-uses-permission#com.android.permission.BILLING
-ADDED from /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:5:5-70
+uses-permission#com.android.vending.BILLING
+ADDED from /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:5:5-66
+MERGED from [com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:10:5-67
+MERGED from [com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:10:5-67
 	android:name
-		ADDED from /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:5:22-67
+		ADDED from /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:5:22-64
 uses-permission#android.permission.READ_EXTERNAL_STORAGE
 ADDED from /Users/gadgetzone/Desktop/react-native/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:7:5-79
 	android:name
@@ -515,10 +517,6 @@ ADDED from [com.google.android.gms:play-services-basement:17.6.0] /Users/gadgetz
 		ADDED from [com.google.android.gms:play-services-basement:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/05e66e15a69fa7b37fe5944ea963478e/jetified-play-services-basement-17.6.0/AndroidManifest.xml:25:13-66
 	android:name
 		ADDED from [com.google.android.gms:play-services-basement:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/05e66e15a69fa7b37fe5944ea963478e/jetified-play-services-basement-17.6.0/AndroidManifest.xml:24:13-58
-uses-permission#com.android.vending.BILLING
-ADDED from [com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:10:5-67
-	android:name
-		ADDED from [com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:10:22-64
 meta-data#com.google.android.play.billingclient.version
 ADDED from [com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:13:9-15:37
 	android:value

@@ -498,7 +498,7 @@ const LogBookListing = ({ navigation }) => {
               }
               SearchedData.push(SingleResult);
               //console.log('single', SingleResult)
-              console.log(' Searched data', SearchedData);
+              //console.log(' Searched data', SearchedData);
               dataDispatcher(LogListData({ data: SearchedData, inProgress: false }))
             }
             
@@ -571,7 +571,7 @@ const LogBookListing = ({ navigation }) => {
               }
               SearchedData.push(SingleResult);
               //console.log('single', SingleResult)
-              console.log(' Searched data', SearchedData);
+              //console.log(' Searched data', SearchedData);
               dataDispatcher(LogListData({ data: SearchedData, inProgress: false }))
             }
             //setFilteredData(SearchedData);
@@ -710,14 +710,14 @@ const LogBookListing = ({ navigation }) => {
     let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
     //let temData =  []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 50 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           //dataDispatcher(LogListData({ data: [], inProgress: false }))
           setLoadmore(false)
           return false;
         }
-        setOffset(offset + 50);
+        setOffset(offset + 10);
         //if (result.rows.length > 1){
         for (let i = 0; i <= result.rows.length; i++) {
           if (result.rows.length !== 0){
@@ -870,7 +870,7 @@ const LogBookListing = ({ navigation }) => {
             to_long: result.rows.item(i).to_long,
 
           });
-          //console.log('checkdata', temData);
+          //console.log('checkdata', result.rows.item(i).totalTime);
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>
@@ -893,39 +893,39 @@ const LogBookListing = ({ navigation }) => {
     //test()
   }, [getReduxData]);
 
-  React.useEffect(() => {
-    if(isFocused){
-      getTotalTime();
-  }
-  }, [isFocused]);
+//   React.useEffect(() => {
+//     if(isFocused){
+//       getTotalTime();
+//   }
+//   }, [isFocused]);
 
-const getTotalTime = async () => {
-    //console.log('First')
-    let user = await AsyncStorage.getItem('userdetails');
-    user = JSON.parse(user);
-    let temData = [];
-    //console.log('tempdata', temData);
-    //dataDispatcher(LogListData({data: []}))
-    prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT totalTime from logbook WHERE user_id = "' + user.id + '" AND totalTime != "null"', [], (tx, result) => {
+// const getTotalTime = async () => {
+//     //console.log('First')
+//     let user = await AsyncStorage.getItem('userdetails');
+//     user = JSON.parse(user);
+//     let temData = [];
+//     //console.log('tempdata', temData);
+//     //dataDispatcher(LogListData({data: []}))
+//     prePopulateddb.transaction(tx => {
+//       tx.executeSql('SELECT totalTime from logbook WHERE user_id = "' + user.id + '" AND totalTime != "null"', [], (tx, result) => {
 
-        for (let i = 0; i <= result.rows.length; i++) {
-          temData.push({
-            totalTime: result.rows.item(i).totalTime,
-          });
-          //console.log('single', temData);
-          //setLocalData(temData);
-          //setDone(true)
-          
-        }
-        for (let j = 0; i < temData.length; j++) {
-          var counter = temData[j];
-          console.log('tetststtets',counter);
-      }
+//         for (let i = 0; i <= result.rows.length; i++) {
+//           temData.push({
+//             totalTime: result.rows.item(i).totalTime,
+//           });
+//           console.log('single', temData);
+//           //setLocalData(temData);
+//           //setDone(true)
+//           for (let j = 0; j < temData.length; j++) {
+//             var counter = temData[j];
+//             console.log('tetststtets',counter);
+//         }
+//         }
         
-      });
-    });
-  };
+        
+//       });
+//     });
+//   };
 
 
 
@@ -973,73 +973,70 @@ const getTotalTime = async () => {
   }
 
   const SELECTAfterDel = async (deleteRoster = false) => {
-    let user = await AsyncStorage.getItem('userdetails');
-    user = JSON.parse(user);
-    console.log('test');
-    if (deleteRoster === true) {
-      console.log('inner', user.id)
-      const query = 'SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC LIMIT 5 OFFSET ' + offset
-      console.log(query)
-      prePopulateddb.transaction(tx => {
-        tx.executeSql(query, [], (tx, result) => {
+    // let user = await AsyncStorage.getItem('userdetails');
+    // user = JSON.parse(user);
+    // console.log('test');
+    // if (deleteRoster === true) {
+    //   console.log('inner', user.id)
+    //   const query = 'SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC LIMIT 5 OFFSET ' + offset
+    //   console.log(query)
+    //   prePopulateddb.transaction(tx => {
+    //     tx.executeSql(query, [], (tx, result) => {
 
-          if (result.rows.length == 0) {
-            console.log('no data to load')
-            setLoadmore(false)
-            return false;
-          }
-          else {
-            console.log('resultsLength', result.rows.length)
-          }
-          setOffset(offset + 5);
-          let DataAfterRosterDel = [];
-          for (let i = 0; i <= result.rows.length; i++) {
-            if (result.rows.length !== 0){
-            DataAfterRosterDel.push({
-              id: result.rows.item(i).id,
-              tag: result.rows.item(i).tag,
+    //       if (result.rows.length == 0) {
+    //         console.log('no data to load')
+    //         setLoadmore(false)
+    //         return false;
+    //       }
+    //       else {
+    //         console.log('resultsLength', result.rows.length)
+    //       }
+    //       setOffset(offset + 5);
+    //       let DataAfterRosterDel = [];
+    //       for (let i = 0; i <= result.rows.length; i++) {
+    //         if (result.rows.length !== 0){
+    //         DataAfterRosterDel.push({
+    //           id: result.rows.item(i).id,
+    //           tag: result.rows.item(i).tag,
 
-              date: result.rows.item(i).date,
+    //           date: result.rows.item(i).date,
 
-              aircraftType: result.rows.item(i).aircraftType,
+    //           aircraftType: result.rows.item(i).aircraftType,
 
-              from_lat: result.rows.item(i).from_lat,
-              from_long: result.rows.item(i).from_long,
+    //           from_lat: result.rows.item(i).from_lat,
+    //           from_long: result.rows.item(i).from_long,
 
-              from: result.rows.item(i).from_nameICAO,
+    //           from: result.rows.item(i).from_nameICAO,
 
-              chocksOffTime: result.rows.item(i).offTime,
-              chocksOnTime: result.rows.item(i).onTime,
+    //           chocksOffTime: result.rows.item(i).offTime,
+    //           chocksOnTime: result.rows.item(i).onTime,
 
-              p1: result.rows.item(i).p1,
+    //           p1: result.rows.item(i).p1,
 
-              p2: result.rows.item(i).p2,
+    //           p2: result.rows.item(i).p2,
 
-              to: result.rows.item(i).to_nameICAO,
-              to_lat: result.rows.item(i).to_lat,
-              to_long: result.rows.item(i).to_long,
+    //           to: result.rows.item(i).to_nameICAO,
+    //           to_lat: result.rows.item(i).to_lat,
+    //           to_long: result.rows.item(i).to_long,
 
-              orderedDate: result.rows.item(i).orderedDate,
+    //           orderedDate: result.rows.item(i).orderedDate,
 
-            });
-            //console.log('single', result.rows.item(i).outTime);
-            //setLocalLogbookData(DataAfterRosterDel);
-            //console.log(DataAfterRosterDel)
-            //setComplete(true)
-            dataDispatcher(LogListData({ data: DataAfterRosterDel, inProgress: false }))
-            setLoadmore(false)
-            setFindTag(result.rows.item(i).tag);
-          }
-          else {
-            console.log('no data to show')
-            dataDispatcher(LogListData({ data: [], inProgress: false }))
-          }
-        }
-        });
-      });
-      const getReduxDataDeleted = dataSelector;
-      //console.log('from Deleted Logbook', getReduxDataDeleted.data);
-    }
+    //         })
+    //         console.log('DATTATTA', DataAfterRosterDel)
+    //         dataDispatcher(LogListData({ data: DataAfterRosterDel, inProgress: false }))
+    //         setLoadmore(false)
+    //         setFindTag(result.rows.item(i).tag);
+    //       }
+    //       else {
+    //         console.log('no data to show')
+    //         dataDispatcher(LogListData({ data: [], inProgress: false }))
+    //       }
+    //     }
+    //     });
+    //   });
+    // }
+    //getLogbookData()
+    onRefresh()
   }
 
   const UpdateAllRoster = () => {
@@ -1056,65 +1053,66 @@ const getTotalTime = async () => {
   }
 
   const SELECTAfterAccept = async (AcceptRoster = false) => {
-    let user = await AsyncStorage.getItem('userdetails');
-    user = JSON.parse(user);
-    console.log('test');
-    if (AcceptRoster === true) {
-      console.log('inner', user.id)
-      const query = 'SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC , inTime DESC LIMIT 5 OFFSET ' + offset
-      console.log(query)
-      prePopulateddb.transaction(tx => {
-        tx.executeSql(query, [], (tx, result) => {
+    // let user = await AsyncStorage.getItem('userdetails');
+    // user = JSON.parse(user);
+    // console.log('test');
+    // if (AcceptRoster === true) {
+    //   console.log('inner', user.id)
+    //   const query = 'SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,orderedDate from logbook WHERE user_id = "' + user.id + '" ORDER BY orderedDate DESC , inTime DESC LIMIT 5 OFFSET ' + offset
+    //   console.log(query)
+    //   prePopulateddb.transaction(tx => {
+    //     tx.executeSql(query, [], (tx, result) => {
 
-          if (result.rows.length == 0) {
-            console.log('no data to load')
-            setLoadmore(false)
-            return false;
-          }
-          else {
-            console.log('resultsLength', result.rows.length)
-          }
-          setOffset(offset + 5);
-          let DataAfterRosterAccept = [];
-          for (let i = 0; i <= result.rows.length; i++) {
-            DataAfterRosterAccept.push({
-              id: result.rows.item(i).id,
-              tag: result.rows.item(i).tag,
+    //       if (result.rows.length == 0) {
+    //         console.log('no data to load')
+    //         setLoadmore(false)
+    //         return false;
+    //       }
+    //       else {
+    //         console.log('resultsLength', result.rows.length)
+    //       }
+    //       setOffset(offset + 5);
+    //       let DataAfterRosterAccept = [];
+    //       for (let i = 0; i <= result.rows.length; i++) {
+    //         DataAfterRosterAccept.push({
+    //           id: result.rows.item(i).id,
+    //           tag: result.rows.item(i).tag,
 
-              date: result.rows.item(i).date,
+    //           date: result.rows.item(i).date,
 
-              aircraftType: result.rows.item(i).aircraftType,
+    //           aircraftType: result.rows.item(i).aircraftType,
 
-              from_lat: result.rows.item(i).from_lat,
-              from_long: result.rows.item(i).from_long,
+    //           from_lat: result.rows.item(i).from_lat,
+    //           from_long: result.rows.item(i).from_long,
 
-              from: result.rows.item(i).from_nameICAO,
+    //           from: result.rows.item(i).from_nameICAO,
 
-              chocksOffTime: result.rows.item(i).offTime,
-              chocksOnTime: result.rows.item(i).onTime,
+    //           chocksOffTime: result.rows.item(i).offTime,
+    //           chocksOnTime: result.rows.item(i).onTime,
 
-              p1: result.rows.item(i).p1,
+    //           p1: result.rows.item(i).p1,
 
-              p2: result.rows.item(i).p2,
+    //           p2: result.rows.item(i).p2,
 
-              to: result.rows.item(i).to_nameICAO,
-              to_lat: result.rows.item(i).to_lat,
-              to_long: result.rows.item(i).to_long,
+    //           to: result.rows.item(i).to_nameICAO,
+    //           to_lat: result.rows.item(i).to_lat,
+    //           to_long: result.rows.item(i).to_long,
 
-              orderedDate: result.rows.item(i).orderedDate,
+    //           orderedDate: result.rows.item(i).orderedDate,
 
-            });
-            //console.log('single', result.rows.item(i).outTime);
-            //setLocalLogbookData(DataAfterRosterDel);
-            //console.log(DataAfterRosterDel)
-            //setComplete(true)
-            dataDispatcher(LogListData({ data: DataAfterRosterAccept, inProgress: false }))
-          }
-        });
-      });
-      //const getReduxDataDeleted = dataSelector;
-      //console.log('from Deleted Logbook', getReduxDataDeleted.data);
-    }
+    //         });
+    //         //console.log('single', result.rows.item(i).outTime);
+    //         //setLocalLogbookData(DataAfterRosterDel);
+    //         //console.log(DataAfterRosterDel)
+    //         //setComplete(true)
+    //         dataDispatcher(LogListData({ data: DataAfterRosterAccept, inProgress: false }))
+    //       }
+    //     });
+    //   });
+    //   //const getReduxDataDeleted = dataSelector;
+    //   //console.log('from Deleted Logbook', getReduxDataDeleted.data);
+    // }
+    onRefresh();
   }
 
   const Total = () => {
