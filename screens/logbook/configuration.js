@@ -1,60 +1,23 @@
 //import liraries
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Platform, Touchable, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Text, Platform, Touchable, TouchableOpacity } from 'react-native';
 import {Logbook,configuration} from '../../styles/styles';
 import {  Switch } from 'react-native-paper';
 import { ThemeContext } from '../../theme-context';
 import { ParamsContext } from '../../params-context';
 import { ConfigContext } from '../../config-Context';
 import { ScrollView } from 'react-native-gesture-handler';
-import AsyncStorage from '@react-native-community/async-storage';
-import {BaseUrl} from '../../components/url.json';
 import { DisplayContext } from '../../display-context';
 
 // create a component
 const Configuration = ({navigation,route}) => {
 
-   // const [, setParamsConfig ] = React.useContext(ParamsContext);
-
-    //const [rolewise, setRolewise] = React.useState('')
-
-    // React.useEffect(() => {getDisplayValues()}, []);
-
-    // const getDisplayValues = async() => {
-    //     let user = await AsyncStorage.getItem('userdetails');
-    //     user = JSON.parse(user);
-      
-    //     await fetch(BaseUrl+'get_settings',{
-    //       method : 'POST',
-    //       headers:{
-    //           'Accept': 'application/json',
-    //           'Content-Type': 'application/json'
-    //       },
-    //       body: JSON.stringify({
-    //         "user_id": user.id,
-    //         //"date_format": date,             
-    //    })
-    //   }).then(res => res.json())
-    //   .then(resData => {
-    //     //setBuildLogBook(resData.message);
-    //     console.log('data---->', resData.data);
-    //     for (var j = 0; j < resData.data.length; j++){
-    //           console.log(resData.data[j].role);
-    //           setRolewise (resData.data[j].role)
-    //          }
-    //     //setData(resData.message);
-    //     //console.log('data--------->', data);
-    //   });
-    // };
-    
     const { dark, theme, toggle } = React.useContext(ThemeContext);
     const { datee, Dateform, DateFormat, role, roleChecked } = React.useContext(DisplayContext);
     const { 
             //flight 1
             flightToggle, 
-            flightRoleToggle,
             fun_Flighttoggle,
-            fun_FlightRoleToggle,
             routeToggle,
             fun_routeToggle,
 
@@ -158,41 +121,12 @@ const Configuration = ({navigation,route}) => {
     
           const [, setConfigParams] = React.useContext(ParamsContext);
     
-    //flight first section
-    //const [flightToggle,setFlightToggle] = React.useState(false)
-    //const [routeToggle,setRouteToggle] = React.useState(false)
-
-    // const FlightSwitch = () => {
-    //     setFlightToggle(!flightToggle)
-    //     console.log('toggled');
-    //     console.log('params --- >', route.params.toggled )
-    //     route.params.toggled == true ? setFlightToggle(!flightToggle) : setFlightToggle(flightToggle)
-    // }
-
-    // const RouteSwitch = () => {
-    //     setRouteToggle(!routeToggle)
-    //     console.log('toggled');
-    // }
-
-    // const roleWise = role === 'AirlineCaptain'? !flightToggle:flightToggle
-    // console.log('rolllllleeeeee-> ', flightToggle)
-
-    // const selectParams = () =>{ 
-         
-    //     setParamsConfig(previousParams => ({
-    //         ...(previousParams || {}),
-    //         childParam: 'value',
-    //         itemRoleWise : roleWise,
-    //        }));
-    //       navigation.goBack();
-        
-    //   }
+   
 const rolewise = role == 'AirlineCaptain' ? !flightToggle : flightToggle
     
     return (
-        <ScrollView>
-        <View style={Logbook.container}>
-
+        <ScrollView style={[Logbook.container, {backgroundColor: theme.backgroundColor}]}>
+        <View >
             {/* <Text>{route.params.from}</Text> */}
             <View style={configuration.headerView}>
                 <View style={configuration.saveTextView}>

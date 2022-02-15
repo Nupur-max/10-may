@@ -1,6 +1,6 @@
 //import liraries
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet,FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import {Approach,Logbook} from '../../styles/styles';
 import {Precision,NonPrecision} from '../../components/dummyLogBookListing';
 import { ParamsContext } from '../../params-context';
@@ -21,13 +21,8 @@ const ApproachType = ({navigation,route}) => {
       );
     
       const renderItem = ({item}) => {
-        //console.log('typeeeee---->',item.Airline_code);
         const backgroundColor = item.id === pselectedId ? "#6e3b6e" : "#f9c2ff";
         const color = item.id === pselectedId ? 'white' : 'black';
-        // const fetchToBuildLogBook = item.id === selectedId ? navigation.navigate('BuildLogbook',{
-        //   itemId: item.id,
-        //   itemName: item.aircraft_name,
-        // }) : '';
     
         const selectParams = () =>{ 
         if(item.id === pselectedId && route.params.fromPrecision)
@@ -62,11 +57,6 @@ const ApproachType = ({navigation,route}) => {
         //console.log('typeeeee---->',item.Airline_code);
         const backgroundColor = item.id === npselectedId ? "#6e3b6e" : "#f9c2ff";
         const color = item.id === npselectedId ? 'white' : 'black';
-        // const fetchToBuildLogBook = item.id === selectedId ? navigation.navigate('BuildLogbook',{
-        //   itemId: item.id,
-        //   itemName: item.aircraft_name,
-        // }) : '';
-    
         const npselectParams = () =>{ 
         if(item.id === npselectedId && route.params.fromNonPrecision)
         {

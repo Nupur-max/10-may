@@ -1,7 +1,7 @@
 //import liraries
 import React, { Component } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Platform, StyleSheet, Dimensions } from 'react-native';
-import {Logbook,ModalView} from '../../styles/styles';
+import {Logbook} from '../../styles/styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ParamsContext } from '../../params-context';
 import Colors from '../../components/colors'
@@ -18,21 +18,16 @@ const Approach = ({navigation}) => {
 
     const [apType, setAPType] = React.useState('');
     const [airport, setAirport] = React.useState('')
-    //const [npType, setNpType] = React.useState('');
     const[approaches, setApproaches] = React.useState('1')
     const[runway, setRunway] = React.useState('')
 
-    console.log('Destparams',Destparams.ApproachItemCode)
     const getReduxData = useSelector(state => state.cl.AircraftType);
-    console.log ('hehhh11111', getReduxData.toICAO)
 
     React.useEffect(() => {
         if(params.childParam === 'value1'){
-            console.log('app Type', params.PrecisionItemName);
              setAPType(params.PrecisionItemName)
         }
         else  {
-            console.log('app Type', params.NonPrecisionItemName);
             setAPType(params.NonPrecisionItemName)
         }
 
@@ -40,13 +35,11 @@ const Approach = ({navigation}) => {
 
     React.useEffect(() => {
         if(Destparams.childParam2){
-            console.log('Child param is', Destparams.childParam2);
             setAirport (Destparams.ApproachItemCode)
         }
        },[Destparams]);
 
     const mixture = approaches+';'+apType+';'+runway+';'+airport
-    console.log('mixture ----->', mixture); 
 
     const selectParams = () =>{ 
         setParams(previousParams => ({
@@ -71,7 +64,6 @@ const Approach = ({navigation}) => {
             
             <View style={Logbook.fieldWithoutBottom}>
                 <View style={{...Logbook.fields, ...{paddingTop:20, paddingBottom: Platform.OS === 'ios' ? 10 : null}}}>
-                {/* <Text style={{...Logbook.fieldText, ...{lineHeight:35,}}}>Flight</Text> */}
                 <TextInput 
                     placeholder='Number of Approaches'
                     placeholderTextColor='#393F45'
@@ -96,7 +88,6 @@ const Approach = ({navigation}) => {
 
                 <View style={Logbook.fieldWithoutBottom}>
                 <View style={{...Logbook.fields, ...{paddingTop:Platform.OS === 'ios' ? 15 : null , paddingBottom: Platform.OS === 'ios' ? 10 : null}}}>
-                {/* <Text style={{...Logbook.fieldText, ...{lineHeight:35,}}}>Flight</Text> */}
                 <TextInput 
                     placeholder='Runway'
                     placeholderTextColor='#393F45'

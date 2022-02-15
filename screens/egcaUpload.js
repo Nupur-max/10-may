@@ -9,11 +9,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {BaseUrl} from '../components/url.json';
 import DgcaLogbookStyles from '../styles/dgcaLogbookStyles';
-import { EGCADetailsData } from '../store/actions/egcaDetailsAction';
 import { useDispatch, useSelector } from 'react-redux';
 import {FTOData,Elog_verifiers} from '../components/dummydropdown'
 import { ThemeContext } from '../theme-context';
-import SearchableDropdown from 'react-native-searchable-dropdown';
 
 import SQLite from 'react-native-sqlite-storage';
 
@@ -168,7 +166,6 @@ const EGCAUpload = ({navigation}) => {
     {label: 'Patter Flying - Take off and Flight', value: 'Patter Flying - Take off and Flight'},
     {label: 'Patter Flying - First Solo', value: 'Patter Flying - First Solo'},
     {label: 'Patter Flying - Radio navigation and instrument flying', value: 'Patter Flying - Radio navigation and instrument flying'},
-    // {label: 'Patter Flying - Night flying', value: 'Patter Flying - Night flying'},
     {label: 'Patter Flying - Circuit and Rotor Emergencies', value: 'Patter Flying - Circuit and Rotor Emergencies'},
     {label: 'Patter Flying - Auto-rotations', value: 'Patter Flying - Auto-rotations'},
     {label: 'Patter Flying - Hovering', value: 'Patter Flying - Hovering'},
@@ -232,7 +229,7 @@ const EGCAUpload = ({navigation}) => {
        })
       }).then(res => res.json())
       .then(resData => {
-         console.log(resData);
+         //console.log(resData);
          Alert.alert(resData.message);
       });
       }
@@ -262,7 +259,7 @@ const EGCAUpload = ({navigation}) => {
                       NameOfAuthVerifier :  result.rows.item(i).NameOfAuthVerifier,
 
                      });
-                     console.log('setRosterAId', selectedPurpose)
+                     //console.log('setRosterAId', selectedPurpose)
                      setSelectedPurpose(selectedData)
                      setEGCAUSER(result.rows.item(i).egcaId)
                      setEGCAPWD(result.rows.item(i).egcaPwd)
@@ -282,7 +279,7 @@ const EGCAUpload = ({navigation}) => {
     }
 
     const PurposeData = egca==='Training'? training : egca==='Test'? test : egca==='Commercial'?commercial:[]
-    console.log('purposeData',PurposeData)
+    //console.log('purposeData',PurposeData)
     //setSelectedPurpose(PurposeData)
 
     const UpdateQuery = async() => {
@@ -618,9 +615,6 @@ const EGCAUpload = ({navigation}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //justifyContent: 'flex-start',
-        //alignItems: 'center',
-        //backgroundColor: '#2c3e50',
     },
     mainHeader:{
         padding: 5,
@@ -638,7 +632,6 @@ const styles = StyleSheet.create({
         padding: 5,
         backgroundColor:'#F3F3F3',
         width: '100%',
-        //justifyContent:'space-between',
         marginTop:10,
         flexDirection: 'row'
     },
@@ -646,7 +639,6 @@ const styles = StyleSheet.create({
         padding: 5,
         backgroundColor:'#000',
         width: '100%',
-        //justifyContent:'space-between',
         marginTop:10,
         flexDirection: 'row'
       },
@@ -665,11 +657,9 @@ const styles = StyleSheet.create({
           paddingVertical:10, 
           width:'100%',
           flexDirection:'row',
-          //justifyContent: 'space-evenly',
       },
       fieldTextRadio: {
         fontSize: 14,
-        //marginTop: 5,
         fontWeight: '600',
         fontFamily: 'WorkSans-Regular',
         lineHeight: 30,

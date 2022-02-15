@@ -1,4 +1,3 @@
-//import liraries
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking, Dimensions, Platform } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -86,7 +85,6 @@ const Support = ({navigation}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //justifyContent: 'center',
         alignItems: 'flex-start',
         backgroundColor: '#fff',
         padding: 5,
@@ -95,7 +93,6 @@ const styles = StyleSheet.create({
     Email:{
         fontSize: 28,
         marginTop:10,
-        //fontWeight: 'bold',
         marginHorizontal:15,
         color: Colors.primary,
         fontFamily: 'WorkSans-ExtraBold',

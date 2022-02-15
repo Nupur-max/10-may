@@ -18,6 +18,7 @@ import SegmentedControlTab from "react-native-segmented-control-tab";
 import { DocListData } from '../../store/actions/DocListAction';
 import { DocData } from '../../store/actions/docAction';
 import { useIsFocused } from "@react-navigation/native";
+import SsStyle from '../../styles/settingScreenStyle';
 
 
 const prePopulateddb = SQLite.openDatabase(
@@ -498,7 +499,7 @@ const Docs = ({ navigation }) => {
               NameOfAuthVerifier: result1.rows.item(i).NameOfAuthVerifier,
             }
             Data.push(SingleResult)
-            console.log('',SingleResult)
+            console.log('', SingleResult)
             dataDispatcher(EGCADetailsData({ data: Data }))
           }
         }
@@ -556,17 +557,30 @@ const Docs = ({ navigation }) => {
     var total_PIC_Time = 0
     var Night_Hours = 0;
     var total_instrument = 0
+    var total_pic_x_country_day = 0
+    var total_pic_x_country_night = 0
+    var total_x_country_day_night = 0
+    var total_x_country = 0
 
     var Final_Night_Time = ''
     var Final_PIC_Time = ''
     var total_instrument1 = ''
     var Total_Time = ''
+    var pic_x_country_day = ''
+    var pic_x_country_night = ''
+    var final_x_country_day_night = ''
+    var x_country_total = ''
     ATPLData.map((d) => {
       //--------  nightTime flying hours --------//
       if (d.night !== "") {
-        var Night = d.night.split(":")
+        const co_time = d.p1 !== "Self" ? d.night : "00:00"
+        var co_nightTime = co_time.split(":");
+        var Night = d.night.split(":");
+        var total_co_nightTime = Number(co_nightTime[0] * 60) + Number(co_nightTime[1])
+        var half_co_nightTime = total_co_nightTime / 2
         var total_Nighttime = Number(Night[0] * 60) + Number(Night[1])
-        Night_Hours += total_Nighttime
+        var add_co_time = total_Nighttime + half_co_nightTime
+        Night_Hours += add_co_time
         var total_Night_Hours = Math.floor(Night_Hours / 60);
         var total_Night_Min = Night_Hours % 60;
         if (total_Night_Hours < 10) {
@@ -583,9 +597,14 @@ const Docs = ({ navigation }) => {
 
       //--------  total_Time flying hours --------//
       if (d.totalTime !== "") {
+        const p2_time = d.p1 !== "Self" ? d.totalTime : "00:00"
+        var split_p2_Time = p2_time.split(":");
         var TotalTime = d.totalTime.split(":")
         var total_time = Number(TotalTime[0] * 60) + Number(TotalTime[1])
-        total_Flying += total_time
+        var total_co_Time = Number(split_p2_Time[0] * 60) + Number(split_p2_Time[1])
+        var half_co_Time = total_co_Time / 2
+        var add_co_final_time = half_co_Time + total_time
+        total_Flying += add_co_final_time
         var total_Hours = Math.floor(total_Flying / 60);
         var total_Min = total_Flying % 60;
         if (total_Hours < 10) {
@@ -597,10 +616,15 @@ const Docs = ({ navigation }) => {
         Total_Time = total_Hours + ":" + total_Min;
       }
       //--------  total_Pic Time flying hours --------//
-      if (d.totalTime !== "") {
+      if (d.p1 == "Self") {
+        var stlHrs = d.stl == "undefined" ? d.totalTime : "00:00"
+        var splitStlhrs = stlHrs.split(":")
         var Pic_Hours = d.totalTime.split(":")
         var pic_hrs = Number(Pic_Hours[0] * 60) + Number(Pic_Hours[1])
-        total_PIC_Time += pic_hrs
+        var stl_total_hrs = Number(splitStlhrs[0] * 60) + Number(splitStlhrs[1])
+        var half_stl_total_hrs = stl_total_hrs / 2
+        var add_stl_Hrs = pic_hrs + half_stl_total_hrs
+        total_PIC_Time += add_stl_Hrs
         var pic_total_Hours = Math.floor(total_PIC_Time / 60);
         var pic_total_Min = total_PIC_Time % 60;
         if (pic_total_Hours < 10) {
@@ -616,28 +640,108 @@ const Docs = ({ navigation }) => {
       }
 
       //------- instrument flying hours --------//
-      if (d.totalTime !== "") {
-        var sim_instrument = d.sim_instrument.split(":")
-        var act_instrument = d.actual_Instrument.split(":")
-        var total_sim_instrument = Number(sim_instrument[0] * 60) + Number(sim_instrument[1])
-        var total_act_instrument = Number(act_instrument[0] * 60) + Number(act_instrument[1])
-        var instrument = total_sim_instrument + total_act_instrument
-        total_instrument += instrument
-        var sim_instrument_Hours = Math.floor(total_instrument / 60);
-        var sim_instrument_Min = total_instrument % 60;
-        if (sim_instrument_Hours < 10) {
-          sim_instrument_Hours = '0' + sim_instrument_Hours;
+      // if (d.totalTime !== "") {
+      var sim = d.sim_instrument !== "" ? d.sim_instrument : "00:00"
+      var act = d.act_instrument == "undefined" ? d.act_instrument : "00:00"
+      var sim_instrument = sim.split(":")
+      var act_instrument = act.split(":")
+      var total_sim_instrument = Number(sim_instrument[0] * 60) + Number(sim_instrument[1])
+      var total_act_instrument = Number(act_instrument[0] * 60) + Number(act_instrument[1])
+      var instrument = total_sim_instrument + total_act_instrument
+      total_instrument += instrument
+      var sim_instrument_Hours = Math.floor(total_instrument / 60);
+      var sim_instrument_Min = total_instrument % 60;
+      if (sim_instrument_Hours < 10) {
+        sim_instrument_Hours = '0' + sim_instrument_Hours;
+      }
+      if (sim_instrument_Min < 10) {
+        sim_instrument_Min = '0' + sim_instrument_Min;
+      }
+      total_instrument1 = sim_instrument_Hours + ":" + sim_instrument_Min;
+
+      if (isNaN(total_instrument1[1])) {
+        total_instrument1 = '00:00'
+      }
+      // }
+
+      ///-------------- total X country (only pic) ------------////
+      if (d.p1 === "Self") {
+        ///--------- country day ---------///
+        var country_day_time = d.x_country_day !== "" ? d.x_country_day : "00:00"
+        var x_day = country_day_time.split(":")
+        var total_x_day = Number(x_day[0] * 60) + Number(x_day[1])
+        total_pic_x_country_day += total_x_day
+        var pic_x_day_Hours = Math.floor(total_pic_x_country_day / 60);
+        var pic_x_day_Min = total_pic_x_country_day % 60;
+        if (pic_x_day_Hours < 10) {
+          pic_x_day_Hours = '0' + pic_x_day_Hours;
         }
-        if (sim_instrument_Min < 10) {
-          sim_instrument_Min = '0' + sim_instrument_Min;
+        if (pic_x_day_Min < 10) {
+          pic_x_day_Min = '0' + pic_x_day_Min;
         }
-        total_instrument1 = sim_instrument_Hours + ":" + sim_instrument_Min;
-        if (isNaN(total_instrument1[1])) {
-          total_instrument1 = '00:00'
+        pic_x_country_day = pic_x_day_Hours + ":" + pic_x_day_Min;
+        if (isNaN(pic_x_country_day[1])) {
+          pic_x_country_day = '00:00'
+        }
+
+        ///--------- country night  and  only night value---------///
+        var country_night_time = d.x_country_night !== "" ? d.x_country_night : "00:00"
+        var x_night = country_night_time.split(":")
+        var total_x_night = Number(x_night[0] * 60) + Number(x_night[1])
+        total_pic_x_country_night += total_x_night
+        var pic_x_night_Hours = Math.floor(total_pic_x_country_night / 60);
+        var pic_x_night_Min = total_pic_x_country_night % 60;
+        if (pic_x_night_Hours < 10) {
+          pic_x_night_Hours = '0' + pic_x_night_Hours;
+        }
+        if (pic_x_night_Min < 10) {
+          pic_x_night_Min = '0' + pic_x_night_Min;
+        }
+        pic_x_country_night = pic_x_night_Hours + ":" + pic_x_night_Min;
+        if (isNaN(pic_x_country_night[1])) {
+          pic_x_country_night = '00:00'
+        }
+
+      /// ----pic X country total --------///
+        var add_x_country_day_night = total_x_day + total_x_night
+        total_x_country_day_night += add_x_country_day_night
+        var x_day_night_Hours = Math.floor(total_x_country_day_night / 60);
+        var x_day_night_Min = total_x_country_day_night % 60;
+        if (x_day_night_Hours < 10) {
+          x_day_night_Hours = '0' + x_day_night_Hours;
+        }
+        if (x_day_night_Min < 10) {
+          x_day_night_Min = '0' + x_day_night_Min;
+        }
+        final_x_country_day_night = x_day_night_Hours + ":" + x_day_night_Min;
+        if (isNaN(final_x_country_day_night[1])) {
+          final_x_country_day_night = '00:00'
         }
       }
+
+      ///-------------- total X country ------------////
+      var x_day_time = d.x_country_day !== "" ? d.x_country_day : "00:00"
+      var split_x_day = x_day_time.split(":")
+      var total_x_day = Number(split_x_day[0] * 60) + Number(split_x_day[1])
+      var x_night_time = d.x_country_night !== "" ? d.x_country_night : "00:00"
+      var split_x_night = x_night_time.split(":")
+      var total_x_night = Number(split_x_night[0] * 60) + Number(split_x_night[1])
+      var add_x_day_night = total_x_day + total_x_night
+      total_x_country += add_x_day_night
+      var x_Hours = Math.floor(total_x_country / 60);
+      var x_Min = total_x_country % 60;
+      if (x_Hours < 10) {
+        x_Hours = '0' + x_Hours;
+      }
+      if (x_Min < 10) {
+        x_Min = '0' + x_Min;
+      }
+      x_country_total = x_Hours + ":" + x_Min;
+      if (isNaN(x_country_total[1])) {
+        x_country_total = '00:00'
+      }
     })
-    const htmldata = '<style type="text/css">td{border: 1px #ccc solid; font-size:12px; padding: 2px;} .ritz{width:100%}</style><div class="ritz grid-container"><table class="waffle" cellspacing="0" cellpadding="0"><tbody><tr style="height: 20px"><td class="s0" colspan="5">Total flying experience till THE DATE OF SUBMISSION OF PAPERS IN DGCA</td></tr><tr style="height: 20px"><td colspan="2">Requirement</td><td>Hrs Req.</td><td>Actual</td><td>Remarks</td></tr><tr style="height: 20px"><td class="s0" colspan="5">Total flying experience details</td></tr><tr style="height: 20px"><td>(i)</td><td>Total flying time (in this 50% of multi co-pilot hrs are counted)</td><td>1500</td><td>' + Total_Time + '</td><td></td></tr><tr style="height: 20px"><td>(ii)</td><td>Total as PIC (in this P1 U/S and STL hrs are counted 50%)</td><td>500</td><td>' + Final_PIC_Time + '</td><td></td></tr><tr style="height: 20px"><td class="s2">(iii)</td><td>Total Night flying experience (in this 50% of multi co-pilot night hrs are counted)</td><td class="s2">100</td><td>' + Final_Night_Time + '</td><td></td></tr><tr style="height: 20px"><td>(iv)</td><td>Total Instrument Time (not more than 50 synthetic simulator hrs shall be counted)</td><td>100</td><td>' + total_instrument1 + '</td><td></td></tr><tr style="height: 20px"><td class="s0" colspan="5">X-country flying time</td></tr><tr style="height: 20px"><td>(i)</td><td>Total X-country by day and night</td><td>1000</td><td></td><td></td></tr><tr style="height: 20px"><td>(ii)</td><td>Total PIC X-country by day and night</td><td>200</td><td></td><td></td></tr><tr style="height: 20px"><td class="s2">(iii)</td><td>Total PIC X-country flying time by Night</td><td>50</td><td></td><td></td></tr></tbody></table></div>';
+    const htmldata = '<style type="text/css">td{border: 1px #ccc solid; font-size:12px; padding: 2px;} .ritz{width:100%}</style><div class="ritz grid-container"><table class="waffle" cellspacing="0" cellpadding="0"><tbody><tr style="height: 20px"><td class="s0" colspan="5">Total flying experience till THE DATE OF SUBMISSION OF PAPERS IN DGCA</td></tr><tr style="height: 20px"><td colspan="2">Requirement</td><td>Hrs Req.</td><td>Actual</td><td>Remarks</td></tr><tr style="height: 20px"><td class="s0" colspan="5">Total flying experience details</td></tr><tr style="height: 20px"><td>(i)</td><td>Total flying time (in this 50% of multi co-pilot hrs are counted)</td><td>1500</td><td>' + Total_Time + '</td><td></td></tr><tr style="height: 20px"><td>(ii)</td><td>Total as PIC (in this P1 U/S and STL hrs are counted 50%)</td><td>500</td><td>' + Final_PIC_Time + '</td><td></td></tr><tr style="height: 20px"><td class="s2">(iii)</td><td>Total Night flying experience (in this 50% of multi co-pilot night hrs are counted)</td><td class="s2">100</td><td>' + Final_Night_Time + '</td><td></td></tr><tr style="height: 20px"><td>(iv)</td><td>Total Instrument Time (not more than 50 synthetic simulator hrs shall be counted)</td><td>100</td><td>' + total_instrument1 + '</td><td></td></tr><tr style="height: 20px"><td class="s0" colspan="5">X-country flying time</td></tr><tr style="height: 20px"><td>(i)</td><td>Total X-country by day and night</td><td>1000</td><td>' + x_country_total + '</td><td></td></tr><tr style="height: 20px"><td>(ii)</td><td>Total PIC X-country by day and night</td><td>200</td><td>' + final_x_country_day_night + '</td><td></td></tr><tr style="height: 20px"><td class="s2">(iii)</td><td>Total PIC X-country flying time by Night</td><td>50</td><td>' + pic_x_country_night + '</td><td></td></tr></tbody></table></div>';
     const resulthtml = await RNHTMLtoPDF.convert({
       width: 842,
       height: 595,
@@ -653,7 +757,7 @@ const Docs = ({ navigation }) => {
 
   }
   return (
-    <SafeAreaView style={[DocScreenStyle.container, { backgroundColor: theme.backgroundColor }]}>
+    <SafeAreaView style={logModalVisible===true||reportModalVisible?[DocScreenStyle.container, {backgroundColor: 'rgba(0,0,0,0.3)'}]:[DocScreenStyle.container, {backgroundColor: theme.backgroundColor}]}>
       <Modal animationType='slide' transparent={true} visible={open === true}>
         {/* <TouchableOpacity activeOpacity={1} onPress={closeList} style={{ flex: 1 }}> */}
         <SafeAreaView style={{ flex: 1 }}>
@@ -722,7 +826,7 @@ const Docs = ({ navigation }) => {
         <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{ padding: 6 }} onPress={() => navigation.goBack()} />
         <Text style={DocScreenStyle.aircrafts}>Docs</Text>
       </View>
-      <View style={dark ? DocScreenStyle.DarkmainTagLine : DocScreenStyle.mainTagLine}>
+      <View style={dark ? DocScreenStyle.DarkmainTagLine : logModalVisible||reportModalVisible?[DocScreenStyle.mainTagLine,{backgroundColor:'rgba(0,0,0,0)'}]: DocScreenStyle.mainTagLine}>
         <Text style={dark ? DocScreenStyle.DarktagLine : DocScreenStyle.tagLine}>Logbooks</Text>
         <MaterialCommunityIcons
           name="help-circle-outline" color='#256173' size={25} onPress={() => setLogModalVisible(true)} style={{ lineHeight: 23, position: 'absolute', right: 10, top: 10 }} />
@@ -733,7 +837,7 @@ const Docs = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={DocScreenStyle.tabs}>
-        <TouchableOpacity onPress={() => {getLogbookData();openList();selection();}}>
+        <TouchableOpacity onPress={() => { getLogbookData(); openList(); selection(); }}>
           <Text style={dark ? DocScreenStyle.DarktabText : DocScreenStyle.tabText}>Upload DGCA LogBook</Text>
         </TouchableOpacity>
       </View>
@@ -747,7 +851,7 @@ const Docs = ({ navigation }) => {
           <Text style={dark ? DocScreenStyle.DarktabText : DocScreenStyle.tabText}>Jeppessen Logbook (EU)</Text>
         </TouchableOpacity>
       </View>
-      <View style={dark ? DocScreenStyle.DarkmainTagLine : DocScreenStyle.mainTagLine}>
+      <View style={dark ? DocScreenStyle.DarkmainTagLine :logModalVisible||reportModalVisible?[DocScreenStyle.mainTagLine,{backgroundColor:'rgba(0,0,0,0)'}]: DocScreenStyle.mainTagLine}>
         <Text style={dark ? DocScreenStyle.DarktagLine : DocScreenStyle.tagLine}>Reports</Text>
         <MaterialCommunityIcons
           name="help-circle-outline" color='#256173' size={25} onPress={() => setReportModalVisible(true)} style={{ lineHeight: 23, position: 'absolute', right: 10, top: 10 }} />
@@ -789,13 +893,13 @@ const Docs = ({ navigation }) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <View style={{ width: '100%', backgroundColor: '#EFEFEF', padding: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text >LOGBOOKS</Text>
+              <View style={{ width: '100%', backgroundColor: '#EFEFEF', padding: 5, flexDirection: 'row', justifyContent: 'space-between', borderRadius:10, borderTopWidth:0.2 }}>
+                <Text style={SsStyle.modalText}>LOGBOOKS</Text>
                 <MaterialCommunityIcons
                   name="close" color='#256173' size={25} onPress={() => setLogModalVisible(!logModalVisible)} />
               </View>
               <View style={{ padding: 10, }}>
-                <Text >
+                <Text style={SsStyle.mainText}>
                   1. Create your logbook as per DGCA/ Jepp US/ Jepp EU format.{"\n"}
                   2. DGCA Logbook - Select STL to generate your STL logbook. P2 hours of STL flights will be automatically reflected in P1 (U/S)column.{"\n"}
                   3. You can number the Logbook page to ensure continuity of printed logbook pages{"\n"}
@@ -818,13 +922,13 @@ const Docs = ({ navigation }) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <View style={{ width: '100%', backgroundColor: '#EFEFEF', padding: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text >REPORTS</Text>
+              <View style={{ width: '100%', backgroundColor: '#EFEFEF', padding: 5, flexDirection: 'row', justifyContent: 'space-between',borderRadius:10, borderTopWidth:0.2}}>
+                <Text style={SsStyle.modalText} >REPORTS</Text>
                 <MaterialCommunityIcons
                   name="close" color='#256173' size={25} onPress={() => setReportModalVisible(!reportModalVisible)} />
               </View>
               <View style={{ padding: 10, }}>
-                <Text >
+                <Text style={SsStyle.mainText}>
                   Enter Your User Id and Password to import
                   your logbook / roster. AIMS users can view
                   the video at <Text style={{ color: 'blue' }}
@@ -866,6 +970,8 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     width: '90%',
+    borderRadius:10,
+    borderWidth:0.2,
   },
   DarkModalView: {
     margin: 20,

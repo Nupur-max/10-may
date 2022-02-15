@@ -30,8 +30,6 @@ const db = SQLite.openDatabase(
 const SetAircraft = ({navigation, route}) => {
     const [image, setImage] = React.useState(null);
     const [imageData, setImageData] = React.useState('');
-    const [imageFilename, setImageFilename] = React.useState('');
-
     const [category, setCategory] = React.useState('');
     const [engine, setEngine] = React.useState('');
     const [Class, setClass] = React.useState('');
@@ -40,26 +38,19 @@ const SetAircraft = ({navigation, route}) => {
     const [aircraft_id, setAircraft_id] = React.useState('');
     const [engineName, setEngineName] = React.useState('');
 
-    
-    // const { itemAtype, itemAId } = route.params;
-    // console.log ('itemAtype', itemAtype)
-
     const getReduxData = useSelector(state => state.cl.AircraftType);
-    console.log ('hehhh', getReduxData.AircraftType)
+    //console.log ('hehhh', getReduxData.AircraftType)
 
     React.useEffect(() => {selectQuery()}, []);
 
     const selectQuery = () => {
       let tempdata = [];
         db.transaction(tx => {
-          //console.log('SELECT * FROM Aircrafts WHERE AircraftType= "'+itemAtype+'"')
           tx.executeSql('SELECT * FROM Aircrafts WHERE AircraftType="'+getReduxData.AircraftType+'"', [], (tx, result) => {
             if (result.rows.length > 0) {
-              //alert('data available ');
-              console.log('result', result)
             
             for (let i = 0; i <= result.rows.length; i++) {
-              console.log('name: ', result.rows.item(i).id)
+             //console.log('name: ', result.rows.item(i).id)
               tempdata.push({
                 id: result.rows.item(i).id,
                 AircraftType: result.rows.item(i).AircraftType,
@@ -70,7 +61,7 @@ const SetAircraft = ({navigation, route}) => {
                 Class : result.rows.item(i).Class,
                 Crew: result.rows.item(i).Crew,
                 });
-                console.log('hdsfddfdh',tempdata);
+                //console.log('hdsfddfdh',tempdata);
                 setAircraft_type(result.rows.item(i).AircraftType)
                 setAircraft_id(result.rows.item(i).aircraft_id)
                 setCategory(result.rows.item(i).Category)
@@ -85,7 +76,7 @@ const SetAircraft = ({navigation, route}) => {
 
     const selectingImage = () => {
         ImagePicker.showImagePicker({quality: 0.3}, responseGet => {
-          console.log('Response = ', responseGet);
+          //console.log('Response = ', responseGet);
    
           if (responseGet.didCancel) {
             console.log('User cancelled image picker');
@@ -111,7 +102,7 @@ const SetAircraft = ({navigation, route}) => {
         const splittedBase64 = imageData.split(';base64');
         formData.append('aircraftPhoto', splittedBase64[1]);
         // console.log('form data' , data._parts[0][1].uri)
-        console.log('form data' , formData)
+        //console.log('form data' , formData)
         var Url = BaseUrl+'add_logbook'
           fetch(Url, {
           method: 'POST',
@@ -175,8 +166,8 @@ const SetAircraft = ({navigation, route}) => {
                     </TouchableOpacity>     
             </View>
 
-            <View style={styles.headline}>
-                <Text style={styles.HeadlineText}>Aircraft</Text>
+            <View style={dark?styles.Darkheadline:styles.headline}>
+                <Text style={dark?styles.DarkHeadlineText:styles.HeadlineText}>Aircraft</Text>
             </View>
 
 <ScrollView>
@@ -187,7 +178,7 @@ const SetAircraft = ({navigation, route}) => {
                 placeholderTextColor='#393F45'
                 value={aircraft_type}
                 onChangeText={(inputText)=> setAircraft_type(inputText)}
-                style={{marginTop: -5,}} />
+                style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
 
             <View style={{...styles.fieldWithoutBottom, ...styles.otherEnd, }}>
@@ -197,17 +188,17 @@ const SetAircraft = ({navigation, route}) => {
                 placeholderTextColor='#393F45'
                 value={aircraft_id}
                 onChangeText = {(inputText) => setAircraft_id(inputText)}
-                style={{marginTop: -5,}} />
+                style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
 
             {/* Category */}
-            <View style={styles.headline}>
-                <Text style={styles.HeadlineText}>Category <Text style={{color:'red'}}>*</Text></Text>
+            <View style={dark?styles.Darkheadline:styles.headline}>
+                <Text style={dark?styles.DarkHeadlineText:styles.HeadlineText}>Category <Text style={{color:'red'}}>*</Text></Text>
             </View>
 
             <View style={styles.fieldWithoutBottom}>
             <View style={{flexDirection:'row'}}> 
-            <RadioButton
+            <RadioButton.Android
                 value="Air Plane"
                 status={ category === 'Air Plane' ? 'checked' : 'unchecked' }
                 onPress={() => setCategory('Air Plane')}
@@ -218,7 +209,7 @@ const SetAircraft = ({navigation, route}) => {
             <Text style={styles.fieldTextRadio}>Air Plane</Text>
             </View>
             <View style={{flexDirection:'row', paddingLeft:78,}}>
-            <RadioButton
+            <RadioButton.Android
                 value="microlight"
                 status={ category === 'microlight' ? 'checked' : 'unchecked' }
                 onPress={() => setCategory('microlight')}
@@ -231,7 +222,7 @@ const SetAircraft = ({navigation, route}) => {
         </View>
         <View style={styles.fieldWithoutBottom}>
             <View style={{flexDirection:'row',}}> 
-            <RadioButton
+            <RadioButton.Android
                 value="Helicopter"
                 status={ category === 'Helicopter' ? 'checked' : 'unchecked' }
                 onPress={() => setCategory('Helicopter')}
@@ -242,7 +233,7 @@ const SetAircraft = ({navigation, route}) => {
             <Text style={styles.fieldTextRadio}>Helicopter</Text>
             </View>
             <View style={{flexDirection:'row', paddingLeft:70}}>
-            <RadioButton
+            <RadioButton.Android
                 value="glider"
                 status={ category === 'glider' ? 'checked' : 'unchecked' }
                 onPress={() => setCategory('glider')}
@@ -255,13 +246,13 @@ const SetAircraft = ({navigation, route}) => {
         </View>
         
         {/* Engine */}
-        <View style={styles.headline}>
-          <Text style={styles.HeadlineText}>Engine</Text>
+        <View style={dark?styles.Darkheadline:styles.headline}>
+          <Text style={dark?styles.DarkHeadlineText:styles.HeadlineText}>Engine</Text>
         </View>
 
         <View style={styles.fieldWithoutBottom}>
         <View style={{flexDirection:'row'}}> 
-         <RadioButton
+         <RadioButton.Android
             value="Jet"
             status={ engine === 'Jet' ? 'checked' : 'unchecked' }
             onPress={() => setEngine('Jet')}
@@ -272,7 +263,7 @@ const SetAircraft = ({navigation, route}) => {
           <Text style={styles.fieldTextRadio}>Jet</Text>
         </View>
         <View style={{flexDirection:'row', paddingLeft:40,}}>
-        <RadioButton
+        <RadioButton.Android
             value="Turbo Prop"
             status={ engine === 'Turbo Prop' ? 'checked' : 'unchecked' }
             onPress={() => setEngine('Turbo Prop')}
@@ -283,7 +274,7 @@ const SetAircraft = ({navigation, route}) => {
           <Text style={styles.fieldTextRadio}>Turbo Prop</Text>
         </View>
         <View style={{flexDirection:'row', paddingLeft:25,}}>
-        <RadioButton
+        <RadioButton.Android
             value="Turbo Shaft"
             status={ engine === 'Turbo Shaft' ? 'checked' : 'unchecked' }
             onPress={() => setEngine('Turbo Shaft')}
@@ -297,7 +288,7 @@ const SetAircraft = ({navigation, route}) => {
     <View style={styles.fieldWithoutBottom}>
           <View style={styles.underline}>
         <View style={{flexDirection:'row',}}> 
-         <RadioButton
+         <RadioButton.Android
             value="Piston"
             status={ engine === 'Piston' ? 'checked' : 'unchecked' }
             onPress={() => setEngine('Piston')}
@@ -308,7 +299,7 @@ const SetAircraft = ({navigation, route}) => {
           <Text style={styles.fieldTextRadio}>Piston</Text>
         </View>
         <View style={{flexDirection:'row', paddingLeft:23}}>
-        <RadioButton
+        <RadioButton.Android
             value="notPowered"
             status={ engine === 'notPowered' ? 'checked' : 'unchecked' }
             onPress={() => setEngine('notPowered')}
@@ -329,7 +320,7 @@ const SetAircraft = ({navigation, route}) => {
             placeholderTextColor='#393F45'
             value={engineName.toString()}
             onChangeText={(engineName) => setEngineName(engineName)}
-            style={{marginTop: -5}} />
+            style={{marginTop: -5,color:dark?'#fff':'#000'}} />
         </View>
         </View>
 
@@ -340,7 +331,7 @@ const SetAircraft = ({navigation, route}) => {
               <View style={{width:'70%'}}>
               <View style={styles.fieldWithoutBottom}>
         <View style={{flexDirection:'row'}}> 
-         <RadioButton
+         <RadioButton.Android
             value="ME Land"
             status={ Class === 'ME Land' ? 'checked' : 'unchecked' }
             onPress={() => setClass('ME Land')}
@@ -351,7 +342,7 @@ const SetAircraft = ({navigation, route}) => {
           <Text style={styles.fieldTextRadio}>ME Land</Text>
         </View>
         <View style={{flexDirection:'row', paddingLeft: 20,}}>
-        <RadioButton
+        <RadioButton.Android
             value="ME Sea"
             status={ Class === 'ME Sea' ? 'checked' : 'unchecked' }
             onPress={() => setClass('ME Sea')}
@@ -364,7 +355,7 @@ const SetAircraft = ({navigation, route}) => {
       </View>
       <View style={styles.fieldWithoutBottom}>
         <View style={{flexDirection:'row',}}> 
-         <RadioButton
+         <RadioButton.Android
             value="SE Land"
             status={ Class === 'SE Land' ? 'checked' : 'unchecked' }
             onPress={() => setClass('SE Land')}
@@ -375,7 +366,7 @@ const SetAircraft = ({navigation, route}) => {
           <Text style={styles.fieldTextRadio}>SE Land</Text>
         </View>
       <View style={{flexDirection:'row', paddingLeft:25}}>
-        <RadioButton
+        <RadioButton.Android
             value="SE Sea"
             status={ Class === 'SE Sea' ? 'checked' : 'unchecked' }
             onPress={() => setClass('SE Sea')}
@@ -407,8 +398,6 @@ const SetAircraft = ({navigation, route}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //justifyContent: 'center',
-        //alignItems: 'center',
         backgroundColor: '#fff',
     },
     headline: {
@@ -417,14 +406,24 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent:'center',
     },
+    Darkheadline: {
+      padding: 20,
+      backgroundColor: '#000',
+      width: '100%',
+      justifyContent:'center',
+  },
     HeadlineText:{
         color:'#000',
         fontSize: 14,
         fontFamily: 'WorkSans-Regular',
     },
+    DarkHeadlineText:{
+      color:'#fff',
+      fontSize: 14,
+      fontFamily: 'WorkSans-Regular',
+  },
     fieldWithoutBottom: {
-        paddingHorizontal:15, 
-        //paddingVertical:10, 
+        paddingHorizontal:15,
         width:'100%',
         flexDirection:'row'
     },
@@ -442,13 +441,11 @@ const styles = StyleSheet.create({
     underline:{
         borderBottomWidth: 0.2,
         borderBottomColor: Colors.accent,
-        //paddingVertical:15,
         width: '100%',
         flexDirection: 'row'
         },
     fieldTextRadio: {
             fontSize: 14,
-            //marginTop: 5,
             fontWeight: '500',
             fontFamily: 'WorkSans-Regular',
             lineHeight: 30,
@@ -457,8 +454,6 @@ const styles = StyleSheet.create({
     fields:{
             borderBottomWidth: 0.2,
             borderBottomColor: Colors.accent,
-            //paddingHorizontal:15,
-            //paddingVertical:15,
             width: '100%',
             justifyContent:'space-between',
             flexDirection:'row',

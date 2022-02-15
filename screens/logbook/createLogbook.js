@@ -1,5 +1,5 @@
 //import liraries
-import React, { Component, useEffect } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity,ActivityIndicator, TextInput, Button,KeyboardAvoidingView, Modal, Dimensions,Pressable, StyleSheet, Alert, SafeAreaView, Platform, TouchableWithoutFeedback } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DatePicker from 'react-native-datepicker';
@@ -12,18 +12,13 @@ import { ConfigContext } from '../../config-Context';
 import { DisplayContext } from '../../display-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { LogListData } from '../../store/actions/loglistAction';
-import { DocListData } from '../../store/actions/DocListAction';
 import { CreateLogbookData } from '../../store/actions/CLAction';
 import { useSelector, useDispatch } from 'react-redux';
 import { ThemeContext } from '../../theme-context';
-import moment from 'moment';
-import NetInfo from "@react-native-community/netinfo";
 import SsStyle from '../../styles/settingScreenStyle';
 import { ProgressBar } from 'react-native-paper';
 import BackupStyle from '../../styles/backupStyles';
 import { PilotData } from '../../store/actions/pilotsAction';
-
-
 import { BaseUrl } from '../../components/url.json';
 import SQLite from 'react-native-sqlite-storage';
 
@@ -43,7 +38,6 @@ const prePopulateddb = SQLite.openDatabase(
 
 import { Logbook, ModalView } from '../../styles/styles';
 import { ScrollView } from 'react-native-gesture-handler';
-import { List } from 'native-base';
 
 // create a component
 const CreateLogbook = ({ navigation }) => {
@@ -51,7 +45,6 @@ const CreateLogbook = ({ navigation }) => {
     const dataDispatcher = useDispatch();
 
     const getReduxDisplayData = useSelector(state => state.display.ActualI);
-    //console.log ('Display Data', getReduxDisplayData.ActualI ,'+', getReduxDisplayData.TimeofAi, '+', getReduxDisplayData.Xc)
 
 const CalcActualInstrument = () => {
      if (getReduxDisplayData.ActualI === true) {
@@ -116,16 +109,13 @@ const night_editable = (inputText) => {
 
     var DayHour = Math.floor((TotalFlightTime1cm-NightTotalTimecm)/60);  
     if (DayHour < 10) { DayHour = "0" + DayHour; }  
-    var Daymin=Math.floor((TotalFlightTime1cm-NightTotalTimecm)%60); 
-    //var m = (Math.round(min/15) * 15) % 60;
+    var Daymin=Math.floor((TotalFlightTime1cm-NightTotalTimecm)%60);
     if (Daymin < 10) { Daymin = "0" + Daymin; } 
-    //console.log (DayHour+':'+Daymin); 
     setDayTime(DayHour+':'+Daymin)
     setSic_day(DayHour+':'+Daymin)
     setP1_us_day(DayHour+':'+Daymin)
 }
-// console.log('sic',sic_day)
-// console.log('pi/us', p1_us_day)
+
 
 const SICday_editable = (inputText) => {
     setSic_day(inputText)
@@ -141,9 +131,7 @@ const SICday_editable = (inputText) => {
   var NighthourSIC = Math.floor((TotalFlightTimecmSIC-DayTotalTimecmSIC)/60);  
   if (NighthourSIC < 10) { NighthourSIC = "0" + NighthourSIC; }  
   var NightminSIC=Math.floor((TotalFlightTimecmSIC-DayTotalTimecmSIC)%60); 
-  //var m = (Math.round(min/15) * 15) % 60;
   if (NightminSIC < 10) { NightminSIC = "0" + NightminSIC; } 
-  //console.log (Nighthour+':'+Nightmin); 
   setSic_night(NighthourSIC+':'+NightminSIC)
   setNightTime(NighthourSIC+':'+NightminSIC)
   setP1_us_night(NighthourSIC+':'+NightminSIC)
@@ -164,9 +152,7 @@ const SICnight_editable = (inputText) => {
   var DayHourSIC =Math.floor((TotalFlightTime1cmSIC-NightTotalTimecmSIC)/60);  
   if (DayHourSIC < 10) { DayHourSIC = "0" + DayHourSIC; }  
   var DayminSIC=Math.floor((TotalFlightTime1cmSIC-NightTotalTimecmSIC)%60); 
-  //var m = (Math.round(min/15) * 15) % 60;
   if (DayminSIC < 10) { DayminSIC = "0" + DayminSIC; } 
-  //console.log (DayHour+':'+Daymin); 
   setSic_day(DayHourSIC+':'+DayminSIC)
   setDayTime(DayHourSIC+':'+DayminSIC)
   setP1_us_day(DayHourSIC+':'+DayminSIC)
@@ -184,11 +170,8 @@ const SICnight_editable = (inputText) => {
 
     //custom input fields start
 
-    // this will be attached with each input onChangeText
     const [textValue, setTextValue] = React.useState('');
-    // our number of inputs, we can add the length or decrease
     const [numInputs, setNumInputs] = React.useState(1);
-    // all our input fields are tracked with this array
     const refInputs = React.useRef([textValue]);
 
     //custom input fields end
@@ -231,15 +214,9 @@ const SICnight_editable = (inputText) => {
     const [offset, setOffset] = React.useState(1)
     const [pilotsFetched, setPilotsFetched] = React.useState(false)
     const [pilotListProgress, setPilotListProgress] = React.useState('');
-
-    //const [maskedValue, setMaskedValue] = React.useState("");
-    //const [unMaskedValue, setUnmaskedValue] = React.useState("");
-
-
     const [date, setDate] = React.useState(new Date());
     const [mode, setMode] = React.useState('date');
     const [show, setShow] = React.useState(false);
-    //const [date, setDate] = React.useState('15-05-2021');
     const [fr, setFr] = React.useState('ifr');
     const [stl, setStl] = React.useState(false);
     const [df, setDf] = React.useState([]);
@@ -248,8 +225,8 @@ const SICnight_editable = (inputText) => {
     const [aircraftId, setAircraftId] = React.useState('') 
     const [route, setRoute] = React.useState('')
     const [remark, setRemark] = React.useState('')
-    const [fromDate, setFromDate] = React.useState('01-10-2021')
-    const [toDate, setToDate] = React.useState('31-10-2021')
+    const [fromDate, setFromDate] = React.useState('')
+    const [toDate, setToDate] = React.useState('')
 
     //landing
     const [dayLanding, setDayLanding] = React.useState('');
@@ -424,20 +401,6 @@ const SICnight_editable = (inputText) => {
     const [sf, setSf] = React.useState('')
     const [networkConnection, setNetworkConnection] = React.useState('')
 
-    // NetInfo.addEventListener(networkState => {
-    //     console.log("Connection type - ", networkState.type);
-    //     console.log("Is connected? - ", networkState.isConnected);
-      
-    //     if (networkState.isConnected === false) {
-    //         setNetworkConnection(false)
-    //     }
-    //     else if (networkState.isConnected === true){
-    //         setNetworkConnection(true)
-    //     }
-    //   });
-
-    // for self 
-
     //dynamic fields
 
     const [textInput,setTextInput] = React.useState([]);
@@ -455,16 +418,9 @@ const SICnight_editable = (inputText) => {
 
     //function to remove TextInput dynamically
     const removeTextInput = (index) => {
-    //console.log('pressed', index)
-    // let textInput1 = textInput;
-    // let inputData1 = inputData;
-    // textInput1.pop();
-    // inputData1.pop();
-    // setTextInput(textInput1)
-    // setInputData(inputData1)
     inputData.splice(inputData, index);
     textInput.splice(textInput, index);
-  }
+    }
 
     const addTextInput = (index) => {
     if (!FilterCustom.trim()) {
@@ -472,13 +428,11 @@ const SICnight_editable = (inputText) => {
     setFlightModalVisible(!FlightmodalVisible)
     }
     else{
-    //console.log('addTextInput',index)
     let textInput1 = textInput;
     textInput1.push(<View style={Logbook.fieldWithoutBottom}>
         <View style={Logbook.fields}>
             <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>{FilterCustom}</Text>
             <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
-                {/* <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{student}</Text> */}
                 <TouchableOpacity onPress={()=>(navigation.navigate('People'))}>
                     <MaterialCommunityIcons
                         name="chevron-right" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
@@ -491,7 +445,6 @@ const SICnight_editable = (inputText) => {
         </View>
     </View>);
    setTextInput(textInput1);
-   //console.log(textInput1)
    setFlightModalVisible(false);
     }
   }
@@ -500,26 +453,22 @@ const SICnight_editable = (inputText) => {
 
 //custom fields for time
 const removeTextInputTime = (timeIndex) => {
-    //console.log('pressed')
     timeInputData.splice(timeInputData, timeIndex);
     timeTextInput.splice(timeTextInput, timeIndex);
   }
 
     const TimeInputText = (timeIndex) => {
-    //console.log('addTextInputTime')
     if (!TimeFilterCustom.trim()) {
     alert('Custom Field is required');
     setTimeModalVisible(!TimemodalVisible)
     }
     else{
-    //console.log('addTextInput',timeIndex)
     let timeTextInput1 = timeTextInput;
     timeTextInput1.push(<View style={Logbook.fieldWithoutBottom}>
         <View style={Logbook.fields}>
             <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>{TimeFilterCustom}</Text>
             <MaskedTextInput
                 mask='99:99'
-                //value={Listparams.itemSicDay?listSicDay:sic_day}
                 value={params.RoasterP2 === 'Self' && sic_day}
                 onChangeText={inputText => {SICday_editable(inputText)}}
                 keyboardType="numeric"
@@ -532,7 +481,6 @@ const removeTextInputTime = (timeIndex) => {
         </TouchableOpacity>
     </View>);
    setTimeTextInput(timeTextInput1);
-   //console.log(textInput1)
    setTimeModalVisible(false);
     }
   }
@@ -541,19 +489,16 @@ const removeTextInputTime = (timeIndex) => {
 //Custom fields for Landing
 
 const removelandingInputTime = (LandingIndex) => {
-    //console.log('pressed')
     LandingInputData.splice(LandingInputData, LandingIndex);
     LandingTextInput.splice(LandingTextInput, LandingIndex);
   }
 
     const LandingInputText = (LandingIndex) => {
-    //console.log('addTextInputTime')
     if (!LandingFilterCustom.trim()) {
     alert('Custom Field is required');
     setLandingModalVisible(!LandingmodalVisible)
     }
     else{
-    //console.log('addTextInput',timeIndex)
     let LandingTextInput1 = LandingTextInput;
     LandingTextInput1.push(<View style={Logbook.fieldWithoutBottom}>
         <View style={Logbook.fields}>
@@ -571,7 +516,6 @@ const removelandingInputTime = (LandingIndex) => {
         </TouchableOpacity>
     </View>);
    setLandingTextInput(LandingTextInput1);
-   //console.log(textInput1)
    setLandingModalVisible(false);
     }
   }
@@ -585,28 +529,17 @@ React.useEffect(() => {
     }, []);
   
     const GetUserDetails = async () => {
-      //console.log('hello')
       let user = await AsyncStorage.getItem('userdetails');
       user = JSON.parse(user);
       let temData = [];
       prePopulateddb.transaction(tx => {
         tx.executeSql('SELECT roster_id,roster_pwd,airline_type FROM userProfileData Where user_id = "' + user.id + '"', [], (tx, result) => {
-          //setOffset(offset + 10);
-          if (result.rows.length > 0) {
-            //alert('data available '); 
-            //console.log('result', result)
-          }
-          else {
-            //console.log('error')
-          }
           for (let i = 0; i <= result.rows.length; i++) {
-            //console.log('name: ', result.rows.item(i).airline_name, 'loginlink: ', result.rows.item(i).loginUrl)
             temData.push({
               roster_id: result.rows.item(i).roster_id,
               roster_pwd: result.rows.item(i).roster_pwd,
               airline_type: result.rows.item(i).airline_type,
             });
-            //console.log('user Data', temData);
             setUserRosterId(result.rows.item(i).roster_id)
             setUserRosterPwd(result.rows.item(i).roster_pwd)
             setUserAirlineType(result.rows.item(i).airline_type)
@@ -639,13 +572,9 @@ const Roaster = async() => {
       })
     }).then(res => res.json())
     .then(resData => {
-      //console.log(resData);
-      //console.log('data ---->', resData.data)
-      //console.log('roaster data--->' ,roasterData)
   
       for(let i=0; i<resData.data.length; i++) 
        {
-           //console.log('Aircraft id', resData.data[i] )
            const AircraftReg = resData.data[i].Aircraft_Reg
            const AircraftType = resData.data[i].Aircraft_type
            const chocksOn = resData.data[i].Arrival_time
@@ -669,16 +598,9 @@ const Roaster = async() => {
   
           const RealAircraftType = AircraftType === '320' || AircraftType === '321' ? 'A-'+ AircraftType : AircraftType;
   
-           //console.log('orginal date', date)
-  
           let text = date;
           const myArray = text.split("-");
           const day =  myArray[2]+ myArray[1] + myArray[0] 
-          //console.log('sorted date', day);
-  
-           //console.log('Pilot_Pic====', Pilot_Pic);
-           //console.log('Pilot_Copilot====',Pilot_Copilot)
-          //console.log('Pilot_Instructor===',Pilot_Instructor)
   
            prePopulateddb.transaction((tx) => {
             if (Pilot_Pic !== ''){
@@ -700,19 +622,13 @@ const Roaster = async() => {
                );
             }
   
-            //console.log('data pos '+ i +' '+ resData.data.length);
-            //console.log(resData.data.length === resData.data.length)
-  
             if(resData.data.length>10){
               setProgressValue(0.5)
             }
   
             if((i+1) == resData.data.length){
-            //console.log('if true',(i+1) == resData.data.length)
-              //
             //selection from table logbook
               let RostertemData = [];
-              //console.log('SELECT id,tag,aircraftType,aircraftReg,user_id,date,from_nameICAO,to_nameICAO,offTime,onTime,from_lat,from_long,to_lat,to_long,p1,p2,dayLanding,nightLanding,dayTO,nightTO from logbook WHERE user_id = "'+user.id+'" AND tag ="roster" ORDER BY orderedDate DESC')
               prePopulateddb.transaction(tx => {
               tx.executeSql('SELECT id,tag,aircraftType,aircraftReg,user_id,date,from_nameICAO,to_nameICAO,offTime,onTime,from_lat,from_long,to_lat,to_long,p1,p2,dayLanding,nightLanding,dayTO,nightTO from logbook WHERE user_id = "'+user.id+'" AND tag ="roster" ORDER BY orderedDate DESC', [], (tx, result) => {
                   setOffset(offset + 10);
@@ -739,17 +655,10 @@ const Roaster = async() => {
                           dayTO : result.rows.item(j).dayTO,
                           nightTO : result.rows.item(j).nightTO,
                       });
-                      //console.log('Entry fetched '+ j +' out of :'+result.rows.length );
-                      //console.log('id', result.rows.item(j).id)
                       setProgressValue(1)
-                      //setLocalLogbookData(temData);
-                      //console.log('peopleee', result.rows.item(j).dayLanding+result.rows.item(j).nightLanding+result.rows.item(j).dayTO+result.rows.item(j).nightTO);
-                     //console.log('icao code test : ' ,RostertemData)
                       dataDispatcher(LogListData({data: RostertemData, inProgress:false}))
                       let jPos = j+1
-                      //console.log('data fetched pos', jPos, result.rows.length)
                       if(jPos == result.rows.length){
-                        //console.log('jpos')
                         Alert.alert("Message",'Data fetched successfully');
                         setDataFetched(false)
                         setRosterModalVisible(false)
@@ -764,7 +673,6 @@ const Roaster = async() => {
       }
   
     }).catch((error) => {
-      //console.log(error)
       alert('Credentials incorrect',error)
       setModalVisible(false)
     });
@@ -786,7 +694,6 @@ const importPilotList = async() => {
    })
   }).then(res => res.json())
   .then(resData => {
-  //console.log('Pilot List',resData.data);
 
   if(resData.data.length>100){
     setPilotListProgress(0.5)
@@ -797,29 +704,20 @@ const importPilotList = async() => {
   
      for(let k=0; k < resData.data.length; k++) 
    {
-      //const Airline = resData.data[i].Airline
       const Airline =resData.data[k].Airline
       const EGCA_Registration_No =resData.data[k].EGCA_Registration_No
       const Name =resData.data[k].Name
       const Pilotid =resData.data[k].id
        
-      //console.log ('getting people',Pilotid )
       prePopulateddb.transaction((tx) => {
         tx.executeSql(
           'INSERT INTO pilots (Airline,Egca_reg_no,Name,pilotId,selectedAirline)VALUES("'+Airline+'","'+EGCA_Registration_No+'","'+Name+'","'+Pilotid+'","'+userRosterAirlineType+'")',
-          // console.log('INSERT INTO pilots (Airline, Egca_reg_no, Name, pilotId)  VALUES ("'+Airline+'","'+EGCA_Registration_No+'", "'+Name+'" ,"'+Pilotid+'")')
         );
-        //console.log('K1', k+1);
-        //console.log('K', resData.data.length);
         if((k+1) == resData.data.length){
-          //selection from table pilots
             let PilotData1 = [];
             prePopulateddb.transaction(tx => {
             tx.executeSql('SELECT * from pilots WHERE Airline = "'+userRosterAirlineType+'" limit 10 ', [], (tx, pilotresult) => {
-                //setOffset(offset + 10);
                 if (pilotresult.rows.length > 0) {
-                    //alert('data available ');
-                    //console.log('result', pilotresult)
                 }
                 for (let l = 0; l < pilotresult.rows.length; l++) {
                 
@@ -831,14 +729,9 @@ const importPilotList = async() => {
                         pilotId :pilotresult.rows.item(l).pilotId,
                         
                     });
-                    //console.log('Entry fetched '+ l +' out of :'+pilotresult.rows.length );
-                    //console.log('date', result.rows.item(j).date)
-                    //setLocalLogbookData(temData);
-                    //console.log('peopleee', result.rows.item(j).dayLanding+result.rows.item(j).nightLanding+result.rows.item(j).dayTO+result.rows.item(j).nightTO);
-                    //console.log('icao code test : ' ,temData)
+                  
                     dataDispatcher(PilotData({data: PilotData1}))
                     let lPos = l+1
-                    //console.log('data fetched pos', jPos, result.rows.length)
                     if(lPos == pilotresult.rows.length){
                       setPilotListProgress(1)
                       Alert.alert("Message",'Pilot List imported successfully');
@@ -854,28 +747,24 @@ const importPilotList = async() => {
       })
       
    }
-   //alert('Pilots imported successfully')
+
 }).catch((error) => {
-    //console.log(error)
     alert (error);
     setPilotsFetched (true);
   });
 }
 
 const removeApproachInputTime = (ApproachIndex) => {
-    //console.log('pressed')
     ApproachInputData.splice(ApproachInputData, ApproachIndex);
     ApproachTextInput.splice(ApproachTextInput, ApproachIndex);
   }
 
     const ApproachInputText = (ApproachIndex) => {
-    //console.log('addTextInputTime')
     if (!ApproachFilterCustom.trim()) {
     alert('Custom Field is required');
     setApproachModalVisible(!ApproachmodalVisible)
     }
     else{
-    //console.log('addTextInput',timeIndex)
     let ApproachTextInput1 = ApproachTextInput;
     ApproachTextInput1.push(<View style={Logbook.fieldWithoutBottom}>
         <View style={Logbook.fields}>
@@ -895,14 +784,11 @@ const removeApproachInputTime = (ApproachIndex) => {
         </TouchableOpacity>
     </View>);
    setApproachTextInput(ApproachTextInput1);
-   //console.log(textInput1)
    setApproachModalVisible(false);
     }
   }
 
 //Custom fields for Approaches
-
-
 //function to console the output
 
     const { dark, theme, toggle } = React.useContext(ThemeContext);
@@ -943,9 +829,6 @@ const removeApproachInputTime = (ApproachIndex) => {
 
 
     React.useEffect(() => {
-        // if (Destparams.childParam) {
-            //console.log('Child param is', Destparams.childParam);
-            //console.log('rosterlat: '+params.RoasterFrom_lat);
             setFromAirportId(params.FromItemId)
             setFromIdent(params.FromItemCode)
             setFromAirportName(params.FromItemName)
@@ -986,27 +869,20 @@ const removeApproachInputTime = (ApproachIndex) => {
         //}
     }, [params]);
 
-    //console.log('latDest', fromLatitude)
-
     React.useEffect(() => {
         if (Approachparams.childParam) {
-            //console.log('Child param is', Approachparams.childParam);
             setApproach1(Approachparams.ApproachMixture)
             setApproach2(Approachparams.ApproachMixture)
         }
     }, [Approachparams]);
 
     React.useEffect(() => {
-            // From Roaster (listing)
-            //setRosterDate(new Date (params.RoasterDate))
             setRosterId(params.RoasterId)
             setRosterFrom(params.RoasterFrom)
             setRosterChocksOff(params.RoasterChocksOff)
             setRosterTo(params.RoasterTo)
             setRosterChocksOn(params.RoasterChocksOn)
-            setRosterAType(params.RoasterAType) // from logbook listing
-            //if (rosterAId !== 'SIMU') setRosterAId(params.RoasterAId)
-            //setRosterTotalTime(Listparams.RoasterTotalTime)
+            setRosterAType(params.RoasterAType)
             setRosterNamePic(params.RoasterP1)
             setRosterNameSic(params.RoasterP2)
             setRosterDayLand(params.RoasterDayLanding)
@@ -1015,17 +891,9 @@ const removeApproachInputTime = (ApproachIndex) => {
             setRosterNightTakeOff(params.RoasterNightTO)
             setRosterFromLat(params.RoasterFrom_lat)
             setRosterToLat(params.RoasterTo_lat)
-            //setRosterFromParams(params.Params);
             setListInstructor(params.RoasterInstructor)
 }, [params]);
 
- //console.log('rosterchocksOff', rosterAType )
-// console.log('selfPICday', rosterNamePic === 'Self' ? dayTime : pic_day )
-// console.log('selfPICnight', rosterNamePic === 'Self' ? nightTime : pic_night )
-// console.log('SelfSICday', rosterNameSic === 'Self' ? dayTime : sic_day )
-// console.log('SelfSICnight', rosterNameSic === 'Self' ? nightTime : sic_night )
-
- 
 React.useEffect(() => {
         setInstructor(Peopleparams.InstructorItemName)
         setReliefCrew1(params.RoasterRC1)
@@ -1096,8 +964,6 @@ React.useEffect(() => {
         PMToggle,
         SFToggle,
     } = React.useContext(ConfigContext);
-    //console.log('flight check', flightToggle)
-    //console.log('check===>', roleCheck)
 
     const Configuration = () => {
         setConfig(config => !config);
@@ -1106,14 +972,12 @@ React.useEffect(() => {
 
     const HideDoneConfig = () => {
         setConfig(config => !config);
-        //setModalVisible(!modalVisible);
     };
 
     
     const Add_Logbook = async () => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
-        //console.log('iddddddd', user.id)
 
         await fetch(BaseUrl + 'addLogbook', {
             method: 'POST',
@@ -1224,14 +1088,11 @@ React.useEffect(() => {
             })
         }).then(res => res.json())
             .then(resData => {
-                //console.log('data---->', resData.data);
                 Alert.alert(resData.message);
             }).catch((error) => {
-                console.log(error)
               });
     };
 
-    //console.log('SIIIICC', pic_p1)
 
     const deleteLogbbok = async () => {
         let user = await AsyncStorage.getItem('userdetails');
@@ -1249,18 +1110,14 @@ React.useEffect(() => {
             })
         }).then(res => res.json())
             .then(resData => {
-                //console.log('data---->', resData.data);
                 Alert.alert(resData.message);
             });
     };
 
     const DeleteLogs = () => {
-        //dataDispatcher(LogListData({ data: [] }))
         prePopulateddb.transaction(tx => {
           tx.executeSql(
             'DELETE FROM logbook WHERE id = "'+rosterId+'"', [], (tx, Delresult) => {
-              //console.log('Result', Delresult.rows.length);
-              //console.log('DELETE FROM logbook WHERE tag = "roster"')
               SELECTAfterDel(true)
               navigation.navigate('LogBookListing')
             }
@@ -1271,16 +1128,11 @@ React.useEffect(() => {
       const SELECTAfterDel = async (deleteLog = false) => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
-        //console.log('test');
         if (deleteLog === true) {
-          //console.log('inner', user.id)
           prePopulateddb.transaction(tx => {
             tx.executeSql(
                 'SELECT * from logbook  WHERE user_id = "'+user.id+'" ORDER BY orderedDate DESC limit 5', [], (tx, result) => {
-                //setOffset(offset + 10);
                       if (result.rows.length > 0) {
-                          //alert('data available ');
-                          //console.log('result', result)
                       }
                       for (let i = 0; i <= result.rows.length; i++) {
                         if (result.rows.length !== 0){
@@ -1304,21 +1156,15 @@ React.useEffect(() => {
                               aircraftType : result.rows.item(i).aircraftType,
                               aircraftReg : result.rows.item(i).aircraftReg,
                           });
-                            //console.log('logbook data', temData);
-                           //setLocalLogbookData(temData);
                           dataDispatcher(LogListData({data: temData, inProgress: false}))
-                        //   dataDispatcher(DocListData({data: temData}))
                           
                         }
                         else {
-                            //console.log('no data to show')
                             dataDispatcher(LogListData({ data: [], inProgress: false }))
                           }
                     }
                   });
           });
-          //const getReduxDataDeleted = dataSelector;
-          //console.log('from Deleted Logbook', getReduxDataDeleted.data);
         }
       }
 
@@ -1330,7 +1176,6 @@ React.useEffect(() => {
     const updateLogbbok = async () => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
-        //console.log('iddddddd', user.id)
 
         await fetch(BaseUrl + 'updateLogbook', {
             method: 'POST',
@@ -1397,30 +1242,19 @@ React.useEffect(() => {
             })
         }).then(res => res.json())
             .then(resData => {
-                //console.log('data---->', resData.data);
                 Alert.alert(resData.message);
             });
     };
-    //Alert.alert('params from roaster import', Listparams.RoasterImportData)
-   // console.log('name_PIc------>', rosterNamePic)
 
    const getReduxApproachData = useSelector(state => state.approaches.Airport);
-    //console.log ('hehhhAproach', getReduxApproachData)
 
     //sqlite starts
 
-    //React.useEffect(() => { getDataQuery() }, []);
-    //console.log(rosterNamePic)
-    //console.log('is it true ?' , rosterNamePic == 'Self')
-    const selfPICday = rosterNamePic === 'Self' ? dayTime : pic_day
-    //console.log('picday', selfPICday)
+    const selfPICday = rosterNamePic === 'Self' ? dayTime : setPic_day
     const selfPICnight = rosterNamePic === 'Self' ? nightTime : pic_night
-    //console.log('picnight', selfPICnight)
 
     const SelfSICday = rosterNameSic === 'Self' ? dayTime : sic_day
-    //console.log('sicDay', SelfSICday)
     const SelfSICnight = rosterNameSic === 'Self' ? nightTime : sic_night
-    //console.log('sicNight', SelfSICnight)
 
     const SelectQuery = () => {
         let selectedData = []; 
@@ -1432,7 +1266,6 @@ React.useEffect(() => {
                         aircraftReg :  result.rows.item(i).aircraftReg    
                      });
                      if (rosterAId !== 'SIMU') setRosterAId(result.rows.item(i).aircraftReg)
-                     //console.log('setRosterAId', rosterAId)
                     }
                 }
             );
@@ -1453,6 +1286,8 @@ React.useEffect(() => {
         });
     }
 
+    //console.log('AT', rosterNamePic)
+
     const insertQuery = async() => {
 
         const SimulatedInstrument = (si) ? si: null
@@ -1463,7 +1298,7 @@ React.useEffect(() => {
           alert('Please select Date');
           return;
         }
-        if (rosterAType==='' && rosterAId!=='SIMU') {
+        if (rosterAType.length === 1) {
           alert('Please select Aircraft Type');
           return;
         }
@@ -1495,8 +1330,6 @@ React.useEffect(() => {
                 'UPDATE logbook set tag="manual", user_id="'+user.id+'" , flight_no="", date="'+originalDate+'", day="'+dayTime+'", actual_Instrument="'+ai+'", aircraftReg="'+rosterAId+'", aircraftType="'+rosterAType+'", approach1="'+Approach1+'", approach2="'+approach2+'", approach3="", approach4="", approach5="", approach6="", approach7="", approach8="", approach9="", approach10="", crewCustom1="", crewCustom2="", crewCustom3="", crewCustom4="", crewCustom5="", dayLanding="'+dayLanding+'", dayTO="'+day_to+'", dual_day="'+dual_day+'", dual_night="'+dual_night+'", flight="'+flight+'", from_airportID="'+fromAirportid+'", from_altitude="'+fromElevation+'", from_city="", from_country="'+fromCountry+'", from_dayLightSaving="'+fromDst+'", from_source="'+fromSource+'", from_lat="'+fromLatitude+'", from_long="'+fromLongitude+'", from_name="'+fromAirportname+'", from_nameIATA="", from_nameICAO="'+rosterFrom+'", from_timeZone="'+fromTimeZone+'", from_type="'+fromType+'", from_dst_status="'+fromDstStatus+'", fullStop="'+fullStop+'", ifr_vfr="'+fr+'", instructional="'+instructional+'", instructor="'+instructor+'", inTime="'+landing+'", landingCustom1="", landingCustom2="", landingCustom3="", landingCustom4="", landingCustom5="", landingCustom6="", landingCustom7="", landingCustom8="", landingCustom9="", landingCustom10="", night="'+nightTime+'", nightLanding="'+nightLanding+'", nightTO="'+night_to+'", offTime="'+rosterChocksOff+'", onTime="'+rosterChocksOn+'", outTime="'+takeOff+'", p1="'+rosterNamePic+'", p1_us_day="'+p1_us_day+'", p1_us_night="'+p1_us_night+'", p2="'+rosterNameSic+'", pic_day="'+selfPICday+'", pic_night="'+selfPICnight+'", stl="'+stl+'", reliefCrew1="'+reliefCrew1+'", reliefCrew2="'+reliefCrew2+'", reliefCrew3="'+reliefCrew3+'", reliefCrew4="'+reliefCrew4+'", route="'+route+'", sic_day="'+SelfSICday+'", sic_night="'+SelfSICnight+'", sim_instructional="", sim_instrument="'+SimulatedInstrument+'", selected_role="", student="'+student+'", timeCustom1="", timeCustom2="", timeCustom3="", timeCustom4="", timeCustom5="", timeCustom6="", timeCustom7="", timeCustom8="", timeCustom9="", timeCustom10="", to_airportID="'+toAirportid+'", to_altitude="'+toElevation+'", to_city="", to_country="'+toCountry+'", to_dayLightSaving="'+toDst+'", to_source="'+toSource+'", to_lat="'+toLatitude+'", to_long="'+toLongitude+'", to_name="'+toAirportname+'", to_nameIATA="", to_nameICAO="'+rosterTo+'", to_timeZone="'+toTimeZone+'", to_type="'+toType+'", to_dst_status="'+toDstStatus+'", totalTime="'+filghtTimeM+'", touch_n_gos="'+touchGo+'", waterLanding="'+waterLanding+'", waterTO="'+water_to+'", x_country_day="'+xc_day+'", x_country_night="'+xc_night+'", x_country_day_leg="'+xc_day_leg+'", x_country_night_leg="'+xc_night_leg+'", outTime_LT="", offTime_LT="", onTime_LT="", inTime_LT="", sim_type="'+St+'", sim_exercise="'+Sim_exercise+'", pf_time="'+pfHours+'", pm_time="'+pmHours+'", sfi_sfe="'+sf+'", simCustom1="", simCustom2="", simCustom3="", simCustom4="", simCustom5="", simLocation="'+location+'", p1_ut_day="'+p1_ut_day+'", p1_ut_night="'+p1_ut_night+'", remark="'+remark+'", autolanding="'+autoLanding+'", flight_date="", selected_flight_timelog="", imported_log="", orderedDate="'+sortedDate+'" where id="'+rosterId+'"')
         }
         else if(rosterAId !== 'SIMU'){
-            //console.log('INSERTING WITHOUT SIMU')
-            //let temDataSIMU = [];
             tx.executeSql(
             'INSERT INTO logbook (tag, user_id, flight_no, date, day,  actual_Instrument, aircraftReg, aircraftType, approach1, approach2, approach3, approach4, approach5, approach6, approach7, approach8, approach9, approach10, crewCustom1, crewCustom2, crewCustom3, crewCustom4, crewCustom5, dayLanding, dayTO, dual_day, dual_night, flight, from_airportID, from_altitude, from_city, from_country, from_dayLightSaving, from_source, from_lat, from_long, from_name, from_nameIATA, from_nameICAO, from_timeZone, from_type, from_dst_status, fullStop, ifr_vfr, instructional, instructor, inTime, landingCustom1, landingCustom2, landingCustom3, landingCustom4, landingCustom5, landingCustom6, landingCustom7, landingCustom8, landingCustom9, landingCustom10, night, nightLanding, nightTO, offTime, onTime, outTime, p1, p1_us_day, p1_us_night, p2, pic_day, pic_night, stl, reliefCrew1, reliefCrew2, reliefCrew3, reliefCrew4, route, sic_day, sic_night, sim_instructional, sim_instrument, selected_role, student, timeCustom1, timeCustom2, timeCustom3, timeCustom4, timeCustom5, timeCustom6, timeCustom7, timeCustom8, timeCustom9, timeCustom10, to_airportID, to_altitude, to_city, to_country, to_dayLightSaving, to_source, to_lat, to_long, to_name, to_nameIATA, to_nameICAO, to_timeZone, to_type, to_dst_status, totalTime, touch_n_gos, waterLanding, waterTO, x_country_day, x_country_night, x_country_day_leg, x_country_night_leg, outTime_LT, offTime_LT, onTime_LT, inTime_LT, sim_type, sim_exercise, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, simLocation, p1_ut_day, p1_ut_night, remark, autolanding, flight_date, selected_flight_timelog, imported_log, orderedDate)  VALUES ("manual","'+user.id+'", "" ,"'+originalDate+'" , "'+dayTime+'" , "'+ai+'" , "'+rosterAId+'" , "'+rosterAType+'" , "'+Approach1+'" , "'+approach2+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+dayLanding+'" , "'+day_to+'" , "'+dual_day+'" , "'+dual_night+'" , "'+flight+'" , "'+fromAirportid+'" , "'+fromElevation+'" , "" , "'+fromCountry+'" , "'+fromDst+'" , "'+fromSource+'" , "'+fromLatitude+'" , "'+fromLongitude+'" , "'+fromAirportname+'" , "" , "'+rosterFrom+'", "'+fromTimeZone+'" , "'+fromType+'" , "'+fromDstStatus+'" , "'+fullStop+'" , "'+fr+'" , "'+instructional+'" , "'+instructor+'" , "'+landing+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+nightTime+'" , "'+nightLanding+'" , "'+night_to+'" , "'+rosterChocksOff+'" , "'+rosterChocksOn+'" , "'+takeOff+'" , "'+rosterNamePic+'" , "'+p1_us_day+'" , "'+p1_us_night+'" , "'+rosterNameSic+'" , "'+selfPICday+'" , "'+selfPICnight+'" , "'+stl+'" , "'+reliefCrew1+'" , "'+reliefCrew2+'" , "'+reliefCrew3+'" , "'+reliefCrew4+'" , "'+route+'" , "'+SelfSICday+'" , "'+SelfSICnight+'" , "" , "'+SimulatedInstrument+'" , "" , "'+student+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+toAirportid+'" , "'+toElevation+'" , "" , "'+toCountry+'" , "'+toDst+'" , "'+toSource+'" , "'+toLatitude+'" , "'+toLongitude+'" , "'+toAirportname+'" , "" , "'+rosterTo+'" , "'+toTimeZone+'" , "'+toType+'" , "'+toDstStatus+'" , "'+filghtTimeM+'" , "'+touchGo+'" , "'+waterLanding+'" , "'+water_to+'" , "'+xc_day+'" , "'+xc_night+'" , "'+xc_day_leg+'" , "'+xc_night_leg+'" , "" , "" , "" , "" , "'+St+'" , "'+Sim_exercise+'" , "'+pfHours+'" , "'+pmHours+'" , "'+sf+'" , "" , "" , "" , "" , "" , "'+location+'" , "'+p1_ut_day+'" , "'+p1_ut_night+'" , "'+remark+'" , "'+autoLanding+'" , "" , "" , "" , "'+sortedDate+'" )',
           )
@@ -1515,11 +1348,6 @@ React.useEffect(() => {
 
     //sqlite ends
 
-    //date settings starts
-
-    //const OnlyDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
-    //const onlyDate = ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + date.getFullYear()
-    //console.log('onlyDate', onlyDate);
     const monthNames = ["Jan", "Feb", "March", "April", "May", "June",
         "July", "Aug", "Sep", "Oct", "Nov", "Dec"
     ];
@@ -1532,14 +1360,11 @@ React.useEffect(() => {
 
 
     const sortedDate  = rosterDate.getFullYear() + ("0" + (rosterDate.getMonth() + 1)).slice(-2) + ("0" + rosterDate.getDate()).slice(-2)
-    //console.log('Date of sorting', sortedDate)
 
     //Get Data from form
     
     //day_night calculation
     const day_night_calc = () => {
-
-        //console.log('hello')
         var depT = rosterChocksOff; 
         let onlyDate1 = '';
         var depTemp = depT.split(":");
@@ -1549,17 +1374,13 @@ React.useEffect(() => {
         var arrTemp = arrT.split(":");
         var arrH = Number(arrTemp[0]);
         var arrM = Number(arrTemp[1]);
-        //var dateOfFlight = new Date('2021-07-22'); //yyyy-mm-dd
         var departureTimeM = new Date('2021-07-22'); //yyyy-mm-dd
-        onlyDate1 = rosterDate.getFullYear() + "-" + ("0" + (rosterDate.getMonth() + 1)).slice(-2) + "-" + ("0" + rosterDate.getDate()).slice(-2) // otherwise use date instead rosterDate
-        //console.log('dateSet', onlyDate1)
+        onlyDate1 = rosterDate.getFullYear() + "-" + ("0" + (rosterDate.getMonth() + 1)).slice(-2) + "-" + ("0" + rosterDate.getDate()).slice(-2) // otherwise use date 
         var dateOfFlight =  new Date(onlyDate1);
-        //console.log("flight date hello", dateOfFlight);
         var departureTimeM = new Date ( onlyDate1 );
         var test = departureTimeM.setHours(depH);
         departureTimeM.setMinutes(depM);
         var arrivelTimeM = new Date(onlyDate1); //yyyy-mm-dd
-        //var arrivelTimeM = new Date ( ddmmyy );
         arrivelTimeM.setHours(arrH);
         arrivelTimeM.setMinutes(arrM);
         let fromLat = fromLatitude;
@@ -1571,16 +1392,6 @@ React.useEffect(() => {
         let night_landing = 0;
         let night_takeoff = 0;
 
-
-    //    console.log(depT);
-    //    console.log(arrT);
-    //    console.log(dateOfFlight);
-    //    console.log(departureTimeM);
-    //    console.log('From lat', fromLat);
-    //    console.log('From long', fromLong);
-    //    console.log('to lat', toLat);
-    //    console.log('to long', toLong);
-    //    console.log('test', test);
 
         //total flight time
         var filghtTimeM = getFlightTime(dateToMinuts(departureTimeM), dateToMinuts(arrivelTimeM));
@@ -1867,8 +1678,7 @@ React.useEffect(() => {
 
             }
         }
-        //console.log(" filghtTimeM:  " + filghtTimeH + "------nightTime:  " + nightTimeH + "----DayTime: " + dayTimeH + "---day_landing: "+ day_landing + "---day_takeoff: "+ day_takeoff + "---night_landing: "+ night_landing + "---night_takeoff: "+ night_takeoff);
-        // functions
+       
 
         function getFlightTime(departureTimeM, arrivelTimeM) {
             if (arrivelTimeM > departureTimeM) {
@@ -2104,8 +1914,6 @@ React.useEffect(() => {
         setRosterNameSic('')
     }
 
-    //console.log('date', datee);
-
     const logic = (P1, P2) => {
         if (P1 === 'Self') {
             P1 = rosterNamePic
@@ -2120,13 +1928,9 @@ React.useEffect(() => {
     }
 
     const flightDate = (event, selectedDate) => {
-        //console.log('selected date',selectedDate )
         const currentDate = selectedDate || rosterDate;
-        //const rosterCurrentDate = selectedDate || rosterDate;
         setShow(Platform.OS === 'ios');
-        //setDate(currentDate);
         setRosterDate(currentDate)
-        //console.log ('daaaaate', currentDate)
     };
 
     const showMode = (currentMode) => {
@@ -2138,7 +1942,6 @@ React.useEffect(() => {
         showMode('date');
     };
 
-    //console.log('stllll',stl )
     const STL_CONDITIONS = () =>  {
         if (stl === false && rosterNameSic==='Self') {
             setP1_us_day(sic_day)
@@ -2165,29 +1968,17 @@ React.useEffect(() => {
             nanRemovable()}}
         , [rosterNamePic]);
 
-    //console.log('p1/usDay ---- >', isNaN(p1_us_day))
     const PerferctP1_us_day = isNaN(p1_us_day)==true ?'00:00': p1_us_day
     const PerferctP1_us_night = isNaN(p1_us_night)==true ? '00:00': p1_us_night
 
     const originalDate = datee == 'DDMM' ? ddmmyy : mmddyy;
-    //const RoasterOriginalDate = datee == 'DDMM' ? RosterDDmmyy : RosterMMddyy;
     
     const ServeroriginalDate = datee == 'DDMM' ? Serverddmmyy : Servermmddyy;
-    //console.log('getting date', ServeroriginalDate)
-    
-    //console.log("PARAMMMMMMMMM", rosterFromParams)
-    //console.log ("contextparam", ListingParam)
-
-    // const hello = () => {
-    //console.log('check', params.RoasterP1)
-    // }
 
     const sicDayControl = (inputText) => {
         setSic_day(inputText)
         setDayTime(inputText)
-        // if (dayTime){ 
-        // day_editable()
-        // }
+        
     }
 
     const sicNightControl = (inputText) => {
@@ -2225,15 +2016,10 @@ React.useEffect(() => {
         if (rosterAId === 'SIMU') {
          SimuCalculations()}}, [rosterAId, SimuCalculations]);
 
-    //console.log('ApproachNo',getReduxApproachData.ApproachNo)
-    //console.log('ApproachType',getReduxApproachData.ApproachType)
-    //console.log('Airport',getReduxApproachData.Airport)
-
     const A = getReduxApproachData.ApproachNo === undefined ? 1 : getReduxApproachData.ApproachNo;
     const B = getReduxApproachData.ApproachType === undefined ? 'ILS' : getReduxApproachData.ApproachType
 
      const Approach1 = A+';'+B+';'+rosterTo;
-     //console.log('C', Approach1)
 
      const ut_control = () => {
          setP1_us_day('')
@@ -2246,6 +2032,32 @@ React.useEffect(() => {
              setP1_ut_day('')
          } 
      }
+
+     const returnTrip = () => {
+         if(!originalDate || rosterAType.length===1 || !rosterFrom || !rosterTo && !rosterChocksOff || !rosterChocksOn){
+             alert('Please Fill mandatory fields');
+             setModalVisible(false)
+         }
+         else {
+             setRosterFrom(rosterTo)
+             setRosterTo(rosterFrom)
+             setModalVisible(false)
+         }
+     }
+
+     const nextLeg = () => {
+        if(!originalDate || rosterAType.length===1 || !rosterFrom || !rosterTo && !rosterChocksOff || !rosterChocksOn){
+            alert('Please Fill mandatory fields');
+            setModalVisible(false)
+        }
+        else {
+            setRosterFrom(rosterTo)
+            setRosterTo('')
+            setModalVisible(false)
+            setRosterChocksOff('')
+            setRosterChocksOn('')
+        }
+    }
 
     return (
         <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
@@ -2406,13 +2218,41 @@ React.useEffect(() => {
                             <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Date <Text style={{ color: 'red' }}>*</Text></Text>
                             
                             {show && (
-                                <DateTimePicker
-                                    testID="dateTimePicker"
-                                    value={rosterDate}
-                                    // mode={mode}
-                                    //is24Hour={true}
-                                    display={Platform.OS=='ios'?"default":"default"}
-                                    onChange={flightDate}
+                                // <DateTimePicker
+                                //     testID="dateTimePicker"
+                                //     value={rosterDate}
+                                //     // mode={mode}
+                                //     //is24Hour={true}
+                                //     display={Platform.OS=='ios'?"default":"default"}
+                                //     onChange={flightDate}
+                                // />
+                                <DatePicker
+                                //style={styles.datePickerStyle}
+                                date={rosterDate} // Initial date from state
+                                mode="date" // The enum of date, datetime and time
+                                placeholder="From"
+                                placeholderTextColor = "#266173"
+                                format= "DD-MM-YYYY"
+                                //minDate="01-01-2016"
+                                //maxDate="01-01-2019"
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                suffixIcon={null}
+                                customStyles={{
+                                    dateInput: {
+                                    borderWidth:0.2,
+                                    borderRadius: 15,
+                                    borderColor: '#EFEFEF',
+                                    width: '100%',
+                                    backgroundColor: '#fff',
+                                    },
+                                    dateIcon: {
+                                    width:40,
+                                    height:40,
+                                    },
+                                }}
+                                hideText={true}
+                                onDateChange={flightDate}
                                 />
                             )}
                             {/* <Text style={{paddingTop:8}}>{onlyDate}</Text> */}
@@ -2438,8 +2278,7 @@ React.useEffect(() => {
                         <View style={Logbook.fields}>
                             <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Aircraft Type <Text style={{ color: 'red' }}>*</Text></Text>
                             <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
-                                {/* <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{ ListingParam === rosterFromParams ? rosterAType : AircraftParam === params.childParam2 ? aircraft_name : '' }</Text> */}
-                                <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterAType }</Text>
+                                <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterAType}</Text>
                                 <TouchableOpacity onPress={() => { navigation.navigate('SetAircraft', {itemAtype : rosterAType , itemAId : rosterAId , from : 'ATCreateLogbook'  }) }}>
                                     <MaterialCommunityIcons
                                         name="alert-circle-outline" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
@@ -2610,7 +2449,7 @@ React.useEffect(() => {
 
                 {config && rosterAId!== 'SIMU' ? <View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, color: 'blue' } }}>Select Choices....</Text>
+                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, color: dark?'#fff':'blue' } }}>Select Choices....</Text>
                         <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                             {/* <Text style={{...Logbook.fieldText, ...{lineHeight:35}}}>Select Choices....</Text> */}
                             <TouchableOpacity onPress={() => navigation.navigate('Configuration', { from: 'flight1', toggled: params.flight })}>
@@ -2639,7 +2478,7 @@ React.useEffect(() => {
                         <View style={Logbook.fields}>
                             <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>PIC/P1<Text style={{ color: 'red' }}>*</Text></Text>
                             <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
-                                <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterNamePic}</Text>
+                                <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterNamePic === 'undefined' ?'':rosterNamePic}</Text>
                                 <TouchableOpacity onPress={() => {navigation.navigate('People', { from: 'pic' })}}>
                                     <MaterialCommunityIcons
                                         name="chevron-right" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
@@ -2779,7 +2618,7 @@ React.useEffect(() => {
 
                 {config && rosterAId !== 'SIMU' ? <View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, color: 'blue' } }}>Select Choices....</Text>
+                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, color: dark?'#fff':'blue' } }}>Select Choices....</Text>
                         <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                             {/* <Text style={{...Logbook.fieldText, ...{lineHeight:35}}}>Select Choices....</Text> */}
                             <TouchableOpacity onPress={() => navigation.navigate('Configuration', { from:'flight2' })}>
@@ -2871,7 +2710,7 @@ React.useEffect(() => {
 
                 {config && rosterAId === 'SIMU' ? <View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, color: 'blue' } }}>Select Choices....</Text>
+                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, color:dark?'#fff': 'blue' } }}>Select Choices....</Text>
                         <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                             {/* <Text style={{...Logbook.fieldText, ...{lineHeight:35}}}>Select Choices....</Text> */}
                             <TouchableOpacity onPress={() => navigation.navigate('Configuration', { from:'simu' })}>
@@ -3227,7 +3066,6 @@ React.useEffect(() => {
                 </View> : null}
                 
                 {timeTextInput.map((Timevalue) => {
-                //console.log('TimeValue', Timevalue)
                 return Timevalue
                 })}
 
@@ -3283,7 +3121,7 @@ React.useEffect(() => {
                 {config ?
                     <View style={Logbook.fieldWithoutBottom}>
                         {rosterAId!== 'SIMU' && (<View style={Logbook.fields}>
-                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, color: 'blue' } }}>Select Choices....</Text>
+                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, color: dark?'#fff':'blue' } }}>Select Choices....</Text>
                             <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                                 {/* <Text style={{...Logbook.fieldText, ...{lineHeight:35}}}>Select Choices....</Text> */}
                                 <TouchableOpacity onPress={() => navigation.navigate('Configuration', { from: 'Time' })}>
@@ -3475,7 +3313,7 @@ React.useEffect(() => {
 
                 {config ? <View style={Logbook.fieldWithoutBottom}>
                     {rosterAId !== 'SIMU' && (<View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, color: 'blue' } }}>Select Choices....</Text>
+                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, color:dark?'#fff': 'blue' } }}>Select Choices....</Text>
                         <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                             {/* <Text style={{...Logbook.fieldText, ...{lineHeight:35}}}>Select Choices....</Text> */}
                             <TouchableOpacity onPress={() => navigation.navigate('Configuration', { from: 'landing' })}>
@@ -3532,7 +3370,6 @@ React.useEffect(() => {
                 </View> : null}
 
                 {ApproachTextInput.map((Approachvalue) => {
-                //console.log('TimeValue', Timevalue)
                 return Approachvalue
                 })}
 
@@ -3583,7 +3420,7 @@ React.useEffect(() => {
 
                 {config ? <View style={Logbook.fieldWithoutBottom}>
                     {rosterAId!== 'SIMU' && (<View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, color: 'blue' } }}>Select Choices....</Text>
+                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, color:dark?'#fff': 'blue' } }}>Select Choices....</Text>
                         <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                             {/* <Text style={{...Logbook.fieldText, ...{lineHeight:35}}}>Select Choices....</Text> */}
                             <TouchableOpacity onPress={() => navigation.navigate('Configuration', { from: 'Approach' })}>
@@ -3794,13 +3631,13 @@ React.useEffect(() => {
                                 <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}>Copy Trip</Text>
                             </View>
                             </TouchableOpacity>
-                            <TouchableOpacity style={ModalView.Modal}>
+                            <TouchableOpacity style={ModalView.Modal} onPress={returnTrip}>
                             <MaterialCommunityIcons name="keyboard-return" color={dark?'#fff':'#000'} size={20}/>
                             <View>
                                 <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}>Return Trip</Text>
                             </View>
                             </TouchableOpacity>
-                            <TouchableOpacity style={ModalView.Modal}>
+                            <TouchableOpacity style={ModalView.Modal} onPress={nextLeg}>
                             <MaterialCommunityIcons name="skip-forward" color={dark?'#fff':'#000'} size={20}/>
                             <View>
                                 <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}>Next Leg</Text>

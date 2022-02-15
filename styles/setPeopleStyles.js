@@ -53,7 +53,7 @@ const SetPeopleScreenStyle = StyleSheet.create({
         fontFamily:'WorkSans-Regular',
       },
       textViewInput:{
-          paddingHorizontal: 2,
+          padding: 5,
           borderColor: '#F2F2F2',
           borderWidth: 1,
           borderRadius : 10,

@@ -1,10 +1,9 @@
 //import liraries
-import React, { Component } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Platform, Dimensions, Alert } from 'react-native';
 import  Colors  from '../../components/colors';
 import ImagePicker from 'react-native-image-picker';
 import { ScrollView } from 'react-native-gesture-handler';
-import { RadioButton,} from 'react-native-paper';
 import { ThemeContext } from '../../theme-context';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useSelector, useDispatch } from "react-redux";
@@ -52,23 +51,17 @@ const SetDestination = ({navigation, route}) => {
     const [iata, setIATA] = React.useState('');
 
     const getReduxData = useSelector(state => state.cl.AircraftType);
-    console.log ('hehhh', getReduxData.FromICAO)
-    console.log ('hehhhttttt', getReduxData.toICAO)
 
     React.useEffect(() => {selectQuery()}, []);
 
     const selectQuery = () => {
       let tempdata = [];
         db.transaction(tx => {
-          //console.log('SELECT * FROM Aircrafts WHERE AircraftType= "'+itemAtype+'"')
           if (route.params.from === 'From') {
           tx.executeSql('SELECT * FROM Airport_table WHERE ICAO_code="'+getReduxData.FromICAO+'"', [], (tx, result) => {
             if (result.rows.length > 0) {
-              //alert('data available ');
-              console.log('result', result)
             
             for (let i = 0; i <= result.rows.length; i++) {
-              console.log('name: ', result.rows.item(i).id)
               tempdata.push({
                 airportID : result.rows.item(i).airportID,
                 ident: result.rows.item(i).ident,
@@ -90,7 +83,6 @@ const SetDestination = ({navigation, route}) => {
                 source : result.rows.item(i).source,
               
               });
-                console.log('hdsfddfdh',tempdata);
                 setIdent(result.rows.item(i).ident)
                 setAirportName(result.rows.item(i).name)
                 setType(result.rows.item(i).type)
@@ -111,11 +103,8 @@ const SetDestination = ({navigation, route}) => {
         else if (route.params.from === 'to'){
           tx.executeSql('SELECT * FROM Airport_table WHERE ICAO_code="'+getReduxData.toICAO+'"', [], (tx, result) => {
             if (result.rows.length > 0) {
-              //alert('data available ');
-              console.log('result', result)
             
             for (let i = 0; i <= result.rows.length; i++) {
-              console.log('name: ', result.rows.item(i).id)
               tempdata.push({
                 airportID : result.rows.item(i).airportID,
                 ident: result.rows.item(i).ident,
@@ -137,7 +126,6 @@ const SetDestination = ({navigation, route}) => {
                 source : result.rows.item(i).source,
               
               });
-                console.log('hdsfddfdh',tempdata);
                 setIdent(result.rows.item(i).ident)
                 setAirportName(result.rows.item(i).name)
                 setType(result.rows.item(i).type)
@@ -183,8 +171,6 @@ const SetDestination = ({navigation, route}) => {
         formData.append('user_id', user.id); 
         const splittedBase64 = imageData.split(';base64');
         formData.append('airport_image', splittedBase64[1]);
-        // console.log('form data' , data._parts[0][1].uri)
-        console.log('form data' , formData)
         var Url = BaseUrl+'addAirportImage'
           fetch(Url, {
           method: 'POST',
@@ -231,11 +217,8 @@ const SetDestination = ({navigation, route}) => {
         db.transaction(tx => {
           tx.executeSql('SELECT * from Places', [], (tx, result) => {
             if (result.rows.length > 0) {
-              alert('data available ');
-              console.log('result', result)
             }
             for (let i = 1; i <= result.rows.length; i++) {
-              //console.log('name: ', result.rows.item(i).airline_name, 'loginlink: ', result.rows.item(i).loginUrl)
               data.push({
                 ident: result.rows.item(i).ident,
                 Airport_name: result.rows.item(i).airport_name,
@@ -250,14 +233,7 @@ const SetDestination = ({navigation, route}) => {
                 icao_code: result.rows.item(i).icao_code,
                 iata_code: result.rows.item(i).iata_code,
               });
-            console.log(data);
             }
-            //console.log(result);
-            //console.log(result.rows.item(0).airline_name)
-            // result.rows.item.map((index, content) => {
-            //   data.push({name:content.airline_name, loginlink: content.loginUrl})
-            // });
-            // );
           });
         });
       };
@@ -295,7 +271,7 @@ const SetDestination = ({navigation, route}) => {
                 placeholderTextColor='#393F45'
                 value = {ident}
                 onChangeText = {(inputText)=>setIdent(inputText)}
-                style={{marginTop: -5,}} />
+                style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
 
             <View style={{...styles.fieldWithoutBottom, ...styles.otherEnd, ...styles.underline }}>
@@ -305,7 +281,7 @@ const SetDestination = ({navigation, route}) => {
                 placeholderTextColor='#393F45'
                 value = {airportName}
                 onChangeText = {(inputText)=>setAirportName(inputText)}
-                style={{marginTop: -5,}} />
+                style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
 
             <View style={{...styles.fieldWithoutBottom, ...styles.otherEnd, ...styles.underline }}>
@@ -315,7 +291,7 @@ const SetDestination = ({navigation, route}) => {
                 placeholderTextColor='#393F45'
                 value = {type}
                 onChangeText = {(inputText) => setType(inputText)}
-                style={{marginTop: -5,}} />
+                style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
 
             <View style={{...styles.fieldWithoutBottom, ...styles.otherEnd, ...styles.underline }}>
@@ -325,7 +301,7 @@ const SetDestination = ({navigation, route}) => {
                 placeholderTextColor='#393F45'
                 value = {city1}
                 onChangeText = {(inputText) => setCity1(inputText)}
-                style={{marginTop: -5,}} />
+                style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
 
             <View style={{...styles.fieldWithoutBottom, ...styles.otherEnd, ...styles.underline }}>
@@ -335,7 +311,7 @@ const SetDestination = ({navigation, route}) => {
                 placeholderTextColor='#393F45'
                 value = {city2}
                 onChangeText = {(inputText) => setCity2(inputText)}
-                style={{marginTop: -5,}} />
+                style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
 
             <View style={{...styles.fieldWithoutBottom, ...styles.otherEnd, ...styles.underline }}>
@@ -345,7 +321,7 @@ const SetDestination = ({navigation, route}) => {
                 placeholderTextColor='#393F45'
                 value = {country}
                 onChangeText = {(inputText) => setCountry(inputText)}
-                style={{marginTop: -5,}} />
+                style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
 
             <View style={{...styles.fieldWithoutBottom, ...styles.otherEnd, ...styles.underline }}>
@@ -355,7 +331,7 @@ const SetDestination = ({navigation, route}) => {
                 placeholderTextColor='#393F45'
                 value = {lat}
                 onChangeText = {(inputText) => setLat(inputText)}
-                style={{marginTop: -5,}} />
+                style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
 
             <View style={{...styles.fieldWithoutBottom, ...styles.otherEnd, ...styles.underline }}>
@@ -365,7 +341,7 @@ const SetDestination = ({navigation, route}) => {
                 placeholderTextColor='#393F45'
                 value = {long}
                 onChangeText = {(inputText) => setLong(inputText)}
-                style={{marginTop: -5,}} />
+                style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
 
             <View style={{...styles.fieldWithoutBottom, ...styles.otherEnd, ...styles.underline }}>
@@ -375,7 +351,7 @@ const SetDestination = ({navigation, route}) => {
                 placeholderTextColor='#393F45'
                 value = {al}
                 onChangeText = {(inputText) => setAl(inputText)}
-                style={{marginTop: -5,}} />
+                style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
 
             <View style={{...styles.fieldWithoutBottom, ...styles.otherEnd, ...styles.underline }}>
@@ -385,7 +361,7 @@ const SetDestination = ({navigation, route}) => {
                 placeholderTextColor='#393F45'
                 value = {tz}
                 onChangeText = {(inputText) => setTz(inputText)}
-                style={{marginTop: -5,}} />
+                style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
 
             <View style={{...styles.fieldWithoutBottom, ...styles.otherEnd, ...styles.underline }}>
@@ -395,7 +371,7 @@ const SetDestination = ({navigation, route}) => {
                 placeholderTextColor='#393F45'
                 value = {day_light}
                 onChangeText = {(inputText) => setDay_light(inputText)}
-                style={{marginTop: -5,}} />
+                style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
 
             <View style={{...styles.fieldWithoutBottom, ...styles.otherEnd, ...styles.underline }}>
@@ -405,7 +381,7 @@ const SetDestination = ({navigation, route}) => {
                 placeholderTextColor='#393F45'
                 value = {icao}
                 onChangeText = {(inputText) => setICAO(inputText)}
-                style={{marginTop: -5,}} />
+                style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
 
             <View style={{...styles.fieldWithoutBottom, ...styles.otherEnd, ...styles.underline }}>
@@ -415,7 +391,7 @@ const SetDestination = ({navigation, route}) => {
                 placeholderTextColor='#393F45'
                 value = {iata}
                 onChangeText = {(inputText) => setIATA(inputText)}
-                style={{marginTop: -5,}} />
+                style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
 
             <TouchableOpacity onPress={()=>{insertQuery();uploadDataToServer()}}>

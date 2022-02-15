@@ -33,7 +33,6 @@ const People = ({navigation,route}) => {
   const dataDispatcher = useDispatch();
 
   const getReduxData = useSelector(state => state.display.AirlineDispatched);
-  //console.log ('peopleDispatcher', getReduxData.SelectedAirline)
  
   const [focused,setFocused] = React.useState(false);
 
@@ -79,19 +78,7 @@ const People = ({navigation,route}) => {
  })
 }).then(res => res.json())
 .then(resData => {
-  //console.log('mesg==>', resData.message)
-  //console.log('data---->', resData.data);
-  //setData(resData.data);
-  //setFilteredData(resData.data);
-  // console.log('dfjgdhgf--->', df)
    for (var j = 0; j < resData.data.length; j++){
-         //console.log(resData.data[j].id);
-         //setIdent(resData.data[j].ident)
-         //setId(resData.data[j].id)
-         //console.log('data---->', data)
-  //       setDf(resData.data[j].date_format);
-  //       console.log('df-->', df);
-  //       console.log ('name-->',resData.data[j].aircraft_type)
        }
 });
 };
@@ -104,17 +91,13 @@ const getDataQuery = async() => {
   let temData = [];
   prePopulateddb.transaction(tx => {
     tx.executeSql('SELECT * from pilots WHERE Airline = selectedAirline lIMIT 10', [], (tx, result) => {
-      //setOffset(offset + 10);
       if (result.rows.length > 0) {
-        //alert('data available ');
-        console.log('result', result)
       }
       else {
         alert('Please import pilot list from settings->Pilot Details->Ecrew-login')
         navigation.navigate('Profile');
       }
       for (let i = 0; i < result.rows.length; i++) {
-        //console.log('name: ', result.rows.item(i).airline_name, 'loginlink: ', result.rows.item(i).loginUrl)
         temData.push({
           id :result.rows.item(i).id,
           Airline:result.rows.item(i).Airline,
@@ -137,19 +120,15 @@ React.useEffect(() => {getDataQuery()}, []);
 //sqlite Ends
 
 const getReduxPilots = useSelector(state => state.pilotsList.data);
-//console.log('from Pilotlist ', getReduxPilots);
 
 const searchQuery = (dataToSearch) => {
   dataDispatcher(PilotData({data: []}))
   let SearchedData = [];
   let SingleResult = '';
   setSearch(dataToSearch)
-  console.log('Searching for ', dataToSearch);
   prePopulateddb.transaction(tx => {
     tx.executeSql('SELECT id,Airline,Egca_reg_no,Name,pilotId FROM pilots WHERE Name  LIKE "%'+dataToSearch+'%" AND Airline = selectedAirline Limit 10', [], (tx, result1) => {
       if (result1.rows.length > 0) {
-        //alert('data available ');
-        console.log('Searched result raw: ', result1)
         for (let i = 0; i <= result1.rows.length; i++) {
           SingleResult = {
             id : result1.rows.item(i).id,
@@ -159,16 +138,12 @@ const searchQuery = (dataToSearch) => {
             pilotId: result1.rows.item(i).pilotId,
           }
           SearchedData.push(SingleResult);
-          console.log('single', SingleResult)
             var Searcharr = SearchedData;
             var Searchclean = Searcharr.filter((Searcharr, index, self) =>
             index === self.findIndex((t) => (t.Egca_reg_no === Searcharr.Egca_reg_no)))
           dataDispatcher(PilotData({data: Searchclean}))
         }
-        //setFilteredData(SearchedData);
-       // console.log('Searched Result array: ', SearchedData)
       }else{
-        //dataDispatcher(PilotData({data: []}))
         console.log('No Data found')
       }
     });
@@ -177,28 +152,17 @@ const searchQuery = (dataToSearch) => {
 
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
   <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-    {/* <Text style={[styles.Name, textColor]}>Self</Text> */}
     {item.Egca_reg_no === 'self' ?
     <Text style={[styles.Name, textColor]}>{item.Name}</Text> : <Text style={[styles.Name, textColor]}>{item.Name}({item.Egca_reg_no})</Text> }
-      {/* <View>
-          <Text style={[styles.title, textColor]}> Airline Code : {item.code}</Text>
-      </View> */}
-    </TouchableOpacity>
+  </TouchableOpacity>
   );
 
   const renderItem = ({item}) => {
-    //setPilotsName(item.Name)
-    //console.log('typeeeee---->',item.Airline_code);
     const backgroundColor = item.id === selectedId ? dark?"#000":"#fff" : dark?"#000":"#fff";
     const color = dark?'#fff':'#000';
-    // const fetchToBuildLogBook = item.id === selectedId ? navigation.navigate('BuildLogbook',{
-    //   itemId: item.id,
-    //   itemName: item.aircraft_name,
-    // }) : '';
 
     const selectParams = () =>{ 
     setSelectedId(item.id);
-    console.log("item selected==========" , item)
     if(route.params.from === 'pic') //item.id === selectedId &&
     {
       setParamsPic(previousParams => ({

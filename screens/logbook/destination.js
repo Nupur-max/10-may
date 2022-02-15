@@ -3,14 +3,8 @@ import React, { Component } from 'react';
 import { View, Text,SafeAreaView, StyleSheet, TextInput, FlatList, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ThemeContext } from '../../theme-context';
-import {Places} from '../../components/dummyLogBookListing';
 import { ParamsContext } from '../../params-context';
-import AsyncStorage from '@react-native-community/async-storage';
-import {Filter} from '../../styles/styles'
 import SegmentedControlTab from "react-native-segmented-control-tab";
-
-import {BaseUrl} from '../../components/url.json';
-
 import SQLite from 'react-native-sqlite-storage';
 
 const prePopulateddb = SQLite.openDatabase(
@@ -44,15 +38,9 @@ const Destination = ({navigation,route}) => {
  const[data, setData] = React.useState([]) 
  const[filteredData, setFilteredData] = React.useState([])
  const[search, setSearch] = React.useState('')
- const[iata, setIata] = React.useState('')
- const [icao, setIcao] = React.useState('')
- //const [id,setId] = React.useState('')
- //const [ident, setIdent] = React.useState('');
  const [dataFetched , setDataFetched ] = React.useState(false)
 
 const [loading, setLoading] = React.useState(false);
-const [offset, setOffset] = React.useState(0);
-const [isListEnd, setIsListEnd] = React.useState(false);
 
 const [selectedIndex, setSelectedIndex] = React.useState(0)
 
@@ -62,12 +50,9 @@ const searchQuery = (dataToSearch) => {
   let SearchedData = [];
   let SingleResult = '';
   setSearch(dataToSearch)
-  console.log('Searching for ', dataToSearch);
   prePopulateddb.transaction(tx => {
     tx.executeSql('SELECT * FROM Airport_table WHERE ident  LIKE "%'+dataToSearch+'%" OR name  LIKE "%'+dataToSearch+'%" OR city1 LIKE "%'+dataToSearch+'%" OR city2 LIKE "%'+dataToSearch+'%" OR ICAO_code LIKE "%'+dataToSearch+'%" OR IATA_code LIKE "%'+dataToSearch+'%" limit 10', [], (tx, result1) => {
       if (result1.rows.length > 0) {
-        //alert('data available ');
-        console.log('Searched result raw: ', result1)
         for (let i = 0; i <= result1.rows.length; i++) {
           SingleResult = {
             id : result1.rows.item(i).airportID,
@@ -90,15 +75,10 @@ const searchQuery = (dataToSearch) => {
             source : result1.rows.item(i).source,
           }
           SearchedData.push(SingleResult);
-          console.log('single', SingleResult)
-          console.log(' Searched data', SearchedData);
           setFilteredData(SearchedData);
         }
-        //setFilteredData(SearchedData);
-        console.log('Searched Result array: ', SearchedData)
       }else{
         setFilteredData([]);
-        console.log('No Data found')
       }
     });
   });
@@ -106,19 +86,9 @@ const searchQuery = (dataToSearch) => {
 
 const getPrepopulatedDataQuery = () => {
   let data = [];
-  //console.log('testing');
   prePopulateddb.transaction(tx => {
     tx.executeSql('SELECT * from Airport_table LIMIT 20', [], (tx, result1) => {
-      // if (result.rows.length > 0) {
-      //   setOffset(offset + 1);
-      //   // After the response increasing the offset
-      //   setLoading(false);
-      // } else {
-      //   setIsListEnd(true);
-      //   setLoading(false);
-      // }
-      //alert('consoling');
-      console.log(result1);
+     
       for (let i = 0 ; i <= result1.rows.length ; i++) {
         data.push({
             id : result1.rows.item(i).airportID,
@@ -140,11 +110,8 @@ const getPrepopulatedDataQuery = () => {
             iata_code : result1.rows.item(i).IATA_code,
             source : result1.rows.item(i).source,
         });
-        console.log('places data',data);
         setDataFetched(false)
-      
-      // setData(data);
-      setFilteredData(data);
+        setFilteredData(data);
       }
       });
   });
@@ -183,13 +150,8 @@ const handleIndexChange = (index) => {
   );
 
   const renderItem = ({item}) => {
-    //console.log('typeeeee---->',item.name);
     const backgroundColor = item.id === selectedId ? dark?"#000":"#fff" : dark?"#000":"#fff";
     const color = dark?'#fff':'#000';
-    // const fetchToBuildLogBook = item.id === selectedId ? navigation.navigate('BuildLogbook',{
-    //   itemId: item.id,
-    //   itemName: item.aircraft_name,
-    // }) : '';
 
     const selectParams = () =>{ 
     if(route.params.from === 'From')
@@ -303,9 +265,6 @@ const handleIndexChange = (index) => {
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             numColumns={1}
-            // ListFooterComponent={renderFooter}
-            // onEndReached={getPrepopulatedDataQuery}
-            // onEndReachedThreshold={2}
             extraData={selectedId}
             />
            <View style={styles.footer}>
@@ -323,9 +282,6 @@ const handleIndexChange = (index) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //justifyContent: 'center',
-        //alignItems: 'center',
-        //backgroundColor: '#2c3e50',
     },
     header:{
       padding: 5,
@@ -340,22 +296,14 @@ const styles = StyleSheet.create({
       paddingTop: 5
     },
     searchbar: {
-      //paddingLeft: 10,
       backgroundColor: '#fff',
-      //padding: 10,
       width: '100%',
-      //borderRadius: 10,
       flexDirection: 'row',
-      //paddingVertical: 10,
     },
     searchbar2: {
-        //paddingLeft: 10,
         backgroundColor: '#fff',
-        //padding: 10,
         width: '80%',
-        //borderRadius: 10,
         flexDirection: 'row',
-        //paddingVertical: 10,
       },
       cancelButton: {
           fontSize: 15,

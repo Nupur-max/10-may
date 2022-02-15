@@ -1,5 +1,5 @@
 //import liraries
-import React, { Component } from 'react';
+import React from 'react';
 import { SafeAreaView, View, Text, StyleSheet,KeyboardAvoidingView, TouchableOpacity, Image, TextInput, Dimensions, Platform, Alert, Modal, Pressable, DrawerLayoutAndroidComponent } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -7,23 +7,16 @@ import Colors from '../components/colors';
 import ImagePicker from 'react-native-image-picker';
 import DatePicker from 'react-native-datepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { RadioButton } from 'react-native-paper';
 import { ThemeContext } from '../theme-context';
 import AsyncStorage from '@react-native-community/async-storage';
-import { rosterImportdata } from '../store/actions/rosterImportsAction';
 import SQLite from 'react-native-sqlite-storage';
 import { LogListData } from '../store/actions/loglistAction';
 import { PilotData } from '../store/actions/pilotsAction';
-import NetInfo from "@react-native-community/netinfo";
 import { ProfileData } from '../store/actions/displayAction';
 import { ProgressBar } from 'react-native-paper';
-//import RNFetchBlob from 'rn-fetch-blob';
-import axios from 'axios';
 
 import { BaseUrl } from '../components/url.json';
-import { Row } from 'native-base';
 import { useSelector, useDispatch } from 'react-redux';
-import { set } from 'date-fns';
 
 const db = SQLite.openDatabase(
   {
@@ -43,14 +36,11 @@ const db = SQLite.openDatabase(
 const P1 = ({ navigation }) => {
 
   const getLoginReduxData = useSelector(state => state.login);
-  console.log('from Login', getLoginReduxData.airlineType);
+  //console.log('from Login', getLoginReduxData.airlineType);
 
   const dataDispatcher = useDispatch();
   const scrollViewRef = React.useRef();
-
-  const [animating, setAnimating] = React.useState(true);
   const [name, setName] = React.useState('')
-  //const [email,setEmail] = React.useState('');
   const [lt, setLt] = React.useState('');
   const [ln, setLn] = React.useState('');
   const [date, setDate] = React.useState('');
@@ -81,7 +71,6 @@ const P1 = ({ navigation }) => {
     { label: 'Spicejet', value: 'Spicejet' },
     { label: 'indigo', value: 'indigo' },
   ]);
-  //const [airline, setAirline] = React.useState([]);
 
   //Modal fields
   const [fromDate, setFromDate] = React.useState('')
@@ -102,7 +91,7 @@ const P1 = ({ navigation }) => {
   const [showPilotsProgress, setShowPilotsProgress] = React.useState(true)
 
 
-  //console.log('dhfshgfghghdjg', name)
+  //console.log('dhfshgfghghdjg', airlineValue)
 
   const checkEcrewFields = () => {
     if (eId !== '' && ePwd !== '' && airlineValue !== null) {
@@ -125,10 +114,10 @@ const P1 = ({ navigation }) => {
         //setOffset(offset + 10);
         if (result.rows.length > 0) {
           //alert('data available '); 
-          console.log('result', result)
+          //console.log('result', result)
         }
         else {
-          console.log('error')
+          //console.log('error')
         }
         for (let i = 0; i <= result.rows.length; i++) {
           //console.log('name: ', result.rows.item(i).airline_name, 'loginlink: ', result.rows.item(i).loginUrl)
@@ -170,7 +159,7 @@ const P1 = ({ navigation }) => {
   const profile = async () => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
-    console.log('user id=>', user.id);
+    //console.log('user id=>', user.id);
     //setName(user.name);
 
     await fetch(BaseUrl + 'edit_profile', {
@@ -193,7 +182,7 @@ const P1 = ({ navigation }) => {
       })
     }).then(res => res.json())
       .then(resData => {
-        console.log(resData);
+        //console.log(resData);
         GetUserDetails()
         Alert.alert(resData.message);
       });
@@ -350,7 +339,7 @@ const P1 = ({ navigation }) => {
                       nightTO: result.rows.item(j).nightTO,
                     });
                     console.log('Entry fetched ' + j + ' out of :' + result.rows.length);
-                    console.log('id', result.rows.item(j).id)
+                    //console.log('id', result.rows.item(j).id)
                     setProgressValue(1)
                     dataDispatcher(LogListData({ data: temData, inProgress: false }))
                     let jPos = j + 1
@@ -388,6 +377,7 @@ const P1 = ({ navigation }) => {
         //console.log(error)
         setShowProgress(false)
         setModalVisible(false)
+        alert('Something Went wrong')
       });
   }
 
@@ -411,14 +401,14 @@ const P1 = ({ navigation }) => {
         //setOffset(offset + 10);
         if (result.rows.length > 0) {
           //alert('data available '); 
-          console.log('result', result)
+          //console.log('result', result)
         }
         for (let i = 0; i <= result.rows.length; i++) {
           //console.log('name: ', result.rows.item(i).airline_name, 'loginlink: ', result.rows.item(i).loginUrl)
           temData.push({
             Aircraftid: result.rows.item(i).user_id,
           });
-          console.log('roster data', temData);
+          //console.log('roster data', temData);
           //setData(temData);
           //setFilteredData(temData);
         }
@@ -450,7 +440,7 @@ const P1 = ({ navigation }) => {
       })
     }).then(res => res.json())
       .then(resData => {
-        console.log(resData);
+        //console.log(resData);
         Alert.alert(resData.message);
       });
   }
@@ -501,7 +491,7 @@ const P1 = ({ navigation }) => {
       body: formData,
     }).then(response => response.json())
       .then(response => {
-        console.log('On task Creation: ', response);
+        //console.log('On task Creation: ', response);
         if(response.success === true){
           alert('Updated Successfully')
         }
@@ -525,17 +515,7 @@ const P1 = ({ navigation }) => {
 
   // React.useEffect(() => {createTable()}, []);
 
-  // const createTable = () => {
-  //   db.transaction(tx => {
-  //     tx.executeSql(
-  //       'CREATE TABLE userProfileData ( user_id TEXT, name TEXT, LicenceType	TEXT, LicenceNumber TEXT, validity TEXT, Country Text, CountryCode Text, Contact Text)',
-
-  //       console.log('Created table userProfileData')
-  //     );
-  //   });
-  // }
-
-  const InsertInUserProfileData = async () => {
+ const InsertInUserProfileData = async () => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
     //  Alert.alert('Hello')
@@ -549,10 +529,10 @@ const P1 = ({ navigation }) => {
         //setOffset(offset + 10);
         if (result.rows.length > 0) {
           //alert('data available ');
-          console.log('result', result)
+          //console.log('result', result)
         }
         for (let i = 0; i <= result.rows.length; i++) {
-          console.log('inserted items', result.rows.item(i).country)
+          //console.log('inserted items', result.rows.item(i).country)
           temData.push({
             id: result.rows.item(i).id,
             user_id: result.rows.item(i).user_id,
@@ -622,7 +602,7 @@ const P1 = ({ navigation }) => {
           const Name = resData.data[k].Name
           const Pilotid = resData.data[k].id
 
-          console.log('getting people', Pilotid)
+          //console.log('getting people', Pilotid)
           db.transaction((tx) => {
             tx.executeSql(
               'INSERT INTO pilots (Airline,Egca_reg_no,Name,pilotId,selectedAirline)VALUES("' + Airline + '","' + EGCA_Registration_No + '","' + Name + '","' + Pilotid + '","' + airlineValue + '")',
@@ -638,7 +618,7 @@ const P1 = ({ navigation }) => {
                   //setOffset(offset + 10);
                   if (pilotresult.rows.length > 0) {
                     //alert('data available ');
-                    console.log('result', pilotresult)
+                    //console.log('result', pilotresult)
                   }
                   for (let l = 0; l < pilotresult.rows.length; l++) {
 
@@ -676,7 +656,7 @@ const P1 = ({ navigation }) => {
         }
         //alert('Pilots imported successfully')
       }).catch((error) => {
-        console.log(error)
+        //console.log(error)
         alert(error);
         setPilotsFetched(true);
         setShowPilotsProgress(false)

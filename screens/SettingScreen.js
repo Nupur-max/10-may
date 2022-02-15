@@ -2,8 +2,6 @@
 import React, { useState } from 'react';
 import { View, Text, Dimensions, Modal, Image, TouchableOpacity, Platform, Linking, TextInput, ScrollView } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import AsyncStorage from '@react-native-community/async-storage';
-import Colors from '../components/colors';
 import { ThemeContext } from '../theme-context';
 import SsStyle from '../styles/settingScreenStyle';
 // create a component

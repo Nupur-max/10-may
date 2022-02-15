@@ -1,5 +1,5 @@
 //import liraries
-import React, { Component } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, FlatList, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -235,12 +235,6 @@ const Gallery = ({navigation}) => {
            />
         </View>}
         />:<Text style={{marginTop:5}}></Text>}
-
-        {/* Docs pictures */}
-        {/* <View style={styles.headline}>
-            <Text style={styles.HeadlineText}>Docs</Text>
-        </View> */}
-
         </View>
         </ScrollView>
     );
@@ -250,8 +244,6 @@ const Gallery = ({navigation}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //justifyContent: 'center',
-        // alignItems: 'flex-start',
         backgroundColor: '#fff',
     },
     photos:{

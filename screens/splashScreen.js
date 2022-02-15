@@ -1,7 +1,3 @@
-// Example of Splash, Login and Sign Up in React Native
-// https://aboutreact.com/react-native-login-and-signup/
-
-// Import React and Component
 import React, {useState, useEffect} from 'react';
 import {ActivityIndicator, View, StyleSheet, Image} from 'react-native';
 
@@ -14,14 +10,10 @@ const SplashScreen = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
       setAnimating(false);
-      //Check if user_id is set or not
-      //If not then send for Authentication
-      //else send to Home Screen
       AsyncStorage.getItem('id').then((value) =>
         navigation.replace(value === null ? 'Auth' : 'SettingScreen'),
       );
     }, 5000);
-    console.log('id---->', AsyncStorage.getItem('id'));
   }, []);
 
   return (

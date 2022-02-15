@@ -166,6 +166,13 @@ const JUSA = ({ navigation }) => {
 
     //-------------  Get Data from database ------------//
     const getLogbookData = async () => {
+        if(rows < 10){
+            alert("Minimum number  of rows is 10")
+        }
+        else if (rows > 25){
+            alert("Maximum number  of rows is 25")
+        }
+        else {
         setLoader(true)
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
@@ -263,6 +270,7 @@ const JUSA = ({ navigation }) => {
                 }
             });
         })
+    }
     }
 
 

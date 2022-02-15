@@ -74,12 +74,12 @@ const searchQuery = (dataToSearch) => {
   let SearchedData = [];
   let SingleResult = '';
   setSearch(dataToSearch)
-  console.log('Searching for ', dataToSearch);
+  //console.log('Searching for ', dataToSearch);
   db.transaction(tx => {
     tx.executeSql('SELECT * FROM Aircrafts WHERE AircraftType  LIKE "%'+dataToSearch+'%" Limit 10', [], (tx, result1) => {
       if (result1.rows.length > 0) {
         //alert('data available ');
-        console.log('Searched result raw: ', result1)
+        //console.log('Searched result raw: ', result1)
         for (let i = 0; i <= result1.rows.length; i++) {
           SingleResult = {
             id : result1.rows.item(i).id,
@@ -93,16 +93,16 @@ const searchQuery = (dataToSearch) => {
           }
           SearchedData.push(SingleResult);
           //console.log('single', SingleResult)
-          console.log(' Searched data', SearchedData);
+          //console.log(' Searched data', SearchedData);
           setFilteredData(SearchedData);
           dataDispatcher(AircraftData({data: SearchedData}))
         }
         //setFilteredData(SearchedData);
-        console.log('Searched Result array: ', SearchedData)
+        //console.log('Searched Result array: ', SearchedData)
       }else{
         setFilteredData([]);
         dataDispatcher(AircraftData({data: []}))
-        console.log('No Data found')
+        //console.log('No Data found')
       }
     });
   });
@@ -113,7 +113,7 @@ const getAircrafts = () => {
   let data = [];
   db.transaction(tx => {
     tx.executeSql('SELECT * from Aircrafts limit 20', [], (tx, result) => {
-      console.log(result);
+      //console.log(result);
       for (let i = 0 ; i <= result.rows.length ; i++) {
         data.push({
           id:     result.rows.item(i).id,
@@ -296,9 +296,6 @@ return (
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //justifyContent: 'center',
-        //alignItems: 'center',
-        //backgroundColor: '#2c3e50',
     },
     header:{
       padding: 5,

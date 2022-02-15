@@ -16,14 +16,8 @@ Alert,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {Picker} from '@react-native-picker/picker';
-import { ScaledSheet } from 'react-native-size-matters';
 import DropDownPicker from 'react-native-dropdown-picker';
-import RNPickerSelect from 'react-native-picker-select';
-//import { ThemeContext } from '../theme-context';
-
 import {BaseUrl} from '../components/url.json';
-
 import Colors from '../components/colors';
 
 // create a component
@@ -67,7 +61,7 @@ const Register = ({navigation}) => {
      })
     }).then(res => res.json())
     .then(resData => {
-       console.log(resData);
+       //console.log(resData);
        Alert.alert(resData.message);
        if(resData.message === 'User Created Successfully'){
         navigation.navigate('Login')
@@ -80,14 +74,9 @@ const Register = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>
         <View
-        //keyboardVerticalOffset={-500} 
-        //behavior= "height"
         style={styles.container}>
           <StatusBar hidden={hidden} />
           <View>
-           {/* <MaterialCommunityIcons 
-           name="arrow-left" color='#000' size={30} style={styles.arrow}
-           /> */}
           <Text style={Platform.OS === 'android' ? styles.welcome: styles.welcomeIos}>Register</Text>
            <Text style={styles.mainLine}>Login with your account to Continue</Text>
            {/* TextInput */}
@@ -151,20 +140,15 @@ const Register = ({navigation}) => {
                   marginRight: 15, 
                   tintColor: '#266173',
                 }}
-                //containerStyle={{zIndex:99, position:'relative'}}
                 setOpen={setOpen}
                 setValue={setValue}
                 setItems={setItems}
                  dropDownContainerStyle={{
                     borderColor: '#256173',
-                    //zIndex: 99,
-                    //backgroundColor: '#000'
                   }}
                 listItemLabelStyle={{
                   color: '#256173',
                   width: '100%',
-                  //height: 100,
-                  //zIndex: 99999,
                 }}
                 textStyle={{
                   fontSize: 14,
@@ -174,12 +158,9 @@ const Register = ({navigation}) => {
                 style= {{
                   borderColor: 'transparent',
                   marginLeft: 30,
-                  //position:'absolute',
-                  //left: 40,
-                  //zIndex: 999,
                 
-}} 
-              />
+                }} 
+                />
                </View> 
 
               <View style={styles.CountryCodeBox}>
@@ -227,20 +208,14 @@ const Register = ({navigation}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#fff',
         padding: 15,
         height: Dimensions.get('window').height,
     },
-    arrow:{
-      //marginTop: 50,
-      //marginLeft:20,
-    },
     welcome:{
         fontSize: 28,
         marginTop:10,
-        //fontWeight: 'bold',
         marginHorizontal:5,
         color: Colors.primary,
         fontFamily: 'WorkSans-ExtraBold',
@@ -262,13 +237,9 @@ const styles = StyleSheet.create({
     },
     inputBox: {
         flexDirection: 'row',
-        //paddingTop:20,
         borderBottomWidth: 0.4,
-        //minWidth: 300,
         width:'100%',
-        //width: Dimensions.get('window').width,
         maxWidth:'100%',
-        //zIndex: -9999,
         borderBottomColor: Colors.accent,
         position: 'relative',
         paddingLeft: 40,
@@ -278,29 +249,17 @@ const styles = StyleSheet.create({
         tintColor: '#000'
       },
     CountryBox:{
-        //flexDirection: 'row',
-        //marginTop:20,
         borderBottomWidth: 0.4,
-        // minWidth: 100,
         width:'50%',
         position:'relative',
-        //zIndex: 9999,
-        //minHeight: Dimensions.get('window').height*0.0,
-        // maxWidth:'90%'
-        //position: 'relative',
         marginBottom: 10,
         borderBottomColor: Colors.accent,
-       //minHeight:150,
-        //position:'absolute',
     },
     CountryCodeBox:{
         flexDirection: 'row',
-        //marginTop:20,
         borderBottomWidth: 0.4,
         paddingLeft:10,
-        // minWidth: 100,
         width:'40%',
-        // maxWidth:'90%'
         position: 'relative',
         marginBottom: 10,
         borderBottomColor: Colors.accent,
@@ -318,9 +277,7 @@ const styles = StyleSheet.create({
         padding: 15,
         alignItems:'center',
         borderRadius:10,
-        //marginVertical: 20,
         width: '100%',
-        //marginLeft:20,
         minWidth: 330,
         maxWidth: '100%',
         zIndex: 10,

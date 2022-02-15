@@ -169,6 +169,13 @@ const JEU = ({ navigation }) => {
 
     //-------------  Get Data from database ------------//
     const getLogbookData = async () => {
+        if(rows < 10){
+            alert("Minimum number  of rows is 10")
+        }
+        else if (rows > 25){
+            alert("Maximum number  of rows is 25")
+        }
+        else {
         setLoader(true)
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
@@ -275,6 +282,7 @@ const JEU = ({ navigation }) => {
                 }
             });
         })
+    }
         
     }
 
@@ -609,7 +617,7 @@ const JEU = ({ navigation }) => {
             const chunk = data.slice(k, k + chunkSize);
             pdfData.push(chunk)
         }
-        var platForm = Platform.OS === "ios" ? '' : chunkSize <= 18 ? '<br><br><br>' :'<br><br>'
+        var platForm = Platform.OS === "ios" ? '<br><br> ' : chunkSize <= 18 ? '<br><br><br>' :'<br><br>'
         var platFormCss = Platform.OS === "ios" ? '.ritz .waffle .s0{padding:0px 9px}' : '.ritz .waffle .s0{padding:0px 9px}'
         let htmlContent = '<html><body>'
         pdfData.map((monthData, index) => {
@@ -635,7 +643,7 @@ const JEU = ({ navigation }) => {
             for (let i = 0; i < rows - monthData.length; i++) {
                 htmlContent += '<tr class="j_ue" style="height: 20px" id=' + [i] + '>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td> <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                </tr>'
             }
-            htmlContent += leftPageTotal(monthData) + prevTotalLeft(monthData) + leftPageTotalTime(monthData) + '        </tbody> ' + breakTag() + ' '+brTag+' </table>'+page1+'<table class="waffle" cellspacing="0" cellpadding="0" >' + breakTag() + '   '+platForm+'          <tr style="height: 20px">                <td class="s0" dir="ltr" colspan="2">OPERATIONAL CONDITION</td>                <td class="s0" dir="ltr" colspan="4">PILOT FUNCTION</td>                <td class="s0" dir="ltr" colspan="3">SYNTHETIC TRAINING DEVICES SESSION</td>                <td class="s0" dir="ltr" rowspan="2">REMARKS AND ENDORSMENTS</td>             </tr>            <tr style="height: 20px">                <td class="s0" dir="ltr">NIGHT</td>                <td class="s0" dir="ltr">IFR</td>                <td class="s0" dir="ltr">PILOT-IN-COMMAND</td>                <td class="s0" dir="ltr">CO- PILOT</td>                <td class="s0" dir="ltr">DUAL</td>        <td class="s0" dir="ltr">INSTRUCTOR</td>                <td class="s0" dir="ltr">DATE (DD/MM/YY)</td>                <td class="s0" dir="ltr">TYPE</td>                <td class="s0" dir="ltr">TOTAL TIME OF SESSION</td>           </tr> <tbody>'
+            htmlContent += leftPageTotal(monthData) + prevTotalLeft(monthData) + leftPageTotalTime(monthData) + '        </tbody> ' + breakTag() + ' '+brTag+' </table>'+page1+'<table class="waffle" cellspacing="0" cellpadding="0" >' + breakTag() + '   '+platForm+'         <tr style="height: 20px">                <td class="s0" dir="ltr" colspan="2">OPERATIONAL CONDITION</td>                <td class="s0" dir="ltr" colspan="4">PILOT FUNCTION</td>                <td class="s0" dir="ltr" colspan="3">SYNTHETIC TRAINING DEVICES SESSION</td>                <td class="s0" dir="ltr" rowspan="2">REMARKS AND ENDORSMENTS</td>             </tr>            <tr style="height: 20px">                <td class="s0" dir="ltr">NIGHT</td>                <td class="s0" dir="ltr">IFR</td>                <td class="s0" dir="ltr">PILOT-IN-COMMAND</td>                <td class="s0" dir="ltr">CO- PILOT</td>                <td class="s0" dir="ltr">DUAL</td>        <td class="s0" dir="ltr">INSTRUCTOR</td>                <td class="s0" dir="ltr">DATE (DD/MM/YY)</td>                <td class="s0" dir="ltr">TYPE</td>                <td class="s0" dir="ltr">TOTAL TIME OF SESSION</td>           </tr> <tbody>'
             monthData.map(d => {
                 var totalSim = d.aircraftReg == 'SIMU' ? d.totalTime : ""  ;
                 if(d.aircraftReg !== "SIMU"){

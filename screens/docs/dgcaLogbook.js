@@ -163,6 +163,13 @@ const DgcaLogBook = ({ navigation }) => {
 
     //-------------  Get Data from database ------------//
     const getLogbookData = async () => {
+        if(rows < 10){
+            alert("Minimum number  of rows is 10")
+        }
+        else if (rows > 25){
+            alert("Maximum number  of rows is 25")
+        }
+        else {
         setLoader(true)
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
@@ -339,6 +346,7 @@ const DgcaLogBook = ({ navigation }) => {
                 });
             }
         });
+    }
     };
 
     //-------- total calculation of logbook and stl data -------// 
@@ -1009,15 +1017,25 @@ const DgcaLogBook = ({ navigation }) => {
     var totalStlTime = '';
 
     const simDataToPrint = () => {
+        const chunkSize = 10
+        var pdfData = []
+        for (var k = 0; k < data.length; k += chunkSize) {
+            const chunk = data.slice(k, k + chunkSize);
+            pdfData.push(chunk)
+        }
         var PF = 0;
         var PM = 0;
         var pf_pm_total = ''
         let htmlContent = '<html><body>'
-        htmlContent += '<style type="text/css"> @page { size: 29.7cm 21cm; }table{"page-break-after: always;"} tr:nth-child(even) {background-color: #e0ebeb;} .ritz .waffle a { color: inherit; }.ritz .waffle .s0{text-align:center;color:#000000;font-size:10pt;vertical-align:center;white-space:normal;overflow:hidden;word-wrap:break-word;direction:ltr;padding:6px 13px;} th ,td{ border: 1px #000 solid}</style><div class="ritz grid-container" dir="ltr"> <table class="waffle" cellspacing="0" cellpadding="0" style="width:100%">       <thead>            <tr style="height: 20px" >                                <th class="s0" dir="ltr" colspan="5"><b>RECORD OF FLIGHT SIMULATOR  TRAINING AND PRACTICES </b></th>                </tr>                <tr style="height: 20px">                <th class="s0" dir="ltr">Date</th>                <th class="s0" dir="ltr">Type Of Simulator</th>                <th class="s0" dir="ltr">Nature of Test Examination of Practices</th>                <th class="s0" dir="ltr">Time</th>                <th class="s0" dir="ltr">Remarks/Certification</th>                </tr></head> <tbody>'
-        htmlContent += data.map((d) => {
+        pdfData.map((monthData, index) => {
+            var pageNo = Number(page) + index
+        htmlContent += '<style type="text/css"> @page { size: 29.7cm 21cm; }table{"page-break-after: always;"} tr:nth-child(even) {background-color: #e0ebeb;} .ritz .waffle a { color: inherit; }.ritz .waffle .s0{text-align:center;color:#000000;font-size:10pt;vertical-align:center;white-space:normal;overflow:hidden;word-wrap:break-word;direction:ltr;padding:2px 13px;} th ,td{ border: 1px #000 solid}</style><div class="ritz grid-container" dir="ltr"> <table class="waffle" cellspacing="0" cellpadding="0" style="width:100%">            <tr style="height: 20px" >                                <th class="s0" dir="ltr" colspan="5"><b>RECORD OF FLIGHT SIMULATOR  TRAINING AND PRACTICES </b></th>                </tr>                <tr style="height: 20px">                <th class="s0" dir="ltr">Date</th>                <th class="s0" dir="ltr">Type Of Simulator</th>                <th class="s0" dir="ltr">Nature of Test Examination of Practices</th>                <th class="s0" dir="ltr">Time</th>                <th class="s0" dir="ltr">Remarks/Certification</th>                </tr> <tbody>'
+        htmlContent += monthData.map((d) => {
             // --------- Pf And Pm Total -------- //
-            var pfTime = d.pf_time.split(":")
-            var pmTime = d.pm_time.split(":")
+            var pf_Time = d.pf_time !== "undefined" ? d.pf_time : "00:00"
+            var pm_Time = d.pm_time !== "undefined" ? d.pm_time : "00:00"
+            var pfTime = pf_Time.split(":")
+            var pmTime = pm_Time.split(":")
             var total_pf = Number(pfTime[0] * 60) + Number(pfTime[1])
             var total_pm = Number(pmTime[0] * 60) + Number(pmTime[1])
             PF += total_pf
@@ -1055,13 +1073,14 @@ const DgcaLogBook = ({ navigation }) => {
                 totalStlTime[1] = '00:00';
             }
 
-            return '<tr style="height: 20px">                <td class="s0" dir="ltr">' + d.date.slice(0, 10) + '</td>                <td class="s0" dir="ltr">' + d.aircraftType + '</td>                <td class="s0" dir="ltr">' + d.sim_exercise + '</td>                <td class="s0" dir="ltr" style="width:15%"> PF: ' + d.pf_time + ' <br /> PM: ' + d.pm_time + '  <br /> Total: ' + pf_pm_total + ' </td>                <td class="s0" dir="ltr"></td>                </tr>'
+            return '<tr style="height: 30px">                <td class="s0" dir="ltr">' + d.date.slice(0, 10) + '</td>                <td class="s0" dir="ltr">' + d.aircraftType + '</td>                <td class="s0" dir="ltr">' + d.sim_exercise + '</td>                <td class="s0" dir="ltr" style="width:15%"> PF: ' + pf_Time + ' <br /> PM: ' + pm_Time + '  <br /> Total: ' + pf_pm_total + ' </td>                <td class="s0" dir="ltr"></td>                </tr>'
         }).join(' ')
-        for (let i = 0; i < 10 - data.length; i++) {
+        for (let i = 0; i < 10 - monthData.length; i++) {
             htmlContent += '<tr style="height: 55px" id=' + [i] + '>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr"></td>                <td class="s0" dir="ltr" style="width:15%"></td>                <td class="s0" dir="ltr"></td>                </tr>'
         }
-        htmlContent += '<tr style="height: 20px">                <td class="s0" dir="ltr" colspan="3">Total Time</td>                <td class="s0" dir="ltr">' + totalStlTime + '</td>                <td class="s0" dir="ltr"></td>                </tr>                 </tbody>                </table>        </div>'
+        htmlContent += '<tr style="height: 30px">                <td class="s0" dir="ltr" colspan="3">Total Time</td>                <td class="s0" dir="ltr">' + totalStlTime + '</td>                <td class="s0" dir="ltr"></td>                </tr>                 </tbody>                </table>        <span>page-'+pageNo+'</span></div><br>'
 
+    }).join(' ')
         htmlContent += '</body></html>'
         return htmlContent
     }
@@ -1331,8 +1350,8 @@ const DgcaLogBook = ({ navigation }) => {
                     </>
                 }
 
-                {rows < 10 ? <Text style={{ color: 'red', paddingLeft: 12 }}>Minimum number  of rows is 10</Text> : null}
-                {rows > 25 ? <Text style={{ color: 'red', paddingLeft: 12 }}>Maximum number  of rows is 25</Text> : null}
+                {/* {rows < 10 ? <Text style={{ color: 'red', paddingLeft: 12 }}>Minimum number  of rows is 10</Text> : null}
+                {rows > 25 ? <Text style={{ color: 'red', paddingLeft: 12 }}>Maximum number  of rows is 25</Text> : null} */}
 
 
                 <View style={DgcaLogbookStyles.mainTagLine}>

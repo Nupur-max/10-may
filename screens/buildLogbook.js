@@ -1,20 +1,15 @@
 //import liraries
-import React, { Component } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity,KeyboardAvoidingView, TextInput, ScrollView, Dimensions, Platform, Alert, SafeAreaView } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RadioButton } from 'react-native-paper';
 import { ThemeContext } from '../theme-context';
 import { MaskedTextInput} from "react-native-mask-text";
 import AsyncStorage from '@react-native-community/async-storage';
-import ModalDropdown from 'react-native-modal-dropdown';
 import { useScrollToTop } from '@react-navigation/native';
 import { ParamsContext } from '../params-context';
-import moment from 'moment';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import {TimePicker} from 'react-native-simple-time-picker';
 import SQLite from 'react-native-sqlite-storage';
 import {BuildLogbookData} from '../store/actions/BLAction'
-
 
 import {BaseUrl} from '../components/url.json';
 
@@ -41,42 +36,6 @@ const BuildBook = ({navigation, route}) => {
     useScrollToTop(ref);
 
     const [params] = React.useContext(ParamsContext);
-
-    // React.useEffect(() => {
-    //   if (params.childParam) {
-    //     console.log('The value of child param is: ', params.childParam)
-        
-    //     //editable
-    //     editSetEngineName(params.itemEngineName)
-    //     EditSetCategory(params.itemCategory)
-    //     editSetEngine(params.itemEngine)
-    //     editSetClass(params.itemEngineClass)
-    //     editSetday_pic(params.itemDay_pic)
-    //     editSetday_sic(params.itemDay_sic)
-    //     editSetDay_dual(params.itemDay_dual)
-    //     editSetDayp1_us(params.itemDay_p1_us)
-    //     editSetDayp1_ut(params.itemDay_p1_ut)
-    //     editSetNight_pic(params.itemNight_pic)
-    //     editSetNight_sic(params.itemNight_sic)
-    //     editSetNight_dual(params.itemNight_dual)
-    //     editSetNightp1_us(params.itemNight_p1_us)
-    //     editSetNightp1_ut(params.itemNight_p1_ut)
-    //     editSetActual(params.itemInstrumental_time_actual)
-    //     editSetSimulated(params.itemInstrumental_time_simulated)
-    //     editSetSimulator(params.itemSimulator)
-    //     editSetInstructional_day(params.itemInstructional_flying_day)
-    //     editSetInstructional_night(params.itemInstructional_flying_night)
-    //     editSetDay_to(params.itemDay_to)
-    //     editSetNight_to(params.itemNight_to)
-    //     editSetDayLanding(params.itemDayLanding)
-    //     editSetNightLanding(params.itemNightLanding)
-    //     editSetRemark(params.itemRemark)
-    //     editSetDay_total(params.itemDay_total)
-    //     editSetNight_total(params.itemNight_total)
-    //     editSetTotal_flyingTime(params.itemTotal_flying_time)
-    //     editSetInstructional_total(params.itemInstructional_flying_total)
-    //   }
-    // }, [params]);
 
     React.useEffect(() => {
       if (params.childParam3) {
@@ -121,12 +80,12 @@ const BuildBook = ({navigation, route}) => {
     const [stl_total, setStl_Total] = React.useState('')
     //const cat =  params.itemCategory
 
-    console.log('Saved Aircraft name==>', params.itemCategory);
+    //console.log('Saved Aircraft name==>', params.itemCategory);
     const [category, setCategory] = React.useState('');
     const [engine, setEngine] = React.useState('');
     const [Class, setClass] = React.useState('');
 
-    console.log('class', Class)
+    //console.log('class', Class)
 
     const[day_to, setDay_to] = React.useState('');
     const[dayLanding, setDayLanding] = React.useState('');
@@ -721,13 +680,13 @@ const { dark, theme, toggle } = React.useContext(ThemeContext);
           //console.log(resData);
           aircraftType === null ? Alert.alert('Aircraft Type is required'): '';
           if(resData.message === 'Record inserted successfully .'){
-          console.log(resData.message);
+          //console.log(resData.message);
           }
           else{
-            console.log(resData.error)
+            //console.log(resData.error)
           }
         }).catch((error) => {
-          console.log(error)
+          //console.log(error)
         });;
    }
 
@@ -765,8 +724,6 @@ const { dark, theme, toggle } = React.useContext(ThemeContext);
         'INSERT INTO buildLogbook (id,user_id,aircraft_id,aircraft_type,image,category,engine,engine_name,engine_class,engine_crew,day_pic,day_sic,day_p1_us,day_p1_ut,total,night_pic,night_sic,night_p1_us,night_p1_ut,night_total,total_flying_time,instrumental_time_actual,instrumental_time_simulated,simulator,instructional_flying_day,instructional_flying_night,instructional_flying_total,day_to,night_to,day_landing,night_landing,day_dual, night_dual, remark, key, lastUpdatedDate, stl_day, stl_night, stl_total) VALUES("'+params.itemId+'","'+user.id+'","'+params.BuildlogBookAirId+'","'+params.BuildlogBookAirType+'","hello","'+category+'","'+engine+'","'+engineName+'","'+Class+'","hello","'+day_pic+'","'+day_sic+'","'+dayp1_us+'","'+dayp1_ut+'","'+localTotalDayTime+'","'+night_pic+'","'+night_sic+'","'+nightp1_us+'","'+nightp1_ut+'","'+localTotalNightTime+'","'+
         localTotalFlyingTime+'","'+actual+'","'+simulated+'","'+simulator+'","'+instructional_day+'","'+instructional_night+'","'+TotalInsTime+'","'+day_to+'","'+night_to+'","'+dayLanding+'","'+nightLanding+'","'+day_dual+'","'+night_dual+'","'+remark+'","hello","hello","'+stl_day+'","'+stl_night+'","'+TotalStlTime+'")',
       );
-      // console.log('INSERT INTO buildLogbook (user_id,aircraft_id,aircraft_type,image,category,engine,engine_name,engine_class,engine_crew,day_pic,day_sic,day_p1_us,day_p1_ut,total,night_pic,night_sic,night_p1_us,night_p1_ut,night_total,total_flying_time,instrumental_time_actual,instrumental_time_simulated,simulator,instructional_flying_day,instructional_flying_night,instructional_flying_total,day_to,night_to,day_landing,night_landing,day_dual, night_dual, remark, key, lastUpdatedDate, stl_day, stl_night, stl_total) VALUES("'+user.id+'","'+params.BuildlogBookAirId+'","'+params.BuildlogBookAirType+'","hello","'+category+'","'+engine+'","'+engineName+'","'+Class+'","hello","'+day_pic+'","'+day_sic+'","'+dayp1_us+'","'+dayp1_ut+'","'+localTotalDayTime+'","'+night_pic+'","'+night_sic+'","'+nightp1_us+'","'+nightp1_ut+'","'+localTotalNightTime+'","'+
-      // localTotalFlyingTime+'","'+actual+'","'+simulated+'","'+simulator+'","'+instructional_day+'","'+instructional_night+'","'+TotalInsTime+'","'+day_to+'","'+night_to+'","'+dayLanding+'","'+nightLanding+'","'+day_dual+'","'+night_dual+'","'+remark+'","hello","hello","'+stl_day+'","'+stl_night+'","'+TotalStlTime+'")')
     });
     alert('Saved successfully');
   };
@@ -776,7 +733,6 @@ const { dark, theme, toggle } = React.useContext(ThemeContext);
   const WholeBuildLogbookData =() => {
     let WholeData = [];
     db.transaction(tx => {
-      //console.log('SELECT * from buildLogbook where aircraft_type = "'+params.BuildlogBookAirType+'"')
       tx.executeSql('SELECT * from buildLogbook', [], (tx, result) => {
         console.log('buildResult',result);
         for (let i = 0 ; i <= result.rows.length ; i++) {
@@ -829,10 +785,9 @@ const { dark, theme, toggle } = React.useContext(ThemeContext);
   const getPrepopulatedDataQuery = () => {
     let data = [];
     db.transaction(tx => {
-      //console.log('SELECT * from buildLogbook where aircraft_type = "'+params.BuildlogBookAirType+'"')
       {edit &&
       tx.executeSql('SELECT * from buildLogbook where aircraft_type = "'+params.BuildlogBookAirType+'"', [], (tx, result) => {
-        console.log('buildResult',result);
+        //console.log('buildResult',result);
         for (let i = 0 ; i <= result.rows.length ; i++) {
           data.push({
             user_id :  result.rows.item(i).user_id,
@@ -871,7 +826,7 @@ const { dark, theme, toggle } = React.useContext(ThemeContext);
             stl_night : result.rows.item(i).stl_day,
             stl_total : result.rows.item(i).stl_total,
           });
-          console.log('buildlogbook data',data);
+          //console.log('buildlogbook data',data);
             setCategory(result.rows.item(i).category)
             setEngine(result.rows.item(i).engine)
             setEngineName(result.rows.item(i).engine_name)
@@ -988,7 +943,7 @@ const { dark, theme, toggle } = React.useContext(ThemeContext);
 //sqlite ends
 
   // stl hours calculation
-console.log('engineName', engineName);
+
 return (
   <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
     <ScrollView ref={ref}>
@@ -1644,8 +1599,6 @@ return (
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //justifyContent: 'center',
-        //alignItems: 'flex-start',
         backgroundColor: '#fff',
     },
     headline: {

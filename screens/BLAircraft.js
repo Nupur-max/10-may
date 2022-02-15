@@ -5,19 +5,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { ThemeContext } from '../theme-context';
 import AsyncStorage from '@react-native-community/async-storage';
 import { ParamsContext } from '../params-context';
-
-import {BaseUrl} from '../components/url.json';
-import {Logbook} from '../styles/styles';
-import { set } from 'react-native-reanimated';
-
 import { useSelector, useDispatch } from "react-redux";
-import {fetchAircrafts} from '../store/actions/aircraftAction';
-import {connect} from 'react-redux';
-import {addUser} from '../store/actions/aircraftAction'
-import {DummyAircrafts} from '../components/dummyAircraft'
 import SQLite from 'react-native-sqlite-storage';
-import Swipeout from 'react-native-swipeout';
-import tr from 'date-fns/locale/tr';
 import {BuildLogbookData} from '../store/actions/BLAction'
 
 const db = SQLite.openDatabase(
@@ -33,9 +22,6 @@ const db = SQLite.openDatabase(
   },
 );
 
-
-
-
 // create a component
 const BLAircraft = ({navigation, route}) => {
 
@@ -46,26 +32,11 @@ const dataDispatcher = useDispatch();
 
  const onFocusChange = () => setFocused(true);
  const onFocusCancelled = () => setFocused(false);
-
- const [data,setData] = React.useState([]);
- const [filteredData,setFilteredData] = React.useState([]);
  const [search,setSearch] = React.useState('')
  const [selectedId, setSelectedId] = React.useState(null);
  const [selectedIndex, setSelectedIndex] = React.useState(null);
- const [selectedAtype, setSelectedAtype] = React.useState(null);
- const [An, setAn] = React.useState('')
- const [activeRowKey, setActiveRowKey] = React.useState(null)
- //const [GetIndex, setIndex] = React.useState('')
-
  const { dark, theme, toggle } = React.useContext(ThemeContext);
-
  const [, setParams] = React.useContext(ParamsContext);
- const [, setParamsDisplay] = React.useContext(ParamsContext)
- const [, setParamsLogbook] = React.useContext(ParamsContext) 
- const [, setParamsBuildLogbook] = React.useContext(ParamsContext)
-
-
-
 
 React.useEffect(() => {getAircrafts()}, [])
 
@@ -76,7 +47,7 @@ const searchQuery = async(dataToSearch) => {
   let SearchedData = [];
   let SingleResult = '';
   setSearch(dataToSearch)
-  console.log('Searching for ', dataToSearch);
+  //console.log('Searching for ', dataToSearch);
   db.transaction(tx => {
     tx.executeSql('SELECT id,user_id,aircraft_type FROM buildLogbook WHERE aircraft_type  LIKE "%'+dataToSearch+'%" AND user_id = "'+user.id+'"', [], (tx, result) => {
       if (result.rows.length > 0) {
@@ -99,7 +70,7 @@ const searchQuery = async(dataToSearch) => {
       }else{
         setFilteredData([]);
         dataDispatcher(BuildLogbookData({data: []}))
-        console.log('No Data found')
+        //console.log('No Data found')
       }
     });
   });
@@ -112,7 +83,7 @@ const getAircrafts = async() => {
   let data = [];
   db.transaction(tx => {
     tx.executeSql('SELECT id,user_id,aircraft_type from buildLogbook WHERE user_id="'+user.id+'" limit 20', [], (tx, result) => {
-      console.log(result);
+      //console.log(result);
       for (let i = 0 ; i <= result.rows.length ; i++) {
         data.push({
           id: result.rows.item(i).id,
@@ -130,10 +101,9 @@ const getAircrafts = async() => {
 }
 
 const getReduxData = useSelector(state => state.bl.data);
-console.log('from BLAircrafts list details', getReduxData.data);
+//console.log('from BLAircrafts list details', getReduxData.data);
 
 //from sqlite
-//console.log('dfdfh',filteredData.indexOf(selectedId))
 
 const Item = ({item, onPress, backgroundColor, textColor, indexPress}) => (
   <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
@@ -142,16 +112,10 @@ const Item = ({item, onPress, backgroundColor, textColor, indexPress}) => (
 );
 
 const renderItem = ({item, index}) => {
-   //console.log('Index---->', index);
-   //setIndex(item.index)
-    const backgroundColor = item.id === selectedId ? "#E8E8E8" : dark ? '#000' : "#fff";
-    const color = dark?'#fff':'#000';
-    // const fetchToBuildLogBook = item.id === selectedId ? navigation.navigate('BuildLogbook',{
-    //   itemId: item.id,
-    //   itemName: item.aircraft_name,
-    // }) : '';
+const backgroundColor = item.id === selectedId ? "#E8E8E8" : dark ? '#000' : "#fff";
+const color = dark?'#fff':'#000';
 
-    const selectParams = () =>{ 
+const selectParams = () =>{ 
     if(route.params.fromScreen) //item.id === selectedId &&
     {
       setParams(previousParams => ({
@@ -210,9 +174,6 @@ return (
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //justifyContent: 'center',
-        //alignItems: 'center',
-        //backgroundColor: '#2c3e50',
     },
     header:{
       padding: 5,

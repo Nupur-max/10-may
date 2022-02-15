@@ -4,18 +4,13 @@ import { View, Text, TouchableOpacity, TextInput, Dimensions, Platform, SafeArea
 import { ScrollView } from 'react-native-gesture-handler';
 import { RadioButton, List, Switch } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-//import CheckBox from '@react-native-community/checkbox';
 import { Checkbox } from 'react-native-paper';
 import { ThemeContext } from '../theme-context';
 import { DisplayContext } from '../display-context';
-import {TimePicker} from 'react-native-simple-time-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
-//import DatePicker from 'react-native-date-picker'
 import AsyncStorage from '@react-native-community/async-storage';
 import { ParamsContext } from '../params-context';
-import { buildLogBook } from '../store/actions/ActionBuildLogbbok';
 import DisplayStyles from '../styles/displayStyles'
-import { CreateLogbookData } from '../store/actions/CLAction';
 import { DisplayData } from '../store/actions/displayAction';
 import { TotalTypeData } from '../store/actions/totalTypeAction';
 import { useSelector, useDispatch } from 'react-redux';
@@ -41,7 +36,7 @@ const Display = ({navigation}) => {
 
     const dataDispatcher = useDispatch();
     const getReduxData = useSelector(state => state.display.ActualI);
-    console.log ('hjhygtdfd', getReduxData)
+    //console.log ('hjhygtdfd', getReduxData)
 
     const[aircraftId, setAircraftId] = React.useState('')
 
@@ -49,25 +44,16 @@ const Display = ({navigation}) => {
 
     React.useEffect(() => {
       if (params.childParam1) {
-        console.log('The value of child param is: ', params.childParam1);
+        //console.log('The value of child param is: ', params.childParam1);
         setAircraftId(params.displayAirId)
       }
     }, [params]);
 
-    //const [date, setDate] = React.useState('DDMM');
-
-    //const [roleChecked, setRoleChecked] = React.useState('');
-
-    const [instructor, setInstructor] = React.useState(false);
     const [country, setCountry] = React.useState(false);
     const [instrument, setInstrument] = React.useState(false);
     const [approach, setApproach] = React.useState(false);
-    const [isSwitchOn, setIsSwitchOn] = React.useState(false);
     const [blockTimeValue, setBlockTimeValue] = React.useState('00:15');
     const blockTime = ['00:15','00:30','00:45','00:60']
-
-    console.log('blockTime', blockTime[blockTimeValue])
-    console.log ('Country', country)
 
     const handleActualInstrument = () => {
         dataDispatcher(DisplayData({ActualI: instrument, TimeofAi: blockTime[blockTimeValue], Xc: country}))
@@ -75,8 +61,6 @@ const Display = ({navigation}) => {
         //console.log('Pressed');
     }
 
-    const [df, setDf] = React.useState('')
-    
     const { dark, theme, toggle } = React.useContext(ThemeContext);
 
     const { datee, Dateform, DateFormat, role, roleChecked } = React.useContext(DisplayContext);
@@ -84,26 +68,22 @@ const Display = ({navigation}) => {
     
 
     const getTotalTime = async () => {
-        console.log('First')
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
         let temData = [];
-        //let temData = [];
-        //console.log('tempdata', temData);
-        //dataDispatcher(LogListData({data: []}))
         prePopulateddb.transaction(tx => {
           tx.executeSql('SELECT totalTime from logbook WHERE user_id = "' + user.id + '" AND aircraftType = "'+params.displayAirType+'"', [], (tx, result) => {
             for (let i = 0; i <= result.rows.length; i++) {
               temData.push({
                 totalTime: result.rows.item(i).totalTime,
               });
-              console.log('single', temData);
+              //console.log('single', temData);
               var TotalTime = 0;
               var Total_time1 = '';
               // console.log(localLogbookData)
               temData.map(d => {
                 // // total  flying hours
-                console.log(d)
+                //console.log(d)
                 
                   var total = d.totalTime.split(":")
           
@@ -118,15 +98,14 @@ const Display = ({navigation}) => {
                     TotalMin = '0' + TotalMin;
                   }
                   Total_time1 = TotalHours + ":" + TotalMin;
-                  console.log(Total_time1)
-                  console.log(Total_time1);
+                  // console.log(Total_time1)
                   if (isNaN(Total_time1[1])) {
                     Total_time1[1] = '0'
                   }
                   //dataDispatcher(FlyingData({totalFlyingHours: Total_time1}))
                 
               })
-              console.log('Total_time1',Total_time1)
+              //console.log('Total_time1',Total_time1)
               dataDispatcher(TotalTypeData({totalType: Total_time1}))
             }
           });
@@ -149,10 +128,6 @@ const Display = ({navigation}) => {
         <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{padding:6}} onPress={()=>navigation.goBack()} />
         <Text style={DisplayStyles.aircrafts}>Display</Text>
         </View>
-        {/* <TouchableOpacity onPress={() => changetheYakenValue()}>
-            <Text>Update Token</Text>
-        </TouchableOpacity>
-        <Text>{userTokenFetch}</Text> */}
         <View style={dark?DisplayStyles.DarkHeadline:DisplayStyles.headline}>
           <Text style={dark?DisplayStyles.DarkHeadlineText:DisplayStyles.HeadlineText}>Date Format</Text>
         </View>
@@ -162,9 +137,6 @@ const Display = ({navigation}) => {
         <View style={DisplayStyles.fieldWithoutBottom}>
         <RadioButton.Android
             value="DDMM"
-            //status={ df === 'DDMM' ? 'checked' : 'unchecked' }
-            //onPress={()=>{Update_Display();setDf('DDMM')}}
-            //onPress={DateFormat}
             color = '#256173'
             uncheckedColor = '#256173'
             labelStyle={{marginRight: 20}}
@@ -173,9 +145,6 @@ const Display = ({navigation}) => {
         <View style={{paddingHorizontal:40, flexDirection:'row'}}>
         <RadioButton.Android
             value="MMDD"
-            //status={ df === 'MMDD' ? 'checked' : 'unchecked' }
-            //onPress={()=>{Update_Display();setDf('MMDD')}}
-            //onPress={DateFormat}
             color = '#256173'
             uncheckedColor = '#256173'
             labelStyle={{marginRight: 20}}
@@ -223,8 +192,6 @@ const Display = ({navigation}) => {
         <View style={DisplayStyles.fieldWithoutBottom}>
         <RadioButton.Android
             value="AirlineCaptain"
-            //status={ roleChecked === 'AirlineCaptain' ? 'checked' : 'unchecked' }
-            //onPress={() => {setRoleChecked('AirlineCaptain'); Update_Display()}}
             color = '#256173'
             uncheckedColor = '#256173'
             labelStyle={{marginRight: 20}}
@@ -233,8 +200,6 @@ const Display = ({navigation}) => {
         <View style={{paddingHorizontal:25, flexDirection:'row'}}> 
         <RadioButton.Android
             value="AirlineFirstOfficer"
-            //status={ roleChecked === 'AirlineFirstOfficer' ? 'checked' : 'unchecked' }
-            //onPress={() => {setRoleChecked('AirlineFirstOfficer'); Update_Display()}}
             color = '#256173'
             uncheckedColor = '#256173'
             labelStyle={{marginRight: 20}}
@@ -246,8 +211,6 @@ const Display = ({navigation}) => {
         <View style={DisplayStyles.fieldWithoutBottom}>
         <RadioButton.Android
             value="AirlineInstructor"
-            //status={ roleChecked === 'AirlineInstructor' ? 'checked' : 'unchecked' }
-            //onPress={() => {setRoleChecked('AirlineInstructor'); Update_Display()}}
             color = '#256173'
             uncheckedColor = '#256173'
             labelStyle={{marginRight: 20}}
@@ -258,8 +221,6 @@ const Display = ({navigation}) => {
         
         <RadioButton.Android
             value="FlightCadet"
-            //status={ roleChecked === 'FlightCadet' ? 'checked' : 'unchecked' }
-            //onPress={() => {setRoleChecked('FlightCadet'); Update_Display()}}
             color = '#256173'
             uncheckedColor = '#256173'
             labelStyle={{marginRight: 20}}
@@ -272,8 +233,6 @@ const Display = ({navigation}) => {
         <View style={DisplayStyles.underline}>
         <RadioButton.Android
             value="Cfi"
-            //status={ roleChecked === 'FlightCadet' ? 'checked' : 'unchecked' }
-            //onPress={() => {setRoleChecked('FlightCadet'); Update_Display()}}
             color = '#256173'
             uncheckedColor = '#256173'
             labelStyle={{marginRight: 20}}
@@ -328,7 +287,6 @@ const Display = ({navigation}) => {
                 isFullWidth = {true}
                 textStyle= {{color: 'grey', fontSize:15,}}
                 dropdownStyle={{boderWidth:1, borderColor:'#256173', width:100}}
-                //style={DisplayStyles.blockDropDown}
                 onSelect = {(blockTimeValue)=>{setBlockTimeValue(blockTimeValue);}}
             />
             <MaterialCommunityIcons name="chevron-down" color={dark?'#fff':'#000'} size={20} style={{lineHeight:20}}/>

@@ -46,10 +46,12 @@ const Login = ({navigation}) => {
   const [forgotModalVisible, setForgotModalVisible] = React.useState(false)
   const [forgotEmail, setForgotEmail] = React.useState('')
   const [localData, setLocalData]= React.useState([])
+  const [show, setShow] =React.useState(true)
 
   const dataDispatcher = useDispatch();
 
   const myfun = async() => {
+    setShow(false)
     dataDispatcher(LogListData({data: []}))
     //Alert.alert(petname);
     await fetch(BaseUrl + 'login',{
@@ -64,11 +66,11 @@ const Login = ({navigation}) => {
     })
     }).then(res => res.json())
     .then(resData => {
-       console.log(resData)
+       //console.log(resData)
        //Alert.alert(resData.msg);
        if(resData.msg === 'loggedin'){
         AsyncStorage.setItem('id', JSON.stringify(resData.data.id));
-        console.log(resData.data.id)
+        //console.log(resData.data.id)
         AsyncStorage.setItem(
           'userdetails',
           JSON.stringify({
@@ -89,18 +91,12 @@ const Login = ({navigation}) => {
             profile_pic : resData.data.profile_pic,
           }),
         )
-        console.log('reg-date',resData.data.registrationDate )
+        //console.log('reg-date',resData.data.registrationDate )
         db.transaction((tx) => {
           tx.executeSql(
         'INSERT INTO userProfileData (user_id,name,email,Contact,roster_id,roster_pwd,airline_type,reg_date,LicenceNumber,LicenceType,Country,validity,profile_pic) VALUES ("'+resData.data.id+'","'+resData.data.name+'","'+resData.data.email+'","'+resData.data.mobile_number+'","'+resData.data.roaster_id+'","'+resData.data.roaster_pass+'","'+resData.data.airline_type+'","'+resData.data.registrationDate+'","'+resData.data.licance_number+'","'+resData.data.licance_type+'","'+resData.data.country+'","'+resData.data.validity+'","'+resData.data.profile_pic+'")',
         );
-
-        // console.log('INSERT INTO userProfileData (user_id,name,email,Contact,roster_id,roster_pwd,airline_type) VALUES ("'+resData.data.id+'","'+resData.data.name+'","'+resData.data.email+'","'+resData.data.mobile_number+'","'+resData.data.roaster_id+'","'+resData.data.roaster_pass+'","'+resData.data.airline_type+'")')
         });
-        //dataDispatcher(LoginData({name:resData.data.name, rosterID:resData.data.roaster_id, rosterPwd:resData.data.roaster_pass, airlineType:resData.data.airline_type, mobile:resData.data.mobile_number}))
-        //console.log('idddd--->>',resData.data.id)
-        //console.log('other data--->>',resData.data.roaster_id + resData.data.roaster_pass + resData.data.airline_type)
-        //console.log(resData.data.email)
         navigation.navigate('SettingScreen')
 
         fetch(BaseUrl+'display_logbook',{
@@ -114,9 +110,6 @@ const Login = ({navigation}) => {
         })
       }).then(response => response.json())
       .then(syncBuildLogbookData => {
-        //console.log('syncBuildLogbookmData',syncBuildLogbookData)
-         //console.log('innerData',syncData.data)
-         //console.log('length', syncBuildLogbookData.message.length)
          if (syncBuildLogbookData.message.length !== 0){
           syncBuildLogbookData.message.map((BLdata, index) => {
             //console.log('synced BLdata',BLdata.aircraft_name)
@@ -140,9 +133,6 @@ const Login = ({navigation}) => {
         })
       }).then(response => response.json())
       .then(syncData => {
-         //console.log('syncData',syncData)
-         //console.log('innerData',syncData.data)
-         console.log('length', syncData.data.length)
          if (syncData.data.length !== 0){
          syncData.data.map((data, index) => {
             //console.log('synced data',data.p1,data.p2)
@@ -203,7 +193,7 @@ const Login = ({navigation}) => {
               'UPDATE userProfileData set Total_flying_hours = "'+Total_time1+'" where user_id="'+resData.data.id+'"'
               );
 
-            console.log('index:', index+1) 
+            //console.log('index:', index+1) 
             dataDispatcher(ProgressData({ProgressValue: index+1, totalvalue: syncData.data.length}))
             if((index+1) == syncData.data.length ){
             let temData = [];
@@ -211,7 +201,7 @@ const Login = ({navigation}) => {
             tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,outTime,inTime,orderedDate from logbook WHERE user_id = "'+resData.data.id+'" ORDER BY orderedDate DESC, onTime DESC limit 50', [], (tx, result) => {
                 //setOffset(offset + 10);
                 for (let i = 0; i < result.rows.length; i++) {
-                  console.log('rows', result.rows.length)
+                  //console.log('rows', result.rows.length)
                   temData.push({
                         id : result.rows.item(i).id,
                         tag : result.rows.item(i).tag,
@@ -234,7 +224,7 @@ const Login = ({navigation}) => {
                     });
                     //console.log('imp-dat', temData)
                     dataDispatcher(LogListData({data: temData,inProgress: true, downloadCount: syncData.data.length}))
-                    console.log('data fetch '+ i +' out of '+ result.rows.length);
+                    //console.log('data fetch '+ i +' out of '+ result.rows.length);
                   }
               });
           }); //  transition end
@@ -251,6 +241,7 @@ const Login = ({navigation}) => {
          Alert.alert('Incorrect credentials')
        }
     });
+    setShow(true)
  }
 
  const ForgotPassword = async() => {
@@ -355,11 +346,11 @@ const Login = ({navigation}) => {
           <TouchableOpacity onPress={()=> setForgotModalVisible(!forgotModalVisible)} style={styles.fullWidth}>
             <Text style={[styles.mainLine, styles.alignRight]}>Forgot password ?</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={myfun}>
+          {show?<TouchableOpacity onPress={myfun}>
             <View style={styles.button}>
               <Text style={styles.buttonText}>Login</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity>:null}
           
             <View style={{flexDirection:'row'}}>
               <Text style={styles.mainLine}>Don't have account? </Text>

@@ -1,12 +1,9 @@
 //import liraries
-import React, { Component } from 'react';
-import { View, Text,SafeAreaView, TouchableOpacity, ImageBackground, TextInput, Platform, Dimensions, Alert } from 'react-native';
-import  Colors  from '../../components/colors';
+import React from 'react';
+import { View, Text,SafeAreaView, TouchableOpacity, ImageBackground, TextInput} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import { ScrollView } from 'react-native-gesture-handler';
-import { RadioButton,} from 'react-native-paper';
 import { ThemeContext } from '../../theme-context';
-import {Logbook} from '../../SetPeopleScreenStyle/SetPeopleScreenStyle';
 import AsyncStorage from '@react-native-community/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SetPeopleScreenStyle from '../../styles/setPeopleStyles';
@@ -37,11 +34,6 @@ const SetPeople = ({navigation}) => {
     const [image, setImage] = React.useState(null);
     const [imageData, setImageData] = React.useState('');
     const [imageFilename, setImageFilename] = React.useState('');
-
-    // const [category, setCategory] = React.useState('');
-    // const [engine, setEngine] = React.useState('');
-    // const [Class, setClass] = React.useState('');
-
     const [name, setName] = React.useState('')
     const [airlineCode, setAirlineCode] = React.useState('')
     const [egcaId, setEgcaId ] = React.useState('')
@@ -74,8 +66,6 @@ const SetPeople = ({navigation}) => {
         formData.append('comments', comments);
         const splittedBase64 = imageData.split(';base64');
         formData.append('img', splittedBase64[1]);
-        // console.log('form data' , data._parts[0][1].uri)
-        console.log('form data' , formData)
         var Url = BaseUrl+'add_people'
           fetch(Url, {
           method: 'POST',
@@ -96,37 +86,27 @@ const SetPeople = ({navigation}) => {
 
     const [userAirlineType,setUserAirlineType] = React.useState('')
 
-
-    // const getReduxData = useSelector(state => state.display.AirlineDispatched);
-    // console.log ('peopleDispatcher', getReduxData.SelectedAirline)
-
     React.useEffect(() => {
       GetUserDetails()
       }, []);
     
       const GetUserDetails = async () => {
-        //console.log('hello')
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
         let temData = [];
         prePopulateddb.transaction(tx => {
           tx.executeSql('SELECT airline_type FROM userProfileData Where user_id = "' + user.id + '"', [], (tx, result) => {
-            //setOffset(offset + 10);
             if (result.rows.length > 0) {
-              //alert('data available '); 
-              console.log('result', result)
             }
             else {
               console.log('error')
             }
             for (let i = 0; i <= result.rows.length; i++) {
-              //console.log('name: ', result.rows.item(i).airline_name, 'loginlink: ', result.rows.item(i).loginUrl)
               temData.push({
                 airline_type: result.rows.item(i).airline_type,
               });
               setUserAirlineType(result.rows.item(i).airline_type)
              }
-            //console.log('rosterid', rosterId)
             });
         });
       }
@@ -163,8 +143,8 @@ const SetPeople = ({navigation}) => {
     //sqlite ends
 
     return (
-      <ScrollView>
-        <SafeAreaView style={[SetPeopleScreenStyle.container, {backgroundColor: theme.backgroundColor}]}>
+      <ScrollView style={[SetPeopleScreenStyle.container, {backgroundColor: theme.backgroundColor}]}>
+        <SafeAreaView >
             
             <View style={SetPeopleScreenStyle.header}>
             <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{padding:6}} onPress={()=>navigation.goBack()} />
@@ -183,7 +163,7 @@ const SetPeople = ({navigation}) => {
                           style={{height:150, width:150}}>
                             <View style={{alignItems:'center', paddingTop: 25}}>
                             <MaterialCommunityIcons  
-                            name="account-supervisor-outline" color={'#000'} size={80} style={{}}/>
+                            name="account-supervisor-outline" color={dark?'#fff':'#000'} size={80} style={{}}/>
                             </View>
                             <View style={{marginLeft:110,backgroundColor:'#fff'}}>
                             <MaterialCommunityIcons  
@@ -202,7 +182,7 @@ const SetPeople = ({navigation}) => {
                 placeholder='Enter Name'
                 value={name}
                 onChangeText = {inputText=>setName(inputText)}
-                style={SetPeopleScreenStyle.textStyleInput}
+                style={[SetPeopleScreenStyle.textStyleInput,{color:dark?'#fff':'#000'}]}
               />
             </View>
             </View>
@@ -216,7 +196,8 @@ const SetPeople = ({navigation}) => {
                 placeholder='Enter code'
                 value={airlineCode}
                 onChangeText = {inputText=>setAirlineCode(inputText)}
-                style={SetPeopleScreenStyle.textStyleInput}
+                style={[SetPeopleScreenStyle.textStyleInput,{color:dark?'#fff':'#000'}]}
+
               />
             </View>
             </View>
@@ -230,7 +211,8 @@ const SetPeople = ({navigation}) => {
                 placeholder='Enter EGCA ID'
                 value={egcaId}
                 onChangeText={inputText=> setEgcaId(inputText)}
-                style={SetPeopleScreenStyle.textStyleInput}
+                style={[SetPeopleScreenStyle.textStyleInput,{color:dark?'#fff':'#000'}]}
+
               />
             </View>
             </View>
@@ -244,7 +226,8 @@ const SetPeople = ({navigation}) => {
                 placeholder='Enter Comments'
                 value={comments}
                 onChangeText={(inputText)=>setComments(inputText)}
-                style={SetPeopleScreenStyle.textStyleInput}
+                style={[SetPeopleScreenStyle.textStyleInput,{color:dark?'#fff':'#000'}]}
+
               />
             </View>
             </View>

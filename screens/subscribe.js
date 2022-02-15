@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Alert, Activ
 //import { View, Text, StyleSheet,ImageBackground } from "react-native";
 import Colors from '../components/colors';
 import iap, * as RNIap from 'react-native-iap';
+import {BaseUrl} from '../components/url.json'
+import AsyncStorage from '@react-native-community/async-storage';
 
 const itemSubs = Platform.select({
   ios: [
@@ -37,12 +39,12 @@ const Subscribe = ({ navigation }) => {
       .catch((err) => {
         console.warn(`IAP ERROR ${err.code}`, err.message);
       });
-    // await RNIap.flushFailedPurchasesCachedAsPendingAndroid()
-    //   .then(async (consumed) => {
-    //     console.log('consumed all items?', consumed);
-    //   }).catch((err) => {
-    //     console.warn(`flushFailedPurchasesCachedAsPendingAndroid ERROR ${err.code}`, err.message);
-    //   });
+    await RNIap.flushFailedPurchasesCachedAsPendingAndroid()
+      .then(async (consumed) => {
+        console.log('consumed all items?', consumed);
+      }).catch((err) => {
+        console.warn(`flushFailedPurchasesCachedAsPendingAndroid ERROR ${err.code}`, err.message);
+      });
   };
 
   const getItems = async () => {
@@ -70,17 +72,20 @@ const Subscribe = ({ navigation }) => {
   useEffect(() => {
     purchaseUpdateSubscription = RNIap.purchaseUpdatedListener(
       async (purchase) => {
-        console.log("purchase", purchase);
+        // console.log("purchase", purchase);
         const receipt = purchase.transactionReceipt;
         if (receipt) {
+          
           try {
             if (Platform.OS === 'ios') {
+              validate(receipt)
               RNIap.finishTransactionIOS(purchase.transactionId);
             } else if (Platform.OS === 'android') {
+            valiadteAndroid(receipt)
               await RNIap.consumeAllItemsAndroid(purchase.purchaseToken);
               await RNIap.acknowledgePurchaseAndroid(purchase.purchaseToken);
             }
-            await RNIap.finishTransaction(purchase, true);
+            await RNIap.finishTransaction(purchase, false);
           } catch (ackErr) {
             console.log('ackErr INAPP>>>>', ackErr);
           }
@@ -116,7 +121,7 @@ const Subscribe = ({ navigation }) => {
           if (Platform.OS === 'android') {
             setPurchaseToken(result.purchaseToken);
             setPackageName(result.packageNameAndroid);
-            setProductId(result.productId);
+            setProductId(result.productId);            
             // can do your API call here to save the purchase details of particular user
           } else if (Platform.OS === 'ios') {
             console.log(result.transactionReceipt)
@@ -124,7 +129,6 @@ const Subscribe = ({ navigation }) => {
             setReceipt(result.transactionReceipt);
             // can do your API call here to save the purchase details of particular user
           }
-          setBuyIsLoading(false);
         })
         .catch((err) => {
           setBuyIsLoading(false);
@@ -135,6 +139,32 @@ const Subscribe = ({ navigation }) => {
       setBuyIsLoading(false);
       console.warn(`err ${error.code}`, error.message);
       setError(err.message);
+    }
+  };
+
+  const validate = async (receipt) => {
+    let user = await AsyncStorage.getItem('userdetails');
+    user = JSON.parse(user);
+    try {
+      // send receipt to backend
+      const deliveryReceipt = await fetch(BaseUrl +  "save_reciept", {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify({ "reciept": receipt , 'user_id': user.id }),
+      }).then((res) => {
+        res.json().then((r) => {
+          // do different things based on response
+          if (r.result.error == -1) {
+            Alert.alert("Error", "There has been an error with your purchase");
+          } else if (r.result.isActiveSubscription) {
+            setPurchased(true);
+          } else {
+            Alert.alert("Expired", "your subscription has expired");
+          }
+        });
+      });
+    } catch (error) {
+      Alert.alert("Error!", error.message);
     }
   };
 

@@ -328,7 +328,7 @@ const configuration = StyleSheet.create({
         paddingBottom:10
     },
     saveText : {
-        color:'blue', 
+        color:'#fff', 
         fontSize:18
     },
 
