@@ -198,7 +198,7 @@ const Login = ({navigation}) => {
             if((index+1) == syncData.data.length ){
             let temData = [];
             db.transaction(tx => {
-            tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,outTime,inTime,orderedDate from logbook WHERE user_id = "'+resData.data.id+'" ORDER BY orderedDate DESC, onTime DESC limit 50', [], (tx, result) => {
+            tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,outTime,inTime,orderedDate from logbook WHERE user_id = "'+resData.data.id+'" ORDER BY orderedDate DESC, onTime DESC limit 100', [], (tx, result) => {
                 //setOffset(offset + 10);
                 for (let i = 0; i < result.rows.length; i++) {
                   //console.log('rows', result.rows.length)
@@ -220,11 +220,8 @@ const Login = ({navigation}) => {
                         to_lat :  result.rows.item(i).to_lat,
                         to_long : result.rows.item(i).to_long,
                         orderedDate : result.rows.item(i).orderedDate,
-                        //totalTime: result.rows.item(i).totalTime,
                     });
-                    //console.log('imp-dat', temData)
                     dataDispatcher(LogListData({data: temData,inProgress: true, downloadCount: syncData.data.length}))
-                    //console.log('data fetch '+ i +' out of '+ result.rows.length);
                   }
               });
           }); //  transition end
@@ -346,11 +343,11 @@ const Login = ({navigation}) => {
           <TouchableOpacity onPress={()=> setForgotModalVisible(!forgotModalVisible)} style={styles.fullWidth}>
             <Text style={[styles.mainLine, styles.alignRight]}>Forgot password ?</Text>
           </TouchableOpacity>
-          {show?<TouchableOpacity onPress={myfun}>
+          {show===false?<ActivityIndicator color='#000'/>:<TouchableOpacity onPress={myfun}>
             <View style={styles.button}>
               <Text style={styles.buttonText}>Login</Text>
             </View>
-          </TouchableOpacity>:null}
+          </TouchableOpacity>}
           
             <View style={{flexDirection:'row'}}>
               <Text style={styles.mainLine}>Don't have account? </Text>

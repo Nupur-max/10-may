@@ -267,11 +267,6 @@ const P1 = ({ navigation }) => {
           let text = date;
           const myArray = text.split("-");
           const day = myArray[2] + myArray[1] + myArray[0]
-          //console.log('sorted date', day);
-
-          //console.log('Pilot_Pic====', Pilot_Pic);
-          //console.log('Pilot_Copilot====', Pilot_Copilot)
-          //console.log('Pilot_Instructor===', Pilot_Instructor)
 
           db.transaction((tx) => {
             if (Pilot_Pic !== '') {
@@ -292,23 +287,14 @@ const P1 = ({ navigation }) => {
                 'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","' + SelfField + '","","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '")',
               );
             }
-
-
-
             console.log('data pos ' + i + ' ' + resData.data.length);
-            // tx.executeSql(
-            //   'INSERT INTO userProfileData (user_id,rosterLength) VALUES ("'+user.id+'", "'+resData.data.length+'")',
-            // );
-
-             
-
+            
             if (resData.data.length > 10) {
               setProgressValue(0.5)
             }
 
             if(resData.msg!==false){
             if ((i + 1) == resData.data.length) {
-              //
               //selection from table logbook
               let temData = [];
               db.transaction(tx => {
@@ -353,18 +339,8 @@ const P1 = ({ navigation }) => {
                   }
                 });
               });
-
-              // setProgressValue(1)
-              // setDataFetched(false)
-              // setModalVisible(false)
-              // Alert.alert("Message", 'Data fetched successfully');
             }
           }
-            //Select Query end
-            // else{
-            //   if(resData.msg === false)
-            //   alert('Invalid Credentials')
-            // }
           });
         }
       }
@@ -1060,12 +1036,6 @@ const P1 = ({ navigation }) => {
 
           {pilotsFetched === true ?
             <View>
-              {/* <ActivityIndicator
-                    animating={true}
-                    color="#000"
-                    size="large"
-                    style={styles.activityIndicator}
-                    /> */}
               <Text style={{ color: dark ? '#fff' : '#000' }}>Pilot list is uploading....</Text>
               <ProgressBar progress={pilotListProgress} color={'#256173'} style={{ width: 200, marginTop: 15 }} visible={showPilotsProgress}/>
             </View> : null}
@@ -1164,7 +1134,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: Colors.primary,
-    padding: 10,
+    padding: 5,
     marginTop: 20,
     width: Dimensions.get('window').width * 0.4,
     borderRadius: 10,
@@ -1180,8 +1150,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonText: {
-    fontWeight: 'bold',
+    fontWeight: '500',
     color: '#fff',
+    fontSize:14,
   },
   fieldWithoutBottom: {
     paddingHorizontal: 15,

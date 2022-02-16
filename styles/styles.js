@@ -86,12 +86,13 @@ const Logbook = StyleSheet.create({
     },
     fieldText: {
         fontSize: 14,
-        //marginTop: 5,
+        paddingLeft: 12,
         fontWeight: '500',
         fontFamily: 'WorkSans-Regular',
         lineHeight: 25,
         color: Colors.primary,
         },
+
     clock: {
         paddingVertical: 10,
         paddingHorizontal:'40%'

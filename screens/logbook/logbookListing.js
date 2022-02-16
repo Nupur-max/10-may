@@ -82,7 +82,7 @@ const LogBookListing = ({ navigation }) => {
   const [selectedId, setSelectedId] = React.useState('')
   const [focused, setFocused] = React.useState(false);
   const [offset, setOffset] = React.useState(0);
-  const [loadmore, setLoadmore] = React.useState(true);
+  const [loadmore, setLoadmore] = React.useState(false);
   const [findTag, setFindTag] = React.useState('')
   const [totalFlyingHours, setTotalFlyingHours] = React.useState('')
  
@@ -484,43 +484,8 @@ const LogBookListing = ({ navigation }) => {
   }
   }, [isFocused]);
 
-  const test = async () => {
-    console.log('GHGHHM')
-    let user = await AsyncStorage.getItem('userdetails');
-    user = JSON.parse(user);
-    let testtemData = []
-    prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" AND date = "02-02-2022"', [], (tx, result) => {
-        if (result.rows.length == 0) {
-          setLoadmore(false)
-          return false;
-        }
-        setOffset(offset + 10);
-        console.log('leng',result.rows.length)
-        for (let i = 0; i <= result.rows.length; i++) {
-          if (result.rows.length !== 0){
-          testtemData.push({
-            id: result.rows.item(i).id,
-            tag: result.rows.item(i).tag,
-            date: result.rows.item(i).date,
-            chocksOffTime: result.rows.item(i).offTime,
-            chocksOnTime: result.rows.item(i).onTime,
-          });
-
-          console.log('test data',testtemData);
-          
-        }
-        else {
-          console.log('no data to show')
-          dataDispatcher(LogListData({ data: [], inProgress: false }))
-          setRefreshing(false);
-        }
-        }
-    });
-    });
-  }
-
   const getLogbookData = async () => {
+    setLoadmore(true)
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
     let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
@@ -528,9 +493,10 @@ const LogBookListing = ({ navigation }) => {
       tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
-          setLoadmore(false)
+          //setLoadmore(false)
           return false;
         }
+        
         setOffset(offset + 10);
         //if (result.rows.length > 1){
         for (let i = 0; i <= result.rows.length; i++) {
@@ -594,14 +560,16 @@ const LogBookListing = ({ navigation }) => {
           index === self.findIndex((t) => (t.chocksOffTime === arr.chocksOffTime && t.date === arr.date && t.from === arr.from)))
 
           dataDispatcher(LogListData({ data: clean, inProgress: false }))
-          setLoadmore(false)
+          //setLoadmore(false)
           setFindTag(result.rows.item(i).tag);
           setRefreshing(false);
+          setLoadmore(false)
         }
         else {
           dataDispatcher(LogListData({ data: [], inProgress: false }))
           setRefreshing(false);
         }
+        
         }
     });
     });
@@ -614,13 +582,13 @@ const LogBookListing = ({ navigation }) => {
     user = JSON.parse(user);
     let temData =  []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 30 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
-          setLoadmore(false)
+          //setLoadmore(false)
           return false;
         }
-        setOffset(offset + 10);
+        setOffset(offset + 30);
         for (let i = 0; i <= result.rows.length; i++) {
           if (result.rows.length !== 0){
           setModalVisible(true)
@@ -682,7 +650,7 @@ const LogBookListing = ({ navigation }) => {
           var clean = arr.filter((arr, index, self) =>
           index === self.findIndex((t) => (t.chocksOffTime === arr.chocksOffTime && t.date === arr.date && t.from === arr.from)))
           dataDispatcher(LogListData({ data: clean, inProgress: false }))
-          setLoadmore(false)
+          //setLoadmore(false)
           setFindTag(result.rows.item(i).tag);
           setRefreshing(false);
         }
@@ -818,7 +786,7 @@ const handleIndexChange = (index) => {
           renderItem={renderItem}
           keyExtractor={(_, index) => { return index.toString() }}
           numColumns={1}
-          onEndReached={search !== '' ? null : getLogbookData}
+          onEndReached={()=>{search !== ''? null:getLogbookData()}}
           onEndReachedThreshold={1}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         />
@@ -841,13 +809,13 @@ const handleIndexChange = (index) => {
         </View>  
       :null}
 
-
       <Draggable
         debug x={300} y={450} z={5} renderColor={'#256173'} renderSize={70} isCircle={true}
         onShortPressRelease={() => PlusNavigation()}
       />
 
       <View style={dark?LogbookListing.DarkbottomView:LogbookListing.bottomView}>
+      {loadmore==true?<ActivityIndicator color={'#000'}/>:null}
         {checkTag === true ?
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 5 }}>
             <TouchableOpacity style={{ backgroundColor: '#256173', paddingHorizontal: 8, paddingVertical: 2 }} onPress={UpdateAllRoster}>

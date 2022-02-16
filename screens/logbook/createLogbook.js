@@ -1088,7 +1088,7 @@ React.useEffect(() => {
             })
         }).then(res => res.json())
             .then(resData => {
-                Alert.alert(resData.message);
+                //Alert.alert(resData.message);
             }).catch((error) => {
               });
     };
@@ -2547,7 +2547,7 @@ React.useEffect(() => {
                             <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterNameSic}</Text>
                             <TouchableOpacity onPress={() => {navigation.navigate('People', { from: 'sic' })}}>
                                 <MaterialCommunityIcons
-                                    name="chevron-right" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
+                                    name="chevron-right" color={'#256173'} size={25} style={{ lineHeight: 35, paddingRight:5 }} />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -3679,7 +3679,7 @@ React.useEffect(() => {
         </ScrollView>
         <View style={dark?Logbook.DarkbuttonView:Logbook.buttonView}>
                 <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={()=>{insertQuery();constUpdateP2()}}> 
+                    <TouchableOpacity onPress={()=>{insertQuery();constUpdateP2();Add_Logbook()}}> 
                         <View style={Logbook.button}>
                             <Text style={Logbook.buttonText}>Save</Text>
                         </View>

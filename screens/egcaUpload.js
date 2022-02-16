@@ -178,7 +178,6 @@ const EGCAUpload = ({navigation}) => {
     {label: 'Patter Flying - Limited power', value: 'Patter Flying - Limited power'},
     {label: 'Patter Flying - Confined areas', value: 'Patter Flying - Confined areas'},
     {label: 'Patter Flying - Spot turns', value: 'Patter Flying - Spot turns'},
-    {label: 'Patter Flying - Circuit and Rotor Emergencies', value: 'Patter Flying - Circuit and Rotor Emergencies'},
 ]);
     const [test, setTest] = React.useState([]);
     const [testValue, setTestValue] = React.useState([
@@ -341,7 +340,7 @@ const EGCAUpload = ({navigation}) => {
       
       <SafeAreaView style={[styles.container,{ backgroundColor: theme.backgroundColor }]}>
         <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
-        <ScrollView nestedScrollEnabled={true} >
+        <ScrollView nestedScrollEnabled={true} contentContainerStyle={{paddingBottom: 60}} >
 
         <View style={styles.mainHeader}>
             <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{padding:6}} onPress={()=>navigation.goBack()} />
@@ -473,23 +472,19 @@ const EGCAUpload = ({navigation}) => {
         </View>
       </View>
 
-      {PurposeData!==[]?<View style={{paddingLeft:20,paddingBottom: 5}}>
-        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[0]}</Text>
-        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[1]}</Text>
-        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[2]}</Text>
-        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[3]}</Text>
-        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[4]}</Text>
-      </View>: null}
+      
 
-      {selectedPurpose!==[]?<View style={{paddingLeft:20,paddingBottom: 5}}>
+      {/* {selectedPurpose!==[]?<View style={{paddingLeft:20,paddingBottom: 5}}>
         <Text>{selectedPurpose.Purpose}</Text>
-       </View>:null}
+       </View>:null} */}
 
         {egca !== "Non-commercial" ?<View>
         <Text style = {dark?styles.DarkInnnerHeadings:styles.InnnerHeadings}>Purpose</Text>
         </View>: null}
         {egca !== "Non-commercial" ? <View style={Platform.OS==='ios'?{padding: 20,zIndex:888}:{padding:20,}}>
           <DropDownPicker
+            zIndex={3000}
+            zIndexInverse={1000}
             searchable={true}
             multiple={true}
             min={0}
@@ -515,12 +510,22 @@ const EGCAUpload = ({navigation}) => {
         />
         </View> : null}
 
+        {PurposeData!==[]?<View style={{paddingLeft:20,paddingBottom: 5}}>
+        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[0]}</Text>
+        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[1]}</Text>
+        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[2]}</Text>
+        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[3]}</Text>
+        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[4]}</Text>
+      </View>: null}
+
         <View>
         <Text style = {dark?{...styles.DarkInnnerHeadings}:{...styles.InnnerHeadings,}}>Authorised Person For Verification</Text>
         </View>
 
         <View style={Platform.OS==='ios'?{padding: 20,zIndex:777}:{padding: 20, elevation:10}}>
         <DropDownPicker
+          zIndex={2000}
+          zIndexInverse={2000}
           open={AuthOpen}
           value={Authvalue}
           items={Authitems}
@@ -530,7 +535,7 @@ const EGCAUpload = ({navigation}) => {
           style = {{width: '100%',}}
           dropDownContainerStyle={{
             width: '100%',
-            height: 50
+            //height: 50
             //zIndex: 999,
             //elevation:10,
           }}
@@ -545,8 +550,10 @@ const EGCAUpload = ({navigation}) => {
         <Text style = {dark?styles.DarkInnnerHeadings:{...styles.InnnerHeadings}}>Name of Authorised Person For Verification</Text>
         </View>
 
-        <View style={Platform.OS==='ios'?{padding: 20,zIndex:999}:{padding: 20,}}>
+        <View style={Platform.OS==='ios'?{padding: 20,zIndex:666}:{padding: 20,}}>
         <DropDownPicker
+          zIndex={1000}
+          zIndexInverse={3000}
           searchable={true}
           open={AuthPersonOpen}
           value={AuthPersonvalue}

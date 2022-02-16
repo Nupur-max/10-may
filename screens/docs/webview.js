@@ -1,7 +1,7 @@
 // window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} + 1 , success:true, error:false}));
 // window.location.href=("https://www.dgca.gov.in/digigov-portal/web?requestType=ApplicationRH&actionVal=checkLogin")
 import React, { Component } from 'react';
-import { View, Modal, StyleSheet, Text, StatusBar } from 'react-native';
+import { View, Modal, StyleSheet, Text, StatusBar, TouchableOpacity } from 'react-native';
 import { WebView } from 'react-native-webview';
 import AsyncStorage from '@react-native-community/async-storage';
 import { ActivityIndicator, ProgressBar, Colors } from 'react-native-paper';
@@ -94,6 +94,16 @@ class Sample extends Component {
     }
   }
 
+  handleOnSubmit = async () => {
+    var items = await AsyncStorage.getItem('notes');
+    var notes = JSON.parse(items)
+    const note = { id: Date.now(), name: 'tarun',time: Date.now() };
+    const updatedNotes = [...notes ,note];
+    console.log(updatedNotes)
+    // setNotes(updatedNotes);
+    await AsyncStorage.setItem('notes', JSON.stringify(updatedNotes));
+  };
+
   //// TO UPDATE INDEX ///
   updateIndex = async () => {
     const value = await AsyncStorage.getItem('result');
@@ -114,10 +124,10 @@ class Sample extends Component {
 
   //// TO GET EGCA RESPONSE ///
   updateLogTags = async () => {
-    const failedEntries = [];
     const value = await AsyncStorage.getItem('result');
     if (value !== null) {
       const logRes = JSON.parse(value)
+      // console.log(logRes)
       if (logRes.success !== false) {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
@@ -157,9 +167,13 @@ class Sample extends Component {
             })
           });
         });
-      } else {
-       failedEntries.push(logRes)
-        AsyncStorage.setItem('egcaErrors', JSON.stringify(failedEntries));
+      } else if(logRes.error == true) {
+        var items = await AsyncStorage.getItem('failedLog');
+        var logs = items == null ? "" : JSON.parse(items)
+        const log = logRes;
+        const updatedNotes = [...logs ,log];
+        console.log("egca result",updatedNotes)
+        await AsyncStorage.setItem('failedLog', JSON.stringify(updatedNotes));
      }
     }
     else {
@@ -168,13 +182,8 @@ class Sample extends Component {
   }
   ///////  ------------  TO COMMUNICATE BETWEEN REACT NATIVE AND WEBVIEW  -----------  ///////////
   onMessage = async (key) => {
-    const failedEntries = [];
 
     const data = JSON.parse(key.data)
-    if (data.error == true) {
-      failedEntries.push(data)
-      await AsyncStorage.setItem('egcaErrors', JSON.stringify(failedEntries));
-    }
     this.setState({
       progress: data.index/this.state.egcaData.length ,
       visible: data.visible
@@ -190,9 +199,7 @@ class Sample extends Component {
         visible: false
       })
       this.updateLogTags()
-      this.props.navigation.navigate('Docs')
-      console.log( await AsyncStorage.getItem('egcaErrors'))
-
+      // this.props.navigation.navigate('Docs')
     }
   }
 
@@ -347,10 +354,9 @@ class Sample extends Component {
                 document.querySelector('#exerciseTypeId').onchange();
             
                 var from = '${this.state.egcaData[dataPos].from}'
-                alert(from)
                 var From = document.getElementById('tkoffAerodrome');
                 for (var i = 0; i < From.options.length; i++) {
-                    if (From.options[i].text === from) {
+                    if (From.options[i].text.slice(0 ,3) === from) {
                         From.selectedIndex = i;
                         document.getElementById('tkoffAerodrome').onchange();
                         break;
@@ -448,6 +454,7 @@ class Sample extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
+        
         {this.state.loading ?
           <View style={styles.centeredView}>
             <ActivityIndicator size="large" color="#00ff00" />
@@ -458,8 +465,8 @@ class Sample extends Component {
             <Modal
               animationType="slide"
               transparent={true}
-              visible={this.state.visible}
-              //visible={false}
+              // visible={this.state.visible}
+              visible={false}
             >
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
@@ -475,7 +482,9 @@ class Sample extends Component {
                 <View>
                
               </View>
+              
               </View>
+              
             </Modal>
             <WebView
               ignoreSslError={true}

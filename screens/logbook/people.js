@@ -169,7 +169,7 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
         ...(previousParams || {}),
         childParam: 'value',
         RoasterP1:item.Egca_reg_no === 'self' ? item.Name : item.Name+'('+item.Egca_reg_no+')',
-       
+        RoasteronlynameP1 : item.Name
       }));
       navigation.goBack();
     }
@@ -179,6 +179,8 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
         ...(previousParams || {}),
         childParam : 'value',
         RoasterP2:item.Egca_reg_no === 'self' ? item.Name : item.Name+'('+item.Egca_reg_no+')',
+        RoasteronlynameP2: item.Name,
+
       }));
       navigation.goBack();
     }
@@ -188,6 +190,7 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
         ...(previousParams || {}),
         childParam2 : 'value2',
         RoasterInstructor : item.Egca_reg_no === 'self' ? item.Name : item.Name+'('+item.Egca_reg_no+')',
+        RoasteronlynameInstructor: item.Name,
       }));
       navigation.goBack();
     }

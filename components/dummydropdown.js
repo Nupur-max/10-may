@@ -331,7 +331,6 @@ export const Elog_verifiers = [
     {label: 'Ferdinand A Deepak(OOPRM20200000110107)' , value:'Ferdinand A Deepak(OOPRM20200000110107)'},
     {label: 'Amol Goyal(OOPRM20200000110108)' , value:'Amol Goyal(OOPRM20200000110108)'},
     {label: 'Tushar Sofat(OOPRM20200000110109)' , value:'Tushar Sofat(OOPRM20200000110109)'},
-    {label: 'RAJIV KUMAR SINGH(OOPRM20200000110005)' , value:'RAJIV KUMAR SINGH(OOPRM20200000110005)'},
     {label: 'Gurucharan Prabhakar(OOPRM20200000110112)' , value:'Gurucharan Prabhakar(OOPRM20200000110112)'},
     {label: 'Ameya Jain(OOPRM20200000110113)' , value:'Ameya Jain(OOPRM20200000110113)'},
     {label: 'Konidala Sai Sharath(OOPRM20200000110114)' , value:'Konidala Sai Sharath(OOPRM20200000110114)'},
