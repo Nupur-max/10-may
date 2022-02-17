@@ -20,6 +20,10 @@ const Configuration = ({navigation,route}) => {
             fun_Flighttoggle,
             routeToggle,
             fun_routeToggle,
+            takeOffToggle1,
+            fun_takeOffToggle1,
+            landingToggle1,
+            fun_landingToggle1,
 
             // flight2
             instructorToggle,
@@ -153,6 +157,24 @@ const rolewise = role == 'AirlineCaptain' ? !flightToggle : flightToggle
                 <Switch trackColor={{ false: "#5f9ea0", true: Platform.OS === 'ios'? "#8fbc8f":"#ccc" }}
                     thumbColor={dark ? "#fff" : "#256173"}
                     onChange={fun_routeToggle} value = {routeToggle} />
+                </View>
+                </View>
+
+                <View style={Logbook.fieldWithoutBottom}>
+                <View style={{...Logbook.fields, ...{paddingTop:10, paddingBottom:5}}}>
+                <Text style={{...Logbook.fieldText, ...{lineHeight:35,}}}>Take off</Text>
+                <Switch trackColor={{ false: "#5f9ea0", true: Platform.OS === 'ios'? "#8fbc8f":"#ccc" }}
+                    thumbColor={dark ? "#fff" : "#256173"}
+                    onChange={fun_takeOffToggle1} value = {takeOffToggle1} />
+                </View>
+                </View>
+
+                <View style={Logbook.fieldWithoutBottom}>
+                <View style={{...Logbook.fields, ...{paddingTop:10, paddingBottom:5}}}>
+                <Text style={{...Logbook.fieldText, ...{lineHeight:35,}}}>Landing</Text>
+                <Switch trackColor={{ false: "#5f9ea0", true: Platform.OS === 'ios'? "#8fbc8f":"#ccc" }}
+                    thumbColor={dark ? "#fff" : "#256173"}
+                    onChange={fun_landingToggle1} value = {landingToggle1} />
                 </View>
                 </View>
             </View> : null}

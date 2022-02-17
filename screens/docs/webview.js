@@ -10,7 +10,9 @@ import { docReducer } from '../../store/reducers/docReducer';
 import { allreducers } from '../../App1'
 import { EGCADetailsReducer } from '../../store/reducers/egcaDetailsReducer';
 import SQLite from 'react-native-sqlite-storage';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LogListData } from '../../store/actions/loglistAction';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const prePopulateddb = SQLite.openDatabase(
   {
@@ -68,7 +70,7 @@ class Sample extends Component {
       loading: false,
       purpse: pur
     })
-    
+
     if (logData[this.state.index].aircraftReg[2] !== '-') {
       this.setState({ airCraftReg: logData[this.state.index].aircraftReg.substr(0, 2) + "-" + logData[this.state.index].aircraftReg.substr(2, 5) })
     }
@@ -76,16 +78,16 @@ class Sample extends Component {
       console.log('no error')
     }
 
-    if(logData[this.state.index].chocksOffTime > logData[this.state.index].chocksOnTime) {
+    if (logData[this.state.index].chocksOffTime > logData[this.state.index].chocksOnTime) {
       let date = logData[this.state.index].date.split("-")
       const day = Number(date[0]) + 1
-      const arrivalDate = day + "/" + date[1] + "/" + date[2] 
+      const arrivalDate = day + "/" + date[1] + "/" + date[2]
       this.setState({
         arrDate: arrivalDate,
         depDate: dep,
       })
     }
-    else{
+    else {
       this.setState({
         arrDate: arr,
         depDate: dep,
@@ -97,8 +99,8 @@ class Sample extends Component {
   handleOnSubmit = async () => {
     var items = await AsyncStorage.getItem('notes');
     var notes = JSON.parse(items)
-    const note = { id: Date.now(), name: 'tarun',time: Date.now() };
-    const updatedNotes = [...notes ,note];
+    const note = { id: Date.now(), name: 'tarun', time: Date.now() };
+    const updatedNotes = [...notes, note];
     console.log(updatedNotes)
     // setNotes(updatedNotes);
     await AsyncStorage.setItem('notes', JSON.stringify(updatedNotes));
@@ -127,7 +129,7 @@ class Sample extends Component {
     const value = await AsyncStorage.getItem('result');
     if (value !== null) {
       const logRes = JSON.parse(value)
-      // console.log(logRes)
+      console.log(logRes)
       if (logRes.success !== false) {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
@@ -161,31 +163,60 @@ class Sample extends Component {
                 }
               }
               else {
-                 this.props.navigation.navigate('Docs')
+                this.props.navigation.navigate('Docs')
                 alert('can\'t update')
               }
             })
           });
         });
-      } else if(logRes.error == true) {
-        var items = await AsyncStorage.getItem('failedLog');
-        var logs = items == null ? "" : JSON.parse(items)
-        const log = logRes;
-        const updatedNotes = [...logs ,log];
-        console.log("egca result",updatedNotes)
-        await AsyncStorage.setItem('failedLog', JSON.stringify(updatedNotes));
-     }
+      } else if (logRes.error == true) {
+        let user = await AsyncStorage.getItem('userdetails');
+        user = JSON.parse(user);
+        console.log('abc')
+        let allErrors = await AsyncStorage.getItem('failed');
+        allErrors = JSON.parse(allErrors) == null ? [] : JSON.parse(allErrors)
+
+        let temData = []
+        prePopulateddb.transaction(tx => {
+          tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND id = ' + logRes.id + '', [], async (tx, result) => {
+            if (result.rows.length == 0) {
+              console.log('no data to load')
+              return false;
+            }
+            console.log(result)
+            for (let i = 0; i <= result.rows.length; i++) {
+              let temData = {
+                id: result.rows.item(i).id,
+                tag: result.rows.item(i).tag,
+                date: result.rows.item(i).date,
+                from: result.rows.item(i).from_nameICAO,
+                to: result.rows.item(i).to_nameICAO,
+                chocksOffTime: result.rows.item(i).offTime,
+                chocksOnTime: result.rows.item(i).onTime,
+              }
+              console.log("tem Data", temData)
+              // if(allErrors !== null){
+              var saveddata = [...allErrors, temData];
+
+              console.log("Saved Data", saveddata)
+              await AsyncStorage.setItem('failed', JSON.stringify(saveddata));
+              // }
+              // else{
+              //    AsyncStorage.setItem('failed', JSON.stringify(temData));
+              // }
+            }
+          });
+        });
+      }
     }
     else {
-      console.log('value is equal to null')
     }
   }
   ///////  ------------  TO COMMUNICATE BETWEEN REACT NATIVE AND WEBVIEW  -----------  ///////////
   onMessage = async (key) => {
-
     const data = JSON.parse(key.data)
     this.setState({
-      progress: data.index/this.state.egcaData.length ,
+      progress: data.index / this.state.egcaData.length,
       visible: data.visible
     })
     if (data.index <= this.state.egcaData.length - 1) {
@@ -195,15 +226,15 @@ class Sample extends Component {
     else {
       await AsyncStorage.setItem('result', JSON.stringify(data));
       this.setState({
-        progress: data.index/this.state.egcaData.length ,
+        progress: data.index / this.state.egcaData.length,
         visible: false
       })
       this.updateLogTags()
-      // this.props.navigation.navigate('Docs')
+      this.props.navigation.navigate('Docs')
     }
   }
 
-  injectJs = (dataPos, arrD, depD, airCraftReg) => {
+  injectJs = (dataPos, arrD, depD, airCraftReg, err) => {
     const injectData =
       `if (window.location.href === "https://www.dgca.gov.in/digigov-portal/jsp/dgca/common/login.jsp") {
         
@@ -215,7 +246,7 @@ class Sample extends Component {
         }
             else if (window.location.href === "https://www.dgca.gov.in/digigov-portal/web?requestType=ApplicationRH&actionVal=checkLogin") {
              
-              window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos}, success:false, error:null ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,visible: true}));
+              window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos}, success:false, error:null ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' , from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
               setTimeout(function () {
                   document.querySelector('#a90000603 ul:nth-child(2) li a').click();
                 }, 10000)
@@ -356,7 +387,7 @@ class Sample extends Component {
                 var from = '${this.state.egcaData[dataPos].from}'
                 var From = document.getElementById('tkoffAerodrome');
                 for (var i = 0; i < From.options.length; i++) {
-                    if (From.options[i].text.slice(0 ,3) === from) {
+                    if (From.options[i].text.substring(0, from.length) === from) {
                         From.selectedIndex = i;
                         document.getElementById('tkoffAerodrome').onchange();
                         break;
@@ -368,7 +399,7 @@ class Sample extends Component {
                 var to = '${this.state.egcaData[dataPos].to}'
                 var To = document.getElementById('lndgAerodrome');
                 for (var i = 0; i < To.options.length; i++) {
-                    if (To.options[i].text === to) {
+                    if (To.options[i].text.substring(0, from.length) === to) {
                         To.selectedIndex = i;
                         document.getElementById('lndgAerodrome').onchange();
                         break;
@@ -435,26 +466,34 @@ class Sample extends Component {
         setTimeout(function () {
           document.querySelector('#verificationStatus').click();
           window.confirm = function(){return true;};
+          window.alert = function(){return true;};
           document.querySelector('#btnAddSubmit').click();
-          window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} + 1, success:false, error:true ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,visible: true}));
+         
           }, 60000)
         
         setTimeout(function () {
             document.querySelector('#btn_Ok').click();
-            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} , success:true, error:false ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date} ,visible: true'}));         
+            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos}+1 , success:true, error:false ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));         
           }, 65000)
 
         setTimeout(function () {
+          if('${err}' == "null"){
+            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:false, error:true ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
             window.location.href=("https://www.dgca.gov.in/digigov-portal/web?requestType=ApplicationRH&actionVal=checkLogin")
-          }, 70000)
+          }
+          else {
+            window.location.href=("https://www.dgca.gov.in/digigov-portal/web?requestType=ApplicationRH&actionVal=checkLogin")
+          }
+           
+        }, 70000)
        
       };`
     return injectData;
   }
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        
+
+      <SafeAreaView style={{ flex: 1 }}>
         {this.state.loading ?
           <View style={styles.centeredView}>
             <ActivityIndicator size="large" color="#00ff00" />
@@ -465,33 +504,33 @@ class Sample extends Component {
             <Modal
               animationType="slide"
               transparent={true}
-              // visible={this.state.visible}
-              visible={false}
+              visible={this.state.visible}
+            // visible={false}
             >
-              <View style={styles.centeredView}>
+              <SafeAreaView>
+                <View style={styles.header}>
+                  <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{ padding: 6 }} onPress={() => this.props.navigation.goBack()} />
+                  <Text style={styles.aircrafts}>Exit</Text>
+                </View>
                 <View style={styles.modalView}>
                   <ActivityIndicator
-                  color = '#fff'
-                  size = "small"
-                  style={{marginBottom: 10}}
+                    color='#fff'
+                    size="small"
+                    style={{ marginBottom: 10 }}
                   />
                   <Text style={styles.modalText}>Please Wait</Text>
                   <Text style={styles.modalText}>{this.state.index} / {this.state.egcaData.length}</Text>
-                  <ProgressBar progress={this.state.progress} color='#fff' style={{width:200 , height: 10 , borderRadius: 10 }} />
+                  <ProgressBar progress={this.state.progress} color='#fff' style={{ width: 200, height: 10, borderRadius: 10 }} />
                 </View>
-                <View>
-               
-              </View>
-              
-              </View>
-              
+              </SafeAreaView>
+
             </Modal>
             <WebView
               ignoreSslError={true}
               ref={webview => { this.webview = webview; }}
               source={{ uri: this.state.webViewUrl }}
               javaScriptEnabledAndroid={true}
-              injectedJavaScript={this.injectJs(this.state.index, this.state.arrDate, this.state.depDate, this.state.airCraftReg)}
+              injectedJavaScript={this.injectJs(this.state.index, this.state.arrDate, this.state.depDate, this.state.airCraftReg, this.state.error)}
               onError={() => this.webviewError(e)}
               startInLoadingState={true}
               scalesPageToFit={true}
@@ -501,7 +540,7 @@ class Sample extends Component {
             />
           </>
         }
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -521,8 +560,6 @@ const mapDispatchToProps = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //justifyContent: 'center',
-    //alignItems: 'flex-start',
     backgroundColor: '#fff',
   },
   spinnerView: {
@@ -536,39 +573,39 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#F5FCFF88",
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    //marginTop: 22
-  },
   modalView: {
-    // margin: 20,
-    backgroundColor: 'rgba(52, 52, 52, 0.8)',
-    // borderRadius: 20,
-    // padding: 35,
-    width: '100%' ,
-    height: '100%' ,
+    backgroundColor: '#000',
+    width: '100%',
+    height: '100%',
     alignItems: "center",
     justifyContent: 'center',
-    // shadowColor: "#000",
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 0
-    // },
-    // shadowOpacity: 1,
-    // shadowRadius: 4,
-    //elevation: 5
   },
   modalText: {
     marginBottom: 15,
     textAlign: "center",
     color: '#fff',
-  }
+  },
+  aircrafts: {
+    fontSize: 15,
+    color: '#fff',
+    fontWeight: '700',
+    fontFamily: 'WorkSans-Regular',
+    paddingTop: 5
+  },
+  header: {
+    padding: 5,
+    flexDirection: 'row',
+    backgroundColor: '#256173'
+  },
 });
 
 //make this component available to the app
 export default connect(mapStateToProps, mapDispatchToProps)(Sample);
+
+
+// document.querySelector('#totalDistance').value = '';
+
+
 
 // document.querySelector('#btnAddAppTrnElbLndgTkOffDtl').click();
 // document.querySelector('#verificationStatus').click();
@@ -582,7 +619,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Sample);
 //      window.alert('error'); 
 //   }
 // }, 60000)
-
+// document.querySelector('#totalDistance').value = '${depD}';
 
 // document.querySelector('#btnAddAppTrnElbLndgTkOffDtl').click();
 // document.querySelector('#verificationStatus').click();

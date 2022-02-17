@@ -792,8 +792,9 @@ const removeApproachInputTime = (ApproachIndex) => {
 //function to console the output
 
     const { dark, theme, toggle } = React.useContext(ThemeContext);
-    
+
     const selfControl = () => {
+        if(rosterAId!="SIMU" || rosterNamePic==='' || rosterNameSic==='')
         if (rosterNamePic === rosterNameSic) {
             alert('P2 cannot be equal to p1,please check role')
             setRosterNameSic('')
@@ -892,6 +893,14 @@ const removeApproachInputTime = (ApproachIndex) => {
             setRosterFromLat(params.RoasterFrom_lat)
             setRosterToLat(params.RoasterTo_lat)
             setListInstructor(params.RoasterInstructor)
+            setSt(params.RoasterSim_type)
+            setLocation(params.RoasterSimLoc)
+            setSim_exercise(params.RoasterSim_exc)
+            setPfHours(params.RoasterPf_time)
+            setPmHours(params.RoasterPm_time)
+            setSf(params.RoasterSF)
+            // setTakeOff(params.RoasterTakeoff)
+            // setLanding(params.Roasterlanding)
 }, [params]);
 
 React.useEffect(() => {
@@ -906,9 +915,9 @@ React.useEffect(() => {
     const {
         // flight 1
         flightToggle,
-        flightRoleToggle,
         routeToggle,
-
+        takeOffToggle1,
+        landingToggle1,
         //flight 2
         instructorToggle,
         Pic_toggle,
@@ -1286,7 +1295,7 @@ React.useEffect(() => {
         });
     }
 
-    //console.log('AT', rosterNamePic)
+   console.log('AT', rosterAId)
 
     const insertQuery = async() => {
 
@@ -1334,7 +1343,12 @@ React.useEffect(() => {
             'INSERT INTO logbook (tag, user_id, flight_no, date, day,  actual_Instrument, aircraftReg, aircraftType, approach1, approach2, approach3, approach4, approach5, approach6, approach7, approach8, approach9, approach10, crewCustom1, crewCustom2, crewCustom3, crewCustom4, crewCustom5, dayLanding, dayTO, dual_day, dual_night, flight, from_airportID, from_altitude, from_city, from_country, from_dayLightSaving, from_source, from_lat, from_long, from_name, from_nameIATA, from_nameICAO, from_timeZone, from_type, from_dst_status, fullStop, ifr_vfr, instructional, instructor, inTime, landingCustom1, landingCustom2, landingCustom3, landingCustom4, landingCustom5, landingCustom6, landingCustom7, landingCustom8, landingCustom9, landingCustom10, night, nightLanding, nightTO, offTime, onTime, outTime, p1, p1_us_day, p1_us_night, p2, pic_day, pic_night, stl, reliefCrew1, reliefCrew2, reliefCrew3, reliefCrew4, route, sic_day, sic_night, sim_instructional, sim_instrument, selected_role, student, timeCustom1, timeCustom2, timeCustom3, timeCustom4, timeCustom5, timeCustom6, timeCustom7, timeCustom8, timeCustom9, timeCustom10, to_airportID, to_altitude, to_city, to_country, to_dayLightSaving, to_source, to_lat, to_long, to_name, to_nameIATA, to_nameICAO, to_timeZone, to_type, to_dst_status, totalTime, touch_n_gos, waterLanding, waterTO, x_country_day, x_country_night, x_country_day_leg, x_country_night_leg, outTime_LT, offTime_LT, onTime_LT, inTime_LT, sim_type, sim_exercise, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, simLocation, p1_ut_day, p1_ut_night, remark, autolanding, flight_date, selected_flight_timelog, imported_log, orderedDate)  VALUES ("manual","'+user.id+'", "" ,"'+originalDate+'" , "'+dayTime+'" , "'+ai+'" , "'+rosterAId+'" , "'+rosterAType+'" , "'+Approach1+'" , "'+approach2+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+dayLanding+'" , "'+day_to+'" , "'+dual_day+'" , "'+dual_night+'" , "'+flight+'" , "'+fromAirportid+'" , "'+fromElevation+'" , "" , "'+fromCountry+'" , "'+fromDst+'" , "'+fromSource+'" , "'+fromLatitude+'" , "'+fromLongitude+'" , "'+fromAirportname+'" , "" , "'+rosterFrom+'", "'+fromTimeZone+'" , "'+fromType+'" , "'+fromDstStatus+'" , "'+fullStop+'" , "'+fr+'" , "'+instructional+'" , "'+instructor+'" , "'+landing+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+nightTime+'" , "'+nightLanding+'" , "'+night_to+'" , "'+rosterChocksOff+'" , "'+rosterChocksOn+'" , "'+takeOff+'" , "'+rosterNamePic+'" , "'+p1_us_day+'" , "'+p1_us_night+'" , "'+rosterNameSic+'" , "'+selfPICday+'" , "'+selfPICnight+'" , "'+stl+'" , "'+reliefCrew1+'" , "'+reliefCrew2+'" , "'+reliefCrew3+'" , "'+reliefCrew4+'" , "'+route+'" , "'+SelfSICday+'" , "'+SelfSICnight+'" , "" , "'+SimulatedInstrument+'" , "" , "'+student+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+toAirportid+'" , "'+toElevation+'" , "" , "'+toCountry+'" , "'+toDst+'" , "'+toSource+'" , "'+toLatitude+'" , "'+toLongitude+'" , "'+toAirportname+'" , "" , "'+rosterTo+'" , "'+toTimeZone+'" , "'+toType+'" , "'+toDstStatus+'" , "'+filghtTimeM+'" , "'+touchGo+'" , "'+waterLanding+'" , "'+water_to+'" , "'+xc_day+'" , "'+xc_night+'" , "'+xc_day_leg+'" , "'+xc_night_leg+'" , "" , "" , "" , "" , "'+St+'" , "'+Sim_exercise+'" , "'+pfHours+'" , "'+pmHours+'" , "'+sf+'" , "" , "" , "" , "" , "" , "'+location+'" , "'+p1_ut_day+'" , "'+p1_ut_night+'" , "'+remark+'" , "'+autoLanding+'" , "" , "" , "" , "'+sortedDate+'" )',
           )
         }
-        else {
+        else if (rosterId && rosterAId==='SIMU') {
+            tx.executeSql(
+                'UPDATE logbook set tag="manual",user_id="'+user.id+'",date="'+originalDate+'",flight="'+flight+'",aircraftType="'+rosterAType+'",aircraftReg="'+rosterAId+'",sim_type="'+St+'",from_nameICAO="'+rosterFrom+'",to_nameICAO="'+rosterTo+'",simLocation="'+location+'",sim_exercise="'+Sim_exercise+'",outTime="'+takeOff+'",inTime="'+landing+'",totalTime="'+filghtTimeM+'",pf_time="'+pfHours+'",pm_time="'+pmHours+'",sfi_sfe="'+sf+'",remark="'+remark+'",orderedDate="'+sortedDate+'" where id="'+rosterId+'"'
+            );
+        }
+        else if (rosterAId==='SIMU') {
             tx.executeSql(
                 'INSERT INTO logbook (tag, user_id, date, flight, aircraftType, aircraftReg, sim_type, from_nameICAO, to_nameICAO, simLocation, sim_exercise, outTime, inTime, totalTime, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, remark,orderedDate ) VALUES ("manual","'+user.id+'","'+originalDate+'", "'+flight+'", "'+rosterAType+'", "'+rosterAId+'", "'+St+'", "'+rosterFrom+'", "'+rosterTo+'", "'+location+'", "'+Sim_exercise+'", "'+takeOff+'", "'+landing+'", "'+filghtTimeM+'", "'+pfHours+'", "'+pmHours+'", "'+sf+'", "", "", "", "", "", "'+remark+'", "'+sortedDate+'")',
 
@@ -2388,7 +2402,7 @@ React.useEffect(() => {
                     </View>
                 </View>)}
 
-                <View style={Logbook.fieldWithoutBottom}>
+                {takeOffToggle1 === true || rosterAId==="SIMU"?<View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
                         <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Take-Off </Text>
                         <MaskedTextInput
@@ -2401,9 +2415,9 @@ React.useEffect(() => {
                             style={dark?{color:'#fff'}:{color:'#000'}}
                         />
                     </View>
-                </View>
+                </View>:null}
 
-                <View style={Logbook.fieldWithoutBottom}>
+                {landingToggle1 === true || rosterAId==="SIMU"?<View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
                         <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Landing </Text>
                         <MaskedTextInput
@@ -2416,7 +2430,7 @@ React.useEffect(() => {
                             style={dark?{color:'#fff'}:{color:'#000'}}
                         />
                     </View>
-                </View>
+                </View>:null}
 
                 {rosterAId!== 'SIMU' && (<View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
@@ -2451,7 +2465,6 @@ React.useEffect(() => {
                     <View style={Logbook.fields}>
                         <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, color: dark?'#fff':'blue' } }}>Select Choices....</Text>
                         <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
-                            {/* <Text style={{...Logbook.fieldText, ...{lineHeight:35}}}>Select Choices....</Text> */}
                             <TouchableOpacity onPress={() => navigation.navigate('Configuration', { from: 'flight1', toggled: params.flight })}>
                                 <MaterialCommunityIcons
                                     name="chevron-right" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
@@ -3679,7 +3692,7 @@ React.useEffect(() => {
         </ScrollView>
         <View style={dark?Logbook.DarkbuttonView:Logbook.buttonView}>
                 <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={()=>{insertQuery();constUpdateP2();Add_Logbook()}}> 
+                    <TouchableOpacity onPress={()=>{insertQuery();constUpdateP2();}}> 
                         <View style={Logbook.button}>
                             <Text style={Logbook.buttonText}>Save</Text>
                         </View>

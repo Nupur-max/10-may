@@ -51,6 +51,8 @@ const Docs = ({ navigation }) => {
   const [reportModalVisible, setReportModalVisible] = React.useState(false);
   const { dark, theme, toggle } = React.useContext(ThemeContext);
   const [refreshing, setRefreshing] = React.useState(false)
+  const [errorModal, setErrorModal] = React.useState(false)
+  const [failedUpload , setfailedUpload] = React.useState([])
 
   const dataDispatcher = useDispatch();
   const onFocusChange = () => setFocused(true);
@@ -230,6 +232,14 @@ const Docs = ({ navigation }) => {
   // React.useEffect(() => { getATPLData() });
 
   const onRefresh = React.useCallback(async () => {
+    let failed = []
+    let allErrors = await AsyncStorage.getItem('failed');
+    if(allErrors !== null){
+      allErrors = JSON.parse(allErrors);
+      console.log(allErrors)
+        setfailedUpload(allErrors)
+        setErrorModal(true)
+    }
     getATPLData()
     //selection()
     setRefreshing(true);
@@ -310,13 +320,10 @@ const Docs = ({ navigation }) => {
     //test()
   }, [getReduxDocData]);
 
-
   const getLogbookData = async () => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
     let temData = (getReduxDocData.data === undefined) ? [] : getReduxDocData.data;
-    //let temData = []
-    //dataDispatcher(DocListData({data: []}))
     prePopulateddb.transaction(tx => {
       tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND tag= "manual" ORDER BY orderedDate DESC , inTime DESC LIMIT 5 OFFSET "' + offset + '"', [], (tx, result) => {
         if (result.rows.length == 0) {
@@ -467,6 +474,7 @@ const Docs = ({ navigation }) => {
   }
 
   const renderItem = ({ item, index }) => <ItemRenderer key={index} index={index} item={item} selected={item.selected} label={item.id} onUpdateValue={onUpdateValue} />
+  const renderUpload = ({ item, index }) => <UploadRenderer key={index} index={index} item={item} />
   const filterSelected = () => {
     var logs = [];
     data.filter(item => item.selected).map(item => {
@@ -544,6 +552,30 @@ const Docs = ({ navigation }) => {
             </View>
           </View>
         </ScrollView>
+      </TouchableOpacity>
+    );
+  }
+  const UploadRenderer = ({ item }) => {
+    return (
+      <TouchableOpacity style={[styles.item]}>
+        <ScrollView style={dark ? [styles.Darklisting] : [styles.listing,{backgroundColor: '#DC3545'}] }>
+          <View style={{ width: '100%' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={dark ? { color: '#fff', fontSize: 15, fontFamily: 'WorkSans-Bold' } : { color: '#000', fontSize: 15, fontFamily: 'WorkSans-Bold' }}> {item.date} </Text>
+            </View>
+            <Divider />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={dark ? { color: '#fff', fontWeight: 'bold', paddingTop: 10 } : { fontWeight: 'bold', paddingTop: 10 }}>{item.from}</Text>
+              <MaterialCommunityIcons name="airplane-takeoff" color={dark ? '#fff' : '#000'} size={30} style={{ paddingHorizontal: 10, paddingTop: 10 }} />
+              <Text style={dark ? { color: '#fff', fontWeight: 'bold', paddingTop: 10 } : { fontWeight: 'bold', paddingTop: 10 }}>{item.to}</Text>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={{ color: dark ? '#fff' : '#000' }}>{item.chocksOffTime}</Text>
+              <Text style={dark ? { color: '#fff', paddingLeft: 28 } : { paddingLeft: 28 }}>{item.chocksOnTime}</Text>
+            </View>
+          </View>
+        </ScrollView>
+        {/* <Text>{item.id}</Text> */}
       </TouchableOpacity>
     );
   }
@@ -943,6 +975,36 @@ const Docs = ({ navigation }) => {
           </View>
         </Modal>
       </View>
+      <View style={styles.centeredView} >
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={errorModal}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setErrorModal(!errorModal); 
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView , {height: '50%',}}>
+              <View style={{ width: '100%', backgroundColor: '#EFEFEF', padding: 5, flexDirection: 'row', justifyContent: 'space-between', borderRadius:10, borderTopWidth:0.2 }}>
+                <Text style={SsStyle.modalText}>Failed To Upload</Text>
+                <MaterialCommunityIcons
+                  name="close" color='#256173' size={25} onPress={() => {setErrorModal(!errorModal); AsyncStorage.removeItem('failed')}} />
+              </View>
+              <ScrollView style={{ padding: 10, }}>
+              <FlatList
+                    data={failedUpload}
+                    renderItem={renderUpload}
+                    keyExtractor={(_, index) => { return index.toString() }}
+                    numColumns={1}
+                    onEndReachedThreshold={1}
+                  />
+              </ScrollView>
+            </View>
+          </View>
+        </Modal>
+      </View>
     </SafeAreaView>
   );
 };
@@ -1023,6 +1085,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     shadowColor: '#000',
+    
   },
   Darklisting: {
     borderRadius: 10,

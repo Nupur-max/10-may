@@ -168,7 +168,10 @@ const LogBookListing = ({ navigation }) => {
           <Divider/>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={dark?{color:'#fff', fontWeight: 'bold', paddingTop: 10 }:{ fontWeight: 'bold', paddingTop: 10 }}>{item.from}</Text>
+            {item.aircraftReg==="SIMU"?
+            <MaterialCommunityIcons name="seat-recline-extra" color={dark?'#fff':'#000'} size={30} style={{ paddingHorizontal: 10, paddingTop: 10 }} />:
             <MaterialCommunityIcons name="airplane-takeoff" color={dark?'#fff':'#000'} size={30} style={{ paddingHorizontal: 10, paddingTop: 10 }} />
+            }
             <Text style={dark?{color:'#fff',fontWeight: 'bold', paddingTop: 10}:{ fontWeight: 'bold', paddingTop: 10 }}>{item.to}</Text>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -179,8 +182,6 @@ const LogBookListing = ({ navigation }) => {
       </ScrollView>
     </TouchableOpacity>
   );
-
-
 
   const renderItem = ({ item }) => {
 
@@ -198,7 +199,7 @@ const LogBookListing = ({ navigation }) => {
         return date;
       }
     }
-
+console.log('item.pf_time',item.outTime)
     const selectParams = () => {
       setSelectedId(item.id)
       setParamsLogbook(previousParams => ({
@@ -218,6 +219,14 @@ const LogBookListing = ({ navigation }) => {
         RoasterTo: item.to,
         RoasterTo_lat: item.to_lat,
         RoasterTo_long: item.to_long,
+        RoasterSim_type: item.sim_type,
+        RoasterSim_exc: item.sim_exercise,
+        RoasterPf_time: item.pf_time,
+        RoasterPm_time: item.pm_time,
+        RoasterSF: item.sfi_sfe,
+        RoasterSimLoc: item.simLocation,
+        RoasterTakeoff: item.outTime,
+        Roasterlanding:item.inTime,
       }));
         navigation.navigate('CreateLogbook');
       //}
@@ -299,15 +308,17 @@ const LogBookListing = ({ navigation }) => {
       RoasterX_country_day_leg: '',
       RoasterX_country_night_leg: '',
       RoasterSim_type: '',
-      RoasterSim_exercise: '',
-      RoasterPfTime: '',
-      RoasterPmTime: '',
-      RoasterSfi_sfe: '',
-      RoasterSimLocation: '',
+      RoasterSim_exc: '',
+      RoasterPf_time: '',
+      RoasterPm_time: '',
+      RoasterSF: '',
+      RoasterSimLoc: '',
       RoasterP1_ut_day: '',
       RoasterP1_ut_night: '',
       RoasterRemark: '',
       RoasterAutoLanding: '',
+      RoasterTakeoff: '',
+      Roasterlanding:'',
     }));
     navigation.navigate('CreateLogbook');
 
@@ -414,7 +425,7 @@ const LogBookListing = ({ navigation }) => {
     else if (selectedIndex === 3) {
       dataDispatcher(LogListData({ data: [], inProgress: false }))
       prePopulateddb.transaction(tx => {
-        tx.executeSql('SELECT id,tag,date,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,outTime,inTime FROM logbook WHERE date  LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC , inTime DESC limit 10', [], (tx, result) => {
+        tx.executeSql('SELECT id,tag,date,aircraftReg,aircraftType,from_city,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,outTime,inTime FROM logbook WHERE date  LIKE "%' + dataToSearch + '%" ORDER BY orderedDate DESC , inTime DESC limit 10', [], (tx, result) => {
           if (result.rows.length > 0) {
             for (let i = 0; i <= result.rows.length; i++) {
               SingleResult = {
@@ -422,6 +433,7 @@ const LogBookListing = ({ navigation }) => {
                 tag: result.rows.item(i).tag,
                 date: result.rows.item(i).date,
                 aircraftType: result.rows.item(i).aircraftType,
+                aircraftReg: result.rows.item(i).aircraftReg,
                 from_city: result.rows.item(i).from_city,
                 from_lat: result.rows.item(i).from_lat,
                 from_long: result.rows.item(i).from_long,
@@ -436,6 +448,7 @@ const LogBookListing = ({ navigation }) => {
                 outTime: result.rows.item(i).outTime,
                 inTime: result.rows.item(i).inTime,
               }
+              console.log('searched for', SingleResult)
               SearchedData.push(SingleResult);
               dataDispatcher(LogListData({ data: SearchedData, inProgress: false }))
             }
@@ -502,6 +515,7 @@ const LogBookListing = ({ navigation }) => {
         for (let i = 0; i <= result.rows.length; i++) {
           if (result.rows.length !== 0){
           setModalVisible(true)
+          if(result.rows.item(i).aircraftReg!=="SIMU"){
           temData.push({
             id: result.rows.item(i).id,
             tag: result.rows.item(i).tag,
@@ -553,7 +567,33 @@ const LogBookListing = ({ navigation }) => {
             from_long: result.rows.item(i).from_long,
             to_lat: result.rows.item(i).to_lat,
             to_long: result.rows.item(i).to_long,
+            
+
           });
+        }
+        else {
+          temData.push({
+            id: result.rows.item(i).id,
+            tag: result.rows.item(i).tag,
+            user_id: result.rows.item(i).user_id,
+            date: result.rows.item(i).date,
+            flight: result.rows.item(i).flight,
+            aircraftType: result.rows.item(i).aircraftType,
+            aircraftReg: result.rows.item(i).aircraftReg,
+            from: result.rows.item(i).from_nameICAO,
+            to: result.rows.item(i).to_nameICAO,
+            totalTime: result.rows.item(i).totalTime,
+            sim_type: result.rows.item(i).sim_type,
+            sim_exercise: result.rows.item(i).sim_type,
+            pf_time: result.rows.item(i).pf_time,
+            pm_time: result.rows.item(i).pm_time,
+            sfi_sfe: result.rows.item(i).sfi_sfe,
+            simLocation: result.rows.item(i).simLocation,
+            takeOff: result.rows.item(i).outTime,
+            landing: result.rows.item(i).inTime,
+            p1: "hello",
+          });
+        }
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>
@@ -592,6 +632,7 @@ const LogBookListing = ({ navigation }) => {
         for (let i = 0; i <= result.rows.length; i++) {
           if (result.rows.length !== 0){
           setModalVisible(true)
+          if(result.rows.item(i).aircraftReg!=="SIMU"){
           temData.push({
             id: result.rows.item(i).id,
             tag: result.rows.item(i).tag,
@@ -643,8 +684,33 @@ const LogBookListing = ({ navigation }) => {
             from_long: result.rows.item(i).from_long,
             to_lat: result.rows.item(i).to_lat,
             to_long: result.rows.item(i).to_long,
-
+            
           });
+        }
+        else{
+          temData.push({
+            id: result.rows.item(i).id,
+            tag: result.rows.item(i).tag,
+            user_id: result.rows.item(i).user_id,
+            date: result.rows.item(i).date,
+            flight: result.rows.item(i).flight,
+            aircraftType: result.rows.item(i).aircraftType,
+            aircraftReg: result.rows.item(i).aircraftReg,
+            from: result.rows.item(i).from_nameICAO,
+            to: result.rows.item(i).to_nameICAO,
+            totalTime: result.rows.item(i).totalTime,
+            takeOff: result.rows.item(i).outTime,
+            sim_type: result.rows.item(i).sim_type,
+            sim_exercise: result.rows.item(i).sim_type,
+            pf_time: result.rows.item(i).pf_time,
+            pm_time: result.rows.item(i).pm_time,
+            sfi_sfe: result.rows.item(i).sfi_sfe,
+            simLocation: result.rows.item(i).simLocation,
+            landing: result.rows.item(i).inTime,
+            p1: "hello",
+          })
+        }
+          //console.log(temData)
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>

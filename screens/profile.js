@@ -90,6 +90,7 @@ const P1 = ({ navigation }) => {
   const [showProgress, setShowProgress] = React.useState(true)
   const [showPilotsProgress, setShowPilotsProgress] = React.useState(true)
 
+  const [showAlert, setShowAlert] = React.useState(true)
 
   //console.log('dhfshgfghghdjg', airlineValue)
 
@@ -243,7 +244,6 @@ const P1 = ({ navigation }) => {
           const AircraftType = resData.data[i].Aircraft_type
           const chocksOn = resData.data[i].Arrival_time
           const date = resData.data[i].Dept_date
-          const newDateFormat = resData.data[i].Dept_date
           const fromCity = resData.data[i].Dept_place_ICAO
           const toCity = resData.data[i].Arrival_place_ICAO
           const chocksOff = resData.data[i].Dept_time
@@ -268,7 +268,46 @@ const P1 = ({ navigation }) => {
           const myArray = text.split("-");
           const day = myArray[2] + myArray[1] + myArray[0]
 
-          db.transaction((tx) => {
+      db.transaction((tx) => {
+        tx.executeSql(
+          'SELECT * from logbook WHERE user_id="'+user.id+'" AND tag="roster" AND onTime="'+chocksOn+'"', [], (tx, result1) => {
+          console.log('impResult',showAlert);
+
+            if(result1.rows.length>0){
+              if ((i + 1) == resData.data.length) {
+              Alert.alert(
+                "This data is already fetched",
+                "Do you want to skip?",
+                [
+                  {
+                    text: "Skip",
+                    onPress: () => console.log('cancel pressed')
+                  },
+                  //{ text: "Cancel", onPress: () => console.log('cancel pressed') }
+                ]
+              )
+              }
+              if (Pilot_Pic !== '') {
+                tx.executeSql(
+                  'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
+                );
+              }
+              else if (Pilot_Copilot !== ''){
+                tx.executeSql(
+                  'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="",p2="'+SelfField+'",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
+                );
+              }
+              else if (Pilot_Instructor !== ''){
+                tx.executeSql(
+                  'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
+                );
+              }
+              setProgressValue(1)
+              setShowProgress(false)
+              setModalVisible(false)
+            }
+            else{
+            db.transaction((tx) => {
             if (Pilot_Pic !== '') {
               //Alert.alert('Pilot_Pic')
               tx.executeSql(
@@ -342,6 +381,10 @@ const P1 = ({ navigation }) => {
             }
           }
           });
+        }
+        });
+        });
+
         }
       }
       else {
@@ -544,7 +587,7 @@ const P1 = ({ navigation }) => {
 
   //sqlite ends
 
-  console.log('imageeē', image);
+  //console.log('imageeē', image);
 
   const importPilotList = async () => {
     setShowPilotsProgress(true)

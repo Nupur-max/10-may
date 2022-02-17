@@ -10,6 +10,10 @@ const initialState = {
     routeToggle: true,
     fun_Flighttoggle: () => {},
     fun_routeToggle: () => {},
+    takeOffToggle1: true,
+    landingToggle1: true,
+    fun_takeOffToggle1: () => {},
+    fun_landingToggle1: () => {},
     //Flight 2
     instructorToggle: false,
     Pic_toggle: true,
@@ -113,8 +117,10 @@ const ConfigContext = createContext(initialState);
 function ConfigProvider({ children}) {
     //flight 1
     const [flightToggle,setFlightToggle] = React.useState(true)
-    const [flightToggle1,setFlightToggle1] = React.useState(false)
-    const [routeToggle,setRouteToggle] = React.useState(true)
+    const [routeToggle,setRouteToggle] = React.useState(false)
+    const [takeOffToggle1,setTakeOffToggle1] = React.useState(false)
+    const [landingToggle1,setLandingToggle1] = React.useState(false)
+
     //flight 2
     const [instructorToggle, setInstructorToggle] = React.useState(false)
     const [Pic_toggle, setPic_toggle] = React.useState(true)
@@ -207,14 +213,18 @@ function ConfigProvider({ children}) {
 
     //flight 1
     const fun_Flighttoggle = () => {
-         //setFlightToggle(!flightToggle) 
-        //setFlightToggle(!flightToggle)
-        //  console.log(flightToggle, 'toggled');
         setFlightToggle(!flightToggle)
     }
     const fun_routeToggle = () => {
         setRouteToggle(!routeToggle)
         console.log('toggled');
+    }
+    const fun_takeOffToggle1 = () => {
+        setTakeOffToggle1(!takeOffToggle1)
+    }
+    const fun_landingToggle1 = () => {
+        setLandingToggle1(!landingToggle1)
+        //console.log('toggled');
     }
     //Flight 2
     const fun_intructorToggle = () => {
@@ -406,6 +416,10 @@ function ConfigProvider({ children}) {
         fun_Flighttoggle,
         routeToggle,
         fun_routeToggle,
+        takeOffToggle1,
+        fun_takeOffToggle1,
+        landingToggle1,
+        fun_landingToggle1,
         //flight 2
         instructorToggle,
         Pic_toggle,

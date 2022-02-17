@@ -113,7 +113,7 @@ const Gallery = ({navigation}) => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
 
-        await fetch(BaseUrl+'display_aircraftImage',{
+        await fetch(BaseUrl+'displayAirportImage',{
          method : 'POST',
          headers:{
           'Accept': 'application/json',
