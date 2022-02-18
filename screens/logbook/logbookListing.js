@@ -1,7 +1,7 @@
 //import liraries
 import React from 'react';
 import { useIsFocused } from "@react-navigation/native";
-import { View, Text, StyleSheet,RefreshControl, TouchableOpacity, TextInput, FlatList, ActivityIndicator, Dimensions, Modal,SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet,RefreshControl,Alert, TouchableOpacity, TextInput, FlatList, ActivityIndicator, Dimensions, Modal,SafeAreaView } from 'react-native';
 import { LogbookListing } from '../../styles/styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -13,6 +13,7 @@ import { Divider } from 'react-native-paper';
 import { ThemeContext } from '../../theme-context';
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import NetInfo from "@react-native-community/netinfo";
+import Swipeout from 'react-native-swipeout';
 
 import SQLite from 'react-native-sqlite-storage';
 
@@ -85,6 +86,8 @@ const LogBookListing = ({ navigation }) => {
   const [loadmore, setLoadmore] = React.useState(false);
   const [findTag, setFindTag] = React.useState('')
   const [totalFlyingHours, setTotalFlyingHours] = React.useState('')
+
+  const [activeRowKey, setActiveRowKey] = React.useState(null)
  
 
   const onFocusChange = () => setFocused(true);
@@ -151,7 +154,7 @@ const LogBookListing = ({ navigation }) => {
   const getReduxProgressData = useSelector(state => state.progressBar.ProgressValue);
   const ProgressBar = getReduxProgressData.ProgressValue + '/' + getReduxProgressData.totalvalue
 
-  const Item = ({ item, onPress, backgroundColor, textColor }) => (
+ const Item = ({ item, onPress, backgroundColor, textColor }) => (
     <TouchableOpacity onPress={onPress} style={[LogbookListing.item]}>
       <ScrollView style={dark?[LogbookListing.Darklisting,backgroundColor]:[LogbookListing.listing, backgroundColor]}>
         <View style={{ width: '100%' }}>
@@ -199,7 +202,52 @@ const LogBookListing = ({ navigation }) => {
         return date;
       }
     }
-console.log('item.pf_time',item.outTime)
+
+    const swipeSettings = {
+      autoClose : true,
+      onClose : (secId, rowId, direction) => {
+        if(activeRowKey != null){
+        setActiveRowKey(null);
+        }
+      },
+      onOpen : (secId, rowId, direction) => {
+        setActiveRowKey(selectedId)
+      },
+      right : [
+        {
+          onPress: () => {
+            Alert.alert(
+              'Alert',
+              'Are you sure you want to delete ?',
+              [
+                {text : 'No', onPress : () => console.log('Cancel Pressed'), style:'cancel'},
+                {text : 'Yes', onPress: () => {DeleteLogs();}},
+              ],
+            )
+          },
+          text: 'Delete', type: 'delete'
+        }
+      ],
+      rowId: selectedId,
+      sectionId: selectedId
+    }
+
+    const DeleteLogs = () => {
+      prePopulateddb.transaction(tx => {
+        tx.executeSql(
+          'DELETE FROM logbook WHERE id = "'+item.id+'"', [], (tx, Delresult) => {
+           //console.log('DELETE FROM logbook WHERE id = "'+item.id+'"')
+            SELECTAfterDelOnSlide()
+            //navigation.navigate('LogBookListing')
+          }
+        );
+      });
+    }
+  
+    const SELECTAfterDelOnSlide = async () => {
+      onRefresh()
+    }
+
     const selectParams = () => {
       setSelectedId(item.id)
       setParamsLogbook(previousParams => ({
@@ -225,24 +273,26 @@ console.log('item.pf_time',item.outTime)
         RoasterPm_time: item.pm_time,
         RoasterSF: item.sfi_sfe,
         RoasterSimLoc: item.simLocation,
-        RoasterTakeoff: item.outTime,
-        Roasterlanding:item.inTime,
+        RoasterTakeoff: item.takeOff,
+        Roasterlanding:item.landing,
       }));
         navigation.navigate('CreateLogbook');
       //}
     }
-
-    return (
+     return (
+      <Swipeout {...swipeSettings}>
       <Item
         item={item}
         onPress={() => { selectParams() }}
         backgroundColor={{ backgroundColor }}
         textColor={{ color }}
       />
+      </Swipeout>
 
     );
 
   }
+
 
   const PlusNavigation = () => {
     setSelectedId('')
@@ -744,13 +794,13 @@ const handleIndexChange = (index) => {
         'DELETE FROM logbook WHERE tag = "roster"', [], (tx, Delresult) => {
           console.log('Result', Delresult.rows.length);
           console.log('DELETE FROM logbook WHERE tag = "roster"')
-          SELECTAfterDel(true)
+          SELECTAfterDel()
         }
       );
     });
   }
 
-  const SELECTAfterDel = async (deleteRoster = false) => {
+  const SELECTAfterDel = async () => {
     onRefresh()
   }
 

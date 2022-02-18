@@ -1,6 +1,6 @@
 //import liraries
 import React from 'react';
-import { View, Text, TouchableOpacity,ActivityIndicator, TextInput, Button,KeyboardAvoidingView, Modal, Dimensions,Pressable, StyleSheet, Alert, SafeAreaView, Platform, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TouchableOpacity,ActivityIndicator,Linking, TextInput, Button,KeyboardAvoidingView, Modal, Dimensions,Pressable, StyleSheet, Alert, SafeAreaView, Platform, TouchableWithoutFeedback } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DatePicker from 'react-native-datepicker';
 import { RadioButton } from 'react-native-paper';
@@ -21,6 +21,7 @@ import BackupStyle from '../../styles/backupStyles';
 import { PilotData } from '../../store/actions/pilotsAction';
 import { BaseUrl } from '../../components/url.json';
 import SQLite from 'react-native-sqlite-storage';
+import { useIsFocused } from "@react-navigation/native";
 
 const prePopulateddb = SQLite.openDatabase(
     {
@@ -42,6 +43,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 // create a component
 const CreateLogbook = ({ navigation }) => {
    
+    const isFocused = useIsFocused();
+
     const dataDispatcher = useDispatch();
 
     const getReduxDisplayData = useSelector(state => state.display.ActualI);
@@ -877,7 +880,10 @@ const removeApproachInputTime = (ApproachIndex) => {
         }
     }, [Approachparams]);
 
+    console.log('pf-time',params.RoasterTakeoff)
+
     React.useEffect(() => {
+        if(isFocused){
             setRosterId(params.RoasterId)
             setRosterFrom(params.RoasterFrom)
             setRosterChocksOff(params.RoasterChocksOff)
@@ -896,12 +902,24 @@ const removeApproachInputTime = (ApproachIndex) => {
             setSt(params.RoasterSim_type)
             setLocation(params.RoasterSimLoc)
             setSim_exercise(params.RoasterSim_exc)
-            setPfHours(params.RoasterPf_time)
-            setPmHours(params.RoasterPm_time)
-            setSf(params.RoasterSF)
+            // setPfHours(params.RoasterPf_time)
+            // setPmHours(params.RoasterPm_time)
+            // setSf(params.RoasterSF)
             // setTakeOff(params.RoasterTakeoff)
             // setLanding(params.Roasterlanding)
-}, [params]);
+        }
+}, [isFocused]);
+
+React.useEffect(() => {
+   if(rosterAId==="SIMU"){
+    setTakeOff(params.RoasterTakeoff)
+    setLanding(params.Roasterlanding)
+    setPfHours(params.RoasterPf_time)
+    setPmHours(params.RoasterPm_time)
+    setSf(params.RoasterSF)
+   }
+}, [rosterAId]);
+
 
 React.useEffect(() => {
         setInstructor(Peopleparams.InstructorItemName)
@@ -2104,7 +2122,7 @@ React.useEffect(() => {
                     <ScrollView>
                         <Text style={dark?{...SsStyle.mainText,...{color:'#fff'}}:SsStyle.mainText}>
                         1. ECREW - Import your logbook / Roster. Make sure you have fed the User ID, Password and Airline in Settings - Ecrew menu. {'\n'}
-                        2. CONFIG- Use this button to add/remove fields from Logbook page. Select Air Section Choices in each logbook section to Update your data. Config button is available in the Burger Menu on the Bottom All right. Check the Youtube video for the (Tsame in https://youtu.be/DYMOUqeJY30. Do not forget to select DONE on completion{'\n'}
+                        2. CONFIG- Use this button to add/remove fields from Logbook page. Select Air Section Choices in each logbook section to Update your data. Config button is available in the Burger Menu on the Bottom All right. Check the Youtube video for the (Tsame in <Text style={{ color: 'blue' }} onPress={() => Linking.openURL('https://youtu.be/DYMOUqeJY30')}>https://youtu.be/DYMOUqeJY30</Text>. Do not forget to select DONE on completion{'\n'}
                         3. DELETE- Swipe a flight left to DELETE a flight.{'\n'}
                         4. AIRCRAFT TYPE - Create your own aircraft type by pressing the info button. {'\n'}
                         5. AIRFIELD search can be by ICAO/IATA or CITY name too by selecting ALL. Use Mine to feed data for self defined airfield. If Lat/ Long are not fed, then all flight time will be defaulted to Day.{'\n'}
@@ -2113,7 +2131,7 @@ React.useEffect(() => {
                         CUSTOM field in TIME menu will only accept hh:mm entries. Use Landing CUSTOM field for numeric values.{'\n'}
                         8. Names/ Photos of Colleagues can be stored by selecting Info button in front of the name. Mention suitable Remarks for improved CRM or FAQ's from Instructor's. {'\n'}
                         9. * marked fields are mandatorily required to be added.{'\n'}
-                        (https://youtu.be/alh9lm1tzoY)
+                        <Text style={{ color: 'blue' }} onPress={() => Linking.openURL('https://youtu.be/alh9lm1tzoY')}>(https://youtu.be/alh9lm1tzoY)</Text>
                         </Text>
                     </ScrollView>
                 </View>
@@ -2154,7 +2172,7 @@ React.useEffect(() => {
                         
                         7. CUSTOM field in TIME menu will only accept hh:mm entries. Use Landing CUSTOM field for numeric values.{'\n'}
 
-                        (https://youtu.be/ZrryH-qF8Qs)
+                        <Text style={{ color: 'blue' }} onPress={() => Linking.openURL('https://youtu.be/ZrryH-qF8Qs')}>(https://youtu.be/ZrryH-qF8Qs)</Text>
                         </Text>
                     </ScrollView>
                 </View>
@@ -2172,7 +2190,7 @@ React.useEffect(() => {
                 }}
             >
                 <View style={SsStyle.centeredView}>
-                <View style={dark?SsStyle.DarkModalView:SsStyle.modalView}>
+                <View style={dark?SsStyle.DarkModalView1:SsStyle.modalView1}>
                     <View style={{width:'100%', backgroundColor:dark?'#000':'#EFEFEF', padding:5, flexDirection:'row', justifyContent:'space-between',borderRadius :10}}>
                     <Text style={SsStyle.modalText}>Approaches</Text>
                     <MaterialCommunityIcons  
@@ -2304,13 +2322,17 @@ React.useEffect(() => {
 
                 <View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Aircraft ID <Text style={{ color: 'red' }}>*</Text></Text>
-                        <Text style={{ fontSize: 10, }}>(Type "SIMU" for Simulator Menu)</Text>
+                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, ...{paddingBottom:8}} }}>Aircraft ID <Text style={{ color: 'red' }}>*</Text></Text>
+                        <View style={{justifyContent:'flex-end',position:'absolute',left:0,bottom:0}}>
+                        <Text style={{ fontSize: 10, }}>
+                            (Type "SIMU" for Simulator Menu)
+                        </Text>
+                        </View>
                         <TextInput
                             autoCapitalize={'characters'}
                             placeholder='Aircraft ID'
                             placeholderTextColor='grey'
-                            value={rosterAId==='undefined'?'':rosterAId.toUpperCase() }
+                            value={rosterAId==='undefined'?'':rosterAId.toUpperCase()}
                             onChangeText={(inputText) => setRosterAId(inputText)}
                             keyboardType= "default"
                             style={{color:dark?'#fff':'#000'}} 
@@ -2320,8 +2342,7 @@ React.useEffect(() => {
 
                 {STToggle && rosterAId === 'SIMU' ? <View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Simulator Type</Text>
-                        {/* <Text style={{fontSize:10,}}>(Type "SIMU" for Simulator Menu)</Text> */}
+                        <Text style={{...Logbook.fieldText,...{ lineHeight: 35,}}}>Simulator Type</Text>
                         <TextInput
                             placeholder='Simulator Type'
                             placeholderTextColor='grey'
@@ -2402,7 +2423,7 @@ React.useEffect(() => {
                     </View>
                 </View>)}
 
-                {takeOffToggle1 === true || rosterAId==="SIMU"?<View style={Logbook.fieldWithoutBottom}>
+                {takeOffToggle1 === true || rosterAId === "SIMU"?<View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
                         <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Take-Off </Text>
                         <MaskedTextInput
@@ -2489,7 +2510,7 @@ React.useEffect(() => {
                 {Pic_toggle && rosterAId!== 'SIMU' ? <TouchableOpacity onPress={() => {navigation.navigate('People', { from: 'pic' })}}>
                     <View style={Logbook.fieldWithoutBottom}>
                         <View style={Logbook.fields}>
-                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>PIC/P1<Text style={{ color: 'red' }}>*</Text></Text>
+                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35,paddingHorizontal:5 } }}>PIC/P1<Text style={{ color: 'red' }}>*</Text></Text>
                             <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                                 <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterNamePic === 'undefined' ?'':rosterNamePic}</Text>
                                 <TouchableOpacity onPress={() => {navigation.navigate('People', { from: 'pic' })}}>
@@ -2555,12 +2576,12 @@ React.useEffect(() => {
 
                 {sic_toggle && rosterAId!== 'SIMU' ? <View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>SIC/P2</Text>
+                        <Text style={{...Logbook.fieldText,...{ lineHeight: 35,paddingHorizontal:5}}}>SIC/P2</Text>
                         <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
-                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterNameSic}</Text>
+                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, ...{alignItems:'center',} } }}>{rosterNameSic}</Text>
                             <TouchableOpacity onPress={() => {navigation.navigate('People', { from: 'sic' })}}>
                                 <MaterialCommunityIcons
-                                    name="chevron-right" color={'#256173'} size={25} style={{ lineHeight: 35, paddingRight:5 }} />
+                                    name="chevron-right" color={'#256173'} size={25} style={{ lineHeight: 35,}} />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -2682,7 +2703,7 @@ React.useEffect(() => {
                         <MaskedTextInput
                             mask='99:99'
                             value={pfHours}
-                            onChangeText={pfHours => setPfHours(pfHours)}
+                            onChangeText={(pfHours) => setPfHours(pfHours)}
                             keyboardType="numeric"
                             placeholder="hh:mm"
                             placeholderTextColor='grey'

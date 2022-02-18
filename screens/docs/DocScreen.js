@@ -1,6 +1,6 @@
 //import liraries
 import React from 'react';
-import { View, StyleSheet, Text, FlatList, TextInput, TouchableOpacity, Modal, Alert, SafeAreaView } from 'react-native';
+import { View, StyleSheet, Text, FlatList,Linking,TextInput, TouchableOpacity, Modal, Alert, SafeAreaView } from 'react-native';
 import DocScreenStyle from '../../styles/docStyles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 // Import HTML to PDF
