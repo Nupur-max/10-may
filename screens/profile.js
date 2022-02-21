@@ -271,7 +271,7 @@ const P1 = ({ navigation }) => {
       db.transaction((tx) => {
         tx.executeSql(
           'SELECT * from logbook WHERE user_id="'+user.id+'" AND tag="roster" AND onTime="'+chocksOn+'"', [], (tx, result1) => {
-          console.log('impResult',showAlert);
+          // console.log('impResult',result1.rows.length, resData.data.length,i + 1);
 
             if(result1.rows.length>0){
               if ((i + 1) == resData.data.length) {

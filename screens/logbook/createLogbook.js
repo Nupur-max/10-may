@@ -22,6 +22,9 @@ import { PilotData } from '../../store/actions/pilotsAction';
 import { BaseUrl } from '../../components/url.json';
 import SQLite from 'react-native-sqlite-storage';
 import { useIsFocused } from "@react-navigation/native";
+import {trainingV,testV,commercialV} from '../../components/dummydropdown'
+import DropDownPicker from 'react-native-dropdown-picker';
+
 
 const prePopulateddb = SQLite.openDatabase(
     {
@@ -176,6 +179,17 @@ const SICnight_editable = (inputText) => {
     const [textValue, setTextValue] = React.useState('');
     const [numInputs, setNumInputs] = React.useState(1);
     const refInputs = React.useRef([textValue]);
+    const [flightType,setFlightType] = React.useState('');
+
+    const [open, setOpen] = React.useState(false);
+    const [training, setTraining] = React.useState([]);
+    const [trainingValue, setTrainingValue] = React.useState(trainingV);
+    const [test, setTest] = React.useState([]);
+    const [testValue, setTestValue] = React.useState(testV);
+    const [commercial, setCommercial] = React.useState([]); 
+    const [commercialValue, setCommercialValue] = React.useState(commercialV);
+
+    const [ddvalue,setDDValue]= React.useState([]);
 
     //custom input fields end
 
@@ -2091,6 +2105,34 @@ React.useEffect(() => {
         }
     }
 
+    React.useEffect(() => {
+        if(isFocused){
+        SelectEGCADETAILS()
+        }
+      },[isFocused]);
+
+    const SelectEGCADETAILS = async() => {
+        let user = await AsyncStorage.getItem('userdetails');
+        user = JSON.parse(user);
+        let selectedData = []; 
+        prePopulateddb.transaction(tx => {
+            tx.executeSql(
+                'SELECT * from EGCADetails WHERE user_id = "'+user.id+'"', [], (tx, result) => {
+                    for (let i = 0; i <= result.rows.length; i++) {
+                    selectedData.push({
+                      FlightType :  result.rows.item(i).FlightType,
+                    });
+                     console.log('FlightType', result.rows.item(i).FlightType)
+                     setFlightType(result.rows.item(i).FlightType)
+                    }
+                }
+            );
+        });
+    } 
+
+    const PurposeData = flightType==='Training'? training : flightType==='Test'? test : flightType==='Commercial'?commercial:[]
+    console.log('purposeData',PurposeData)
+
     return (
         <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
         <ScrollView contentContainerStyle={{paddingBottom: 60}}>
@@ -2586,6 +2628,65 @@ React.useEffect(() => {
                         </View>
                     </View>
                 </View> : null}
+
+                {/* <View style={{flexDirection:'row',paddingHorizontal:10,flex: 1, flexWrap: 'wrap'}}>
+                    {PurposeData.map((data) => {
+                        return (
+                            <View style={{padding:5}}>
+                            <View style={{backgroundColor:'yellow', padding:3, borderRadius:10,}}>
+                                <Text>{data}</Text>
+                            </View>
+                            </View>
+                        )
+                        })}
+                    </View> */}
+                    {flightType !== "Non-commercial" ?<View>
+                    <Text style = {dark?styles.DarkInnnerHeadings:styles.InnnerHeadings}>Purpose</Text>
+                    </View>: null}
+
+                {flightType !== "Non-commercial" ? <View style={Platform.OS==='ios'?{padding: 20,zIndex:888}:{padding:20,}}>
+                    <DropDownPicker
+                        mode="BADGE"
+                        zIndex={3000}
+                        zIndexInverse={1000}
+                        searchable={true}
+                        multiple={true}
+                        min={0}
+                        max={5}
+                        open={open}
+                        value={PurposeData}
+                        items={flightType === "Training" ? trainingValue : flightType === "Test" ? testValue : flightType === "Commercial" ? commercialValue : []}
+                        setOpen={setOpen}
+                        setValue={ flightType === "Training" ? setTraining : flightType === "Test" ? setTest : flightType === "Commercial" ? setCommercial : ''}
+                        setItems={ flightType === "Training" ? setTrainingValue : flightType === "Test" ? setTestValue : flightType === "Commercial" ? setCommercialValue : []}
+                        placeholder="Select *"
+                        style = {{flex:1,width: '100%', flexWrap:'wrap'}}
+                        dropDownContainerStyle={{
+                        width: '100%',
+                        //zIndex:99,
+                        elevation: 15,
+                    }}
+                    listMode="SCROLLVIEW"
+                    selectedItemLabelStyle={{
+                        fontWeight: "bold"
+                      }}
+                      selectedItemContainerStyle={{
+                        backgroundColor: "grey"
+                      }}
+                      badgeStyle={{
+                        //padding:5,
+                      }}
+                      badgeColors={["red", "green", "orange"]}
+                      showBadgeDot={false}
+                      listItemContainer={{
+                        height: 100
+                      }}
+                      badgeSeparatorStyle={{
+                        width: 5
+                      }}
+                    />
+                    </View> : null}
+                    
 
                 {studentToggle ? <View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
@@ -3866,6 +3967,17 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color:'#fff'
     },
+    InnnerHeadings:{
+        paddingHorizontal: 20,
+        fontWeight: '600',
+        fontFamily: 'WorkSans-Regular',
+      },
+      DarkInnnerHeadings:{
+        paddingHorizontal: 20,
+        fontWeight: '600',
+        fontFamily: 'WorkSans-Regular',
+        color:'#fff'
+      }
 });
 
 //make this component available to the app

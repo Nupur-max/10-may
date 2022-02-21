@@ -203,6 +203,20 @@ const LogBookListing = ({ navigation }) => {
       }
     }
 
+    const DeleteEgcaUploadedFlights = () =>
+    Alert.alert(
+      "Caution!!!!",
+      "Before deleting From logbook Please also delete it from Egca",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => DeleteLogs() }
+      ]
+    );
+
     const swipeSettings = {
       autoClose : true,
       onClose : (secId, rowId, direction) => {
@@ -216,6 +230,15 @@ const LogBookListing = ({ navigation }) => {
       right : [
         {
           onPress: () => {
+            console.log('tag',item.tag)
+            item.tag==='uploaded' ? Alert.alert(
+              'This flight is Uploaded on egca already',
+              'Are you Still want to delete ?',
+              [
+                {text : 'No', onPress : () => console.log('Cancel Pressed'), style:'cancel'},
+                {text : 'Yes', onPress: () => {DeleteEgcaUploadedFlights();}},
+              ],
+            ):
             Alert.alert(
               'Alert',
               'Are you sure you want to delete ?',
@@ -246,6 +269,36 @@ const LogBookListing = ({ navigation }) => {
   
     const SELECTAfterDelOnSlide = async () => {
       onRefresh()
+    }
+
+    const selectingEgcaUploadedFlights = ()=>{
+      Alert.alert(
+        "WARNING!!!!This flight has been already uploaded on EGCA",
+        "Do you still want to Edit ? ",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "Yes", onPress: () => LastWarningEgcaUploadedFlights() }
+        ]
+      );
+    }
+
+    const LastWarningEgcaUploadedFlights = ()=>{
+      Alert.alert(
+        "Please make Sure to delete the flight from Egca",
+        "Are you sure to proceed? ",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => selectParams() }
+        ]
+      );
     }
 
     const selectParams = () => {
@@ -283,7 +336,7 @@ const LogBookListing = ({ navigation }) => {
       <Swipeout {...swipeSettings}>
       <Item
         item={item}
-        onPress={() => { selectParams() }}
+        onPress={() => {item.tag==='uploaded'?selectingEgcaUploadedFlights():selectParams()}}
         backgroundColor={{ backgroundColor }}
         textColor={{ color }}
       />
@@ -296,7 +349,6 @@ const LogBookListing = ({ navigation }) => {
 
   const PlusNavigation = () => {
     setSelectedId('')
-
     setParamsLogbook(previousParams => ({
       ...(previousParams || {}),
       childParamList: 'Listvalue',
@@ -556,7 +608,7 @@ const LogBookListing = ({ navigation }) => {
       tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
-          //setLoadmore(false)
+          setLoadmore(false)
           return false;
         }
         
@@ -658,6 +710,7 @@ const LogBookListing = ({ navigation }) => {
         else {
           dataDispatcher(LogListData({ data: [], inProgress: false }))
           setRefreshing(false);
+          setLoadmore(false)
         }
         
         }
