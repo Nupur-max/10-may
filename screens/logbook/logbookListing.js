@@ -75,6 +75,10 @@ const LogBookListing = ({ navigation }) => {
 
   const [rosterLength, setRosterLength] = React.useState('')
 
+  const [freeHours, setFreeHours] = React.useState('')
+
+  const [subscribe, setSubscribe] = React.useState('')
+
   const [done, setDone] = React.useState(false)
 
   const [refreshing,setRefreshing] = React.useState(false)
@@ -107,7 +111,7 @@ const LogBookListing = ({ navigation }) => {
     user = JSON.parse(user);
     let temData = [];
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT reg_date,roster_id,Total_flying_hours,rosterLength FROM userProfileData Where user_id = "' + user.id + '"', [], (tx, result) => {
+      tx.executeSql('SELECT reg_date,roster_id,Total_flying_hours,rosterLength,freeHours,subscribe FROM userProfileData Where user_id = "' + user.id + '"', [], (tx, result) => {
         //setOffset(offset + 10);
         if (result.rows.length > 0) {
           //alert('data available '); 
@@ -125,12 +129,16 @@ const LogBookListing = ({ navigation }) => {
             Total_flying_hours: result.rows.item(i).Total_flying_hours,
             rosterLength : result.rows.item(i).rosterLength,
           });
-          //console.log('user Data', temData);
+          console.log('subscription', result.rows.item(i).subscribe);
+          console.log('rosterLength', result.rows.item(i).rosterLength);
+          console.log('freeHours', result.rows.item(i).freeHours);
           setReg_date(result.rows.item(i).reg_date)
           setRosterId(result.rows.item(i).roster_id)
           //console.log('rosterlength', result.rows.item(i).rosterLength)
           setRosterLength(result.rows.item(i).rosterLength)
-          setTotalFlyingHours(result.rows.item(i).Total_flying_hours)
+          //setTotalFlyingHours(result.rows.item(i).Total_flying_hours)
+          setFreeHours(result.rows.item(i).freeHours)
+          setSubscribe(result.rows.item(i).subscribe)
          }
         //console.log('rosterid', rosterId)
         });
@@ -328,6 +336,8 @@ const LogBookListing = ({ navigation }) => {
         RoasterSimLoc: item.simLocation,
         RoasterTakeoff: item.takeOff,
         Roasterlanding:item.landing,
+        RosterPurpose : item.purpose1,
+        //RoasterDistance: item.distance
       }));
         navigation.navigate('CreateLogbook');
       //}
@@ -593,10 +603,33 @@ const LogBookListing = ({ navigation }) => {
     }
   }
 
+  console.log('FT',subscribe)
+
   React.useEffect(() => {
     if(isFocused){
-    onRefresh();
+      FreeTrial();
+    }
+  }, [isFocused,subscribe]);
+
+  const FreeTrial = () => {
+    if(subscribe===0){
+      navigation.navigate('subscribe')
+    }
+    else if (rosterLength >= 12){
+      navigation.navigate('subscribe')
+    }
+    else if(freeHours>250){
+      navigation.navigate('subscribe')
+    }
+    else{
+      navigation.navigate('LogBookListing')
+    }
   }
+
+  React.useEffect(() => {
+    if(isFocused){
+      onRefresh();
+    }
   }, [isFocused]);
 
   const getLogbookData = async () => {
@@ -604,6 +637,7 @@ const LogBookListing = ({ navigation }) => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
     let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
+    let pur = []
     prePopulateddb.transaction(tx => {
       tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
@@ -618,6 +652,7 @@ const LogBookListing = ({ navigation }) => {
           if (result.rows.length !== 0){
           setModalVisible(true)
           if(result.rows.item(i).aircraftReg!=="SIMU"){
+            pur.push(result.rows.item(i).purpose1)
           temData.push({
             id: result.rows.item(i).id,
             tag: result.rows.item(i).tag,
@@ -669,8 +704,8 @@ const LogBookListing = ({ navigation }) => {
             from_long: result.rows.item(i).from_long,
             to_lat: result.rows.item(i).to_lat,
             to_long: result.rows.item(i).to_long,
-            
-
+            purpose1: pur,
+            distance: result.rows.item(i).distance,
           });
         }
         else {
@@ -724,18 +759,20 @@ const LogBookListing = ({ navigation }) => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
     let temData =  []
+    let pur = []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 30 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           //setLoadmore(false)
           return false;
         }
-        setOffset(offset + 30);
+        setOffset(offset + 10);
         for (let i = 0; i <= result.rows.length; i++) {
           if (result.rows.length !== 0){
           setModalVisible(true)
           if(result.rows.item(i).aircraftReg!=="SIMU"){
+           pur.push(result.rows.item(i).purpose1)
           temData.push({
             id: result.rows.item(i).id,
             tag: result.rows.item(i).tag,
@@ -787,7 +824,8 @@ const LogBookListing = ({ navigation }) => {
             from_long: result.rows.item(i).from_long,
             to_lat: result.rows.item(i).to_lat,
             to_long: result.rows.item(i).to_long,
-            
+            purpose1 : pur,
+            distance: result.rows.item(i).distance,
           });
         }
         else{

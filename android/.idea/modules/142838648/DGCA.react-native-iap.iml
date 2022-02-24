@@ -10,36 +10,36 @@
     </facet>
     <facet type="android" name="Android">
       <configuration>
-        <option name="SELECTED_BUILD_VARIANT" value="playDebug" />
-        <option name="ASSEMBLE_TASK_NAME" value="assemblePlayDebug" />
-        <option name="COMPILE_JAVA_TASK_NAME" value="compilePlayDebugSources" />
+        <option name="SELECTED_BUILD_VARIANT" value="playRelease" />
+        <option name="ASSEMBLE_TASK_NAME" value="assemblePlayRelease" />
+        <option name="COMPILE_JAVA_TASK_NAME" value="compilePlayReleaseSources" />
         <afterSyncTasks>
-          <task>generatePlayDebugSources</task>
+          <task>generatePlayReleaseSources</task>
         </afterSyncTasks>
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
         <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
-        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/main/res;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/play/res;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/debug/res;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/playDebug/res;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/res/rs/play/debug;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/res/resValues/play/debug" />
-        <option name="TEST_RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/androidTest/res;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/androidTestPlay/res;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/androidTestDebug/res;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/androidTestPlayDebug/res;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/res/rs/androidTest/play/debug;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/res/resValues/androidTest/play/debug" />
+        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/main/res;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/play/res;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/release/res;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/playRelease/res;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/res/rs/play/release;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/res/resValues/play/release" />
+        <option name="TEST_RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/androidTest/res;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/androidTestPlay/res;file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/androidTestRelease/res" />
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
         <option name="PROJECT_TYPE" value="1" />
       </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
-    <output url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/intermediates/javac/playDebug/classes" />
-    <output-test url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/intermediates/javac/playDebugUnitTest/classes" />
+    <output url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/intermediates/javac/playRelease/classes" />
+    <output-test url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/intermediates/javac/playReleaseUnitTest/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android">
       <sourceFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/src/play/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/ap_generated_sources/playDebug/out" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/source/buildConfig/play/debug" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/res/resValues/play/debug" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/res/resValues/play/release" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/ap_generated_sources/playRelease/out" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build/generated/source/buildConfig/play/release" isTestSource="false" generated="true" />
       <excludeFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../../../node_modules/react-native-iap/android/build" />
     </content>
-    <orderEntry type="jdk" jdkName="Android API 29 Platform" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="Android API 30 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: androidx.collection:collection:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-common:2.0.0" level="project" />
@@ -87,6 +87,7 @@
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-livedata:2.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-livedata-core:2.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.arch.core:core-runtime:2.0.0@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.billingclient:billing:4.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.fresco:fresco:2.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.fresco:fbcore:2.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.fresco:drawee:2.0.0@aar" level="project" />
@@ -96,6 +97,5 @@
     <orderEntry type="library" name="Gradle: com.facebook.fresco:nativeimagefilters:2.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.fresco:nativeimagetranscoder:2.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.fresco:imagepipeline-okhttp3:2.0.0@aar" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.billingclient:billing:4.0.0@aar" level="project" />
   </component>
 </module>

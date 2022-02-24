@@ -370,6 +370,24 @@ const P1 = ({ navigation }) => {
                     let jPos = j + 1
                     //console.log('data fetched pos', jPos, result.rows.length)
                     if (jPos == result.rows.length) {
+                        fetch(BaseUrl + 'edit_profile', {
+                          method: 'POST',
+                          headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                          },
+                          body: JSON.stringify({
+                            "user_id": user.id,
+                            "rosterLength" : result.rows.length,
+                    
+                          })
+                        }).then(res => res.json())
+                          .then(resData => {
+                            //console.log(resData);
+                            //GetUserDetails()
+                            //Alert.alert(resData.message);
+                    });
+                    
                       Alert.alert("Message", 'Data fetched successfully');
                       setDataFetched(false)
                       setModalVisible(false)

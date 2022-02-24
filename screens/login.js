@@ -89,12 +89,15 @@ const Login = ({navigation}) => {
             country : resData.data.country,
             validity : resData.data.validity,
             profile_pic : resData.data.profile_pic,
+            subscribe : resData.data.subscribe,
+            rosterLength: resData.data.rosterLength,
+            freeHours: resData.data.freeHours,
           }),
         )
         //console.log('reg-date',resData.data.registrationDate )
         db.transaction((tx) => {
           tx.executeSql(
-        'INSERT INTO userProfileData (user_id,name,email,Contact,roster_id,roster_pwd,airline_type,reg_date,LicenceNumber,LicenceType,Country,validity,profile_pic) VALUES ("'+resData.data.id+'","'+resData.data.name+'","'+resData.data.email+'","'+resData.data.mobile_number+'","'+resData.data.roaster_id+'","'+resData.data.roaster_pass+'","'+resData.data.airline_type+'","'+resData.data.registrationDate+'","'+resData.data.licance_number+'","'+resData.data.licance_type+'","'+resData.data.country+'","'+resData.data.validity+'","'+resData.data.profile_pic+'")',
+        'INSERT INTO userProfileData (user_id,name,email,Contact,roster_id,roster_pwd,airline_type,reg_date,LicenceNumber,LicenceType,Country,validity,profile_pic,subscribe,rosterLength,freeHours) VALUES ("'+resData.data.id+'","'+resData.data.name+'","'+resData.data.email+'","'+resData.data.mobile_number+'","'+resData.data.roaster_id+'","'+resData.data.roaster_pass+'","'+resData.data.airline_type+'","'+resData.data.registrationDate+'","'+resData.data.licance_number+'","'+resData.data.licance_type+'","'+resData.data.country+'","'+resData.data.validity+'","'+resData.data.profile_pic+'","'+resData.data.subscribe+'","'+resData.data.rosterLength+'","'+resData.data.freeHours+'")',
         );
         });
         navigation.navigate('SettingScreen')

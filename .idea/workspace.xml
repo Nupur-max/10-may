@@ -34,4 +34,10 @@
     </task>
     <servers />
   </component>
+  <component name="WindowStateProjectService">
+    <state x="138" y="125" width="1184" height="853" key="AVDManager" timestamp="1645679432826">
+      <screen x="0" y="25" width="1920" height="1055" />
+    </state>
+    <state x="138" y="125" width="1184" height="853" key="AVDManager/0.25.1920.1055@0.25.1920.1055" timestamp="1645679432826" />
+  </component>
 </project>

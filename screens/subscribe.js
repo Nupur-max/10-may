@@ -9,9 +9,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 const itemSubs = Platform.select({
   ios: [
     'com.aviation.AutoFlightLog.sub.Annual',
+    'com.aviation.Cojo.sub.Annual',
   ],
   android: [
-    'com.aviation_autoflight_annual'
+    'com.aviation_autoflight_annual',
+    'com.aviation_cojo_annual',
   ]
 });
 
@@ -48,6 +50,8 @@ const Subscribe = ({ navigation }) => {
   };
 
   const getItems = async () => {
+    let user = await AsyncStorage.getItem('userdetails');
+    user = JSON.parse(user);
     try {
       console.log("itemSubs ", itemSubs);
       const Products = await RNIap.getSubscriptions(itemSubs);
@@ -55,9 +59,19 @@ const Subscribe = ({ navigation }) => {
       if (Products.length !== 0) {
         if (Platform.OS === 'android') {
           setProducts(Products)
+          if(2+2 == 3){
+            setProductId(Products[0].productId)
+              }else {
+            setProductId(Products[1].productId)
+          }
           //Your logic here to save the products in states etc
         } else if (Platform.OS === 'ios') {
           setProducts(Products)
+          if(2+2 == 3){
+            setProductId(Products[0].productId)
+              }else {
+            setProductId(Products[1].productId)
+          }
           // your logic here to save the products in states etc
           // Make sure to check the response differently for android and ios as it is different for both
         }
@@ -82,6 +96,7 @@ const Subscribe = ({ navigation }) => {
               RNIap.finishTransactionIOS(purchase.transactionId);
             } else if (Platform.OS === 'android') {
             valiadteAndroid(receipt)
+            validateInAndroid(receipt)
               await RNIap.consumeAllItemsAndroid(purchase.purchaseToken);
               await RNIap.acknowledgePurchaseAndroid(purchase.purchaseToken);
             }
@@ -121,11 +136,20 @@ const Subscribe = ({ navigation }) => {
           if (Platform.OS === 'android') {
             setPurchaseToken(result.purchaseToken);
             setPackageName(result.packageNameAndroid);
-            setProductId(result.productId);            
+            if(2+2 == 3){
+              setProductId(Products[0].productId)
+                }else {
+              setProductId(Products[1].productId)
+            }           
             // can do your API call here to save the purchase details of particular user
           } else if (Platform.OS === 'ios') {
             console.log(result.transactionReceipt)
-            setProductId(result.productId);
+            setProducts(Products)
+            if(2+2 == 3){
+              setProductId(Products[0].productId)
+                }else {
+              setProductId(Products[1].productId)
+            }
             setReceipt(result.transactionReceipt);
             // can do your API call here to save the purchase details of particular user
           }
@@ -167,6 +191,31 @@ const Subscribe = ({ navigation }) => {
       Alert.alert("Error!", error.message);
     }
   };
+  const validateInAndroid = async (receipt) => {
+    let user = await AsyncStorage.getItem('userdetails');
+    user = JSON.parse(user);
+    try {
+      // send receipt to backend
+      const deliveryReceipt = await fetch(BaseUrl +  "save_reciept", {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify({ "reciept": receipt , 'user_id': user.id }),
+      }).then((res) => {
+        res.json().then((r) => {
+          // do different things based on response
+          if (r.result.error == -1) {
+            Alert.alert("Error", "There has been an error with your purchase");
+          } else if (r.result.isActiveSubscription) {
+            setPurchased(true);
+          } else {
+            Alert.alert("Expired", "your subscription has expired");
+          }
+        });
+      });
+    } catch (error) {
+      Alert.alert("Error!", error.message);
+    }
+  };
 
 
   return (
@@ -183,9 +232,9 @@ const Subscribe = ({ navigation }) => {
           <Text style={styles.mainLine}>App Access {'\n'} (1 year)</Text>
           <Text style={styles.mainLine}>App Access (1 year) {'\n'} Subscription</Text>
           <Text style={styles.mainLine}>1,599.00/- Rupees</Text>
-            <TouchableOpacity >
+            <TouchableOpacity onPress={() => requestSubscription(productId)}>
               <View style={styles.button} >
-                <Text style={styles.buttonText} onPress={() => requestSubscription(products[0].productId)}>Subscribe Now</Text>
+                <Text style={styles.buttonText} >Subscribe Now</Text>
               </View>
             </TouchableOpacity>
 
@@ -294,3 +343,34 @@ const styles = StyleSheet.create({
 
 
 export default Subscribe;
+
+
+//for restore purchase 
+
+
+// getPurchases = async () => {
+//   try {
+//     const purchases = await RNIap.getAvailablePurchases();
+//     const newState = { premium: false, ads: true }
+//     let restoredTitles = [];
+//     purchases.forEach(purchase => {
+//       switch (purchase.productId) {
+//       case 'com.example.premium':
+//         newState.premium = true
+//         restoredTitles.push('Premium Version');
+//         break
+//       case 'com.example.no_ads':
+//         newState.ads = false
+//         restoredTitles.push('No Ads');
+//         break
+//       case 'com.example.coins100':
+//         await RNIap.consumePurchaseAndroid(purchase.purchaseToken);
+//         CoinStore.addCoins(100);
+//       }
+//     })
+//     Alert.alert('Restore Successful', 'You successfully restored the following purchases: ' + restoredTitles.join(', '));
+//   } catch(err) {
+//     console.warn(err); // standardized err.code and err.message available
+//     Alert.alert(err.message);
+//   }
+// }

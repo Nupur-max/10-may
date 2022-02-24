@@ -59,7 +59,7 @@ const EGCAUpload = ({navigation}) => {
     const [AuthPersonvalue, setAuthPersonValue] = React.useState('');
     const [AuthPersonitems, setAuthPersonItems] = React.useState(Elog_verifiers);
 
-    const [egca, setEgca] = React.useState('');
+    const [egca, setEgca] = React.useState('Commercial');
     const [choice, setChoice] = React.useState('');
     const [open, setOpen] = React.useState(false);
     const [training, setTraining] = React.useState([]);

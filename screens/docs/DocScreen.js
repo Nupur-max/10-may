@@ -1,6 +1,6 @@
 //import liraries
 import React from 'react';
-import { View, StyleSheet, Text, FlatList,Linking,TextInput, TouchableOpacity, Modal, Alert, SafeAreaView } from 'react-native';
+import { View, StyleSheet, Text,RefreshControl, FlatList,Linking,TextInput, TouchableOpacity, Modal, Alert, SafeAreaView } from 'react-native';
 import DocScreenStyle from '../../styles/docStyles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 // Import HTML to PDF
@@ -246,6 +246,7 @@ const Docs = ({ navigation }) => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
     let temData = []
+    let pur = []
     prePopulateddb.transaction(tx => {
       tx.executeSql('SELECT * from logbook WHERE  user_id = "' + user.id + '" AND tag= "manual" ORDER BY orderedDate DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
@@ -256,6 +257,7 @@ const Docs = ({ navigation }) => {
         setOffset(offset + 10);
         for (let i = 0; i <= result.rows.length; i++) {
           if (result.rows.length !== 0) {
+            pur.push(result.rows.item(i).purpose1)
             temData.push({
               id: result.rows.item(i).id,
               tag: result.rows.item(i).tag,
@@ -303,7 +305,8 @@ const Docs = ({ navigation }) => {
               p1_ut_day: result.rows.item(i).p1_ut_day,
               p1_ut_night: result.rows.item(i).p1_ut_night,
               remark: result.rows.item(i).remark,
-
+              Purpose: pur,
+              distance: result.rows.item(i).distance,
             });
             setData(temData);
             dataDispatcher(DocListData({ data: temData }))
@@ -323,6 +326,7 @@ const Docs = ({ navigation }) => {
   const getLogbookData = async () => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
+    let pur = []
     let temData = (getReduxDocData.data === undefined) ? [] : getReduxDocData.data;
     prePopulateddb.transaction(tx => {
       tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND tag= "manual" ORDER BY orderedDate DESC , inTime DESC LIMIT 5 OFFSET "' + offset + '"', [], (tx, result) => {
@@ -333,6 +337,7 @@ const Docs = ({ navigation }) => {
         //console.log(result)
         setOffset(offset + 5);
         for (let i = 0; i <= result.rows.length; i++) {
+          console.log("123456789======",result.rows.item(i))
           temData.push({
             id: result.rows.item(i).id,
             tag: result.rows.item(i).tag,
@@ -380,6 +385,8 @@ const Docs = ({ navigation }) => {
             p1_ut_day: result.rows.item(i).p1_ut_day,
             p1_ut_night: result.rows.item(i).p1_ut_night,
             remark: result.rows.item(i).remark,
+            Purpose: pur,
+            distance: result.rows.item(i).distance,
           });
           setData(temData);
           dataDispatcher(DocListData({ data: temData }))
@@ -480,6 +487,7 @@ const Docs = ({ navigation }) => {
     data.filter(item => item.selected).map(item => {
       logs.push(item);
       setSelectedItem(logs);
+      console.log(logs)
       dataDispatcher(DocData({ selectedData: logs }))
     })
   }
@@ -489,20 +497,18 @@ const Docs = ({ navigation }) => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
     let Data = [];
-    let pur = []
+   
     let SingleResult = '';
     prePopulateddb.transaction(tx => {
       tx.executeSql('SELECT * FROM EGCADetails WHERE user_id = "' + user.id + '"', [], (tx, result1) => {
         if (result1.rows.length > 0) {
           for (let i = 0; i <= result1.rows.length; i++) {
-            pur.push(result1.rows.item(i).Purpose)
             SingleResult = {
               id: result1.rows.item(i).id,
               egcaId: result1.rows.item(i).egcaId,
               egcaPwd: result1.rows.item(i).egcaPwd,
               FtoOperator: result1.rows.item(i).FtoOperator,
               FlightType: result1.rows.item(i).FlightType,
-              Purpose: pur,
               AuthVerifier: result1.rows.item(i).AuthVerifier,
               NameOfAuthVerifier: result1.rows.item(i).NameOfAuthVerifier,
             }
@@ -837,6 +843,8 @@ const Docs = ({ navigation }) => {
                     numColumns={1}
                     onEndReached={() => { search !== '' ? null : getLogbookData() }}
                     onEndReachedThreshold={1}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+
                   />
 
                   <View style={DocScreenStyle.footer}>
@@ -986,7 +994,7 @@ const Docs = ({ navigation }) => {
           }}
         >
           <View style={styles.centeredView}>
-            <View style={styles.modalView , {height: '50%',}}>
+            <View style={styles.modalView}>
               <View style={{ width: '100%', backgroundColor: '#EFEFEF', padding: 5, flexDirection: 'row', justifyContent: 'space-between', borderRadius:10, borderTopWidth:0.2 }}>
                 <Text style={SsStyle.modalText}>Failed To Upload</Text>
                 <MaterialCommunityIcons

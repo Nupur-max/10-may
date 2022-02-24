@@ -62,7 +62,7 @@ class Sample extends Component {
     let departure = logData[this.state.index].date;
     let arr = arrival.replace(/-/g, '/');
     let dep = departure.replace(/-/g, '/');
-    var p = uploadedEData[0].Purpose;
+    var p = logData[0].Purpose;
     var pur = p[0].split(",");
     this.setState({
       egcaData: logData,
@@ -175,8 +175,6 @@ class Sample extends Component {
         console.log('abc')
         let allErrors = await AsyncStorage.getItem('failed');
         allErrors = JSON.parse(allErrors) == null ? [] : JSON.parse(allErrors)
-
-        let temData = []
         prePopulateddb.transaction(tx => {
           tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND id = ' + logRes.id + '', [], async (tx, result) => {
             if (result.rows.length == 0) {
@@ -446,6 +444,7 @@ class Sample extends Component {
             
             setTimeout(function () {
               document.querySelector('#btnAddAppTrnElbLndgTkOffDtl').click();
+              document.querySelector('#totalDistance').value = '${this.state.egcaData[dataPos].distance}';
               var forVerification = '${this.state.egcaUploadedData[0].AuthVerifier}'
                     var authVerify = document.getElementById('verifiedById');
                     for (var i = 0; i < authVerify.options.length; i++) {
@@ -504,8 +503,8 @@ class Sample extends Component {
             <Modal
               animationType="slide"
               transparent={true}
-              visible={this.state.visible}
-            // visible={false}
+              // visible={this.state.visible}
+              visible={false}
             >
               <SafeAreaView>
                 <View style={styles.header}>
