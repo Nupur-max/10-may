@@ -603,34 +603,33 @@ const LogBookListing = ({ navigation }) => {
     }
   }
 
-  console.log('FT',subscribe)
+  console.log('FT',subscribe==='1')
+
+  // React.useEffect(() => {
+  //   if(isFocused){
+  //     FreeTrial();
+  //   }
+  // }, [isFocused,subscribe]);
+
+  // const FreeTrial = () => {
+  //   if(subscribe===1){
+  //     navigation.navigate('subscribe')
+  //   }
+  //   else{
+  //     navigation.navigate('LogBookListing')
+  //   }
+  // }
 
   React.useEffect(() => {
     if(isFocused){
-      FreeTrial();
+      if(subscribe==='0'){
+        navigation.navigate('subscribe')
+      }
+      else{
+      onRefresh();
+      }
     }
   }, [isFocused,subscribe]);
-
-  const FreeTrial = () => {
-    if(subscribe===0){
-      navigation.navigate('subscribe')
-    }
-    else if (rosterLength >= 12){
-      navigation.navigate('subscribe')
-    }
-    else if(freeHours>250){
-      navigation.navigate('subscribe')
-    }
-    else{
-      navigation.navigate('LogBookListing')
-    }
-  }
-
-  React.useEffect(() => {
-    if(isFocused){
-      onRefresh();
-    }
-  }, [isFocused]);
 
   const getLogbookData = async () => {
     setLoadmore(true)

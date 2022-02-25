@@ -174,7 +174,7 @@ const Subscribe = ({ navigation }) => {
       const deliveryReceipt = await fetch(BaseUrl +  "save_reciept", {
         headers: { "Content-Type": "application/json" },
         method: "POST",
-        body: JSON.stringify({ "reciept": receipt , 'user_id': user.id }),
+        body: JSON.stringify({ "token": receipt , 'user_id': user.id }),
       }).then((res) => {
         res.json().then((r) => {
           // do different things based on response
@@ -182,6 +182,7 @@ const Subscribe = ({ navigation }) => {
             Alert.alert("Error", "There has been an error with your purchase");
           } else if (r.result.isActiveSubscription) {
             setPurchased(true);
+            navigation.naviagte('SettingScreen')
           } else {
             Alert.alert("Expired", "your subscription has expired");
           }
@@ -244,9 +245,8 @@ const Subscribe = ({ navigation }) => {
           <Text style={styles.mainLine}>(in case, Sign in from New/ {'\n'} Second device)</Text>
         </View>
       </View>
-      <TouchableOpacity onPress={() => navigation.goBack()}><Text style={[styles.mainLine, styles.link1]}>Go Back</Text></TouchableOpacity>
-
-    </ImageBackground>
+      {/* <TouchableOpacity onPress={() => navigation.goBack()}><Text style={[styles.mainLine, styles.link1]}>Go Back</Text></TouchableOpacity> */}
+  </ImageBackground>
   );
 };
 
