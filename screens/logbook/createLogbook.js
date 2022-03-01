@@ -1132,6 +1132,10 @@ React.useEffect(() => {
                 "pf_hours":pfHours,
                 "pm_hours":pmHours,
                 "sfi_sfe":sf,
+                "from_lat":fromLatitude,
+                "from_long":fromLongitude,
+                "to_lat":toLatitude,
+                "to_long":toLongitude,
             })
         }).then(res => res.json())
             .then(resData => {
@@ -2149,13 +2153,11 @@ React.useEffect(() => {
         <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
         <ScrollView contentContainerStyle={{paddingBottom: 60}}>
         <SafeAreaView style={modalVisible || FlightmodalVisible || TimemodalVisible || LandingmodalVisible || ApproachmodalVisible || FlightAlertmodalVisible || TimeAlertmodalVisible || AppAlertmodalVisible || lndgAlertmodalVisible || importModal || RostermodalVisible ? {...Logbook.container, ...{backgroundColor: 'rgba(0,0,0,0.4)'}} : [Logbook.container, {backgroundColor: theme.backgroundColor}]}>
-    
         <View style={styles.header}>
         <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{padding:6}} onPress={()=>navigation.navigate('LogBookListing')} />
         <Text style={styles.aircrafts}>LogBook</Text>
         {config?<TouchableOpacity style={{paddingLeft:150}} onPress={HideDoneConfig}><Text style={{color:'#fff'}}>Done config</Text></TouchableOpacity>:null}
         </View>
-
         <View style={SsStyle.centeredView}>
             <Modal
                 animationType="fade"
@@ -2301,17 +2303,9 @@ React.useEffect(() => {
                 <TouchableOpacity onPress={showDatepicker} >
                     <View style={Logbook.fieldWithoutBottom}>
                         <View style={Logbook.fields}>
-                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Date <Text style={{ color: 'red' }}>*</Text></Text>
+                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}><Text style={{ color: 'red' }}>*</Text>Date</Text>
                             
                             {show && (
-                                // <DateTimePicker
-                                //     testID="dateTimePicker"
-                                //     value={rosterDate}
-                                //     // mode={mode}
-                                //     //is24Hour={true}
-                                //     display={Platform.OS=='ios'?"default":"default"}
-                                //     onChange={flightDate}
-                                // />
                                 <DatePicker
                                 //style={styles.datePickerStyle}
                                 date={rosterDate} // Initial date from state
@@ -2362,7 +2356,7 @@ React.useEffect(() => {
                 <TouchableOpacity onPress={()=>navigation.navigate('Aircraft', { fromScreenLogbook: 'createLogBook' })}>
                     <View style={Logbook.fieldWithoutBottom}>
                         <View style={Logbook.fields}>
-                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Aircraft Type <Text style={{ color: 'red' }}>*</Text></Text>
+                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}><Text style={{ color: 'red' }}>*</Text>Aircraft Type</Text>
                             <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                                 <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterAType}</Text>
                                 <TouchableOpacity onPress={() => { navigation.navigate('SetAircraft', {itemAtype : rosterAType , itemAId : rosterAId , from : 'ATCreateLogbook'  }) }}>
@@ -2376,7 +2370,7 @@ React.useEffect(() => {
 
                 <View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, ...{paddingBottom:8}} }}>Aircraft ID <Text style={{ color: 'red' }}>*</Text></Text>
+                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, ...{paddingBottom:8}} }}><Text style={{ color: 'red' }}>*</Text>Aircraft ID</Text>
                         <View style={{justifyContent:'flex-end',position:'absolute',left:0,bottom:0}}>
                         <Text style={{ fontSize: 10, }}>
                             (Type "SIMU" for Simulator Menu)
@@ -2409,7 +2403,7 @@ React.useEffect(() => {
                 <TouchableOpacity onPress={() => navigation.navigate('Destination', { from: 'From' })}>
                     <View style={Logbook.fieldWithoutBottom}>
                         <View style={Logbook.fields}>
-                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>From<Text style={{ color: 'red' }}>*</Text></Text>
+                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}><Text style={{ color: 'red' }}>*</Text>From</Text>
                             <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                                 <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterFrom}</Text>
                                 <TouchableOpacity onPress={() => navigation.navigate('SetDestination', { from: 'From' })}>
@@ -2424,7 +2418,7 @@ React.useEffect(() => {
                 <TouchableOpacity onPress={() => navigation.navigate('Destination', { from: 'to' })}>
                     <View style={Logbook.fieldWithoutBottom}>
                         <View style={Logbook.fields}>
-                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>To<Text style={{ color: 'red' }}>*</Text></Text>
+                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}><Text style={{ color: 'red' }}>*</Text>To</Text>
                             <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                                 <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{ rosterTo }</Text>
                                 <TouchableOpacity onPress={() => navigation.navigate('SetDestination', { from: 'to' })}>
@@ -2464,7 +2458,7 @@ React.useEffect(() => {
 
                 {rosterAId !== 'SIMU' && (<View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Chocks Off<Text style={{ color: 'red' }}>*</Text></Text>
+                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}><Text style={{ color: 'red' }}>*</Text>Chocks Off</Text>
                         <MaskedTextInput
                             mask='99:99'
                             value={ rosterChocksOff }
@@ -2509,7 +2503,7 @@ React.useEffect(() => {
 
                 {rosterAId!== 'SIMU' && (<View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Chocks On<Text style={{ color: 'red' }}>*</Text></Text>
+                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}><Text style={{ color: 'red' }}>*</Text>Chocks On</Text>
                         <MaskedTextInput
                             mask='99:99'
                             value={rosterChocksOn }
@@ -2564,7 +2558,7 @@ React.useEffect(() => {
                 {Pic_toggle && rosterAId!== 'SIMU' ? <TouchableOpacity onPress={() => {navigation.navigate('People', { from: 'pic' })}}>
                     <View style={Logbook.fieldWithoutBottom}>
                         <View style={Logbook.fields}>
-                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35,paddingHorizontal:5 } }}>PIC/P1<Text style={{ color: 'red' }}>*</Text></Text>
+                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35,paddingHorizontal:5 } }}><Text style={{ color: 'red' }}>*</Text>PIC/P1</Text>
                             <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                                 <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterNamePic === 'undefined' ?'':rosterNamePic}</Text>
                                 <TouchableOpacity onPress={() => {navigation.navigate('People', { from: 'pic' })}}>
@@ -3839,7 +3833,7 @@ React.useEffect(() => {
         </ScrollView>
         <View style={dark?Logbook.DarkbuttonView:Logbook.buttonView}>
                 <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={()=>{insertQuery();constUpdateP2();}}> 
+                    <TouchableOpacity onPress={()=>{insertQuery();constUpdateP2();Add_Logbook();}}> 
                         <View style={Logbook.button}>
                             <Text style={Logbook.buttonText}>Save</Text>
                         </View>

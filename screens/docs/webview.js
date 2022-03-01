@@ -278,8 +278,8 @@ class Sample extends Component {
                     }
               }, 25000)
             
-            setTimeout(function () {
-                if ('${this.state.egcaData[dataPos].instructional}' == null && '${this.state.egcaData[dataPos].pic_day}' !== null && '${this.state.egcaData[dataPos].pic_night}' !== null) {
+              setTimeout(function () {
+                if ('${this.state.egcaData[dataPos].instructional}' == null && '${this.state.egcaData[dataPos].pic_day}' !== '' && '${this.state.egcaData[dataPos].pic_night}' !== '') {
                     document.querySelector('#pilotFuncPic').click();
                     var PicPilot = '${this.state.egcaData[dataPos].p2}';
                     document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').value = PicPilot;
@@ -307,7 +307,7 @@ class Sample extends Component {
                         }
                     }
                 }
-                        else if ('${this.state.egcaData[dataPos].sic_day}' !== null && '${this.state.egcaData[dataPos].sic_night}' !== null  ) {
+                        else if ('${this.state.egcaData[dataPos].sic_day}' !== '' && '${this.state.egcaData[dataPos].sic_night}' !== ''  ) {
                     let coPilot = '${this.state.egcaData[dataPos].p1}';
                     document.querySelector('#pilotFuncCoPilot').click();
                     document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').value = coPilot;
@@ -322,7 +322,7 @@ class Sample extends Component {
                         }
                     }
                 } 
-                        else if ('${this.state.egcaData[dataPos].p1_ut_day}' !== null && '${this.state.egcaData[dataPos].p1_ut_night}' !== null) {
+                        else if ('${this.state.egcaData[dataPos].p1_ut_day}' !== '' && '${this.state.egcaData[dataPos].p1_ut_night}' !== '') {
                           var Dual = '${this.state.egcaData[dataPos].p1}';
                           document.querySelector('#pilotFuncDual').click();
                           document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').value = Dual;
@@ -337,7 +337,7 @@ class Sample extends Component {
                               }
                           }
                 }
-                else if ('${this.state.egcaData[dataPos].p1_us_night} '!== null && '${this.state.egcaData[dataPos].p1_us_day}' !== null) {
+                else if ('${this.state.egcaData[dataPos].p1_us_night} '!== '' && '${this.state.egcaData[dataPos].p1_us_day}' !== '') {
                     var p1Pilot = '${this.state.egcaData[dataPos].p1}';
                     document.querySelector('#pilotFuncP1Us').click();
                     document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').value = p1Pilot;

@@ -196,7 +196,7 @@ const LogBookListing = ({ navigation }) => {
 
   const renderItem = ({ item }) => {
 
-    const backgroundColor = item.tag === 'manual' || item.tag === 'server' ? dark?"#000":"#fff" : item.tag === 'roster' ? "#708090" : item.id === selectedId ? "grey" : '';
+    const backgroundColor = item.tag === 'manual' || item.tag === 'uploaded' || item.tag === 'server' ? dark?"#000":"#fff" : item.tag === 'roster' ? "#708090" : item.id === selectedId ? "grey" : '';
   
     const color = item.id === selectedId ? 'white' : 'black';
     
@@ -603,8 +603,6 @@ const LogBookListing = ({ navigation }) => {
     }
   }
 
-  console.log('FT',subscribe==='1')
-
   // React.useEffect(() => {
   //   if(isFocused){
   //     FreeTrial();
@@ -760,13 +758,13 @@ const LogBookListing = ({ navigation }) => {
     let temData =  []
     let pur = []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 20 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           //setLoadmore(false)
           return false;
         }
-        setOffset(offset + 10);
+        setOffset(offset + 20);
         for (let i = 0; i <= result.rows.length; i++) {
           if (result.rows.length !== 0){
           setModalVisible(true)
@@ -992,8 +990,8 @@ const handleIndexChange = (index) => {
           renderItem={renderItem}
           keyExtractor={(_, index) => { return index.toString() }}
           numColumns={1}
-          onEndReached={()=>{search !== ''? null:getLogbookData()}}
-          onEndReachedThreshold={1}
+          onEndReached={()=>{search !== ''? null:getLogbookData();console.log('called')}}
+          onEndReachedThreshold={0.2}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         />
       }
