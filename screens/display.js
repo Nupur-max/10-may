@@ -245,7 +245,7 @@ const Display = ({navigation}) => {
         
         <View style={{flexDirection:'row', justifyContent:'space-between'}}>
         <View style={{flexDirection:'row', padding:5}}>
-           <Checkbox
+           <Checkbox.Android
             color = {dark?'#fff':'#256173'}
             uncheckedColor = {dark?'#fff':'#000'}
             status={country ? 'checked' : 'unchecked'}
@@ -257,7 +257,7 @@ const Display = ({navigation}) => {
         </View>
 
         <View style={{flexDirection:'row', padding:5}}>
-        <Checkbox
+        <Checkbox.Android
             color = {dark?'#fff':'#256173'}
             uncheckedColor = {dark?'#fff':'#000'}
             status={approach ? 'checked' : 'unchecked'}
@@ -271,7 +271,7 @@ const Display = ({navigation}) => {
         </View>
         
         <View style={{flexDirection:'row', padding:5}}>
-            <Checkbox
+            <Checkbox.Android
             status={instrument ? 'checked' : 'unchecked'}
             color = {dark?'#fff':'#256173'}
             uncheckedColor = {dark?'#fff':'#000'}

@@ -1337,7 +1337,7 @@ React.useEffect(() => {
         });
     }
 
-  
+    console.log('AT', PurposeData)  
     const insertQuery = async() => {
         //console.log('AT', PurposeData[0])
 
@@ -2151,13 +2151,16 @@ React.useEffect(() => {
 
     return (
         <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
+        
         <ScrollView contentContainerStyle={{paddingBottom: 60}}>
         <SafeAreaView style={modalVisible || FlightmodalVisible || TimemodalVisible || LandingmodalVisible || ApproachmodalVisible || FlightAlertmodalVisible || TimeAlertmodalVisible || AppAlertmodalVisible || lndgAlertmodalVisible || importModal || RostermodalVisible ? {...Logbook.container, ...{backgroundColor: 'rgba(0,0,0,0.4)'}} : [Logbook.container, {backgroundColor: theme.backgroundColor}]}>
+
         <View style={styles.header}>
         <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{padding:6}} onPress={()=>navigation.navigate('LogBookListing')} />
         <Text style={styles.aircrafts}>LogBook</Text>
         {config?<TouchableOpacity style={{paddingLeft:150}} onPress={HideDoneConfig}><Text style={{color:'#fff'}}>Done config</Text></TouchableOpacity>:null}
         </View>
+
         <View style={SsStyle.centeredView}>
             <Modal
                 animationType="fade"

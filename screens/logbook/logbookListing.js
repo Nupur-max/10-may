@@ -164,7 +164,7 @@ const LogBookListing = ({ navigation }) => {
 
  const Item = ({ item, onPress, backgroundColor, textColor }) => (
     <TouchableOpacity onPress={onPress} style={[LogbookListing.item]}>
-      <ScrollView style={dark?[LogbookListing.Darklisting,backgroundColor]:[LogbookListing.listing, backgroundColor]}>
+      <View style={dark?[LogbookListing.Darklisting,backgroundColor]:[LogbookListing.listing, backgroundColor]}>
         <View style={{ width: '100%' }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={dark?{color:'#fff',fontFamily: 'WorkSans-Bold', fontSize: 15}:{ fontFamily: 'WorkSans-Bold', fontSize: 15 }}>{item.date} </Text>
@@ -190,7 +190,7 @@ const LogBookListing = ({ navigation }) => {
             {item.aircraftReg === 'SIMU' ? <Text style={dark?{color:'#fff',paddingLeft: 28}:{ paddingLeft: 28 }}>{item.landing}</Text> : <Text style={dark?{color:'#fff',paddingLeft: 28}:{ paddingLeft: 28 }}>{item.chocksOnTime}</Text>}
           </View>
         </View>
-      </ScrollView>
+      </View>
     </TouchableOpacity>
   );
 
@@ -821,7 +821,7 @@ const LogBookListing = ({ navigation }) => {
             from_long: result.rows.item(i).from_long,
             to_lat: result.rows.item(i).to_lat,
             to_long: result.rows.item(i).to_long,
-            purpose1 : pur,
+            purpose1 : result.rows.item(i).purpose1,
             distance: result.rows.item(i).distance,
           });
         }
@@ -991,7 +991,7 @@ const handleIndexChange = (index) => {
           keyExtractor={(_, index) => { return index.toString() }}
           numColumns={1}
           onEndReached={()=>{search !== ''? null:getLogbookData();console.log('called')}}
-          onEndReachedThreshold={0.2}
+          onEndReachedThreshold={0.8}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         />
       }

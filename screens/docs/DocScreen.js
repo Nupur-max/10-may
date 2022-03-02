@@ -305,7 +305,7 @@ const Docs = ({ navigation }) => {
               p1_ut_day: result.rows.item(i).p1_ut_day,
               p1_ut_night: result.rows.item(i).p1_ut_night,
               remark: result.rows.item(i).remark,
-              Purpose: pur,
+              Purpose: result.rows.item(i).purpose1,
               distance: result.rows.item(i).distance,
             });
             setData(temData);
@@ -385,7 +385,7 @@ const Docs = ({ navigation }) => {
             p1_ut_day: result.rows.item(i).p1_ut_day,
             p1_ut_night: result.rows.item(i).p1_ut_night,
             remark: result.rows.item(i).remark,
-            Purpose: pur,
+            Purpose: result.rows.item(i).purpose1,
             distance: result.rows.item(i).distance,
           });
           setData(temData);
@@ -1000,15 +1000,19 @@ const Docs = ({ navigation }) => {
                 <MaterialCommunityIcons
                   name="close" color='#256173' size={25} onPress={() => {setErrorModal(!errorModal); AsyncStorage.removeItem('failed')}} />
               </View>
-              <ScrollView style={{ padding: 10, }}>
+              {/* <Text>Failed to upload these on egca please review nd reupload</Text> */}
               <FlatList
                     data={failedUpload}
                     renderItem={renderUpload}
                     keyExtractor={(_, index) => { return index.toString() }}
                     numColumns={1}
                     onEndReachedThreshold={1}
+                    style={{
+                      height: 500,
+                      flexGrow: 0
+                    }}
                   />
-              </ScrollView>
+                   <Text style={{padding:10 , textAlign:'center'}}>Failed to upload these on egca please review and Re-upload</Text>
             </View>
           </View>
         </Modal>

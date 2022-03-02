@@ -22,14 +22,14 @@ const Logbook = StyleSheet.create({
     paddingTop: 42,
     },
     headline: {
-        padding: 10,
+        padding: 15,
         backgroundColor: "#F3F3F3",
         width: '100%',
         //justifyContent:'center',
         flexDirection: 'row'
     },
     Darkheadline: {
-        padding: 10,
+        padding: 15,
         backgroundColor: "#000",
         width: '100%',
         //justifyContent:'center',
@@ -37,31 +37,33 @@ const Logbook = StyleSheet.create({
     },
     HeadlineText:{
         color:'#000',
+        fontWeight:'bold',
         fontSize: 14,
         fontFamily: 'WorkSans-Regular',
     },
     DarkHeadlineText:{
         color:'#fff',
+        fontWeight:'bold',
         fontSize: 14,
         fontFamily: 'WorkSans-Regular',
     },
     fieldWithoutBottom: {
-        paddingHorizontal:15, 
-        //paddingVertical:10, 
+        paddingHorizontal:5, 
+        paddingVertical:5, 
         width:'100%' ,
         flexDirection:'row'
     },
     fieldWithoutBottom1: {
-        paddingHorizontal:15,
-        //paddingVertical:10, 
+        paddingHorizontal:5,
+        paddingVertical:510, 
         width:'65%',
         flexDirection:'row',
         borderRightWidth: 2,
         borderRightColor: Colors.accent
     },
     fieldWithoutBottom2: {
-        paddingHorizontal:10, 
-        //paddingVertical:10, 
+        paddingHorizontal:5, 
+        paddingVertical:5, 
         width:'34%',
         flexDirection:'row',
         //alignItems: 'center'
@@ -114,7 +116,7 @@ const Logbook = StyleSheet.create({
         
       },
       buttonView:{
-          flex:2,
+          //flex:1,
           padding:10,
           backgroundColor: '#c0c0c0',
           width: '100%',
