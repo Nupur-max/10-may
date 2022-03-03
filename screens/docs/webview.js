@@ -46,6 +46,10 @@ class Sample extends Component {
       visible: false,
       error: null,
       purpse: [],
+      PIC: '',
+      SIC:'',
+      chocksOffTime: '',
+      chocksOnTime: '' ,
     };
   }
   componentDidMount = () => {
@@ -64,12 +68,25 @@ class Sample extends Component {
     let dep = departure.replace(/-/g, '/');
     var p = logData[0].Purpose;
     var pur = p.split(",");
-    console.log(pur)
+    var Pic_Name = logData[this.state.index].p1.split("(")
+    var Pic_Name_Split = Pic_Name
+    var Sic_Name = logData[this.state.index].p2.split("(")
+    var Sic_Name_Split = Sic_Name[1].split(")")
+    const takeOffTime =logData[this.state.index].chocksOffTime.split(":");
+    const  landingTime=logData[this.state.index].chocksOnTime.split(":");
+     
+    const chokOff = Number(takeOffTime[0]) < 10 ? "0" + takeOffTime[0] + ":" + takeOffTime[1] : takeOffTime[0] + ":" + takeOffTime[1]
+    const chokOn = Number(landingTime[0]) < 10 ? "0" + landingTime[0] + ":" + landingTime[1] : landingTime[0] + ":" + landingTime[1]
+
     this.setState({
       egcaData: logData,
       egcaUploadedData: uploadedEData,
       loading: false,
-      purpse: pur
+      purpse: pur,
+      PIC: Pic_Name_Split[0] ,
+      SIC: Sic_Name_Split[0],
+      chocksOffTime: chokOff,
+      chocksOnTime: chokOn,
     })
 
     if (logData[this.state.index].aircraftReg[2] !== '-') {
@@ -79,10 +96,12 @@ class Sample extends Component {
       console.log('no error')
     }
 
-    if (logData[this.state.index].chocksOffTime > logData[this.state.index].chocksOnTime) {
+    
+
+    if (Number(takeOffTime[0]) > Number(landingTime[0])) {
       let date = logData[this.state.index].date.split("-")
       const day = Number(date[0]) + 1
-      const arrivalDate = day + "/" + date[1] + "/" + date[2]
+      const arrivalDate = day < 10 ?"0"+ day + "/" + date[1] + "/" + date[2] : day + "/" + date[1] + "/" + date[2]
       this.setState({
         arrDate: arrivalDate,
         depDate: dep,
@@ -96,16 +115,6 @@ class Sample extends Component {
       console.log("no error")
     }
   }
-
-  handleOnSubmit = async () => {
-    var items = await AsyncStorage.getItem('notes');
-    var notes = JSON.parse(items)
-    const note = { id: Date.now(), name: 'tarun', time: Date.now() };
-    const updatedNotes = [...notes, note];
-    console.log(updatedNotes)
-    // setNotes(updatedNotes);
-    await AsyncStorage.setItem('notes', JSON.stringify(updatedNotes));
-  };
 
   //// TO UPDATE INDEX ///
   updateIndex = async () => {
@@ -130,10 +139,12 @@ class Sample extends Component {
     const value = await AsyncStorage.getItem('result');
     if (value !== null) {
       const logRes = JSON.parse(value)
-      console.log(logRes)
       if (logRes.success !== false) {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
+        let allSuccess = await AsyncStorage.getItem('success');
+        allSuccess = JSON.parse(allSuccess) == null ? [] : JSON.parse(allSuccess)
+        console.log("sucess of log upload" , allSuccess)
         prePopulateddb.transaction(tx => {
           tx.executeSql('UPDATE logbook set tag="uploaded" WHERE user_id = "' + user.id + '" AND  id = "' + logRes.id + '"')
           let Data = [];
@@ -161,6 +172,8 @@ class Sample extends Component {
                   }
                   Data.push(SingleResult)
                   this.props.LogListData({ data: Data, inProgress: false })
+                  var successData = [...allErrors, temData];
+                 AsyncStorage.setItem('success', JSON.stringify(successData));
                 }
               }
               else {
@@ -173,18 +186,14 @@ class Sample extends Component {
       } else if (logRes.error == true) {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
-        console.log('abc')
         let allErrors = await AsyncStorage.getItem('failed');
         allErrors = JSON.parse(allErrors) == null ? [] : JSON.parse(allErrors)
-
-        let temData = []
         prePopulateddb.transaction(tx => {
           tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND id = ' + logRes.id + '', [], async (tx, result) => {
             if (result.rows.length == 0) {
               console.log('no data to load')
               return false;
             }
-            console.log(result)
             for (let i = 0; i <= result.rows.length; i++) {
               let temData = {
                 id: result.rows.item(i).id,
@@ -195,16 +204,8 @@ class Sample extends Component {
                 chocksOffTime: result.rows.item(i).offTime,
                 chocksOnTime: result.rows.item(i).onTime,
               }
-              console.log("tem Data", temData)
-              // if(allErrors !== null){
               var saveddata = [...allErrors, temData];
-
-              console.log("Saved Data", saveddata)
               await AsyncStorage.setItem('failed', JSON.stringify(saveddata));
-              // }
-              // else{
-              //    AsyncStorage.setItem('failed', JSON.stringify(temData));
-              // }
             }
           });
         });
@@ -235,7 +236,7 @@ class Sample extends Component {
     }
   }
 
-  injectJs = (dataPos, arrD, depD, airCraftReg, err) => {
+  injectJs = (dataPos, arrD, depD, airCraftReg, err , PiC ,SiC , chocksOff , chocksOn) => {
     const injectData =
       `if (window.location.href === "https://www.dgca.gov.in/digigov-portal/jsp/dgca/common/login.jsp") {
         
@@ -282,15 +283,17 @@ class Sample extends Component {
               }, 25000)
             
             setTimeout(function () {
-                if ('${this.state.egcaData[dataPos].instructional}' == '' && '${this.state.egcaData[dataPos].pic_day}' !== '' && '${this.state.egcaData[dataPos].pic_night}' !== '') {
+                if ('${this.state.egcaData[dataPos].instructional}' == "" && '${this.state.egcaData[dataPos].pic_day}' !== '' && '${this.state.egcaData[dataPos].pic_night}' !== '') {
                     document.querySelector('#pilotFuncPic').click();
-                    var PicPilot = '${this.state.egcaData[dataPos].p2}';
+                    var PicPilot = '${SiC}';
                     document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').value = PicPilot;
                     document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').onkeyup();
                     document.querySelector('#pilotInCommandIdCurrentEntry').onchange();
                     var pic = document.getElementById('pilotInCommandIdCurrentEntry');
                     for (var i = 0; i < pic.options.length; i++) {
-                        if (pic.options[i].text === PicPilot) {
+                        let spl = pic.options[1].text.split("(");
+                        let spl1 = spl[1].split(")")
+                        if (spl1[0] === PicPilot) {
                             pic.selectedIndex = i;
                             document.querySelector('#pilotInCommandIdCurrentEntry').onchange();
                         }
@@ -298,7 +301,7 @@ class Sample extends Component {
                 }
                 else if ('${this.state.egcaData[dataPos].instructional}' !== '') {
                     document.querySelector('#pilotFuncInstructor').click();
-                    var InsPilot = '${this.state.egcaData[dataPos].p2}';
+                    var InsPilot = '${SiC}';
                     document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').value = InsPilot;
                     document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').onkeyup();
                     document.querySelector('#pilotInCommandIdCurrentEntry').onchange();
@@ -311,7 +314,7 @@ class Sample extends Component {
                     }
                 }
                         else if ('${this.state.egcaData[dataPos].sic_day}' !== null && '${this.state.egcaData[dataPos].sic_night}' !== null  ) {
-                    let coPilot = '${this.state.egcaData[dataPos].p1}';
+                    let coPilot = '${PiC}';
                     document.querySelector('#pilotFuncCoPilot').click();
                     document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').value = coPilot;
                     document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').onkeyup();
@@ -326,7 +329,7 @@ class Sample extends Component {
                     }
                 } 
                         else if ('${this.state.egcaData[dataPos].p1_ut_day}' !== null && '${this.state.egcaData[dataPos].p1_ut_night}' !== null) {
-                          var Dual = '${this.state.egcaData[dataPos].p1}';
+                          var Dual = '${PiC}';
                           document.querySelector('#pilotFuncDual').click();
                           document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').value = Dual;
                           document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').onkeyup();
@@ -341,7 +344,7 @@ class Sample extends Component {
                           }
                 }
                 else if ('${this.state.egcaData[dataPos].p1_us_night} '!== null && '${this.state.egcaData[dataPos].p1_us_day}' !== null) {
-                    var p1Pilot = '${this.state.egcaData[dataPos].p1}';
+                    var p1Pilot = '${PiC}';
                     document.querySelector('#pilotFuncP1Us').click();
                     document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').value = p1Pilot;
                     document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').onkeyup();
@@ -395,7 +398,7 @@ class Sample extends Component {
                     }
                 }
                 document.querySelector('#departuredate').value = '${depD}';
-                document.querySelector('#departuretime').value = '${this.state.egcaData[dataPos].chocksOffTime}';
+                document.querySelector('#departuretime').value = '${chocksOff}';
             
                 var to = '${this.state.egcaData[dataPos].to}'
                 var To = document.getElementById('lndgAerodrome');
@@ -407,7 +410,7 @@ class Sample extends Component {
                     }
                 }
                 document.querySelector('#arrivaldate').value = '${arrD}';
-                document.querySelector('#arrivaltime').value = '${this.state.egcaData[dataPos].chocksOnTime}';
+                document.querySelector('#arrivaltime').value = '${chocksOn}';
                 document.querySelector('#numberOfLandings').value = ${this.state.egcaData[dataPos].nightLanding} + ${this.state.egcaData[dataPos].dayLanding};
             }, 40000)
             
@@ -467,7 +470,6 @@ class Sample extends Component {
         setTimeout(function () {
           document.querySelector('#verificationStatus').click();
           window.confirm = function(){return true;};
-          window.alert = function(){return true;};
           document.querySelector('#btnAddSubmit').click();
          
           }, 60000)
@@ -479,15 +481,24 @@ class Sample extends Component {
 
         setTimeout(function () {
           if('${err}' == "null"){
+            if(${dataPos}+1 == ${this.state.egcaData.length}){
+              document.querySelector('#Logout_btn').click();
+              document.querySelector('#noFeedback').click();
             window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:false, error:true ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
-            window.location.href=("https://www.dgca.gov.in/digigov-portal/web?requestType=ApplicationRH&actionVal=checkLogin")
+          }
           }
           else {
-            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:${this.state.success}, error:false ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
-            window.location.href=("https://www.dgca.gov.in/digigov-portal/web?requestType=ApplicationRH&actionVal=checkLogin")
+            if(${dataPos}+1 == ${this.state.egcaData.length}){
+              document.querySelector('#Logout_btn').click();
+              document.querySelector('#noFeedback').click();
+            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:${this.state.success}, error:${this.state.error} ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
           }
-           
+          }
         }, 70000)
+
+        setTimeout(function () {
+          window.location.href=("https://www.dgca.gov.in/digigov-portal/web?requestType=ApplicationRH&actionVal=checkLogin")
+        }, 75000)
        
       };`
     return injectData;
@@ -532,7 +543,7 @@ class Sample extends Component {
               ref={webview => { this.webview = webview; }}
               source={{ uri: this.state.webViewUrl }}
               javaScriptEnabledAndroid={true}
-              injectedJavaScript={this.injectJs(this.state.index, this.state.arrDate, this.state.depDate, this.state.airCraftReg, this.state.error)}
+              injectedJavaScript={this.injectJs(this.state.index, this.state.arrDate, this.state.depDate, this.state.airCraftReg, this.state.error , this.state.PIC ,this.state.SIC , this.state.chocksOffTime , this.state.chocksOnTime)}
               onError={() => this.webviewError(e)}
               startInLoadingState={true}
               scalesPageToFit={true}

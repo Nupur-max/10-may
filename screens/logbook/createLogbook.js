@@ -79,10 +79,10 @@ React.useEffect(() => {
 if (filghtTimeM) {
 CalcActualInstrument()}}, [filghtTimeM, CalcActualInstrument]);
 
-const day_editable = (inputText) => {
-      setSic_day(inputText)
-      setDayTime(inputText)
-      setP1_us_day(inputText)
+const day_editable = (dayTime) => {
+      setSic_day(dayTime)
+      setDayTime(dayTime)
+      setP1_us_day(dayTime)
     var TotalFlightTime = filghtTimeM
     var DayTotalTime = dayTime
     var TotalFlightTimeparts = TotalFlightTime.split(':');    
@@ -99,12 +99,13 @@ const day_editable = (inputText) => {
     setNightTime(Nighthour+':'+Nightmin)
     setSic_night(Nighthour+':'+Nightmin)
     setP1_us_night(Nighthour+':'+Nightmin)
+    console.log('timeeee',nightTime);
 }
 
-const night_editable = (inputText) => {
-       setSic_night(inputText)
-       setNightTime(inputText)
-       setP1_us_night(inputText)
+const night_editable = (nightTime) => {
+       setSic_night(nightTime)
+       setNightTime(nightTime)
+       setP1_us_night(nightTime)
     var TotalFlightTime1 = filghtTimeM
     var NightTotalTime = nightTime
     var TotalFlightTime1parts = TotalFlightTime1.split(':');    
@@ -895,7 +896,9 @@ const removeApproachInputTime = (ApproachIndex) => {
         }
     }, [Approachparams]);
 
-    console.log('pf-time',params.RoasterTakeoff)
+    const purposeCheck = params.RosterPurpose
+    const purposeCheck1 = purposeCheck == null? [] : purposeCheck.split(",");
+    // console.log('pf-time',purposeCheck.split(","))
 
     React.useEffect(() => {
         if(isFocused){
@@ -917,17 +920,15 @@ const removeApproachInputTime = (ApproachIndex) => {
             setSt(params.RoasterSim_type)
             setLocation(params.RoasterSimLoc)
             setSim_exercise(params.RoasterSim_exc)
-            if(flightType === 'training'){
-            setTraining(params.RosterPurpose)
-            }
-            if(flightType === 'test'){
-            setTest(params.RosterPurpose)
-            }
-            if(flightType === 'commercial'){
-            setCommercial(params.RosterPurpose)
-            }
+
+            setTraining(purposeCheck1)
+            setTest(purposeCheck1)
+            setCommercial(purposeCheck1)
+            
 }
 }, [isFocused]);
+
+
 
 React.useEffect(() => {
    if(rosterAId==="SIMU"){
@@ -1331,13 +1332,13 @@ React.useEffect(() => {
         prePopulateddb.transaction(tx => {
             if (rosterNameSic !== '') {
                 tx.executeSql(
-                    'UPDATE logbook set p2="'+rosterNameSic+'" where date="'+originalDate+'"',
+                    'UPDATE logbook set p2="'+rosterNameSic+'",purpose1="'+PurposeData+'" where date="'+originalDate+'"',
                 );
             }
         });
     }
 
-    console.log('AT', PurposeData)  
+    //console.log('AT', PurposeData)  
     const insertQuery = async() => {
         //console.log('AT', PurposeData[0])
 
@@ -2117,12 +2118,6 @@ React.useEffect(() => {
         }
     }
 
-    React.useEffect(() => {
-        if(isFocused){
-        SelectEGCADETAILS()
-        }
-      },[isFocused]);
-
     const SelectEGCADETAILS = async() => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
@@ -2131,19 +2126,32 @@ React.useEffect(() => {
             tx.executeSql(
                 'SELECT * from EGCADetails WHERE user_id = "'+user.id+'"', [], (tx, result) => {
                     for (let i = 0; i <= result.rows.length; i++) {
+                    console.log('FlightType1',result.rows.item(i).FlightType)
                     selectedData.push({
                       FlightType :  result.rows.item(i).FlightType,
                     });
-                     console.log('FlightType', result.rows.item(i).FlightType)
-                     setFlightType(result.rows.item(i).FlightType)
+                        console.log('FlightType1', result.rows.item(i).FlightType)
+                        setFlightType(result.rows.item(i).FlightType)
                     }
                 }
             );
         });
     } 
 
+    React.useEffect(() => {
+        if(isFocused){
+        SelectEGCADETAILS()
+        }
+      },[isFocused]);
+
     const PurposeData = flightType==='Training'? training : flightType==='Test'? test : flightType==='Commercial'?commercial:[]
     console.log('purposeData',PurposeData)
+    console.log('FlightType',flightType)
+
+   const isFlightTypeSelected = () => {
+       alert('Please Fill egcaUpload details first from settings-> EGCA Upload to proceed!!')
+       navigation.navigate('EGCAUpload')
+   }
 
     // console.log('distane',PurposeData.includes("Cross-country flight (day)"),PurposeData.includes("Cross-country flight (night)"))
 
@@ -2375,7 +2383,7 @@ React.useEffect(() => {
                     <View style={Logbook.fields}>
                         <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, ...{paddingBottom:8}} }}><Text style={{ color: 'red' }}>*</Text>Aircraft ID</Text>
                         <View style={{justifyContent:'flex-end',position:'absolute',left:0,bottom:0}}>
-                        <Text style={{ fontSize: 10, }}>
+                        <Text style={{ fontSize: 10, paddingLeft: 25 }}>
                             (Type "SIMU" for Simulator Menu)
                         </Text>
                         </View>
@@ -2625,30 +2633,19 @@ React.useEffect(() => {
                     </View>
                 </View> : null}
 
-                {sic_toggle && rosterAId!== 'SIMU' ? <View style={Logbook.fieldWithoutBottom}>
+                {sic_toggle && rosterAId!== 'SIMU' ?<TouchableOpacity onPress={() => {navigation.navigate('People', { from: 'sic' })}}><View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
-                        <Text style={{...Logbook.fieldText,...{ lineHeight: 35,paddingHorizontal:5}}}>SIC/P2</Text>
+                        <Text style={{...Logbook.fieldText,...{ paddingHorizontal:5}}}><Text style={{ color: 'red' }}>*</Text>SIC/P2</Text>
                         <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
-                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, ...{alignItems:'center',} } }}>{rosterNameSic}</Text>
+                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, ...{alignItems:'center', lineHeight: 20,} } }}>{rosterNameSic}</Text>
                             <TouchableOpacity onPress={() => {navigation.navigate('People', { from: 'sic' })}}>
                                 <MaterialCommunityIcons
                                     name="chevron-right" color={'#256173'} size={25} style={{ lineHeight: 35,}} />
                             </TouchableOpacity>
                         </View>
                     </View>
-                </View> : null}
+                </View></TouchableOpacity>: null}
 
-                {/* <View style={{flexDirection:'row',paddingHorizontal:10,flex: 1, flexWrap: 'wrap'}}>
-                    {PurposeData.map((data) => {
-                        return (
-                            <View style={{padding:5}}>
-                            <View style={{backgroundColor:'yellow', padding:3, borderRadius:10,}}>
-                                <Text>{data}</Text>
-                            </View>
-                            </View>
-                        )
-                        })}
-                    </View> */}
                     {flightType !== "Non-commercial" ?<View>
                     <Text style = {dark?styles.DarkInnnerHeadings:styles.InnnerHeadings}>Purpose</Text>
                     </View>: null}
@@ -2670,6 +2667,7 @@ React.useEffect(() => {
                         setItems={ flightType === "Training" ? setTrainingValue : flightType === "Test" ? setTestValue : flightType === "Commercial" ? setCommercialValue : []}
                         placeholder="Select *"
                         style = {{flex:1,width: '100%', flexWrap:'wrap'}}
+                        onPress={(open) => {console.log('was the picker open?', open); flightType===''?isFlightTypeSelected():null}}
                         dropDownContainerStyle={{
                         width: '100%',
                         elevation: 15,
@@ -2875,13 +2873,14 @@ React.useEffect(() => {
                         </View>)}
                     </View>}
 
-                {dayToggle && rosterAId !== 'SIMU' ? <View style={Logbook.fieldWithoutBottom}>
+                {dayToggle && rosterAId !== 'SIMU' ?<View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
                         <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Day</Text>
                         <MaskedTextInput
                             mask='99:99'
                             value={dayTime}
-                            onChangeText={(inputText)=>day_editable(inputText)}
+                            //onValueChange={(inputText)=>day_editable(inputText)}
+                            onChangeText = {(dayTime)=>day_editable(dayTime)}
                             keyboardType="numeric"
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
@@ -2896,7 +2895,8 @@ React.useEffect(() => {
                         <MaskedTextInput
                             mask='99:99'
                             value={nightTime}
-                            onChangeText={(inputText)=>night_editable(inputText)}
+                            //onValueChange={(inputText)=>night_editable(inputText)}
+                            onChangeText = {(nightTime)=>night_editable(nightTime)}
                             keyboardType="numeric"
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
@@ -2974,7 +2974,7 @@ React.useEffect(() => {
                         <View style={{ flexDirection: 'row', }}>
                             <RadioButton.Group value={fr}
                                 onValueChange={fr => setFr(fr)}>
-                                <RadioButton
+                                <RadioButton.Android
                                     value="ifr"
                                     status={fr === 'ifr' ? 'checked' : 'unchecked'}
                                     onPress={() => setFr('ifr')}
@@ -2988,7 +2988,7 @@ React.useEffect(() => {
                         <View style={{ flexDirection: 'row', }}>
                             <RadioButton.Group value={fr}
                                 onValueChange={fr => setFr(fr)}>
-                                <RadioButton
+                                <RadioButton.Android
                                     value="vfr"
                                     //status={ fr === 'vfr' ? 'checked' : 'unchecked' }
                                     //onPress={() => setFr('vfr')}

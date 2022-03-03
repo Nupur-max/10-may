@@ -282,7 +282,7 @@ class Sample extends Component {
               }, 25000)
             
             setTimeout(function () {
-                if ('${this.state.egcaData[dataPos].instructional}' == null && '${this.state.egcaData[dataPos].pic_day}' !== null && '${this.state.egcaData[dataPos].pic_night}' !== null) {
+                if ('${this.state.egcaData[dataPos].instructional}' == '' && '${this.state.egcaData[dataPos].pic_day}' !== '' && '${this.state.egcaData[dataPos].pic_night}' !== '') {
                     document.querySelector('#pilotFuncPic').click();
                     var PicPilot = '${this.state.egcaData[dataPos].p2}';
                     document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').value = PicPilot;
@@ -296,7 +296,7 @@ class Sample extends Component {
                         }
                     }
                 }
-                else if ('${this.state.egcaData[dataPos].instructional}' !== null) {
+                else if ('${this.state.egcaData[dataPos].instructional}' !== '') {
                     document.querySelector('#pilotFuncInstructor').click();
                     var InsPilot = '${this.state.egcaData[dataPos].p2}';
                     document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').value = InsPilot;
@@ -408,9 +408,6 @@ class Sample extends Component {
                 }
                 document.querySelector('#arrivaldate').value = '${arrD}';
                 document.querySelector('#arrivaltime').value = '${this.state.egcaData[dataPos].chocksOnTime}';
-                if(document.querySelector('#distance')) {
-                  document.getElementById("distance").value='${this.state.egcaData[dataPos].distance}'
-                }
                 document.querySelector('#numberOfLandings').value = ${this.state.egcaData[dataPos].nightLanding} + ${this.state.egcaData[dataPos].dayLanding};
             }, 40000)
             
@@ -486,10 +483,8 @@ class Sample extends Component {
             window.location.href=("https://www.dgca.gov.in/digigov-portal/web?requestType=ApplicationRH&actionVal=checkLogin")
           }
           else {
-            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:${this.state.success}, error:${this.state.error} ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
-
+            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:${this.state.success}, error:false ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
             window.location.href=("https://www.dgca.gov.in/digigov-portal/web?requestType=ApplicationRH&actionVal=checkLogin")
-          
           }
            
         }, 70000)
@@ -511,8 +506,8 @@ class Sample extends Component {
             <Modal
               animationType="slide"
               transparent={true}
-              // visible={this.state.visible}
-            visible={false}
+              visible={this.state.visible}
+            // visible={false}
             >
               <SafeAreaView>
                 <View style={styles.header}>
@@ -581,7 +576,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5FCFF88",
   },
   modalView: {
-    // backgroundColor: '#000',
+    backgroundColor: '#000',
     width: '100%',
     height: '100%',
     alignItems: "center",
