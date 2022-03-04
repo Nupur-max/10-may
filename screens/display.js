@@ -57,8 +57,13 @@ const Display = ({navigation}) => {
 
     const handleActualInstrument = () => {
         dataDispatcher(DisplayData({ActualI: instrument, TimeofAi: blockTime[blockTimeValue], Xc: country}))
+        if(blockTime[blockTimeValue]===undefined){
+          alert('Please Select Block Time to proceed!')
+        }
+        else{
         alert('Changes Saved')
-        //console.log('Pressed');
+        }
+        //console.log('Pressed',blockTime[blockTimeValue]);
     }
 
     const { dark, theme, toggle } = React.useContext(ThemeContext);
@@ -281,20 +286,23 @@ const Display = ({navigation}) => {
         </View>
 
         <View style={DisplayStyles.blockDropDown}>
-            <Text style={{color: dark?'#fff':'#000'}}>Block Time - </Text>
+            <Text style={{color: dark?'#fff':'#000', fontSize:15,lineHeight:30}}>Block Time - </Text>
             <ModalDropdown options={blockTime}
                 defaultValue= {blockTime[blockTimeValue]}
                 isFullWidth = {true}
-                textStyle= {{color: 'grey', fontSize:15,}}
-                dropdownStyle={{boderWidth:1, borderColor:'#256173', width:100}}
+                style={{backgroundColor:'grey',borderRadius:10,width:'30%',alignItems:'center',justifyContent:'center'}}
+                textStyle= {{color: '#fff', fontSize:15,padding:5}}
+                dropdownStyle={{boderWidth:1, borderColor:'#000', width:'30%',backgroundColor:'grey'}}
+                dropdownTextStyle={{fontSize:15,textAlign:'center',backgroundColor:'grey',color:'#fff'}}
                 onSelect = {(blockTimeValue)=>{setBlockTimeValue(blockTimeValue);}}
             />
-            <MaterialCommunityIcons name="chevron-down" color={dark?'#fff':'#000'} size={20} style={{lineHeight:20}}/>
-            <View style={{paddingLeft: 50}}>
+            {/* <MaterialCommunityIcons name="chevron-down" color={dark?'#fff':'#000'} size={20} style={{lineHeight:20}}/> */}
+        </View>
+
+        <View style={{alignItems:'center'}}>
             <TouchableOpacity onPress = {handleActualInstrument} style={dark?DisplayStyles.darkSaveChanges:DisplayStyles.saveChanges}>
-                <Text style={{color:'#fff', padding:5}}>Save Changes</Text>
+                <Text style={{color:'#fff', padding:5,textAlign:'center'}}>Save Changes</Text>
             </TouchableOpacity>
-            </View>
         </View>
         
 

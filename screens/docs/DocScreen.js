@@ -229,17 +229,21 @@ const Docs = ({ navigation }) => {
     }
   }, [isFocused]);
 
-  // React.useEffect(() => { getATPLData() });
+  React.useEffect(async() => { 
+    let allErrors = await AsyncStorage.getItem('failed');
+    console.log(allErrors)
+    if (allErrors !== null) {
+      allErrors = JSON.parse(allErrors);
+      console.log("All Error",allErrors)
+      setfailedUpload(allErrors)
+      setErrorModal(true)
+    }
+  });
+
+  const [successUpload, setsuccessUpload] = React.useState([])
+
 
   const onRefresh = React.useCallback(async () => {
-    let failed = []
-    let allErrors = await AsyncStorage.getItem('failed');
-    if(allErrors !== null){
-      allErrors = JSON.parse(allErrors);
-      console.log(allErrors)
-        setfailedUpload(allErrors)
-        setErrorModal(true)
-    }
     getATPLData()
     //selection()
     setRefreshing(true);

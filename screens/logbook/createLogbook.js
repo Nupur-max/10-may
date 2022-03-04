@@ -51,6 +51,7 @@ const CreateLogbook = ({ navigation }) => {
     const dataDispatcher = useDispatch();
 
     const getReduxDisplayData = useSelector(state => state.display.ActualI);
+    //console.log('ReduxDisplayData',getReduxDisplayData)
 
 const CalcActualInstrument = () => {
      if (getReduxDisplayData.ActualI === true) {
@@ -95,11 +96,12 @@ const day_editable = (dayTime) => {
     var Nightmin=Math.floor((TotalFlightTimecm-DayTotalTimecm)%60); 
     //var m = (Math.round(min/15) * 15) % 60;
     if (Nightmin < 10) { Nightmin = "0" + Nightmin; } 
+    if(isNaN(Nighthour)){Nighthour="00"}
+    if(isNaN(Nightmin)){Nightmin="00"}
     //console.log (Nighthour+':'+Nightmin); 
     setNightTime(Nighthour+':'+Nightmin)
     setSic_night(Nighthour+':'+Nightmin)
     setP1_us_night(Nighthour+':'+Nightmin)
-    console.log('timeeee',nightTime);
 }
 
 const night_editable = (nightTime) => {
@@ -118,6 +120,8 @@ const night_editable = (nightTime) => {
     if (DayHour < 10) { DayHour = "0" + DayHour; }  
     var Daymin=Math.floor((TotalFlightTime1cm-NightTotalTimecm)%60);
     if (Daymin < 10) { Daymin = "0" + Daymin; } 
+    if(isNaN(DayHour)){DayHour="00"}
+    if(isNaN(Daymin)){Daymin="00"}
     setDayTime(DayHour+':'+Daymin)
     setSic_day(DayHour+':'+Daymin)
     setP1_us_day(DayHour+':'+Daymin)

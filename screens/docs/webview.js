@@ -139,12 +139,13 @@ class Sample extends Component {
     const value = await AsyncStorage.getItem('result');
     if (value !== null) {
       const logRes = JSON.parse(value)
+      console.log('logRes',logRes)
       if (logRes.success !== false) {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
         let allSuccess = await AsyncStorage.getItem('success');
         allSuccess = JSON.parse(allSuccess) == null ? [] : JSON.parse(allSuccess)
-        console.log("sucess of log upload" , allSuccess)
+        // console.log("sucess of log upload" , allSuccess)
         prePopulateddb.transaction(tx => {
           tx.executeSql('UPDATE logbook set tag="uploaded" WHERE user_id = "' + user.id + '" AND  id = "' + logRes.id + '"')
           let Data = [];
@@ -189,7 +190,7 @@ class Sample extends Component {
         let allErrors = await AsyncStorage.getItem('failed');
         allErrors = JSON.parse(allErrors) == null ? [] : JSON.parse(allErrors)
         prePopulateddb.transaction(tx => {
-          tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND id = ' + logRes.id + '', [], async (tx, result) => {
+          tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND id = ' + logRes.id + ' AND tag = "manual" ', [], async (tx, result) => {
             if (result.rows.length == 0) {
               console.log('no data to load')
               return false;
@@ -205,6 +206,8 @@ class Sample extends Component {
                 chocksOnTime: result.rows.item(i).onTime,
               }
               var saveddata = [...allErrors, temData];
+        console.log('allErrors',saveddata)
+
               await AsyncStorage.setItem('failed', JSON.stringify(saveddata));
             }
           });
@@ -470,13 +473,17 @@ class Sample extends Component {
         setTimeout(function () {
           document.querySelector('#verificationStatus').click();
           window.confirm = function(){return true;};
+          window.alert = function(){return true;};
           document.querySelector('#btnAddSubmit').click();
          
           }, 60000)
         
         setTimeout(function () {
-            document.querySelector('#btn_Ok').click();
-            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} , success:true, error:false ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));         
+          document.querySelector('#btn_Ok').clicked =true
+            document.querySelector('#btn_Ok').onclick();
+            if(document.querySelector('#btn_Ok').clicked == true){
+              window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} , success:true, error:false ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));    
+            }
           }, 65000)
 
         setTimeout(function () {
@@ -486,11 +493,17 @@ class Sample extends Component {
               document.querySelector('#noFeedback').click();
             window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:false, error:true ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
           }
+          else{
+            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:false, error:true ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
+          }
           }
           else {
             if(${dataPos}+1 == ${this.state.egcaData.length}){
               document.querySelector('#Logout_btn').click();
               document.querySelector('#noFeedback').click();
+            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:${this.state.success}, error:${this.state.error} ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
+          }
+          else{
             window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:${this.state.success}, error:${this.state.error} ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
           }
           }
@@ -517,8 +530,8 @@ class Sample extends Component {
             <Modal
               animationType="slide"
               transparent={true}
-              visible={this.state.visible}
-            // visible={false}
+              // visible={this.state.visible}
+            visible={false}
             >
               <SafeAreaView>
                 <View style={styles.header}>

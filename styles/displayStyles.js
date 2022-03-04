@@ -111,13 +111,8 @@ const DisplayStyles = StyleSheet.create({
 
       },
       blockDropDown:{
-        borderRadius:10,
-        borderColor: '#F2F2F2',
-        borderWidth:1,
-        //padding:10,
-        padding:10, 
+        paddingVertical:10, 
         flexDirection:'row', 
-        //justifyContent:'space-between'
       },
       saveChanges : {
           backgroundColor : '#256173',
@@ -125,6 +120,7 @@ const DisplayStyles = StyleSheet.create({
           borderWidth: 1,
           borderColor: '#fff',
           borderRadius:5,
+          width:'50%'
       },
       //dark
       DarkHeadline : {
@@ -157,6 +153,7 @@ const DisplayStyles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#000',
         borderRadius:10,
+        width:'50%'
     },
    
 });
