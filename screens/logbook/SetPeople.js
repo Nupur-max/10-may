@@ -118,18 +118,18 @@ const SetPeople = ({navigation}) => {
         alert('Please fill name');
         return;
       }
-      if (!imageData) {
-        alert('Please insert image');
-        return;
-      }
-      if (!airlineCode) {
-        alert('Please fill Airline Code');
-        return;
-      }
-      if (!egcaId) {
-        alert('Please fill Egca ID');
-        return;
-      }
+      // if (!imageData) {
+      //   alert('Please insert image');
+      //   return;
+      // }
+      // if (!airlineCode) {
+      //   alert('Please fill Airline Code');
+      //   return;
+      // }
+      // if (!egcaId) {
+      //   alert('Please fill Egca ID');
+      //   return;
+      // }
       let user = await AsyncStorage.getItem('userdetails');
       user = JSON.parse(user);
       db.transaction(tx => {

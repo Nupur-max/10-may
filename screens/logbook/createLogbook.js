@@ -51,9 +51,9 @@ const CreateLogbook = ({ navigation }) => {
     const dataDispatcher = useDispatch();
 
     const getReduxDisplayData = useSelector(state => state.display.ActualI);
-    //console.log('ReduxDisplayData',getReduxDisplayData)
 
-const CalcActualInstrument = () => {
+const CalcActualInstrument = (inputText) => {
+    console.log(getReduxDisplayData.ActualI)
      if (getReduxDisplayData.ActualI === true) {
         var t1 = filghtTimeM
         var t2 = getReduxDisplayData.TimeofAi
@@ -68,12 +68,11 @@ const CalcActualInstrument = () => {
         var min=Math.floor((t1cm-t2cm)%60); 
         var m = (Math.round(min/15) * 15) % 60;
         if (m < 10) { m = "0" + m; } 
-        //console.log (hour+':'+m); 
         setAi(hour+':'+m)
     }
-    else {
-        setAi('')
-    }
+    // else if(getReduxDisplayData.ActualI===undefined || getReduxDisplayData.ActualI===false) {
+    //     setAi(inputText)
+    // }
 }
 
 React.useEffect(() => {
@@ -98,7 +97,6 @@ const day_editable = (dayTime) => {
     if (Nightmin < 10) { Nightmin = "0" + Nightmin; } 
     if(isNaN(Nighthour)){Nighthour="00"}
     if(isNaN(Nightmin)){Nightmin="00"}
-    //console.log (Nighthour+':'+Nightmin); 
     setNightTime(Nighthour+':'+Nightmin)
     setSic_night(Nighthour+':'+Nightmin)
     setP1_us_night(Nighthour+':'+Nightmin)
@@ -902,7 +900,6 @@ const removeApproachInputTime = (ApproachIndex) => {
 
     const purposeCheck = params.RosterPurpose
     const purposeCheck1 = purposeCheck == null? [] : purposeCheck.split(",");
-    // console.log('pf-time',purposeCheck.split(","))
 
     React.useEffect(() => {
         if(isFocused){
@@ -1025,7 +1022,6 @@ React.useEffect(() => {
     const HideDoneConfig = () => {
         setConfig(config => !config);
     };
-
     
     const Add_Logbook = async () => {
         let user = await AsyncStorage.getItem('userdetails');
@@ -1078,8 +1074,8 @@ React.useEffect(() => {
                 "dayTO": day_to,
                 "nightTO": night_to,
                 "remark": remark,
-                "timeCustom1": "",
-                "timeCustom2": "",
+                "timeCustom1": PurposeData.toString(),
+                "timeCustom2": flightType,
                 "timeCustom3": "",
                 "timeCustom4": "",
                 "timeCustom5": "",
@@ -1144,9 +1140,8 @@ React.useEffect(() => {
             })
         }).then(res => res.json())
             .then(resData => {
-                //Alert.alert(resData.message);
-            }).catch((error) => {
-              });
+               // Alert.alert(resData.message);
+            })
     };
 
 
@@ -1336,15 +1331,12 @@ React.useEffect(() => {
         prePopulateddb.transaction(tx => {
             if (rosterNameSic !== '') {
                 tx.executeSql(
-                    'UPDATE logbook set p2="'+rosterNameSic+'",purpose1="'+PurposeData+'" where date="'+originalDate+'"',
+                    'UPDATE logbook set p2="'+rosterNameSic+'",purpose1="'+PurposeData+'" where date="'+originalDate+'" AND isSaved != "true"',
                 );
             }
         });
     }
-
-    //console.log('AT', PurposeData)  
     const insertQuery = async() => {
-        //console.log('AT', PurposeData[0])
 
         const SimulatedInstrument = (si) ? si: null
         const NIGHTtemp = (nightTime) ? nightTime : '00:52'
@@ -1383,21 +1375,21 @@ React.useEffect(() => {
         if (rosterId && rosterAId !== 'SIMU') {
            //let temData = [];
             tx.executeSql(
-                'UPDATE logbook set tag="manual", user_id="'+user.id+'" , flight_no="", date="'+originalDate+'", day="'+dayTime+'", actual_Instrument="'+ai+'", aircraftReg="'+rosterAId+'", aircraftType="'+rosterAType+'", approach1="'+Approach1+'", approach2="'+approach2+'", approach3="", approach4="", approach5="", approach6="", approach7="", approach8="", approach9="", approach10="", crewCustom1="", crewCustom2="", crewCustom3="", crewCustom4="", crewCustom5="", dayLanding="'+dayLanding+'", dayTO="'+day_to+'", dual_day="'+dual_day+'", dual_night="'+dual_night+'", flight="'+flight+'", from_airportID="'+fromAirportid+'", from_altitude="'+fromElevation+'", from_city="", from_country="'+fromCountry+'", from_dayLightSaving="'+fromDst+'", from_source="'+fromSource+'", from_lat="'+fromLatitude+'", from_long="'+fromLongitude+'", from_name="'+fromAirportname+'", from_nameIATA="", from_nameICAO="'+rosterFrom+'", from_timeZone="'+fromTimeZone+'", from_type="'+fromType+'", from_dst_status="'+fromDstStatus+'", fullStop="'+fullStop+'", ifr_vfr="'+fr+'", instructional="'+instructional+'", instructor="'+instructor+'", inTime="'+landing+'", landingCustom1="", landingCustom2="", landingCustom3="", landingCustom4="", landingCustom5="", landingCustom6="", landingCustom7="", landingCustom8="", landingCustom9="", landingCustom10="", night="'+nightTime+'", nightLanding="'+nightLanding+'", nightTO="'+night_to+'", offTime="'+rosterChocksOff+'", onTime="'+rosterChocksOn+'", outTime="'+takeOff+'", p1="'+rosterNamePic+'", p1_us_day="'+p1_us_day+'", p1_us_night="'+p1_us_night+'", p2="'+rosterNameSic+'", pic_day="'+selfPICday+'", pic_night="'+selfPICnight+'", stl="'+stl+'", reliefCrew1="'+reliefCrew1+'", reliefCrew2="'+reliefCrew2+'", reliefCrew3="'+reliefCrew3+'", reliefCrew4="'+reliefCrew4+'", route="'+route+'", sic_day="'+SelfSICday+'", sic_night="'+SelfSICnight+'", sim_instructional="", sim_instrument="'+SimulatedInstrument+'", selected_role="", student="'+student+'", timeCustom1="", timeCustom2="", timeCustom3="", timeCustom4="", timeCustom5="", timeCustom6="", timeCustom7="", timeCustom8="", timeCustom9="", timeCustom10="", to_airportID="'+toAirportid+'", to_altitude="'+toElevation+'", to_city="", to_country="'+toCountry+'", to_dayLightSaving="'+toDst+'", to_source="'+toSource+'", to_lat="'+toLatitude+'", to_long="'+toLongitude+'", to_name="'+toAirportname+'", to_nameIATA="", to_nameICAO="'+rosterTo+'", to_timeZone="'+toTimeZone+'", to_type="'+toType+'", to_dst_status="'+toDstStatus+'", totalTime="'+filghtTimeM+'", touch_n_gos="'+touchGo+'", waterLanding="'+waterLanding+'", waterTO="'+water_to+'", x_country_day="'+xc_day+'", x_country_night="'+xc_night+'", x_country_day_leg="'+xc_day_leg+'", x_country_night_leg="'+xc_night_leg+'", outTime_LT="", offTime_LT="", onTime_LT="", inTime_LT="", sim_type="'+St+'", sim_exercise="'+Sim_exercise+'", pf_time="'+pfHours+'", pm_time="'+pmHours+'", sfi_sfe="'+sf+'", simCustom1="", simCustom2="", simCustom3="", simCustom4="", simCustom5="", simLocation="'+location+'", p1_ut_day="'+p1_ut_day+'", p1_ut_night="'+p1_ut_night+'", remark="'+remark+'", autolanding="'+autoLanding+'", flight_date="", selected_flight_timelog="", imported_log="", orderedDate="'+sortedDate+'", purpose1="'+PurposeData+'", distance="'+distance+'" where id="'+rosterId+'"')
+                'UPDATE logbook set tag="manual", user_id="'+user.id+'" , flight_no="", date="'+originalDate+'", day="'+dayTime+'", actual_Instrument="'+ai+'", aircraftReg="'+rosterAId+'", aircraftType="'+rosterAType+'", approach1="'+Approach1+'", approach2="'+approach2+'", approach3="", approach4="", approach5="", approach6="", approach7="", approach8="", approach9="", approach10="", crewCustom1="", crewCustom2="", crewCustom3="", crewCustom4="", crewCustom5="", dayLanding="'+dayLanding+'", dayTO="'+day_to+'", dual_day="'+dual_day+'", dual_night="'+dual_night+'", flight="'+flight+'", from_airportID="'+fromAirportid+'", from_altitude="'+fromElevation+'", from_city="", from_country="'+fromCountry+'", from_dayLightSaving="'+fromDst+'", from_source="'+fromSource+'", from_lat="'+fromLatitude+'", from_long="'+fromLongitude+'", from_name="'+fromAirportname+'", from_nameIATA="", from_nameICAO="'+rosterFrom+'", from_timeZone="'+fromTimeZone+'", from_type="'+fromType+'", from_dst_status="'+fromDstStatus+'", fullStop="'+fullStop+'", ifr_vfr="'+fr+'", instructional="'+instructional+'", instructor="'+instructor+'", inTime="'+landing+'", landingCustom1="", landingCustom2="", landingCustom3="", landingCustom4="", landingCustom5="", landingCustom6="", landingCustom7="", landingCustom8="", landingCustom9="", landingCustom10="", night="'+nightTime+'", nightLanding="'+nightLanding+'", nightTO="'+night_to+'", offTime="'+rosterChocksOff+'", onTime="'+rosterChocksOn+'", outTime="'+takeOff+'", p1="'+rosterNamePic+'", p1_us_day="'+p1_us_day+'", p1_us_night="'+p1_us_night+'", p2="'+rosterNameSic+'", pic_day="'+selfPICday+'", pic_night="'+selfPICnight+'", stl="'+stl+'", reliefCrew1="'+reliefCrew1+'", reliefCrew2="'+reliefCrew2+'", reliefCrew3="'+reliefCrew3+'", reliefCrew4="'+reliefCrew4+'", route="'+route+'", sic_day="'+SelfSICday+'", sic_night="'+SelfSICnight+'", sim_instructional="", sim_instrument="'+SimulatedInstrument+'", selected_role="", student="'+student+'", timeCustom1="", timeCustom2="", timeCustom3="", timeCustom4="", timeCustom5="", timeCustom6="", timeCustom7="", timeCustom8="", timeCustom9="", timeCustom10="", to_airportID="'+toAirportid+'", to_altitude="'+toElevation+'", to_city="", to_country="'+toCountry+'", to_dayLightSaving="'+toDst+'", to_source="'+toSource+'", to_lat="'+toLatitude+'", to_long="'+toLongitude+'", to_name="'+toAirportname+'", to_nameIATA="", to_nameICAO="'+rosterTo+'", to_timeZone="'+toTimeZone+'", to_type="'+toType+'", to_dst_status="'+toDstStatus+'", totalTime="'+filghtTimeM+'", touch_n_gos="'+touchGo+'", waterLanding="'+waterLanding+'", waterTO="'+water_to+'", x_country_day="'+xc_day+'", x_country_night="'+xc_night+'", x_country_day_leg="'+xc_day_leg+'", x_country_night_leg="'+xc_night_leg+'", outTime_LT="", offTime_LT="", onTime_LT="", inTime_LT="", sim_type="'+St+'", sim_exercise="'+Sim_exercise+'", pf_time="'+pfHours+'", pm_time="'+pmHours+'", sfi_sfe="'+sf+'", simCustom1="", simCustom2="", simCustom3="", simCustom4="", simCustom5="", simLocation="'+location+'", p1_ut_day="'+p1_ut_day+'", p1_ut_night="'+p1_ut_night+'", remark="'+remark+'", autolanding="'+autoLanding+'", flight_date="", selected_flight_timelog="", imported_log="", orderedDate="'+sortedDate+'", purpose1="'+PurposeData+'", distance="'+distance+'" where id="'+rosterId+'"', isSaved="true", flight_type="'+flightType+'")
         }
         else if(rosterAId !== 'SIMU'){
             tx.executeSql(
-            'INSERT INTO logbook (tag, user_id, flight_no, date, day,  actual_Instrument, aircraftReg, aircraftType, approach1, approach2, approach3, approach4, approach5, approach6, approach7, approach8, approach9, approach10, crewCustom1, crewCustom2, crewCustom3, crewCustom4, crewCustom5, dayLanding, dayTO, dual_day, dual_night, flight, from_airportID, from_altitude, from_city, from_country, from_dayLightSaving, from_source, from_lat, from_long, from_name, from_nameIATA, from_nameICAO, from_timeZone, from_type, from_dst_status, fullStop, ifr_vfr, instructional, instructor, inTime, landingCustom1, landingCustom2, landingCustom3, landingCustom4, landingCustom5, landingCustom6, landingCustom7, landingCustom8, landingCustom9, landingCustom10, night, nightLanding, nightTO, offTime, onTime, outTime, p1, p1_us_day, p1_us_night, p2, pic_day, pic_night, stl, reliefCrew1, reliefCrew2, reliefCrew3, reliefCrew4, route, sic_day, sic_night, sim_instructional, sim_instrument, selected_role, student, timeCustom1, timeCustom2, timeCustom3, timeCustom4, timeCustom5, timeCustom6, timeCustom7, timeCustom8, timeCustom9, timeCustom10, to_airportID, to_altitude, to_city, to_country, to_dayLightSaving, to_source, to_lat, to_long, to_name, to_nameIATA, to_nameICAO, to_timeZone, to_type, to_dst_status, totalTime, touch_n_gos, waterLanding, waterTO, x_country_day, x_country_night, x_country_day_leg, x_country_night_leg, outTime_LT, offTime_LT, onTime_LT, inTime_LT, sim_type, sim_exercise, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, simLocation, p1_ut_day, p1_ut_night, remark, autolanding, flight_date, selected_flight_timelog, imported_log, orderedDate,purpose1,distance)  VALUES ("manual","'+user.id+'", "" ,"'+originalDate+'" , "'+dayTime+'" , "'+ai+'" , "'+rosterAId+'" , "'+rosterAType+'" , "'+Approach1+'" , "'+approach2+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+dayLanding+'" , "'+day_to+'" , "'+dual_day+'" , "'+dual_night+'" , "'+flight+'" , "'+fromAirportid+'" , "'+fromElevation+'" , "" , "'+fromCountry+'" , "'+fromDst+'" , "'+fromSource+'" , "'+fromLatitude+'" , "'+fromLongitude+'" , "'+fromAirportname+'" , "" , "'+rosterFrom+'", "'+fromTimeZone+'" , "'+fromType+'" , "'+fromDstStatus+'" , "'+fullStop+'" , "'+fr+'" , "'+instructional+'" , "'+instructor+'" , "'+landing+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+nightTime+'" , "'+nightLanding+'" , "'+night_to+'" , "'+rosterChocksOff+'" , "'+rosterChocksOn+'" , "'+takeOff+'" , "'+rosterNamePic+'" , "'+p1_us_day+'" , "'+p1_us_night+'" , "'+rosterNameSic+'" , "'+selfPICday+'" , "'+selfPICnight+'" , "'+stl+'" , "'+reliefCrew1+'" , "'+reliefCrew2+'" , "'+reliefCrew3+'" , "'+reliefCrew4+'" , "'+route+'" , "'+SelfSICday+'" , "'+SelfSICnight+'" , "" , "'+SimulatedInstrument+'" , "" , "'+student+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+toAirportid+'" , "'+toElevation+'" , "" , "'+toCountry+'" , "'+toDst+'" , "'+toSource+'" , "'+toLatitude+'" , "'+toLongitude+'" , "'+toAirportname+'" , "" , "'+rosterTo+'" , "'+toTimeZone+'" , "'+toType+'" , "'+toDstStatus+'" , "'+filghtTimeM+'" , "'+touchGo+'" , "'+waterLanding+'" , "'+water_to+'" , "'+xc_day+'" , "'+xc_night+'" , "'+xc_day_leg+'" , "'+xc_night_leg+'" , "" , "" , "" , "" , "'+St+'" , "'+Sim_exercise+'" , "'+pfHours+'" , "'+pmHours+'" , "'+sf+'" , "" , "" , "" , "" , "" , "'+location+'" , "'+p1_ut_day+'" , "'+p1_ut_night+'" , "'+remark+'" , "'+autoLanding+'" , "" , "" , "" , "'+sortedDate+'", "'+PurposeData+'", "'+distance+'")',
+            'INSERT INTO logbook (tag, user_id, flight_no, date, day,  actual_Instrument, aircraftReg, aircraftType, approach1, approach2, approach3, approach4, approach5, approach6, approach7, approach8, approach9, approach10, crewCustom1, crewCustom2, crewCustom3, crewCustom4, crewCustom5, dayLanding, dayTO, dual_day, dual_night, flight, from_airportID, from_altitude, from_city, from_country, from_dayLightSaving, from_source, from_lat, from_long, from_name, from_nameIATA, from_nameICAO, from_timeZone, from_type, from_dst_status, fullStop, ifr_vfr, instructional, instructor, inTime, landingCustom1, landingCustom2, landingCustom3, landingCustom4, landingCustom5, landingCustom6, landingCustom7, landingCustom8, landingCustom9, landingCustom10, night, nightLanding, nightTO, offTime, onTime, outTime, p1, p1_us_day, p1_us_night, p2, pic_day, pic_night, stl, reliefCrew1, reliefCrew2, reliefCrew3, reliefCrew4, route, sic_day, sic_night, sim_instructional, sim_instrument, selected_role, student, timeCustom1, timeCustom2, timeCustom3, timeCustom4, timeCustom5, timeCustom6, timeCustom7, timeCustom8, timeCustom9, timeCustom10, to_airportID, to_altitude, to_city, to_country, to_dayLightSaving, to_source, to_lat, to_long, to_name, to_nameIATA, to_nameICAO, to_timeZone, to_type, to_dst_status, totalTime, touch_n_gos, waterLanding, waterTO, x_country_day, x_country_night, x_country_day_leg, x_country_night_leg, outTime_LT, offTime_LT, onTime_LT, inTime_LT, sim_type, sim_exercise, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, simLocation, p1_ut_day, p1_ut_night, remark, autolanding, flight_date, selected_flight_timelog, imported_log, orderedDate,purpose1,distance,isSaved,flight_type)  VALUES ("manual","'+user.id+'", "" ,"'+originalDate+'" , "'+dayTime+'" , "'+ai+'" , "'+rosterAId+'" , "'+rosterAType+'" , "'+Approach1+'" , "'+approach2+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+dayLanding+'" , "'+day_to+'" , "'+dual_day+'" , "'+dual_night+'" , "'+flight+'" , "'+fromAirportid+'" , "'+fromElevation+'" , "" , "'+fromCountry+'" , "'+fromDst+'" , "'+fromSource+'" , "'+fromLatitude+'" , "'+fromLongitude+'" , "'+fromAirportname+'" , "" , "'+rosterFrom+'", "'+fromTimeZone+'" , "'+fromType+'" , "'+fromDstStatus+'" , "'+fullStop+'" , "'+fr+'" , "'+instructional+'" , "'+instructor+'" , "'+landing+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+nightTime+'" , "'+nightLanding+'" , "'+night_to+'" , "'+rosterChocksOff+'" , "'+rosterChocksOn+'" , "'+takeOff+'" , "'+rosterNamePic+'" , "'+p1_us_day+'" , "'+p1_us_night+'" , "'+rosterNameSic+'" , "'+selfPICday+'" , "'+selfPICnight+'" , "'+stl+'" , "'+reliefCrew1+'" , "'+reliefCrew2+'" , "'+reliefCrew3+'" , "'+reliefCrew4+'" , "'+route+'" , "'+SelfSICday+'" , "'+SelfSICnight+'" , "" , "'+SimulatedInstrument+'" , "" , "'+student+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+toAirportid+'" , "'+toElevation+'" , "" , "'+toCountry+'" , "'+toDst+'" , "'+toSource+'" , "'+toLatitude+'" , "'+toLongitude+'" , "'+toAirportname+'" , "" , "'+rosterTo+'" , "'+toTimeZone+'" , "'+toType+'" , "'+toDstStatus+'" , "'+filghtTimeM+'" , "'+touchGo+'" , "'+waterLanding+'" , "'+water_to+'" , "'+xc_day+'" , "'+xc_night+'" , "'+xc_day_leg+'" , "'+xc_night_leg+'" , "" , "" , "" , "" , "'+St+'" , "'+Sim_exercise+'" , "'+pfHours+'" , "'+pmHours+'" , "'+sf+'" , "" , "" , "" , "" , "" , "'+location+'" , "'+p1_ut_day+'" , "'+p1_ut_night+'" , "'+remark+'" , "'+autoLanding+'" , "" , "" , "" , "'+sortedDate+'", "'+PurposeData+'", "'+distance+'", "true", "'+flightType+'")',
           )
         }
         else if (rosterId && rosterAId==='SIMU') {
             tx.executeSql(
-                'UPDATE logbook set tag="manual",user_id="'+user.id+'",date="'+originalDate+'",flight="'+flight+'",aircraftType="'+rosterAType+'",aircraftReg="'+rosterAId+'",sim_type="'+St+'",from_nameICAO="'+rosterFrom+'",to_nameICAO="'+rosterTo+'",simLocation="'+location+'",sim_exercise="'+Sim_exercise+'",outTime="'+takeOff+'",inTime="'+landing+'",totalTime="'+filghtTimeM+'",pf_time="'+pfHours+'",pm_time="'+pmHours+'",sfi_sfe="'+sf+'",remark="'+remark+'",orderedDate="'+sortedDate+'" where id="'+rosterId+'"'
+                'UPDATE logbook set tag="manual",user_id="'+user.id+'",date="'+originalDate+'",flight="'+flight+'",aircraftType="'+rosterAType+'",aircraftReg="'+rosterAId+'",sim_type="'+St+'",from_nameICAO="'+rosterFrom+'",to_nameICAO="'+rosterTo+'",simLocation="'+location+'",sim_exercise="'+Sim_exercise+'",outTime="'+takeOff+'",inTime="'+landing+'",totalTime="'+filghtTimeM+'",pf_time="'+pfHours+'",pm_time="'+pmHours+'",sfi_sfe="'+sf+'",remark="'+remark+'",orderedDate="'+sortedDate+'" , isSaved="true" where id="'+rosterId+'"'
             );
         }
         else if (rosterAId==='SIMU') {
             tx.executeSql(
-                'INSERT INTO logbook (tag, user_id, date, flight, aircraftType, aircraftReg, sim_type, from_nameICAO, to_nameICAO, simLocation, sim_exercise, outTime, inTime, totalTime, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, remark,orderedDate ) VALUES ("manual","'+user.id+'","'+originalDate+'", "'+flight+'", "'+rosterAType+'", "'+rosterAId+'", "'+St+'", "'+rosterFrom+'", "'+rosterTo+'", "'+location+'", "'+Sim_exercise+'", "'+takeOff+'", "'+landing+'", "'+filghtTimeM+'", "'+pfHours+'", "'+pmHours+'", "'+sf+'", "", "", "", "", "", "'+remark+'", "'+sortedDate+'")',
+                'INSERT INTO logbook (tag, user_id, date, flight, aircraftType, aircraftReg, sim_type, from_nameICAO, to_nameICAO, simLocation, sim_exercise, outTime, inTime, totalTime, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, remark,orderedDate,isSaved ) VALUES ("manual","'+user.id+'","'+originalDate+'", "'+flight+'", "'+rosterAType+'", "'+rosterAId+'", "'+St+'", "'+rosterFrom+'", "'+rosterTo+'", "'+location+'", "'+Sim_exercise+'", "'+takeOff+'", "'+landing+'", "'+filghtTimeM+'", "'+pfHours+'", "'+pmHours+'", "'+sf+'", "", "", "", "", "", "'+remark+'", "'+sortedDate+'","true")',
 
             );
         }
@@ -1464,7 +1456,6 @@ React.useEffect(() => {
 
         //Distance of departure and destination
         var distance = distance(fromLat, fromLong, toLat, toLong, 'N'); // in nm
-        console.log('check dis',distance )
         setDistance(distance)
 
         //SunRise and SunSet of departure and destination
@@ -1497,7 +1488,6 @@ React.useEffect(() => {
 
 
         if ((sunRiseDepartureTimeM < sunRiseDestinationTimeM) && (sunSetDepartureTimeM < sunSetDestinationTimeM)) {
-            //console.log('west');
             //difference in sunrises
             var diffSunRiseTime = (dateToMinuts(sunRiseDestinationTimeM) - dateToMinuts(sunRiseDepartureTimeM));
             if (diffSunRiseTime < 0) { diffSunRiseTime = diffSunRiseTime + 1440; }
@@ -1544,7 +1534,6 @@ React.useEffect(() => {
 
                 var result = "N-D : filghtTimeM:  " + setfilghtTimeM(filghtTimeH) + "------nightTime:  " + setNightTime(nightTimeH) + "----DayTime: " + setDayTime(dayTimeH) + "---day_landing: "+ setDayLanding(day_landing) + "---day_takeoff: "+ setDay_to(day_takeoff) + "---night_landing: "+ setNightLanding(night_landing) + "---night_takeoff: "+ setNight_to(night_takeoff) + "----sic_day:"+ setSic_day(dayTimeH)+ "-----sic_night:"+ setSic_night(nightTimeH);
                 //$('#result').html(result);
-                //console.log('n-d')
 
             } else if ((departureTimeM > sunRiseDepartureTimeM) && (arrivelTimeM < sunSetDestinationTimeM)) {
 
@@ -1559,7 +1548,6 @@ React.useEffect(() => {
                 day_takeoff = 1;
                 var result = "D-D : filghtTimeM:  " + setfilghtTimeM(filghtTimeH) + "------nightTime:  " + setNightTime(nightTimeH) + "----DayTime: " + setDayTime(dayTimeH) + "---day_landing: "+ setDayLanding(day_landing) + "---day_takeoff: "+ setDay_to(day_takeoff) + "---night_landing: "+ setNightLanding(night_landing) + "---night_takeoff: "+ setNight_to(night_takeoff)+ "----sic_day:"+ setSic_day(dayTimeH)+ "-----sic_night:"+ setSic_night(nightTimeH);
                 //$('#result').html(result);
-                //console.log('d-d')
 
             } else if ((departureTimeM > sunSetDepartureTimeM) && (arrivelTimeM > sunSetDestinationTimeM)) {
 
@@ -1574,7 +1562,6 @@ React.useEffect(() => {
                 night_landing = 1;
                 var result = "N-N : filghtTimeM:  " + setfilghtTimeM(filghtTimeH) + "------nightTime:  " + setNightTime(nightTimeH) + "----DayTime: " + setDayTime(dayTimeH) + "---day_landing: "+ setDayLanding(day_landing) + "---day_takeoff: "+ setDay_to(day_takeoff) + "---night_landing: "+ setNightLanding(night_landing) + "---night_takeoff: "+ setNight_to(night_takeoff)+ "----sic_day:"+ setSic_day(dayTimeH)+ "-----sic_night:"+ setSic_night(nightTimeH);
                 //$('#result').html(result);
-                //console.log('n-n')
 
             } else if ((departureTimeM < sunSetDepartureTimeM) && (arrivelTimeM > sunSetDestinationTimeM)) {
                 // total day time
@@ -1607,10 +1594,8 @@ React.useEffect(() => {
                 night_landing =1;
                 var result = "D-N : filghtTimeM:  " + setfilghtTimeM(filghtTimeH) + "------nightTime:  " + setNightTime(nightTimeH) + "----DayTime: " + setDayTime(dayTimeH) + "---day_landing: "+ setDayLanding(day_landing) + "---day_takeoff: "+ setDay_to(day_takeoff) + "---night_landing: "+ setNightLanding(night_landing) + "---night_takeoff: "+ setNight_to(night_takeoff)+ "----sic_day:"+ setSic_day(dayTimeH)+ "-----sic_night:"+ setSic_night(nightTimeH);
                 //$('#result').html(result);
-                //console.log('d-n')
             }
         } else {
-            //console.log('east');
             //difference in sunrises
             var diffSunRiseTime = (dateToMinuts(sunRiseDepartureTimeM) - dateToMinuts(sunRiseDestinationTimeM));
             if (diffSunRiseTime < 0) { diffSunRiseTime = diffSunRiseTime + 1440; }
@@ -1620,9 +1605,6 @@ React.useEffect(() => {
             if (diffSunSetTime < 0) { diffSunSetTime = diffSunSetTime + 1440; }
             if (diffSunSetTime > 1440) { diffSunSetTime = diffSunSetTime - 1440; }
 
-            
-            // console.log("diffSunRiseTime======"+diffSunRiseTime);
-            // console.log("diffSunSetTime======"+diffSunSetTime);
             if ((departureTimeM < sunRiseDepartureTimeM) && (arrivelTimeM > sunRiseDestinationTimeM)) {
 
 
@@ -1665,7 +1647,6 @@ React.useEffect(() => {
                 day_landing = 1;
                 var result = "N-D : filghtTimeM:  " + setfilghtTimeM(filghtTimeH) + "------nightTime:  " + setNightTime(nightTimeH) + "----DayTime: " + setDayTime(dayTimeH) + "---day_landing: "+ setDayLanding(day_landing) + "---day_takeoff: "+ setDay_to(day_takeoff) + "---night_landing: "+ setNightLanding(night_landing) + "---night_takeoff: "+ setNight_to(night_takeoff)+ "----sic_day:"+ setSic_day(dayTimeH)+ "-----sic_night:"+ setSic_night(nightTimeH);
                 //$('#result').html(result);
-                //console.log('n-d')
 
             } else if ((departureTimeM >= sunRiseDepartureTimeM) && (arrivelTimeM <= sunSetDestinationTimeM)) {
 
@@ -1680,7 +1661,6 @@ React.useEffect(() => {
                 day_landing = 1;
                 var result = "D-D : filghtTimeM:  " + setfilghtTimeM(filghtTimeH) + "------nightTime:  " + setNightTime(nightTimeH) + "----DayTime: " + setDayTime(dayTimeH) + "---day_landing: "+ setDayLanding(day_landing) + "---day_takeoff: "+ setDay_to(day_takeoff) + "---night_landing: "+ setNightLanding(night_landing) + "---night_takeoff: "+ setNight_to(night_takeoff)+ "----sic_day:"+ setSic_day(dayTimeH)+ "-----sic_night:"+ setSic_night(nightTimeH);
                 //$('#result').html(result);
-                //console.log('d-d')
 
             } else if ((departureTimeM >= sunSetDepartureTimeM) && (arrivelTimeM >= sunSetDestinationTimeM)) {
 
@@ -1695,7 +1675,6 @@ React.useEffect(() => {
                 night_landing = 1;
                 var result = "N-N : filghtTimeM:  " + setfilghtTimeM(filghtTimeH) + "------nightTime:  " + setNightTime(nightTimeH) + "----DayTime: " + setDayTime(dayTimeH) + "---day_landing: "+ setDayLanding(day_landing) + "---day_takeoff: "+ setDay_to(day_takeoff) + "---night_landing: "+ setNightLanding(night_landing) + "---night_takeoff: "+ setNight_to(night_takeoff)+ "----sic_day:"+ setSic_day(dayTimeH)+ "-----sic_night:"+ setSic_night(nightTimeH);
                 //$('#result').html(result);
-                //console.log('n-n')
 
             } else if ((departureTimeM < sunSetDepartureTimeM) && (arrivelTimeM > sunSetDestinationTimeM)) {
 
@@ -1737,7 +1716,6 @@ React.useEffect(() => {
                 night_landing = 1;
                 var result = "D-N : filghtTimeM:  " + setfilghtTimeM(filghtTimeH) + "------nightTime:  " + setNightTime(nightTimeH) + "----DayTime: " + setDayTime(dayTimeH) + "---day_landing: "+ setDayLanding(day_landing) + "---day_takeoff: "+ setDay_to(day_takeoff) + "---night_landing: "+ setNightLanding(night_landing) + "---night_takeoff: "+ setNight_to(night_takeoff)+ "----sic_day:"+ setSic_day(dayTimeH)+ "-----sic_night:"+ setSic_night(nightTimeH);
                 //$('#result').html(result);
-                //console.log('d-n')
 
             }
         }
@@ -1863,12 +1841,10 @@ React.useEffect(() => {
             // 9. adjust back to UTC
             var UT = T - lngHour;
             UT = modpos(UT, 24); // NOTE: UT potentially needs to be adjusted into the range [0,24) by adding/subtracting 24
-            // console.log(UT);
 
             var hours = floor(UT),
                 minutes = Math.round(60 * (UT - hours));
             var result = new Date(year, month - 1, day, hours, minutes);
-            //console.log('resultssssss->', result)
             return result;
         }
 
@@ -2011,6 +1987,10 @@ React.useEffect(() => {
             setP1_us_night(sic_night)
             setSic_day ('')
             setSic_night('')
+            setP1_ut_day('')
+            setP1_ut_night('')
+            setDual_day('')
+            setDual_night('')
             
         }
         else if (stl === true && rosterNameSic==='Self') {
@@ -2018,6 +1998,10 @@ React.useEffect(() => {
             setP1_us_night('')
             setSic_day (dayTime)
             setSic_night(nightTime)
+            setP1_ut_day('')
+            setP1_ut_night('')
+            setDual_day('')
+            setDual_night('')
         }
     }
 
@@ -2030,9 +2014,6 @@ React.useEffect(() => {
         if (rosterNamePic) {
             nanRemovable()}}
         , [rosterNamePic]);
-
-    const PerferctP1_us_day = isNaN(p1_us_day)==true ?'00:00': p1_us_day
-    const PerferctP1_us_night = isNaN(p1_us_night)==true ? '00:00': p1_us_night
 
     const originalDate = datee == 'DDMM' ? ddmmyy : mmddyy;
     
@@ -2066,8 +2047,7 @@ React.useEffect(() => {
             if (hour < 10) { hour = "0" + hour; }  
             var min=Math.floor((t1cm-t2cm)%60); 
             //var m = (Math.round(min/15) * 15) % 60;
-            if (min < 10) { min = "0" + min; } 
-           // console.log (hour+':'+min); 
+            if (min < 10) { min = "0" + min; }  
             setfilghtTimeM(hour+':'+min)
         }
         else {
@@ -2090,11 +2070,32 @@ React.useEffect(() => {
          setSic_day('')
          setSic_night('')
          setP1_ut_day(dayTime)
-         setP1_ut_night(nightTime)
-         if(p1_us_day !== ''){
-             setP1_ut_day('')
-         } 
-     }
+         setP1_ut_night(nightTime) 
+         setDual_day('')
+         setDual_night('') 
+     } 
+
+     const us_control = () => {
+        setP1_us_day(dayTime)
+        setP1_us_night(nightTime)
+        setSic_day('')
+        setSic_night('')
+        setP1_ut_day('')
+        setP1_ut_night('')
+        setDual_day('')
+        setDual_night('') 
+    }
+
+    const dual_control = () => {
+        setP1_us_day('')
+        setP1_us_night('')
+        setSic_day('')
+        setSic_night('')
+        setP1_ut_day('')
+        setP1_ut_night('') 
+        setDual_day(dayTime)
+        setDual_night(nightTime)
+    }
 
      const returnTrip = () => {
          if(!originalDate || rosterAType.length===1 || !rosterFrom || !rosterTo && !rosterChocksOff || !rosterChocksOn){
@@ -2130,17 +2131,16 @@ React.useEffect(() => {
             tx.executeSql(
                 'SELECT * from EGCADetails WHERE user_id = "'+user.id+'"', [], (tx, result) => {
                     for (let i = 0; i <= result.rows.length; i++) {
-                    console.log('FlightType1',result.rows.item(i).FlightType)
                     selectedData.push({
                       FlightType :  result.rows.item(i).FlightType,
                     });
-                        console.log('FlightType1', result.rows.item(i).FlightType)
                         setFlightType(result.rows.item(i).FlightType)
                     }
                 }
             );
         });
     } 
+    
 
     React.useEffect(() => {
         if(isFocused){
@@ -2149,17 +2149,28 @@ React.useEffect(() => {
       },[isFocused]);
 
     const PurposeData = flightType==='Training'? training : flightType==='Test'? test : flightType==='Commercial'?commercial:[]
-    console.log('purposeData',PurposeData)
-    console.log('FlightType',flightType)
 
    const isFlightTypeSelected = () => {
        alert('Please Fill egcaUpload details first from settings-> EGCA Upload to proceed!!')
        navigation.navigate('EGCAUpload')
    }
 
-    // console.log('distane',PurposeData.includes("Cross-country flight (day)"),PurposeData.includes("Cross-country flight (night)"))
+   React.useEffect(async(inputText) => {
+    if(isFocused){
+        // let details = await AsyncStorage.getItem('inputKey');
+        // inputDetails = JSON.parse(details);
+        // console.log('inputDetails',inputDetails.inputText)
+        await AsyncStorage.getItem('inputKey').then((inputText) => {
+            console.log('value',inputText)
+            if (inputText !== null){
+            // saved input is available
+            setRosterChocksOff(inputText); // Note: update state with last entered value
+          }
+          }).done();
+        }
+  },[isFocused]);
 
-    console.log('get dist',distance)
+  console.log('TT',filghtTimeM)
 
     return (
         <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
@@ -2374,10 +2385,10 @@ React.useEffect(() => {
                             <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}><Text style={{ color: 'red' }}>*</Text>Aircraft Type</Text>
                             <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                                 <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterAType}</Text>
-                                <TouchableOpacity onPress={() => { navigation.navigate('SetAircraft', {itemAtype : rosterAType , itemAId : rosterAId , from : 'ATCreateLogbook'  }) }}>
+                                {/* <TouchableOpacity onPress={() => { navigation.navigate('SetAircraft', {itemAtype : rosterAType , itemAId : rosterAId , from : 'ATCreateLogbook'  }) }}>
                                     <MaterialCommunityIcons
                                         name="alert-circle-outline" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
-                                </TouchableOpacity> 
+                                </TouchableOpacity>  */}
                             </View>
                         </View>
                     </View>
@@ -2477,7 +2488,7 @@ React.useEffect(() => {
                         <MaskedTextInput
                             mask='99:99'
                             value={ rosterChocksOff }
-                            onChangeText={inputText => setRosterChocksOff(inputText)}
+                            onChangeText={rosterChocksOff => {setRosterChocksOff(rosterChocksOff);AsyncStorage.setItem('inputKey', rosterChocksOff);}}
                             keyboardType="numeric"
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
@@ -2798,7 +2809,7 @@ React.useEffect(() => {
                         <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Total Time</Text>
                         <MaskedTextInput
                             mask='99:99'
-                            value={filghtTimeM}
+                            value={isNaN(filghtTimeM)?'00:00':filghtTimeM}
                             onChangeText={inputText => setfilghtTimeM(inputText)}
                             keyboardType="numeric"
                             placeholder="hh:mm"
@@ -2853,37 +2864,12 @@ React.useEffect(() => {
                     </View>
                 </View> : null}
 
-                {config && rosterAId === 'SIMU' ? <View style={Logbook.fieldWithoutBottom}>
-                    <View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, color:dark?'#fff': 'blue' } }}>Select Choices....</Text>
-                        <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
-                            {/* <Text style={{...Logbook.fieldText, ...{lineHeight:35}}}>Select Choices....</Text> */}
-                            <TouchableOpacity onPress={() => navigation.navigate('Configuration', { from:'simu' })}>
-                                <MaterialCommunityIcons
-                                    name="chevron-right" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View> :
-                    <View style={Logbook.fieldWithoutBottom}>
-                        {rosterAId=== 'SIMU' && (<View style={Logbook.fields}>
-                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Custom</Text>
-                            <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
-                                <TouchableOpacity onPress={() => setFlightModalVisible(true)}>
-                                    <MaterialCommunityIcons
-                                        name="plus-circle" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
-                                </TouchableOpacity>
-                            </View>
-                        </View>)}
-                    </View>}
-
                 {dayToggle && rosterAId !== 'SIMU' ?<View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
                         <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Day</Text>
                         <MaskedTextInput
                             mask='99:99'
                             value={dayTime}
-                            //onValueChange={(inputText)=>day_editable(inputText)}
                             onChangeText = {(dayTime)=>day_editable(dayTime)}
                             keyboardType="numeric"
                             placeholder="hh:mm"
@@ -2899,7 +2885,6 @@ React.useEffect(() => {
                         <MaskedTextInput
                             mask='99:99'
                             value={nightTime}
-                            //onValueChange={(inputText)=>night_editable(inputText)}
                             onChangeText = {(nightTime)=>night_editable(nightTime)}
                             keyboardType="numeric"
                             placeholder="hh:mm"
@@ -2912,11 +2897,11 @@ React.useEffect(() => {
                 {AiToggle && rosterAId !== 'SIMU' ?<View style={Logbook.fieldWithoutBottom}>
                     
                     <View style={Logbook.fields}>
-                    <Text onPress = {CalcActualInstrument} style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Actual Instrument</Text>
+                    <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Actual Instrument</Text>
                         <MaskedTextInput
-                            mask='9:99'
+                            mask='99:99'
                             value={ai}
-                            onChangeText={()=>{inputText => setAi(inputText)}}
+                            onChangeText={getReduxDisplayData.ActualI===undefined || getReduxDisplayData.ActualI===false?(inputText)=>setAi(inputText):CalcActualInstrument}
                             keyboardType="numeric"
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
@@ -2937,6 +2922,7 @@ React.useEffect(() => {
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
                             style={{color:dark?'#fff':'#000'}}
+                            onFocus = {dual_control}
                         />
                     </View>
                 </View> : null}
@@ -2952,6 +2938,7 @@ React.useEffect(() => {
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
                             style={{color:dark?'#fff':'#000'}}
+                            onFocus = {dual_control}
                         />
                     </View>
                 </View> : null}
@@ -3014,12 +3001,13 @@ React.useEffect(() => {
                         <MaskedTextInput
                             mask='99:99'
                             //value={PerferctP1_us_day}
-                            value={p1_us_day}
-                            onChangeText={inputText => {SICday_editable(inputText)}}
+                            value={isNaN(p1_us_day)?'00:00':p1_us_day}
+                            onChangeText={inputText => {SICday_editable(inputText);}}
                             keyboardType="numeric"
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
                             style={{color:dark?'#fff':'#000'}}
+                            onFocus = {us_control}
                         />
                     </View>
                 </View> : null}
@@ -3036,6 +3024,7 @@ React.useEffect(() => {
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
                             style={{color:dark?'#fff':'#000'}}
+                            onFocus = {us_control}
                         />
                     </View>
                 </View> : null}
@@ -3115,6 +3104,7 @@ React.useEffect(() => {
                             onCheckColor='#fff'
                             onFillColor='#256173'
                             tintColors={{ true: '#256173', false: '#256173' }}
+                            lineWidth={1.5}
                         />
                     </View>
                 </View> : null}
@@ -3229,6 +3219,30 @@ React.useEffect(() => {
                         </View>
                     </View>
                 </View>: null}
+
+                {config && rosterAId === 'SIMU' ? <View style={Logbook.fieldWithoutBottom}>
+                    <View style={Logbook.fields}>
+                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, color:dark?'#fff': 'blue' } }}>Select Choices....</Text>
+                        <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
+                            <Text style={{...Logbook.fieldText, ...{lineHeight:35}}}>Select Choices....</Text>
+                            <TouchableOpacity onPress={() => navigation.navigate('Configuration', { from:'simu' })}>
+                                <MaterialCommunityIcons
+                                    name="chevron-right" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View> :
+                    <View style={Logbook.fieldWithoutBottom}>
+                        {rosterAId=== 'SIMU' && (<View style={Logbook.fields}>
+                            <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Custom</Text>
+                            <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
+                                <TouchableOpacity onPress={() => setFlightModalVisible(true)}>
+                                    <MaterialCommunityIcons
+                                        name="plus-circle" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>)}
+                    </View>}
 
                 {/* Modal for Time */}
                 <Modal
@@ -3423,7 +3437,6 @@ React.useEffect(() => {
                 </View> : null}
 
                 {LandingTextInput.map((Landingvalue) => {
-                //console.log('TimeValue', Timevalue)
                 return Landingvalue
                 })}
 

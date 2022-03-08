@@ -389,7 +389,7 @@ const LogBookListing = ({ navigation }) => {
       RoasterNight: '',
       RoasterNightLanding: '',
       RoasterNightTO: '',
-      RoasterChocksOff: '',
+      //RoasterChocksOff: '',
       RoasterChocksOn: '',
       RoasterP1: '',
       RoasterP1_us_day: '',
@@ -848,7 +848,7 @@ const LogBookListing = ({ navigation }) => {
             p1: "hello",
           })
         }
-          //console.log(temData)
+          //console.log(result.rows.item(i).purpose1)
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>

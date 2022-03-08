@@ -262,7 +262,7 @@ const P1 = ({ navigation }) => {
 
           const RealAircraftType = AircraftType === '320' || AircraftType === '321' ? 'A-' + AircraftType : AircraftType;
 
-          //console.log('orginal date', date)
+         console.log('Pilot_Copilot', Pilot_Copilot)
 
           let text = date;
           const myArray = text.split("-");
@@ -292,9 +292,9 @@ const P1 = ({ navigation }) => {
                   'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
                 );
               }
-              else if (Pilot_Copilot !== ''){
+              else if (Pilot_Copilot === '' && Pilot_Pic === ''){
                 tx.executeSql(
-                  'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="",p2="'+SelfField+'",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
+                  'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
                 );
               }
               else if (Pilot_Instructor !== ''){
@@ -314,10 +314,10 @@ const P1 = ({ navigation }) => {
                 'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","' + SelfField + '","","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '")',
               );
             }
-            else if (Pilot_Copilot !== '') {
+            else if (Pilot_Copilot === '' && Pilot_Pic === '') {
               //Alert.alert ('Pilot_Copilot')
               tx.executeSql(
-                'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","","' + SelfField + '","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '")',
+                'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","' + SelfField + '","","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '")',
               );
             }
             else if (Pilot_Instructor !== '') {

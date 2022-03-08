@@ -116,7 +116,7 @@ const ConfigContext = createContext(initialState);
 
 function ConfigProvider({ children}) {
     //flight 1
-    const [flightToggle,setFlightToggle] = React.useState(true)
+    const [flightToggle,setFlightToggle] = React.useState(false)
     const [routeToggle,setRouteToggle] = React.useState(false)
     const [takeOffToggle1,setTakeOffToggle1] = React.useState(false)
     const [landingToggle1,setLandingToggle1] = React.useState(false)
@@ -445,20 +445,20 @@ function ConfigProvider({ children}) {
         AiToggle,
         dualDayToggle : role === 'AirlineCaptain' || role === 'AirlineInstructor' || role === 'AirlineFirstOfficer' || role === 'Cfi' ? !dualDayToggle  : dualDayToggle, 
         dualNightToggle : role === 'AirlineCaptain' || role === 'AirlineInstructor' || role === 'AirlineFirstOfficer' || role === 'Cfi' ? !dualNightToggle : dualNightToggle,
-        instructionalToggle,
+        instructionalToggle : role === 'AirlineInstructor' ? !instructionalToggle : instructionalToggle,
         ifr_vfrToggle : role === 'AirlineCaptain' || role === 'AirlineInstructor' || role === 'AirlineFirstOfficer' ? !ifr_vfrToggle : ifr_vfrToggle, 
-        p1_us_dayToggle : role === 'AirlineCaptain' || role === 'AirlineInstructor' || role === 'AirlineFirstOfficer' || role === 'Cfi' ? !p1_us_dayToggle : p1_us_dayToggle,
-        p1_us_nightToggle : role === 'AirlineCaptain' || role === 'AirlineInstructor' || role === 'AirlineFirstOfficer' || role === 'Cfi' ? !p1_us_nightToggle : p1_us_nightToggle,
+        p1_us_dayToggle : role === 'AirlineCaptain' || role === 'AirlineInstructor' || role === 'Cfi' ? !p1_us_dayToggle : p1_us_dayToggle,
+        p1_us_nightToggle : role === 'AirlineCaptain' || role === 'AirlineInstructor' || role === 'Cfi' ? !p1_us_nightToggle : p1_us_nightToggle,
         p1_ut_dayToggle : role === 'AirlineCaptain' || role === 'AirlineInstructor' || role === 'AirlineFirstOfficer' || role === 'Cfi' ?  !p1_ut_dayToggle : p1_ut_dayToggle,
         p1_ut_nightToggle : role === 'AirlineCaptain' || role === 'AirlineInstructor' || role === 'AirlineFirstOfficer' || role === 'Cfi' ? !p1_ut_nightToggle : p1_ut_nightToggle,
         Pic_dayToggle: role === 'AirlineFirstOfficer' ? !Pic_dayToggle : Pic_dayToggle  ,
         Pic_nightToggle: role === 'AirlineFirstOfficer' ? !Pic_nightToggle : Pic_nightToggle, 
-        stlToggle: role === 'AirlineInstructor' || role === 'Cfi' || role === 'FlightCadet' ? !stlToggle : stlToggle , 
+        stlToggle: role === 'AirlineInstructor' || role === 'Cfi' || role === 'FlightCadet' || role === 'AirlineCaptain' ? !stlToggle : stlToggle , 
         siToggle : role === 'AirlineCaptain' || role === 'AirlineInstructor' || role === 'AirlineFirstOfficer' ? !siToggle : siToggle,
         sic_dayToggle : role === 'Cfi' ? !sic_dayToggle : sic_dayToggle ,
         sic_nightToggle : role === 'Cfi' ? !sic_nightToggle : sic_nightToggle ,
-        xc_dayToggle : role === 'AirlineCaptain' || role === 'AirlineFirstOfficer' ? !xc_dayToggle : xc_dayToggle,
-        xc_nightToggle : role === 'AirlineCaptain' || role === 'AirlineFirstOfficer' ? !xc_nightToggle : xc_nightToggle,
+        xc_dayToggle : role === 'AirlineCaptain' || role === 'AirlineFirstOfficer' || role === 'AirlineInstructor' ? !xc_dayToggle : xc_dayToggle,
+        xc_nightToggle : role === 'AirlineCaptain' || role === 'AirlineFirstOfficer'|| role === 'AirlineInstructor' ? !xc_nightToggle : xc_nightToggle,
         fun_ttToggle,
         fun_dayToggle,
         fun_nightToggle,
