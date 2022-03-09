@@ -758,13 +758,13 @@ const LogBookListing = ({ navigation }) => {
     let temData =  []
     let pur = []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 30 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           //setLoadmore(false)
           return false;
         }
-        setOffset(offset + 30);
+        setOffset(offset + 10);
         for (let i = 0; i <= result.rows.length; i++) {
           if (result.rows.length !== 0){
           setModalVisible(true)
@@ -823,6 +823,7 @@ const LogBookListing = ({ navigation }) => {
             to_long: result.rows.item(i).to_long,
             purpose1 : result.rows.item(i).purpose1,
             distance: result.rows.item(i).distance,
+            isSaved: result.rows.item(i).isSaved,
           });
         }
         else{
@@ -846,9 +847,10 @@ const LogBookListing = ({ navigation }) => {
             simLocation: result.rows.item(i).simLocation,
             landing: result.rows.item(i).inTime,
             p1: "hello",
+            isSaved: result.rows.item(i).isSaved,
           })
         }
-          //console.log(result.rows.item(i).purpose1)
+          console.log(result.rows.item(i).isSaved)
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>
@@ -1019,7 +1021,7 @@ const handleIndexChange = (index) => {
       />
 
       <View style={dark?LogbookListing.DarkbottomView:LogbookListing.bottomView}>
-      {loadmore==true?<ActivityIndicator color={'#000'}/>:null}
+      {loadmore==true?<ActivityIndicator color={dark?'#fff':'#000'}/>:null}
         {checkTag === true ?
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 5 }}>
             <TouchableOpacity style={{ backgroundColor: '#256173', paddingHorizontal: 8, paddingVertical: 2 }} onPress={UpdateAllRoster}>

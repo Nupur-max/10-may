@@ -4,7 +4,6 @@ const initialState = {
     AircraftType : '',
     FromICAO : '',
     toICAO : '',
-    
   }
 
 export const CreateLogbookReducer = (state = initialState, action) => {
