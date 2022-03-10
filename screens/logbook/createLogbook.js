@@ -395,6 +395,7 @@ const SICnight_editable = (inputText) => {
     const [rosterDate, setRosterDate] = React.useState(dynamicRosterdate);
     const [rosterFrom, setRosterFrom] = React.useState('')
     const [rosterChocksOff, setRosterChocksOff] = React.useState('')
+    const [savedChocksOff, setSavedChocksOff] = React.useState('')
     const [rosterTo, setRosterTo] = React.useState('')
     const [rosterChocksOn, setRosterChocksOn] = React.useState('')
     const [rosterAType, setRosterAType] = React.useState('')
@@ -899,7 +900,7 @@ const removeApproachInputTime = (ApproachIndex) => {
     const purposeCheck = params.RosterPurpose
     const purposeCheck1 = purposeCheck == null? [] : purposeCheck.split(",");
 
-    console.log('rosterChocksOff',rosterChocksOff)
+    console.log('rosterChocksOff',params.RoasterSavedChocksOff)
 
     React.useEffect(async() => {
         if(isFocused){
@@ -925,21 +926,8 @@ const removeApproachInputTime = (ApproachIndex) => {
             setTraining(purposeCheck1)
             setTest(purposeCheck1)
             setCommercial(purposeCheck1)
-
-            //if(params.RoasterChocksOff===undefined){
-
-            let user = await AsyncStorage.getItem('myKey');
-                user = JSON.parse(user);
-                console.log('values', user.input)
-                setRosterChocksOff(user.input)
-
-            //}
-    
-            
-}
-}, [isFocused]);
-
-
+        }
+    }, [isFocused]);
 
 React.useEffect(() => {
    if(rosterAId==="SIMU"){
@@ -1150,7 +1138,7 @@ React.useEffect(() => {
             })
         }).then(res => res.json())
             .then(resData => {
-               Alert.alert(resData.message);
+            //    Alert.alert(resData.message);
             })
     };
 
@@ -1406,7 +1394,7 @@ React.useEffect(() => {
         }
 
         });
-        alert('Saved Successfully');
+        //alert('Saved Successfully');
         navigation.goBack();
       };
 
@@ -2166,17 +2154,49 @@ React.useEffect(() => {
        navigation.navigate('EGCAUpload')
    }
 
-//    React.useEffect(async()=>{
-//     if(isFocused){
-//     // AsyncStorage.getItem("myKey").then((inputText) => {
-//     //    setRosterChocksOff(inputText);
-//     // }).done();
-//     let user = await AsyncStorage.getItem('myKey');
-//         user = JSON.parse(user);
-//         console.log('values', user.input)
-//         setRosterChocksOff(user.input)
-//     }
-//    },[isFocused])
+   const SaveChocksOff = async(inputText) => {
+    console.log('inputText',inputText)
+    if(isFocused){
+    let user = await AsyncStorage.getItem('userdetails');
+    user = JSON.parse(user);
+    let syncChocksOff =  []
+    prePopulateddb.transaction(tx => {
+        if(inputText!==undefined){
+        tx.executeSql('UPDATE logbook set savedChocksOff="'+inputText+'" where user_id="'+user.id+'"')
+        console.log('UPDATE logbook set savedChocksOff="'+inputText+'" where user_id="'+user.id+'"')
+        }
+        tx.executeSql('SELECT savedChocksOff FROM logbook Where user_id = "'+user.id+'"', [], (tx, result) => {
+            for (let i = 0; i <= result.rows.length; i++) {
+                syncChocksOff.push({
+                    savedChocksOff: result.rows.item(i).savedChocksOff,
+                })
+                //console.log('saved Chocks Off', result.rows.item(i).savedChocksOff)
+                if(params.RoasterChocksOff===''){
+                    setRosterChocksOff(result.rows.item(i).savedChocksOff)
+                    setSavedChocksOff(result.rows.item(i).savedChocksOff)
+                }
+                // else if(rosterChocksOff===''){
+                //     setRosterChocksOff(params.RoasterSavedChocksOff)
+                // }
+             }
+        })
+        });
+    }
+}
+React.useEffect(()=>{
+    if(isFocused){
+        //console.log('chocksOffTime',rosterChocksOff)
+        SaveChocksOff()
+    }
+},[isFocused])
+
+React.useEffect(()=>{
+        if(params.RoasterChocksOff==='' && rosterChocksOff===''){
+            console.log('dfd',savedChocksOff)
+            setRosterChocksOff(savedChocksOff)
+        }
+},[rosterChocksOff])
+   
 
    return (
         <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
@@ -2494,8 +2514,7 @@ React.useEffect(() => {
                         <MaskedTextInput
                             mask='99:99'
                             value={ rosterChocksOff }
-                            onChangeText={inputText => {setRosterChocksOff(inputText);
-                            AsyncStorage.setItem('myKey', JSON.stringify({input:inputText}));}}
+                            onChangeText={inputText => {setRosterChocksOff(inputText);SaveChocksOff(inputText)}}
                             keyboardType="numeric"
                             placeholder="hh:mm"
                             placeholderTextColor='grey'

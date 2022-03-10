@@ -337,7 +337,7 @@ const LogBookListing = ({ navigation }) => {
         RoasterTakeoff: item.takeOff,
         Roasterlanding:item.landing,
         RosterPurpose : item.purpose1,
-        //RoasterDistance: item.distance
+        RoasterSavedChocksOff: item.savedChocksOff
       }));
         navigation.navigate('CreateLogbook');
       //}
@@ -389,7 +389,7 @@ const LogBookListing = ({ navigation }) => {
       RoasterNight: '',
       RoasterNightLanding: '',
       RoasterNightTO: '',
-      //RoasterChocksOff: '',
+      RoasterChocksOff: '',
       RoasterChocksOn: '',
       RoasterP1: '',
       RoasterP1_us_day: '',
@@ -636,7 +636,7 @@ const LogBookListing = ({ navigation }) => {
     let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
     let pur = []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           setLoadmore(false)
@@ -703,6 +703,8 @@ const LogBookListing = ({ navigation }) => {
             to_long: result.rows.item(i).to_long,
             purpose1 : result.rows.item(i).purpose1,
             distance: result.rows.item(i).distance,
+            isSaved: result.rows.item(i).isSaved,
+            savedChocksOff: result.rows.item(i).savedChocksOff,
           });
         }
         else {
@@ -726,6 +728,8 @@ const LogBookListing = ({ navigation }) => {
             takeOff: result.rows.item(i).outTime,
             landing: result.rows.item(i).inTime,
             p1: "hello",
+            isSaved: result.rows.item(i).isSaved,
+            savedChocksOff: result.rows.item(i).savedChocksOff,
           });
         }
           setLocalLogbookData(temData);
@@ -758,7 +762,7 @@ const LogBookListing = ({ navigation }) => {
     let temData =  []
     let pur = []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           //setLoadmore(false)
@@ -824,6 +828,7 @@ const LogBookListing = ({ navigation }) => {
             purpose1 : result.rows.item(i).purpose1,
             distance: result.rows.item(i).distance,
             isSaved: result.rows.item(i).isSaved,
+            savedChocksOff: result.rows.item(i).savedChocksOff,
           });
         }
         else{
@@ -848,9 +853,10 @@ const LogBookListing = ({ navigation }) => {
             landing: result.rows.item(i).inTime,
             p1: "hello",
             isSaved: result.rows.item(i).isSaved,
+            savedChocksOff: result.rows.item(i).savedChocksOff,
           })
         }
-          console.log(result.rows.item(i).isSaved)
+          //console.log(result.rows.item(i).savedChocksOff)
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>

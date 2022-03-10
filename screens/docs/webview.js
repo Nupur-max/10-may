@@ -13,6 +13,7 @@ import SQLite from 'react-native-sqlite-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LogListData } from '../../store/actions/loglistAction';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import {BaseUrl} from '../../components/url.json';
 
 const prePopulateddb = SQLite.openDatabase(
   {
@@ -116,6 +117,8 @@ class Sample extends Component {
     }
   }
 
+ 
+
   //// TO UPDATE INDEX ///
   updateIndex = async () => {
     const value = await AsyncStorage.getItem('result');
@@ -143,6 +146,22 @@ class Sample extends Component {
       if (logRes.success !== false) {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
+        await fetch(BaseUrl + 'updateLogbook', {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              "user_id": user.id,
+              "id": logRes.id,
+              "tag": 'uploaded'
+              
+          })
+      }).then(res => res.json())
+          .then(resData => {
+              console.log(resData);
+          });
         let allSuccess = await AsyncStorage.getItem('success');
         allSuccess = JSON.parse(allSuccess) == null ? [] : JSON.parse(allSuccess)
         // console.log("sucess of log upload" , allSuccess)
