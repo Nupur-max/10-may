@@ -13,7 +13,7 @@ import { DisplayContext } from '../../display-context';
 const Configuration = ({navigation,route}) => {
 
     const { dark, theme, toggle } = React.useContext(ThemeContext);
-    const { datee, Dateform, DateFormat, role, roleChecked } = React.useContext(DisplayContext);
+    const { datee, Dateform, DateFormat, role, roleChecked, config, configCheck } = React.useContext(DisplayContext);
     const { 
             //flight 1
             flightToggle, 
@@ -134,7 +134,7 @@ const rolewise = role == 'AirlineCaptain' ? !flightToggle : flightToggle
             {/* <Text>{route.params.from}</Text> */}
             <View style={configuration.headerView}>
                 <View style={configuration.saveTextView}>
-                    <TouchableOpacity onPress={()=>navigation.goBack()}>
+                    <TouchableOpacity onPress={()=>{navigation.goBack(),configCheck()}}>
                         <Text style={configuration.saveText}>Save</Text>
                     </TouchableOpacity>
                 </View>

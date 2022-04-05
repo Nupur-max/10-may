@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { useSelector, useDispatch } from "react-redux";
 
 import {BaseUrl} from '../../components/url.json';
+import {BaseUrlAndroid} from '../../components/urlAndroid.json';
 
 import SQLite from 'react-native-sqlite-storage';
 
@@ -171,7 +172,7 @@ const SetDestination = ({navigation, route}) => {
         formData.append('user_id', user.id); 
         const splittedBase64 = imageData.split(';base64');
         formData.append('airport_image', splittedBase64[1]);
-        var Url = BaseUrl+'addAirportImage'
+        var Url = Platform.OS==='ios'?BaseUrl+'addAirportImage':BaseUrlAndroid+'addAirportImage'
           fetch(Url, {
           method: 'POST',
           headers: {

@@ -1,43 +1,43 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:1:1-30:12
-INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:1:1-30:12
-INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:1:1-30:12
-INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:1:1-30:12
-MERGED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:1:1-30:12
+ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:1:1-30:12
+INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:1:1-30:12
+INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:1:1-30:12
+INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:1:1-30:12
+MERGED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:1:1-30:12
 MERGED from [com.facebook.flipper:flipper:0.75.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/7868851a0ac1f4140e4416d11c8ab058/jetified-flipper-0.75.1/AndroidManifest.xml:8:1-18:12
 MERGED from [com.facebook.flipper:flipper-network-plugin:0.75.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/3a555156f5524e9829f63bbd2b5dfe4d/jetified-flipper-network-plugin-0.75.1/AndroidManifest.xml:8:1-15:12
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.75.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/64aaf2fe8d75c053ffe98aa39d8cf909/jetified-flipper-fresco-plugin-0.75.1/AndroidManifest.xml:8:1-15:12
-MERGED from [:react-native-sqlite-storage] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-sqlite-storage/platforms/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-community_async-storage] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/async-storage/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-community_checkbox] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/checkbox/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-community_datetimepicker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/datetimepicker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
-MERGED from [:react-native-community_masked-view] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/masked-view/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-community_netinfo] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-12:12
-MERGED from [:react-native-picker_picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-picker/picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-appearance] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-appearance/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-date-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-date-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-gesture-handler] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-gesture-handler/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-html-to-pdf] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-html-to-pdf/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-iap] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-iap/android/build/intermediates/merged_manifest/playDebug/AndroidManifest.xml:2:1-10:12
-MERGED from [:react-native-image-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-21:12
-MERGED from [:react-native-permissions] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-permissions/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-print] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-print/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-safe-area-context] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-safe-area-context/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-screens] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-screens/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-svg] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-svg/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-vector-icons] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-vector-icons/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-view-pdf] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-view-pdf/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-webview] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-21:12
-MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-45:12
+MERGED from [:react-native-sqlite-storage] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-sqlite-storage/platforms/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-community_async-storage] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/async-storage/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-community_checkbox] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/checkbox/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-community_datetimepicker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/datetimepicker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-community_masked-view] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/masked-view/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-community_netinfo] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-12:12
+MERGED from [:react-native-picker_picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-picker/picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-appearance] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-appearance/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-date-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-date-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-gesture-handler] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-gesture-handler/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-html-to-pdf] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-html-to-pdf/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-iap] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-iap/android/build/intermediates/merged_manifest/playDebug/AndroidManifest.xml:2:1-10:12
+MERGED from [:react-native-image-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-21:12
+MERGED from [:react-native-permissions] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-permissions/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-print] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-print/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-safe-area-context] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-safe-area-context/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-screens] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-screens/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-svg] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-svg/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-vector-icons] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-vector-icons/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-view-pdf] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-view-pdf/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-webview] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-21:12
+MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-45:12
 MERGED from [com.facebook.react:react-native:0.64.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/6919320cd8fe6a426254323c79c8908a/jetified-react-native-0.64.2/AndroidManifest.xml:2:1-13:12
-MERGED from [com.github.barteksc:android-pdf-viewer:2.8.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/d6a6fad966f1972993fb3cc122c27d8d/jetified-android-pdf-viewer-2.8.2/AndroidManifest.xml:2:1-11:12
-MERGED from [com.github.barteksc:pdfium-android:1.7.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/f23855905df69453ae49c7f73641d7c3/jetified-pdfium-android-1.7.1/AndroidManifest.xml:2:1-11:12
+MERGED from [com.github.barteksc:android-pdf-viewer:2.8.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/113f5c59d710335d1029ac465b0ec74c/jetified-android-pdf-viewer-2.8.2/AndroidManifest.xml:2:1-11:12
+MERGED from [com.github.barteksc:pdfium-android:1.7.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/945b1edbcb09ac8c5da0011eb944762d/jetified-pdfium-android-1.7.1/AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/233f29e05d3f62c91d94717ecf57158d/legacy-support-v4-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/b913b577636afb646741ffd904028e15/legacy-support-core-ui-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a4aa212df090916fdc5167a61460eb35/swiperefreshlayout-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [org.webkit:android-jsc:r245459] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/acc9efd6c15fa99d3fcea46367558146/jetified-android-jsc-r245459/AndroidManifest.xml:2:1-11:12
-MERGED from [:react-native-reanimated] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-reanimated/android/build/.transforms/623962731c618ed26497460b35b8cba5/jetified-react-native-reanimated-64-jsc/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-reanimated] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-reanimated/android/build/.transforms/9e79724bdbd198da78fb7d467d1b9af2/jetified-react-native-reanimated-64-jsc/AndroidManifest.xml:2:1-11:12
 MERGED from [com.facebook.fresco:flipper:2.2.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/dc8fd2d88b5cb11ee65297864011c023/jetified-flipper-2.2.0/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:stetho:2.2.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/f1611030562783b6ac8c6f64e4c3d5e0/jetified-stetho-2.2.0/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:fresco:2.2.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/ca6acb30b5cabbdf79e4b26c44454855/jetified-fresco-2.2.0/AndroidManifest.xml:2:1-9:12
@@ -99,72 +99,72 @@ MERGED from [com.tom_roush:pdfbox-android:1.8.10.0] /Users/gadgetzone/.gradle/ca
 MERGED from [com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:2:1-24:12
 MERGED from [com.facebook.fresco:fbcore:2.2.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a4557efd0714d20a1a7c95bda5faf437/jetified-fbcore-2.2.0/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:ui-common:2.2.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/3b461a50254e983a6ff9244155e5fe10/jetified-ui-common-2.2.0/AndroidManifest.xml:2:1-9:12
-INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:2:1-18:12
-INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:2:1-18:12
-INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:2:1-18:12
+INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml:2:1-18:12
+INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml:2:1-18:12
+INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml:2:1-18:12
 	package
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:2:3-21
-		INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:2:3-21
-		INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:2:3-21
+		INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:2:3-21
+		INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml
 	android:versionName
-		INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:1:1-30:12
-		INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml
+		INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:1:1-30:12
+		INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml
 	xmlns:tools
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:3:5-51
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml:3:5-51
 	android:versionCode
-		INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:1:1-30:12
-		INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml
+		INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:1:1-30:12
+		INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml
 	xmlns:android
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:1:11-69
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:1:11-69
 uses-permission#android.permission.INTERNET
-ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:4:5-67
+ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:4:5-67
 MERGED from [com.facebook.flipper:flipper:0.75.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/7868851a0ac1f4140e4416d11c8ab058/jetified-flipper-0.75.1/AndroidManifest.xml:15:5-67
 MERGED from [com.facebook.flipper:flipper:0.75.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/7868851a0ac1f4140e4416d11c8ab058/jetified-flipper-0.75.1/AndroidManifest.xml:15:5-67
-MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:5-67
-MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:5-67
+MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:5-67
+MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:5-67
 	android:name
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:4:22-64
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:4:22-64
 uses-permission#com.android.vending.BILLING
-ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:5:5-66
+ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:5:5-66
 MERGED from [com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:10:5-67
 MERGED from [com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a71b816f4fe0daddc46b9ded73160b47/jetified-billing-4.0.0/AndroidManifest.xml:10:5-67
 	android:name
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:5:22-64
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:5:22-64
 uses-permission#android.permission.READ_EXTERNAL_STORAGE
-ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:7:5-79
+ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:7:5-79
 	android:name
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:7:22-77
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:7:22-77
 uses-permission#android.permission.CAMERA
-ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:8:5-65
-MERGED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:8:5-65
-MERGED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:8:5-65
+ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:8:5-65
+MERGED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:8:5-65
+MERGED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:8:5-65
 	android:name
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:8:22-62
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:8:22-62
 uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
-ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:9:5-80
-MERGED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:9:5-80
-MERGED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:9:5-80
-MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:31:5-81
-MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:31:5-81
+ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:9:5-80
+MERGED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:9:5-80
+MERGED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:9:5-80
+MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:31:5-81
+MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:31:5-81
 MERGED from [com.tom_roush:pdfbox-android:1.8.10.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/4bae9e58dae7707a5e269dbd0197de27/jetified-pdfbox-android-1.8.10.0/AndroidManifest.xml:11:5-81
 MERGED from [com.tom_roush:pdfbox-android:1.8.10.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/4bae9e58dae7707a5e269dbd0197de27/jetified-pdfbox-android-1.8.10.0/AndroidManifest.xml:11:5-81
 	android:name
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:9:22-78
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:9:22-78
 application
-ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:11:5-29:19
-MERGED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:11:5-29:19
-MERGED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:11:5-29:19
-MERGED from [:react-native-community_datetimepicker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/datetimepicker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-20
-MERGED from [:react-native-community_datetimepicker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/datetimepicker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-20
-MERGED from [:react-native-image-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-19:19
-MERGED from [:react-native-image-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-19:19
-MERGED from [:react-native-webview] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-19:19
-MERGED from [:react-native-webview] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-19:19
-MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:33:5-43:19
-MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:33:5-43:19
+ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:11:5-29:19
+MERGED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:11:5-29:19
+MERGED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:11:5-29:19
+MERGED from [:react-native-community_datetimepicker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/datetimepicker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-20
+MERGED from [:react-native-community_datetimepicker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/datetimepicker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-20
+MERGED from [:react-native-image-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-19:19
+MERGED from [:react-native-image-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-19:19
+MERGED from [:react-native-webview] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-19:19
+MERGED from [:react-native-webview] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-19:19
+MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:33:5-43:19
+MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:33:5-43:19
 MERGED from [com.facebook.react:react-native:0.64.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/6919320cd8fe6a426254323c79c8908a/jetified-react-native-0.64.2/AndroidManifest.xml:11:5-20
 MERGED from [com.facebook.react:react-native:0.64.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/6919320cd8fe6a426254323c79c8908a/jetified-react-native-0.64.2/AndroidManifest.xml:11:5-20
 MERGED from [com.facebook.soloader:soloader:0.10.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/7aa7ad91d3001aa1018311a8beca2630/jetified-soloader-0.10.1/AndroidManifest.xml:11:5-20
@@ -188,111 +188,111 @@ MERGED from [com.android.billingclient:billing:4.0.0] /Users/gadgetzone/.gradle/
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.2.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/87aa3b8d67c582e8dc7adee7edfa0fa3/core-1.2.0/AndroidManifest.xml:24:18-86
 	android:label
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:13:7-39
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:13:7-39
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:13:7-39
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:13:7-39
 	tools:ignore
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:15:9-48
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml:15:9-48
 	android:roundIcon
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:15:7-52
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:15:7-52
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:15:7-52
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:15:7-52
 	tools:targetApi
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:14:9-29
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml:14:9-29
 	android:icon
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:14:7-41
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:14:7-41
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:14:7-41
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:14:7-41
 	android:allowBackup
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:16:7-34
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:16:7-34
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:16:7-34
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:16:7-34
 	android:theme
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:17:7-38
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:17:7-38
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:17:7-38
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:17:7-38
 	android:usesCleartextTraffic
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:13:9-44
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml:13:9-44
 	android:name
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:12:7-46
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:12:7-46
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:12:7-46
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:12:7-46
 activity#com.cojo.MainActivity
-ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:18:7-28:18
+ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:18:7-28:18
 	android:label
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:20:9-41
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:20:9-41
 	android:launchMode
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:22:9-40
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:22:9-40
 	android:windowSoftInputMode
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:23:9-51
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:23:9-51
 	android:configChanges
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:21:9-86
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:21:9-86
 	android:name
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:19:9-45
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:19:9-45
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:24:9-27:25
+ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:24:9-27:25
 action#android.intent.action.MAIN
-ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:25:13-65
+ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:25:13-65
 	android:name
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:25:21-62
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:25:21-62
 category#android.intent.category.LAUNCHER
-ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:26:13-73
+ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:26:13-73
 	android:name
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml:26:23-70
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml:26:23-70
 uses-sdk
-INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml
-INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml
+INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml
+INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml
 MERGED from [com.facebook.flipper:flipper:0.75.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/7868851a0ac1f4140e4416d11c8ab058/jetified-flipper-0.75.1/AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper:0.75.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/7868851a0ac1f4140e4416d11c8ab058/jetified-flipper-0.75.1/AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper-network-plugin:0.75.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/3a555156f5524e9829f63bbd2b5dfe4d/jetified-flipper-network-plugin-0.75.1/AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper-network-plugin:0.75.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/3a555156f5524e9829f63bbd2b5dfe4d/jetified-flipper-network-plugin-0.75.1/AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.75.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/64aaf2fe8d75c053ffe98aa39d8cf909/jetified-flipper-fresco-plugin-0.75.1/AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.75.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/64aaf2fe8d75c053ffe98aa39d8cf909/jetified-flipper-fresco-plugin-0.75.1/AndroidManifest.xml:11:5-13:41
-MERGED from [:react-native-sqlite-storage] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-sqlite-storage/platforms/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-sqlite-storage] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-sqlite-storage/platforms/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-community_async-storage] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/async-storage/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-community_async-storage] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/async-storage/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-community_checkbox] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/checkbox/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-community_checkbox] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/checkbox/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-community_datetimepicker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/datetimepicker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-community_datetimepicker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/datetimepicker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-community_masked-view] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/masked-view/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-community_masked-view] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/masked-view/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-community_netinfo] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-community_netinfo] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-picker_picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-picker/picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-picker_picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-picker/picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-appearance] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-appearance/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-appearance] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-appearance/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-date-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-date-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-date-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-date-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-gesture-handler] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-gesture-handler/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-gesture-handler] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-gesture-handler/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-html-to-pdf] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-html-to-pdf/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-html-to-pdf] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-html-to-pdf/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-iap] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-iap/android/build/intermediates/merged_manifest/playDebug/AndroidManifest.xml:6:5-8:41
-MERGED from [:react-native-iap] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-iap/android/build/intermediates/merged_manifest/playDebug/AndroidManifest.xml:6:5-8:41
-MERGED from [:react-native-image-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-image-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-permissions] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-permissions/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-permissions] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-permissions/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-print] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-print/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-print] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-print/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-safe-area-context] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-safe-area-context/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-safe-area-context] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-safe-area-context/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-screens] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-screens/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-screens] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-screens/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-svg] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-svg/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-svg] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-svg/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-vector-icons] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-vector-icons/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-vector-icons] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-vector-icons/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-view-pdf] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-view-pdf/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-view-pdf] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-view-pdf/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-webview] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-webview] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-sqlite-storage] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-sqlite-storage/platforms/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-sqlite-storage] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-sqlite-storage/platforms/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_async-storage] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/async-storage/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_async-storage] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/async-storage/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_checkbox] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/checkbox/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_checkbox] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/checkbox/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_datetimepicker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/datetimepicker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_datetimepicker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/datetimepicker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_masked-view] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/masked-view/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_masked-view] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/masked-view/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_netinfo] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_netinfo] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-picker_picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-picker/picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-picker_picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-picker/picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-appearance] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-appearance/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-appearance] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-appearance/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-date-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-date-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-date-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-date-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-gesture-handler] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-gesture-handler/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-gesture-handler] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-gesture-handler/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-html-to-pdf] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-html-to-pdf/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-html-to-pdf] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-html-to-pdf/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-iap] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-iap/android/build/intermediates/merged_manifest/playDebug/AndroidManifest.xml:6:5-8:41
+MERGED from [:react-native-iap] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-iap/android/build/intermediates/merged_manifest/playDebug/AndroidManifest.xml:6:5-8:41
+MERGED from [:react-native-image-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-image-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-permissions] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-permissions/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-permissions] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-permissions/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-print] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-print/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-print] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-print/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-safe-area-context] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-safe-area-context/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-safe-area-context] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-safe-area-context/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-screens] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-screens/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-screens] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-screens/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-svg] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-svg/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-svg] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-svg/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-vector-icons] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-vector-icons/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-vector-icons] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-vector-icons/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-view-pdf] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-view-pdf/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-view-pdf] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-view-pdf/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-webview] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-webview] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.react:react-native:0.64.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/6919320cd8fe6a426254323c79c8908a/jetified-react-native-0.64.2/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.64.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/6919320cd8fe6a426254323c79c8908a/jetified-react-native-0.64.2/AndroidManifest.xml:7:5-9:41
-MERGED from [com.github.barteksc:android-pdf-viewer:2.8.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/d6a6fad966f1972993fb3cc122c27d8d/jetified-android-pdf-viewer-2.8.2/AndroidManifest.xml:7:5-9:41
-MERGED from [com.github.barteksc:android-pdf-viewer:2.8.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/d6a6fad966f1972993fb3cc122c27d8d/jetified-android-pdf-viewer-2.8.2/AndroidManifest.xml:7:5-9:41
-MERGED from [com.github.barteksc:pdfium-android:1.7.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/f23855905df69453ae49c7f73641d7c3/jetified-pdfium-android-1.7.1/AndroidManifest.xml:7:5-9:41
-MERGED from [com.github.barteksc:pdfium-android:1.7.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/f23855905df69453ae49c7f73641d7c3/jetified-pdfium-android-1.7.1/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.barteksc:android-pdf-viewer:2.8.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/113f5c59d710335d1029ac465b0ec74c/jetified-android-pdf-viewer-2.8.2/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.barteksc:android-pdf-viewer:2.8.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/113f5c59d710335d1029ac465b0ec74c/jetified-android-pdf-viewer-2.8.2/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.barteksc:pdfium-android:1.7.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/945b1edbcb09ac8c5da0011eb944762d/jetified-pdfium-android-1.7.1/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.barteksc:pdfium-android:1.7.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/945b1edbcb09ac8c5da0011eb944762d/jetified-pdfium-android-1.7.1/AndroidManifest.xml:7:5-9:41
 MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/233f29e05d3f62c91d94717ecf57158d/legacy-support-v4-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/233f29e05d3f62c91d94717ecf57158d/legacy-support-v4-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/b913b577636afb646741ffd904028e15/legacy-support-core-ui-1.0.0/AndroidManifest.xml:20:5-44
@@ -301,8 +301,8 @@ MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/gadget
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a4aa212df090916fdc5167a61460eb35/swiperefreshlayout-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [org.webkit:android-jsc:r245459] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/acc9efd6c15fa99d3fcea46367558146/jetified-android-jsc-r245459/AndroidManifest.xml:7:5-9:41
 MERGED from [org.webkit:android-jsc:r245459] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/acc9efd6c15fa99d3fcea46367558146/jetified-android-jsc-r245459/AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-reanimated] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-reanimated/android/build/.transforms/623962731c618ed26497460b35b8cba5/jetified-react-native-reanimated-64-jsc/AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-reanimated] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-reanimated/android/build/.transforms/623962731c618ed26497460b35b8cba5/jetified-react-native-reanimated-64-jsc/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-reanimated] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-reanimated/android/build/.transforms/9e79724bdbd198da78fb7d467d1b9af2/jetified-react-native-reanimated-64-jsc/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-reanimated] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-reanimated/android/build/.transforms/9e79724bdbd198da78fb7d467d1b9af2/jetified-react-native-reanimated-64-jsc/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.fresco:flipper:2.2.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/dc8fd2d88b5cb11ee65297864011c023/jetified-flipper-2.2.0/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:flipper:2.2.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/dc8fd2d88b5cb11ee65297864011c023/jetified-flipper-2.2.0/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:stetho:2.2.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/f1611030562783b6ac8c6f64e4c3d5e0/jetified-stetho-2.2.0/AndroidManifest.xml:5:5-7:41
@@ -425,84 +425,84 @@ MERGED from [com.facebook.fresco:fbcore:2.2.0] /Users/gadgetzone/.gradle/caches/
 MERGED from [com.facebook.fresco:fbcore:2.2.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a4557efd0714d20a1a7c95bda5faf437/jetified-fbcore-2.2.0/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:ui-common:2.2.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/3b461a50254e983a6ff9244155e5fe10/jetified-ui-common-2.2.0/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:ui-common:2.2.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/3b461a50254e983a6ff9244155e5fe10/jetified-ui-common-2.2.0/AndroidManifest.xml:5:5-7:41
-INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml
-INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml
+INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml
+INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml
+		INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml
+		INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml
 uses-permission#android.permission.SYSTEM_ALERT_WINDOW
-ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:5:5-77
+ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml:5:5-77
 	android:name
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:5:22-75
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml:5:22-75
 uses-permission#android.permission.READcd_EXTERNAL_STORAGE
-ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:8:5-81
+ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml:8:5-81
 	android:name
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:8:22-79
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml:8:22-79
 activity#com.facebook.react.devsupport.DevSettingsActivity
-ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:16:9-86
+ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml:16:9-86
 	android:name
-		ADDED from /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/src/debug/AndroidManifest.xml:16:19-83
+		ADDED from /Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/debug/AndroidManifest.xml:16:19-83
 uses-permission#android.permission.ACCESS_WIFI_STATE
 ADDED from [com.facebook.flipper:flipper:0.75.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/7868851a0ac1f4140e4416d11c8ab058/jetified-flipper-0.75.1/AndroidManifest.xml:16:5-76
-MERGED from [:react-native-community_netinfo] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-76
-MERGED from [:react-native-community_netinfo] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-76
-MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:28:5-76
-MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:28:5-76
+MERGED from [:react-native-community_netinfo] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-76
+MERGED from [:react-native-community_netinfo] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-76
+MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:28:5-76
+MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:28:5-76
 	android:name
 		ADDED from [com.facebook.flipper:flipper:0.75.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/7868851a0ac1f4140e4416d11c8ab058/jetified-flipper-0.75.1/AndroidManifest.xml:16:22-73
 uses-permission#android.permission.ACCESS_NETWORK_STATE
-ADDED from [:react-native-community_netinfo] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-79
-MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:25:5-79
-MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:25:5-79
+ADDED from [:react-native-community_netinfo] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-79
+MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:25:5-79
+MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:25:5-79
 	android:name
-		ADDED from [:react-native-community_netinfo] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:22-76
+		ADDED from [:react-native-community_netinfo] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:22-76
 provider#com.imagepicker.FileProvider
-ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
+ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
 	android:grantUriPermissions
-		ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
+		ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
 	android:authorities
-		ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-60
+		ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-60
 	android:exported
-		ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
+		ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
 	android:name
-		ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-56
+		ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-56
 meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:58
+ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:58
 	android:resource
-		ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-55
+		ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-55
 	android:name
-		ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
+		ADDED from [:react-native-image-picker] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
 provider#com.reactnativecommunity.webview.RNCWebViewFileProvider
-ADDED from [:react-native-webview] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
+ADDED from [:react-native-webview] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
 	android:grantUriPermissions
-		ADDED from [:react-native-webview] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
+		ADDED from [:react-native-webview] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
 	android:authorities
-		ADDED from [:react-native-webview] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-64
+		ADDED from [:react-native-webview] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-64
 	android:exported
-		ADDED from [:react-native-webview] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
+		ADDED from [:react-native-webview] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
 	android:name
-		ADDED from [:react-native-webview] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-83
+		ADDED from [:react-native-webview] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-83
 uses-permission#com.android.vending.CHECK_LICENSE
-ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-73
+ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-73
 	android:name
-		ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:22-70
+		ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:22-70
 uses-permission#android.permission.WAKE_LOCK
-ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:19:5-68
+ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:19:5-68
 	android:name
-		ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:19:22-65
+		ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:19:22-65
 provider#com.RNFetchBlob.Utils.FileProvider
-ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:34:9-42:20
+ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:34:9-42:20
 	android:grantUriPermissions
-		ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:38:13-47
+		ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:38:13-47
 	android:authorities
-		ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:36:13-60
+		ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:36:13-60
 	android:exported
-		ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:37:13-37
+		ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:37:13-37
 	android:name
-		ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:35:13-62
+		ADDED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:35:13-62
 activity#com.google.android.gms.common.api.GoogleApiActivity
 ADDED from [com.google.android.gms:play-services-base:17.6.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/2d7bcf9b8d1b19f42adfdb3b06ba9f99/jetified-play-services-base-17.6.0/AndroidManifest.xml:23:9-26:75
 	android:exported

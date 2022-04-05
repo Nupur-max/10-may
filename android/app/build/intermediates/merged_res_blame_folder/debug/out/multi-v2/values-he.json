@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-he/values-he.xml",
+            "outputFile": "/Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-he/values-he.xml",
             "map": [
                 {
-                    "source": "/Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/node_modules/react-native-date-picker/android/build/intermediates/packaged_res/debug/values-he/values-he.xml",
+                    "source": "/Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-date-picker/android/build/intermediates/packaged_res/debug/values-he/values-he.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",

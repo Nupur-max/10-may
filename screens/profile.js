@@ -16,6 +16,8 @@ import { ProfileData } from '../store/actions/displayAction';
 import { ProgressBar } from 'react-native-paper';
 
 import { BaseUrl } from '../components/url.json';
+import {BaseUrlAndroid} from '../components/urlAndroid.json';
+
 import { useSelector, useDispatch } from 'react-redux';
 
 const db = SQLite.openDatabase(
@@ -36,7 +38,6 @@ const db = SQLite.openDatabase(
 const P1 = ({ navigation }) => {
 
   const getLoginReduxData = useSelector(state => state.login);
-  //console.log('from Login', getLoginReduxData.airlineType);
 
   const dataDispatcher = useDispatch();
   const scrollViewRef = React.useRef();
@@ -92,8 +93,6 @@ const P1 = ({ navigation }) => {
 
   const [showAlert, setShowAlert] = React.useState(true)
 
-  //console.log('dhfshgfghghdjg', airlineValue)
-
   const checkEcrewFields = () => {
     if (eId !== '' && ePwd !== '' && airlineValue !== null) {
       setModalVisible(true)
@@ -103,10 +102,9 @@ const P1 = ({ navigation }) => {
     }
   }
 
-  React.useEffect(() => { GetUserDetails()}, []);
+  React.useEffect(() => { GetUserDetails(),GetProfileImage()}, []);
 
   const GetUserDetails = async () => {
-    //console.log('hello')
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
     let temData = [];
@@ -115,13 +113,11 @@ const P1 = ({ navigation }) => {
         //setOffset(offset + 10);
         if (result.rows.length > 0) {
           //alert('data available '); 
-          //console.log('result', result)
         }
         else {
           //console.log('error')
         }
         for (let i = 0; i <= result.rows.length; i++) {
-          //console.log('name: ', result.rows.item(i).airline_name, 'loginlink: ', result.rows.item(i).loginUrl)
           temData.push({
             user_id: result.rows.item(i).user_id,
             name: result.rows.item(i).name,
@@ -136,7 +132,7 @@ const P1 = ({ navigation }) => {
             country: result.rows.item(i).Country,
             profile_pic : result.rows.item(i).profile_pic,
           });
-          //console.log('user Data', temData);
+          //console.log('user Data', result.rows.item(i).profile_pic);
           setDate(result.rows.item(i).validity)
           setLt(result.rows.item(i).LicenceType)
           setLn(result.rows.item(i).LicenceNumber)
@@ -146,7 +142,7 @@ const P1 = ({ navigation }) => {
           setEPwd(result.rows.item(i).roster_pwd);
           setAirlineValue(result.rows.item(i).airline_type)
           setCountryName(result.rows.item(i).Country)
-          setImage({uri:result.rows.item(i).profile_pic})
+          //setImage({uri:result.rows.item(i).profile_pic})
         }
       });
     });
@@ -160,10 +156,7 @@ const P1 = ({ navigation }) => {
   const profile = async () => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
-    //console.log('user id=>', user.id);
-    //setName(user.name);
-
-    await fetch(BaseUrl + 'edit_profile', {
+    await fetch(Platform.OS==='ios'?BaseUrl + 'edit_profile':BaseUrlAndroid + 'edit_profile', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -197,7 +190,7 @@ const P1 = ({ navigation }) => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
 
-    await fetch(BaseUrl + 'roasterImport', {
+    await fetch(Platform.OS==='ios'?BaseUrl + 'roasterImport':BaseUrlAndroid + 'roasterImport', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -213,33 +206,9 @@ const P1 = ({ navigation }) => {
       })
     }).then(res => res.json())
       .then(resData => {
-        //console.log(resData);
-        //console.log('data ---->', resData.data)
-        //console.log('roaster data--->', roasterData)
-        //setError(resData.data)
-
-        // fetch(BaseUrl + 'edit_profile', {
-        //   method: 'POST',
-        //   headers: {
-        //     'Accept': 'application/json',
-        //     'Content-Type': 'application/json'
-        //   },
-        //   body: JSON.stringify({
-        //     "user_id": user.id,
-        //     "rosterLength" : resData.data.length,
-    
-        //   })
-        // }).then(res => res.json())
-        //   .then(resData => {
-        //     console.log(resData);
-        //     GetUserDetails()
-        //     Alert.alert(resData.message);
-        //   });
-
-        if(resData.msg!==false){
+      if(resData.msg!==false){
         for (let i = 0; i < resData.data.length; i++) {
 
-          //console.log('Aircraft id', resData.data[i] )
           const AircraftReg = resData.data[i].Aircraft_Reg
           const AircraftType = resData.data[i].Aircraft_type
           const chocksOn = resData.data[i].Arrival_time
@@ -258,7 +227,7 @@ const P1 = ({ navigation }) => {
           const RosterToLong = resData.data[i].RosterToLong
           const Pilot_Pic = resData.data[i].Pilot_function_PIC
           const Pilot_Copilot = resData.data[i].Pilot_function_Copilot
-          const Pilot_Instructor = resData.data[i].Pilot_function_Instructor
+          const Pilot_Instructor = resData.data[i].error
 
           const RealAircraftType = AircraftType === '320' || AircraftType === '321' ? 'A-' + AircraftType : AircraftType;
 
@@ -271,7 +240,6 @@ const P1 = ({ navigation }) => {
       db.transaction((tx) => {
         tx.executeSql(
           'SELECT * from logbook WHERE user_id="'+user.id+'" AND tag="roster" AND onTime="'+chocksOn+'"', [], (tx, result1) => {
-          // console.log('impResult',result1.rows.length, resData.data.length,i + 1);
 
             if(result1.rows.length>0){
               if ((i + 1) == resData.data.length) {
@@ -289,17 +257,17 @@ const P1 = ({ navigation }) => {
               }
               if (Pilot_Pic !== '') {
                 tx.executeSql(
-                  'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
+                  'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'",instructional="'+Pilot_Instructor+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
                 );
               }
               else if (Pilot_Copilot === '' && Pilot_Pic === ''){
                 tx.executeSql(
-                  'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
+                  'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'",instructional="'+Pilot_Instructor+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
                 );
               }
               else if (Pilot_Instructor !== ''){
                 tx.executeSql(
-                  'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
+                  'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'",instructional="'+Pilot_Instructor+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
                 );
               }
               setProgressValue(1)
@@ -311,19 +279,19 @@ const P1 = ({ navigation }) => {
             if (Pilot_Pic !== '') {
               //Alert.alert('Pilot_Pic')
               tx.executeSql(
-                'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","' + SelfField + '","","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '")',
+                'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate,instructional) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","' + SelfField + '","","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '","'+Pilot_Instructor+'")',
               );
             }
             else if (Pilot_Copilot === '' && Pilot_Pic === '') {
               //Alert.alert ('Pilot_Copilot')
               tx.executeSql(
-                'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","' + SelfField + '","","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '")',
+                'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate,instructional) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","' + SelfField + '","","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '","'+Pilot_Instructor+'")',
               );
             }
             else if (Pilot_Instructor !== '') {
               //Alert.alert ('Pilot_Instructor')
               tx.executeSql(
-                'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","' + SelfField + '","","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '")',
+                'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate,instructional) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","' + SelfField + '","","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '","'+Pilot_Instructor+'")',
               );
             }
             console.log('data pos ' + i + ' ' + resData.data.length);
@@ -337,7 +305,7 @@ const P1 = ({ navigation }) => {
               //selection from table logbook
               let temData = [];
               db.transaction(tx => {
-                tx.executeSql('SELECT id,tag,aircraftType,aircraftReg,user_id,date,from_nameICAO,to_nameICAO,offTime,onTime,from_lat,from_long,to_lat,to_long,p1,p2,dayLanding,nightLanding,dayTO,nightTO from logbook WHERE user_id = "' + user.id + '" AND tag ="roster" AND from_nameICAO != "null" ORDER BY orderedDate DESC, onTime DESC', [], (tx, result) => {
+                tx.executeSql('SELECT id,tag,aircraftType,aircraftReg,user_id,date,from_nameICAO,to_nameICAO,offTime,onTime,from_lat,from_long,to_lat,to_long,p1,p2,dayLanding,nightLanding,dayTO,nightTO,instructional from logbook WHERE user_id = "' + user.id + '" AND tag ="roster" AND from_nameICAO != "null" ORDER BY orderedDate DESC, onTime DESC', [], (tx, result) => {
                   setOffset(offset + 10);
                   
                   for (let j = 0; j < result.rows.length; j++) {
@@ -362,15 +330,14 @@ const P1 = ({ navigation }) => {
                       nightLanding: result.rows.item(j).nightLanding,
                       dayTO: result.rows.item(j).dayTO,
                       nightTO: result.rows.item(j).nightTO,
+                      instructional: result.rows.item(j).instructional,
                     });
                     console.log('Entry fetched ' + j + ' out of :' + result.rows.length);
-                    //console.log('id', result.rows.item(j).id)
                     setProgressValue(1)
                     dataDispatcher(LogListData({ data: temData, inProgress: false }))
                     let jPos = j + 1
-                    //console.log('data fetched pos', jPos, result.rows.length)
                     if (jPos == result.rows.length) {
-                        fetch(BaseUrl + 'edit_profile', {
+                        fetch(Platform.OS==='ios'?BaseUrl + 'edit_profile':BaseUrlAndroid + 'edit_profile', {
                           method: 'POST',
                           headers: {
                             'Accept': 'application/json',
@@ -411,7 +378,6 @@ const P1 = ({ navigation }) => {
       }
        })
       .catch((error) => {
-        //console.log(error)
         setShowProgress(false)
         setModalVisible(false)
         alert('Something Went wrong')
@@ -438,19 +404,14 @@ const P1 = ({ navigation }) => {
         //setOffset(offset + 10);
         if (result.rows.length > 0) {
           //alert('data available '); 
-          //console.log('result', result)
         }
         for (let i = 0; i <= result.rows.length; i++) {
-          //console.log('name: ', result.rows.item(i).airline_name, 'loginlink: ', result.rows.item(i).loginUrl)
           temData.push({
             Aircraftid: result.rows.item(i).user_id,
           });
-          //console.log('roster data', temData);
           //setData(temData);
           //setFilteredData(temData);
         }
-        //console.log(result);
-        //console.log(result.rows.item(0).airline_name)
         // result.rows.item.map((index, content) => {
         //   data.push({name:content.airline_name, loginlink: content.loginUrl})
         // });
@@ -463,7 +424,7 @@ const P1 = ({ navigation }) => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
 
-    await fetch(BaseUrl + 'change_password', {
+    await fetch(Platform.OS==='ios'?BaseUrl + 'change_password':BaseUrlAndroid + 'change_password', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -494,7 +455,7 @@ const P1 = ({ navigation }) => {
         console.log('ImagePicker Error: ', responseGet.error);
       } else {
         const source = { uri: responseGet.uri }
-        console.log(responseGet)
+        //console.log('uri',responseGet.uri)
         setImage(source)
         setImagePath(responseGet.fileName)
         setImageData("image/jpg;base64" + responseGet.data)
@@ -517,9 +478,7 @@ const P1 = ({ navigation }) => {
     //formData.append('licance_number', ln);
     const splittedBase64 = imageData.split(';base64');
     formData.append('profile_pic', splittedBase64[1]);
-    // console.log('form data' , data._parts[0][1].uri)
-    //console.log('form data', formData)
-    var Url = BaseUrl + 'edit_profile'
+    var Url = Platform.OS==='ios'?BaseUrl + 'edit_profile':BaseUrlAndroid + 'edit_profile'
     fetch(Url, {
       method: 'POST',
       headers: {
@@ -528,7 +487,6 @@ const P1 = ({ navigation }) => {
       body: formData,
     }).then(response => response.json())
       .then(response => {
-        //console.log('On task Creation: ', response);
         if(response.success === true){
           alert('Updated Successfully')
         }
@@ -544,13 +502,26 @@ const P1 = ({ navigation }) => {
   //dataDispatcher(rosterImportdata({data: roasterData}))
 
   const getReduxData = useSelector(state => state.rosterImport.data);
-  //console.log('from pilot details', getReduxData);
 
-  //console.log('item', getReduxData.data.length)
+  const GetProfileImage = async() => {
+    let user = await AsyncStorage.getItem('userdetails');
+    user = JSON.parse(user);
 
-  //SQlite starts
-
-  // React.useEffect(() => {createTable()}, []);
+    await fetch(Platform.OS==='ios'?BaseUrl+'display_profile':BaseUrlAndroid+'display_profile',{
+     method : 'POST',
+     headers:{
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "user_id": user.id,
+        })
+    }).then(res => res.json())
+    .then(resData => {
+        console.log('profile_pic ---->', resData.message.profile_pic)
+        setImage({uri:resData.message.profile_pic})
+    })
+}
 
  const InsertInUserProfileData = async () => {
     let user = await AsyncStorage.getItem('userdetails');
@@ -558,7 +529,7 @@ const P1 = ({ navigation }) => {
     //  Alert.alert('Hello')
     db.transaction(tx => {
       tx.executeSql(
-        'INSERT INTO userProfileData (user_id, name, LicenceType, LicenceNumber, validity, Country, CountryCode, Contact,roster_id,roster_pwd,airline_type)  VALUES ("' + user.id + '", "' + name + '", "' + lt + '", "' + ln + '", "' + date + '", "' + countryName + '", "' + code + '", "' + mn + '","'+eId+'","'+ePwd+'","'+airlineValue+'")',
+        'INSERT INTO userProfileData (user_id, name, LicenceType, LicenceNumber, validity, Country, CountryCode, Contact,roster_id,roster_pwd,airline_type,profile_pic)  VALUES ("' + user.id + '", "' + name + '", "' + lt + '", "' + ln + '", "' + date + '", "' + countryName + '", "' + code + '", "' + mn + '","'+eId+'","'+ePwd+'","'+airlineValue+'"."'+image+'")',
         // console.log('INSERT INTO userProfileData (user_id, name, LicenceType, LicenceNumber, validity, Country, CountryCode, Contact)  VALUES ("'+user.id+'", "'+name+'", "'+lt+'", "'+ln+'", "'+date+'", "'+value+'", "'+code+'", "'+mn+'")')
         //Alert.alert('InSERTED Successfully')
       );
@@ -580,7 +551,7 @@ const P1 = ({ navigation }) => {
             country: result.rows.item(i).Country,
             CountryCode: result.rows.item(i).CountryCode,
             Contact: result.rows.item(i).Contact,
-            //image : result.rows.item(i).profile_pic,
+            profile_pic : result.rows.item(i).profile_pic,
             roster_id: result.rows.item(i).roster_id,
             roster_pwd: result.rows.item(i).roster_pwd,
             airline_type: result.rows.item(i).airline_type,
@@ -594,7 +565,7 @@ const P1 = ({ navigation }) => {
           setMn(result.rows.item(i).Contact)
           setDate(result.rows.item(i).validity)
           setCountryName(result.rows.item(i).country)
-          //console.log(require(result.rows.item(i).profile_pic))
+          console.log('profile_pic',result.rows.item(i).profile_pic)
           setEId(result.rows.item(i).roster_id)
           setEPwd(result.rows.item(i).roster_pwd)
           setAirlineValue(result.rows.item(i).airline_type)
@@ -612,7 +583,7 @@ const P1 = ({ navigation }) => {
     if(airlineValue!==null){
     setPilotListProgress(0.3)
     setPilotsFetched(true)
-    await fetch(BaseUrl + 'fetch_pilots', {
+    await fetch(Platform.OS==='ios'?BaseUrl + 'fetch_pilots':BaseUrlAndroid + 'fetch_pilots', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -713,6 +684,8 @@ const P1 = ({ navigation }) => {
       AirlineDispatch()
     }
   }, [airlineValue]);
+
+  console.log(image)
 
   return (
     <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
@@ -1009,7 +982,7 @@ const P1 = ({ navigation }) => {
                 <View style={{paddingVertical:10, alignItems: 'center'}}>
                     <MaterialCommunityIcons name="close-circle" color={'#000'} size={20} style={{paddingLeft:300}} onPress={()=>setModalVisible(false)}/>
                     <MaterialCommunityIcons name="check-circle-outline" color={'#000'} size={50} style={{}}/>
-                    <Text style={styles.modalText}>Set Title</Text>
+                    <Text style={styles.modalText}>Roster Import</Text>
                 </View>
               </View>
                 <View style={{flexDirection:'row',paddingTop:10}}>

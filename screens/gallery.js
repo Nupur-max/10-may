@@ -7,6 +7,7 @@ import Colors from '../components/colors';
 import { ThemeContext } from '../theme-context';
 import AsyncStorage from '@react-native-community/async-storage';
 import {BaseUrl} from '../components/url.json';
+import {BaseUrlAndroid} from '../components/urlAndroid.json'
 import { ActivityIndicator } from 'react-native-paper';
 
 
@@ -33,7 +34,7 @@ const Gallery = ({navigation}) => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
 
-        await fetch(BaseUrl+'display_profile',{
+        await fetch(Platform.OS==='ios'?BaseUrl+'display_profile':BaseUrlAndroid+'display_profile',{
          method : 'POST',
          headers:{
           'Accept': 'application/json',
@@ -55,7 +56,7 @@ const Gallery = ({navigation}) => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
 
-        await fetch(BaseUrl+'display_people',{
+        await fetch(Platform.OS==='ios'?BaseUrl+'display_people':BaseUrlAndroid+'display_people',{
          method : 'POST',
          headers:{
           'Accept': 'application/json',
@@ -92,7 +93,7 @@ const Gallery = ({navigation}) => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
 
-        await fetch(BaseUrl+'display_aircraftImage',{
+        await fetch(Platform.OS==='ios'?BaseUrl+'display_aircraftImage':BaseUrlAndroid+'display_aircraftImage',{
          method : 'POST',
          headers:{
           'Accept': 'application/json',
@@ -113,7 +114,7 @@ const Gallery = ({navigation}) => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
 
-        await fetch(BaseUrl+'displayAirportImage',{
+        await fetch(Platform.OS==='ios'?BaseUrl+'displayAirportImage':BaseUrlAndroid+'displayAirportImage',{
          method : 'POST',
          headers:{
           'Accept': 'application/json',

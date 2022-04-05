@@ -75,7 +75,7 @@ const SettingScreen = ({navigation}) => {
                     <MaterialCommunityIcons  
                     name="close" color='#256173' size={25} style={{padding: 5,}} onPress={() => setBuildModalVisible(!BuildmodalVisible)} />
                     </View>
-                    <View>
+                    <ScrollView>
                         <Text style={SsStyle.mainText}>
                         Enter aircraft wise flight Data of your 
                         previous flying in the designated fields.
@@ -91,7 +91,7 @@ const SettingScreen = ({navigation}) => {
                         onPress={() => Linking.openURL('https://youtu.be/vbPBBWI7Yx0')}>https://youtu.be/vbPBBWI7Yx0
                         </Text>
                         </Text>
-                    </View>
+                    </ScrollView>
                 </View>
                 </View>
             </Modal>

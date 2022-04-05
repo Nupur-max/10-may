@@ -76,7 +76,7 @@ const searchQuery = (dataToSearch) => {
   setSearch(dataToSearch)
   //console.log('Searching for ', dataToSearch);
   db.transaction(tx => {
-    tx.executeSql('SELECT * FROM Aircrafts WHERE AircraftType  LIKE "%'+dataToSearch+'%" Limit 10', [], (tx, result1) => {
+    tx.executeSql('SELECT * FROM Aircrafts WHERE AircraftType  LIKE "%'+dataToSearch+'%"', [], (tx, result1) => {
       if (result1.rows.length > 0) {
         //alert('data available ');
         //console.log('Searched result raw: ', result1)
@@ -112,7 +112,7 @@ const getAircrafts = () => {
   dataDispatcher(AircraftData({data: []}))
   let data = [];
   db.transaction(tx => {
-    tx.executeSql('SELECT * from Aircrafts limit 20', [], (tx, result) => {
+    tx.executeSql('SELECT * from Aircrafts', [], (tx, result) => {
       //console.log(result);
       for (let i = 0 ; i <= result.rows.length ; i++) {
         data.push({
@@ -212,8 +212,8 @@ const renderItem = ({item, index}) => {
       setParamsDisplay(previousParams => ({
         ...(previousParams || {}),
         childParam1 : 'value1',
-        displayAirType : item.type,
-        displayAirId : item.aircraft_id,
+        RoasterAType : item.type,
+        RoasterAId : item.aircraft_id,
       }));
       navigation.goBack();
     }
@@ -279,7 +279,7 @@ return (
             renderItem={renderItem}
             keyExtractor={(item, index) => {item.type,index}}
             numColumns={1}
-            extraData={selectedId, selectedIndex}
+            extraData={selectedId}
             />
             <View style={dark?styles.Darkfooter:styles.footer}>
             <TouchableOpacity onPress={()=> navigation.navigate('SetAircraft')}>

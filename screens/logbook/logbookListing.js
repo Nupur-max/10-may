@@ -14,6 +14,8 @@ import { ThemeContext } from '../../theme-context';
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import NetInfo from "@react-native-community/netinfo";
 import Swipeout from 'react-native-swipeout';
+import { BaseUrl } from '../../components/url.json';
+import {BaseUrlAndroid} from '../../components/urlAndroid.json';
 
 import SQLite from 'react-native-sqlite-storage';
 
@@ -115,7 +117,6 @@ const LogBookListing = ({ navigation }) => {
         //setOffset(offset + 10);
         if (result.rows.length > 0) {
           //alert('data available '); 
-          console.log('result', result)
         }
         else {
           console.log('error')
@@ -134,13 +135,11 @@ const LogBookListing = ({ navigation }) => {
           console.log('freeHours', result.rows.item(i).freeHours);
           setReg_date(result.rows.item(i).reg_date)
           setRosterId(result.rows.item(i).roster_id)
-          //console.log('rosterlength', result.rows.item(i).rosterLength)
           setRosterLength(result.rows.item(i).rosterLength)
           //setTotalFlyingHours(result.rows.item(i).Total_flying_hours)
           setFreeHours(result.rows.item(i).freeHours)
           setSubscribe(result.rows.item(i).subscribe)
          }
-        //console.log('rosterid', rosterId)
         });
     });
   }
@@ -149,11 +148,6 @@ const LogBookListing = ({ navigation }) => {
     const subscribe_date = new Date();
     const after15Days = subscribe_date.setDate(subscribe_date.getDate() + 15);
   }
-
-
-
-  //console.log('roasted data', getReduxData.data)
-  //console.log('data', logbookData)
 
   // roster data
 
@@ -168,13 +162,7 @@ const LogBookListing = ({ navigation }) => {
         <View style={{ width: '100%' }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={dark?{color:'#fff',fontFamily: 'WorkSans-Bold', fontSize: 15}:{ fontFamily: 'WorkSans-Bold', fontSize: 15 }}>{item.date} </Text>
-            {item.tag === 'manual' ?
-              <MaterialCommunityIcons name="lock-open-variant" color={dark?'#fff':'#000'} size={20} style={{}} /> :
-              item.tag === 'server' ?
-                <MaterialCommunityIcons name="lock-open-variant" color={dark?'#fff':'#000'} size={20} style={{}} /> :
-                item.tag === 'uploaded' ? <MaterialCommunityIcons name="lock" color={dark?'#fff':'#000'} size={20} style={{}} /> :
-                null
-            }
+                 <MaterialCommunityIcons name={item.tag === 'uploaded' ? "lock" : "lock-open-variant"} color={dark?'#fff':'#000'} size={20} style={{}} /> 
           </View>
           <Divider/>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -194,9 +182,11 @@ const LogBookListing = ({ navigation }) => {
     </TouchableOpacity>
   );
 
+  
+
   const renderItem = ({ item }) => {
 
-    const backgroundColor = item.tag === 'manual' || item.tag === 'uploaded' || item.tag === 'server' ? dark?"#000":"#fff" : item.tag === 'roster' ? "#708090" : item.id === selectedId ? "grey" : '';
+    const backgroundColor = item.tag === 'manual' || item.tag === 'uploaded' || item.tag === 'server' || item.tag === 'null' ? dark?"#000":"#fff" : item.tag === 'roster' ? "#708090" : item.id === selectedId ? "grey" : '';
   
     const color = item.id === selectedId ? 'white' : 'black';
     
@@ -221,7 +211,7 @@ const LogBookListing = ({ navigation }) => {
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel"
         },
-        { text: "OK", onPress: () => DeleteLogs() }
+        { text: "OK", onPress: () => {DeleteLogs();deleteLogbbok()} }
       ]
     );
 
@@ -238,13 +228,12 @@ const LogBookListing = ({ navigation }) => {
       right : [
         {
           onPress: () => {
-            console.log('tag',item.tag)
             item.tag==='uploaded' ? Alert.alert(
               'This flight is Uploaded on egca already',
               'Are you Still want to delete ?',
               [
                 {text : 'No', onPress : () => console.log('Cancel Pressed'), style:'cancel'},
-                {text : 'Yes', onPress: () => {DeleteEgcaUploadedFlights();}},
+                {text : 'Yes', onPress: () => {DeleteEgcaUploadedFlights()}},
               ],
             ):
             Alert.alert(
@@ -252,7 +241,7 @@ const LogBookListing = ({ navigation }) => {
               'Are you sure you want to delete ?',
               [
                 {text : 'No', onPress : () => console.log('Cancel Pressed'), style:'cancel'},
-                {text : 'Yes', onPress: () => {DeleteLogs();}},
+                {text : 'Yes', onPress: () => {DeleteLogs();deleteLogbbok()}},
               ],
             )
           },
@@ -263,11 +252,31 @@ const LogBookListing = ({ navigation }) => {
       sectionId: selectedId
     }
 
+    const deleteLogbbok = async () => {
+      let user = await AsyncStorage.getItem('userdetails');
+      user = JSON.parse(user);
+
+      await fetch(Platform.OS==='ios'?BaseUrl + 'deletelogbook':BaseUrlAndroid + 'deletelogbook', {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              "user_id": user.id,
+              "local_id": item.id
+          })
+      }).then(res => res.json())
+          .then(resData => {
+              console.log(resData)
+              //Alert.alert(resData.message);
+          });
+  };
+
     const DeleteLogs = () => {
       prePopulateddb.transaction(tx => {
         tx.executeSql(
           'DELETE FROM logbook WHERE id = "'+item.id+'"', [], (tx, Delresult) => {
-           //console.log('DELETE FROM logbook WHERE id = "'+item.id+'"')
             SELECTAfterDelOnSlide()
             //navigation.navigate('LogBookListing')
           }
@@ -337,7 +346,10 @@ const LogBookListing = ({ navigation }) => {
         RoasterTakeoff: item.takeOff,
         Roasterlanding:item.landing,
         RosterPurpose : item.purpose1,
-        RoasterSavedChocksOff: item.savedChocksOff
+        RoasterSavedChocksOff: item.savedChocksOff,
+        RoasterInstructional: item.instructional,
+        RoasterRemark: item.remark,
+        RoasterAi: item.actual_Instrument,
       }));
         navigation.navigate('CreateLogbook');
       //}
@@ -636,17 +648,30 @@ const LogBookListing = ({ navigation }) => {
     let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
     let pur = []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff,instructional from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC, onTime DESC LIMIT 30 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           setLoadmore(false)
           return false;
         }
         
-        setOffset(offset + 10);
+        setOffset(offset + 30);
         //if (result.rows.length > 1){
         for (let i = 0; i <= result.rows.length; i++) {
           if (result.rows.length !== 0){
+
+            const chocksOFF =  result.rows.item(i).offTime.split(':')
+            if(chocksOFF[0]<10){
+              chocksOFF[0] = '0'+chocksOFF[0]
+            }
+            const getChocksOff = chocksOFF[0].slice(-2)+':'+chocksOFF[1].slice(-2)
+
+            const chocksON = result.rows.item(i).onTime.split(':')
+            if(chocksON[0]<10){
+              chocksON[0] = '0'+chocksON[0]
+            }
+            const getChocksOn = chocksON[0].slice(-2)+':'+chocksON[1].slice(-2)
+
           setModalVisible(true)
           if(result.rows.item(i).aircraftReg!=="SIMU"){
             pur.push(result.rows.item(i).purpose1)
@@ -657,7 +682,7 @@ const LogBookListing = ({ navigation }) => {
             //flight_no: result.rows.item(i).flight_no,
             date: result.rows.item(i).date,
             //day: result.rows.item(i).day,
-            //actual_Instrument: result.rows.item(i).actual_Instrument,
+            actual_Instrument: result.rows.item(i).actual_Instrument,
             aircraftReg: result.rows.item(i).aircraftReg,
             aircraftType: result.rows.item(i).aircraftType,
             //dayLanding: result.rows.item(i).dayLanding,
@@ -666,13 +691,13 @@ const LogBookListing = ({ navigation }) => {
             //flight: result.rows.item(i).flight,
             from: result.rows.item(i).from_nameICAO,
             //ifr_vfr: result.rows.item(i).ifr_vfr,
-            //instructional: result.rows.item(i).instructional,
+            instructional: result.rows.item(i).instructional,
             //instructor: result.rows.item(i).instructor,
             landing: result.rows.item(i).inTime,
             //night: result.rows.item(i).night,
-            chocksOffTime: result.rows.item(i).offTime,
+            chocksOffTime: getChocksOff,
             nightLanding: result.rows.item(i).nightLanding,
-            chocksOnTime: result.rows.item(i).onTime,
+            chocksOnTime: getChocksOn,
             takeOff: result.rows.item(i).outTime,
             p1: result.rows.item(i).p1,
             //p1_us_day: result.rows.item(i).p1_us_day,
@@ -730,6 +755,7 @@ const LogBookListing = ({ navigation }) => {
             p1: "hello",
             isSaved: result.rows.item(i).isSaved,
             savedChocksOff: result.rows.item(i).savedChocksOff,
+            remark: result.rows.item(i).remark,
           });
         }
           setLocalLogbookData(temData);
@@ -762,15 +788,28 @@ const LogBookListing = ({ navigation }) => {
     let temData =  []
     let pur = []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC,onTime DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff,instructional from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC, onTime DESC  LIMIT 50 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           //setLoadmore(false)
           return false;
         }
-        setOffset(offset + 10);
+        setOffset(offset + 50);
         for (let i = 0; i <= result.rows.length; i++) {
           if (result.rows.length !== 0){
+
+            const chocksOFF =  result.rows.item(i).offTime.split(':') 
+            if(chocksOFF[0]<10){
+              chocksOFF[0] = '0'+chocksOFF[0]
+            }
+            const getChocksOff = chocksOFF[0].slice(-2)+':'+chocksOFF[1].slice(-2)
+
+            const chocksON = result.rows.item(i).onTime.split(':')
+            if(chocksON[0]<10){
+              chocksON[0] = '0'+chocksON[0]
+            }
+            const getChocksOn = chocksON[0].slice(-2)+':'+chocksON[1].slice(-2)
+
           setModalVisible(true)
           if(result.rows.item(i).aircraftReg!=="SIMU"){
            pur.push(result.rows.item(i).purpose1)
@@ -781,7 +820,7 @@ const LogBookListing = ({ navigation }) => {
             //flight_no: result.rows.item(i).flight_no,
             date: result.rows.item(i).date,
             //day: result.rows.item(i).day,
-            //actual_Instrument: result.rows.item(i).actual_Instrument,
+            actual_Instrument: result.rows.item(i).actual_Instrument,
             aircraftReg: result.rows.item(i).aircraftReg,
             aircraftType: result.rows.item(i).aircraftType,
             //dayLanding: result.rows.item(i).dayLanding,
@@ -790,13 +829,13 @@ const LogBookListing = ({ navigation }) => {
             //flight: result.rows.item(i).flight,
             from: result.rows.item(i).from_nameICAO,
             //ifr_vfr: result.rows.item(i).ifr_vfr,
-            //instructional: result.rows.item(i).instructional,
+            instructional: result.rows.item(i).instructional,
             //instructor: result.rows.item(i).instructor,
             landing: result.rows.item(i).inTime,
             //night: result.rows.item(i).night,
-            chocksOffTime: result.rows.item(i).offTime,
+            chocksOffTime: getChocksOff,
             //nightLanding: result.rows.item(i).nightLanding,
-            chocksOnTime: result.rows.item(i).onTime,
+            chocksOnTime: getChocksOn,
             takeOff: result.rows.item(i).outTime,
             p1: result.rows.item(i).p1,
             //p1_us_day: result.rows.item(i).p1_us_day,
@@ -854,15 +893,16 @@ const LogBookListing = ({ navigation }) => {
             p1: "hello",
             isSaved: result.rows.item(i).isSaved,
             savedChocksOff: result.rows.item(i).savedChocksOff,
+            remark: result.rows.item(i).remark,
           })
         }
-          //console.log(result.rows.item(i).savedChocksOff)
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>
           index === self.findIndex((t) => (t.chocksOffTime === arr.chocksOffTime && t.date === arr.date && t.from === arr.from)))
           dataDispatcher(LogListData({ data: clean, inProgress: false }))
           //setLoadmore(false)
+
           setFindTag(result.rows.item(i).tag);
           setRefreshing(false);
         }
@@ -888,8 +928,6 @@ const handleIndexChange = (index) => {
     prePopulateddb.transaction(tx => {
       tx.executeSql(
         'DELETE FROM logbook WHERE tag = "roster"', [], (tx, Delresult) => {
-          console.log('Result', Delresult.rows.length);
-          console.log('DELETE FROM logbook WHERE tag = "roster"')
           SELECTAfterDel()
         }
       );
@@ -905,7 +943,6 @@ const handleIndexChange = (index) => {
     prePopulateddb.transaction(tx => {
       tx.executeSql(
         'UPDATE logbook set tag="manual" WHERE tag = "roster"', [], (tx, Delresult) => {
-          console.log('Result', Delresult.rows.length);
           SELECTAfterAccept(true)
         }
       );
@@ -1000,7 +1037,6 @@ const handleIndexChange = (index) => {
           numColumns={1}
           onEndReached={()=>{search !== ''? null:getLogbookData();console.log('called')}}
           onEndReachedThreshold={0.8}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         />
       }
       {getReduxProgressData.ProgressValue!== undefined? 
@@ -1052,11 +1088,7 @@ const handleIndexChange = (index) => {
           {getFlyingReduxData.totalFlyingHours!== undefined?<Text style={{color:'#fff'}}>{TotalFlyingHours}</Text>:<Text style={{color:'#fff'}}>{totalFlyingHours}</Text>}
           </View>
         </View>
-
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 10, }}>
-          <Text style={{color:dark?'#fff':'#000'}}> LAST BACKUP-</Text>
-          <Text style={{color:dark?'#fff':'#000'}}>{getReduxBACKUPData.BackupTime}</Text>
-        </View>
+        
       </View>
 
     </SafeAreaView>

@@ -6,6 +6,7 @@ import Colors from '../components/colors';
 import { ThemeContext } from '../theme-context';
 import BackupStyle from '../styles/backupStyles';
 import {BaseUrl} from '../components/url.json';
+import {BaseUrlAndroid} from '../components/urlAndroid.json';
 import AsyncStorage from '@react-native-community/async-storage';
 import SQLite from 'react-native-sqlite-storage';
 import { useDispatch, useSelector } from 'react-redux';
@@ -59,7 +60,7 @@ const Backup = ({navigation}) => {
       //console.log('hello')
       let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
-        await fetch(BaseUrl+'listlogbook',{
+        await fetch(Platform.OS==='ios'?BaseUrl+'listlogbook':BaseUrlAndroid+'listlogbook',{
             method : 'POST',
             headers:{
                 'Accept': 'application/json',

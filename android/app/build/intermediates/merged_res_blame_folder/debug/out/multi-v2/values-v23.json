@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v23/values-v23.xml",
+            "outputFile": "/Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v23/values-v23.xml",
             "map": [
                 {
                     "source": "/Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/54448c056128a2c935b0bb4d9a555ae7/appcompat-1.1.0/res/values-v23/values-v23.xml",

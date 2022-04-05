@@ -1,7 +1,7 @@
 // window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} + 1 , success:true, error:false}));
 // window.location.href=("https://www.dgca.gov.in/digigov-portal/web?requestType=ApplicationRH&actionVal=checkLogin")
 import React, { Component } from 'react';
-import { View, Modal, StyleSheet, Text, StatusBar, TouchableOpacity } from 'react-native';
+import { View, Modal, StyleSheet, Text, StatusBar, TouchableOpacity,Platform } from 'react-native';
 import { WebView } from 'react-native-webview';
 import AsyncStorage from '@react-native-community/async-storage';
 import { ActivityIndicator, ProgressBar, Colors } from 'react-native-paper';
@@ -14,6 +14,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { LogListData } from '../../store/actions/loglistAction';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {BaseUrl} from '../../components/url.json';
+import {BaseUrlAndroid} from '../../components/urlAndroid.json';
+
 
 const prePopulateddb = SQLite.openDatabase(
   {
@@ -72,7 +74,7 @@ class Sample extends Component {
     var Pic_Name = logData[this.state.index].p1.split("(")
     var Pic_Name_Split = Pic_Name
     var Sic_Name = logData[this.state.index].p2.split("(")
-    var Sic_Name_Split = Sic_Name[1].split(")")
+    var Sic_Name_Split = Sic_Name[1]==='Self'?Sic_Name[1]:Sic_Name[1].split(")")
     const takeOffTime =logData[this.state.index].chocksOffTime.split(":");
     const  landingTime=logData[this.state.index].chocksOnTime.split(":");
      
@@ -142,11 +144,12 @@ class Sample extends Component {
     const value = await AsyncStorage.getItem('result');
     if (value !== null) {
       const logRes = JSON.parse(value)
-      console.log('logRes',logRes)
+      console.log('logRes',logRes.id)
       if (logRes.success !== false) {
+        let id = Number(logRes.id)
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
-        await fetch(BaseUrl + 'updateLogbook', {
+        await fetch(Platform.OS==='ios'?BaseUrl + 'updateLogbook':BaseUrlAndroid + 'updateLogbook', {
           method: 'POST',
           headers: {
               'Accept': 'application/json',
@@ -154,13 +157,13 @@ class Sample extends Component {
           },
           body: JSON.stringify({
               "user_id": user.id,
-              "id": logRes.id,
+              "local_id": logRes.id,
               "tag": 'uploaded'
               
           })
       }).then(res => res.json())
           .then(resData => {
-              console.log(resData);
+              console.log('server data',resData);
           });
         let allSuccess = await AsyncStorage.getItem('success');
         allSuccess = JSON.parse(allSuccess) == null ? [] : JSON.parse(allSuccess)
@@ -316,9 +319,10 @@ class Sample extends Component {
                         let spl = pic.options[1].text.split("(");
                         let spl1 = spl[1].split(")")
                         if (spl1[0] === PicPilot) {
-                            pic.selectedIndex = i;
+                            pic.selectedIndex = 1;
                             document.querySelector('#pilotInCommandIdCurrentEntry').onchange();
-                        }
+                            break;
+                          }
                     }
                 }
                 else if ('${this.state.egcaData[dataPos].instructional}' !== '') {
@@ -327,12 +331,15 @@ class Sample extends Component {
                     document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').value = InsPilot;
                     document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').onkeyup();
                     document.querySelector('#pilotInCommandIdCurrentEntry').onchange();
-                    var pic = document.getElementById('pilotInCommandIdCurrentEntry');
-                    for (var i = 0; i < pic.options.length; i++) {
-                        if (pic.options[i].text === InsPilot) {
-                            pic.selectedIndex = i;
+                    var instP = document.getElementById('pilotInCommandIdCurrentEntry');
+                    for (var i = 0; i < instP.options.length; i++) {
+                      let inst = instP.options[1].text.split("(");
+                        let inst1 = inst[1].split(")")
+                        if (inst1[0] === InsPilot) {
+                            instP.selectedIndex = 1;
                             document.querySelector('#pilotInCommandIdCurrentEntry').onchange();
-                        }
+                            break;
+                          }
                     }
                 }
                         else if ('${this.state.egcaData[dataPos].sic_day}' !== null && '${this.state.egcaData[dataPos].sic_night}' !== null  ) {
@@ -343,8 +350,10 @@ class Sample extends Component {
                     document.querySelector('#pilotInCommandIdExaminer').onchange();
                     let coP = document.getElementById('pilotInCommandIdCurrentEntry');
                     for (var i = 0; i < coP.options.length; i++) {
-                        if (coP.options[i].text === coPilot) {
-                            coP.selectedIndex = i;
+                        let coPil = coP.options[1].text.split("(");
+                        let coPil1 = coPil[1].split(")")
+                        if (coPil1[0] === coPilot) {
+                            coP.selectedIndex = 1;
                             document.querySelector('#pilotInCommandIdCurrentEntry').onchange();
                             break;
                         }
@@ -356,10 +365,12 @@ class Sample extends Component {
                           document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').value = Dual;
                           document.querySelector('#pilotInCommandIdCurrentEntry_chosen #chosenSearchId').onkeyup();
                           document.querySelector('#pilotInCommandIdCurrentEntry').onchange();
-                          var p1Us = document.getElementById('pilotInCommandIdCurrentEntry');
-                          for (var i = 0; i < p1Us.options.length; i++) {
-                              if (p1Us.options[i].text === Dual) {
-                                  p1Us.selectedIndex = i;
+                          var p1Ut = document.getElementById('pilotInCommandIdCurrentEntry');
+                          for (var i = 0; i < p1Ut.options.length; i++) {
+                            let p1UtP = p1Ut.options[1].text.split("(");
+                            let p1UtP1 = p1UtP[1].split(")")
+                              if (p1UtP1[0] === Dual) {
+                                p1Ut.selectedIndex = 1;
                                   document.querySelector('#pilotInCommandIdCurrentEntry').onchange();
                                   break;
                               }
@@ -373,8 +384,10 @@ class Sample extends Component {
                     document.querySelector('#pilotInCommandIdCurrentEntry').onchange();
                     var p1Us = document.getElementById('pilotInCommandIdCurrentEntry');
                     for (var i = 0; i < p1Us.options.length; i++) {
-                        if (p1Us.options[i].text === p1Pilot) {
-                            p1Us.selectedIndex = i;
+                          let p1UsP = p1Us.options[1].text.split("(");
+                          let p1UsP1 = p1UsP[1].split(")")
+                        if (p1UsP1[0] === p1Pilot) {
+                            p1Us.selectedIndex = 1;
                             document.querySelector('#pilotInCommandIdCurrentEntry').onchange();
                             break;
                         }
@@ -434,7 +447,11 @@ class Sample extends Component {
                 document.querySelector('#arrivaldate').value = '${arrD}';
                 document.querySelector('#arrivaltime').value = '${chocksOn}';
                 document.querySelector('#numberOfLandings').value = ${this.state.egcaData[dataPos].nightLanding} + ${this.state.egcaData[dataPos].dayLanding};
-            }, 40000)
+                  var myElement = "#showHideCrsCountryDist";
+                  if($(myElement).is(":hidden") == false ){
+                      document.querySelector('#distance').value = '${depD}';
+                  }
+              }, 40000)
             
             setTimeout(function () {
                 if ('${this.state.egcaData[dataPos].sim_instrument}' !== 'null'){

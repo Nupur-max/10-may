@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Alert, ActivityIndicator,Platform } from 'react-native';
 //import { View, Text, StyleSheet,ImageBackground } from "react-native";
 import Colors from '../components/colors';
 import iap, * as RNIap from 'react-native-iap';
 import {BaseUrl} from '../components/url.json'
+import {BaseUrlAndroid} from '../components/urlAndroid.json'
 import AsyncStorage from '@react-native-community/async-storage';
 
 const itemSubs = Platform.select({
@@ -171,7 +172,7 @@ const Subscribe = ({ navigation }) => {
     user = JSON.parse(user);
     try {
       // send receipt to backend
-      const deliveryReceipt = await fetch(BaseUrl +  "save_reciept", {
+      const deliveryReceipt = await fetch(Platform.OS==='ios'?BaseUrl +  "save_reciept": BaseUrlAndroid + "save_reciept", {
         headers: { "Content-Type": "application/json" },
         method: "POST",
         body: JSON.stringify({ "token": receipt , 'user_id': user.id }),
@@ -197,7 +198,7 @@ const Subscribe = ({ navigation }) => {
     user = JSON.parse(user);
     try {
       // send receipt to backend
-      const deliveryReceipt = await fetch(BaseUrl +  "save_reciept", {
+      const deliveryReceipt = await fetch(Platform.OS==='ios'?BaseUrl +  "save_reciept": BaseUrlAndroid + "save_reciept", {
         headers: { "Content-Type": "application/json" },
         method: "POST",
         body: JSON.stringify({ "reciept": receipt , 'user_id': user.id }),

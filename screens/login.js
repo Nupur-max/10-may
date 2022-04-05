@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ImageBackground, Dimensions, TextInput, TouchableOpacity, Alert, Modal, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, Dimensions, TextInput, TouchableOpacity, Alert, Modal, Pressable,Platform } from 'react-native';
 import Colors from '../components/colors';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -13,6 +13,7 @@ import { FlyingData } from '../store/actions/flyingAction'
 
 
 import {BaseUrl} from '../components/url.json';
+import {BaseUrlAndroid} from '../components/urlAndroid.json';
 // import axios from 'axios';
 
 // const BASE_URL = 'https://dummyapi.io/data/api';
@@ -39,8 +40,8 @@ const db = SQLite.openDatabase(
 
 const Login = ({navigation}) => {
 
-  const [email, setEmail] = React.useState('anantmathur1@yahoo.co.in'); //anantmathur1@yahoo.co.in//nupur1@gmail.com //aviatorrishabh@gmail.com
-  const [pwd, setPwd] = React.useState('Fighters12'); //Fighters12//1234 //riturishi
+  const [email, setEmail] = React.useState(''); //anantmathur1@yahoo.co.in//nupur1@gmail.com //aviatorrishabh@gmail.com
+  const [pwd, setPwd] = React.useState(''); //Fighters12//1234 //riturishi
   const [loading, setLoading] = React.useState(true)
   const [offset, setOffset] = React.useState(1)
   const [forgotModalVisible, setForgotModalVisible] = React.useState(false)
@@ -54,7 +55,7 @@ const Login = ({navigation}) => {
     setShow(false)
     dataDispatcher(LogListData({data: []}))
     //Alert.alert(petname);
-    await fetch(BaseUrl + 'login',{
+    await fetch(Platform.OS==='ios'?BaseUrl + 'login' : BaseUrlAndroid + 'login',{
         method : 'POST',
         headers:{
             'Accept': 'application/json',
@@ -102,7 +103,7 @@ const Login = ({navigation}) => {
         });
         navigation.navigate('SettingScreen')
 
-        fetch(BaseUrl+'display_logbook',{
+        fetch(Platform.OS==='ios'?BaseUrl+'display_logbook':BaseUrlAndroid+'display_logbook',{
           method : 'POST',
           headers:{
               'Accept': 'application/json',
@@ -125,7 +126,7 @@ const Login = ({navigation}) => {
           }
         })
         
-        fetch(BaseUrl+'listlogbook',{
+        fetch(Platform.OS==='ios'?BaseUrl+'listlogbook':BaseUrlAndroid+'listlogbook',{
           method : 'POST',
           headers:{
               'Accept': 'application/json',
@@ -138,7 +139,7 @@ const Login = ({navigation}) => {
       .then(syncData => {
          if (syncData.data.length !== 0){
          syncData.data.map((data, index) => {
-            console.log('synced data',data.p1,data.p2)
+            console.log('synced data',syncData.data.length)
             const takeoffTime = data.offTime===''?data.outTime : data.offTime;
             const LandingTime = data.onTime===''?data.inTime : data.onTime;
             var d = new Date(data.date);
@@ -158,7 +159,7 @@ const Login = ({navigation}) => {
             // console.log('fake', nameAircrfat)
             db.transaction((tx) => {
               tx.executeSql(
-            'INSERT INTO logbook (tag, user_id, flight_no, date, day,  actual_Instrument, aircraftReg, aircraftType, approach1, approach2, approach3, approach4, approach5, approach6, approach7, approach8, approach9, approach10, crewCustom1, crewCustom2, crewCustom3, crewCustom4, crewCustom5, dayLanding, dayTO, dual_day, dual_night, flight, from_airportID, from_altitude, from_city, from_country, from_dayLightSaving, from_source, from_lat, from_long, from_name, from_nameICAO, from_nameIATA, from_timeZone, from_type, from_dst_status, fullStop, ifr_vfr, instructional, instructor, inTime, landingCustom1, landingCustom2, landingCustom3, landingCustom4, landingCustom5, landingCustom6, landingCustom7, landingCustom8, landingCustom9, landingCustom10, night,nightLanding, nightTO, offTime, onTime, outTime, p1, p1_us_day, p1_us_night, p2, pic_day, pic_night, stl, reliefCrew1, reliefCrew2, reliefCrew3, reliefCrew4, route, sic_day, sic_night, sim_instructional, sim_instrument, selected_role, student, timeCustom1, timeCustom2, timeCustom3, timeCustom4, timeCustom5, timeCustom6, timeCustom7, timeCustom8, timeCustom9, timeCustom10, to_airportID, to_altitude, to_city, to_country, to_dayLightSaving, to_source, to_lat, to_long, to_name, to_nameIATA, to_nameICAO, to_timeZone, to_type, to_dst_status, totalTime, touch_n_gos, waterLanding, waterTO, x_country_day, x_country_night, x_country_day_leg, x_country_night_leg, outTime_LT, offTime_LT, onTime_LT, inTime_LT, sim_type, sim_exercise, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, simLocation, p1_ut_day, p1_ut_night, remark, autolanding, flight_date, selected_flight_timelog, imported_log, orderedDate,purpose1) VALUES ("server","'+resData.data.id+'","'+data.flight_no+'","'+PerfectDate+'","'+data.day+'","'+data.actual_Instrument+'","'+data.aircraftReg+'","'+nameAircrfat+'","'+data.approach1+'","'+data.approach2+'","'+data.approach3+'","'+data.approach4+'","'+data.approach5+'","'+data.approach6+'","'+data.approach7+'","'+data.approach8+'","'+data.approach9+'","'+data.approach10+'","'+data.crewCustom1+'","'+data.crewCustom2+'","'+data.crewCustom3+'","'+data.crewCustom4+'","'+data.crewCustom5+'","'+data.dayLanding+'" , "'+data.dayTO+'" , "'+data.dual_day+'" , "'+data.dual_night+'" , "'+data.flight+'" , "'+data.from_airportID+'" , "'+data.from_altitude+'" , "'+data.from_city+'" , "'+data.from_country+'" , "'+data.from_dayLightSaving+'" , "'+data.from_source+'" , "'+data.from_lat+'" , "'+data.from_long+'" , "'+data.from_name+'" ,"'+data.from_nameICAO+'" , "'+data.from_nameIATA+'" , "'+data.from_timeZone+'" , "'+data.from_type+'" , "'+data.from_dst_status+'" , "'+data.fullStop+'" , "'+data.ifr_vfr+'" , "'+data.instructional+'" , "'+data.instructor+'" , "'+data.inTime+'" , "'+data.landingCustom1+'" , "'+data.landingCustom2+'" , "'+data.landingCustom3+'" , "'+data.landingCustom4+'" , "'+data.landingCustom5+'" , "'+data.landingCustom6+'" , "'+data.landingCustom7+'" , "'+data.landingCustom8+'" , "'+data.landingCustom9+'" , "'+data.landingCustom10+'" , "'+data.night+'" , "'+data.nightLanding+'" , "'+data.nightTO+'" , "'+takeoffTime+'" , "'+LandingTime+'" , "'+data.outTime+'" , "'+conditonalP1+'" , "'+data.p1_us_day+'" , "'+data.p1_us_night+'" , "'+data.p2+'" , "'+data.pic_day+'" , "'+data.pic_night+'" , "'+data.stl+'" , "'+data.reliefCrew1+'" , "'+data.reliefCrew2+'" , "'+data.reliefCrew3+'" , "'+data.reliefCrew4+'" , "'+data.route+'" , "'+data.sic_day+'" , "'+data.sic_night+'" , "'+data.sim_instructional+'" , "'+data.sim_instrument+'" , "'+data.selected_role+'" , "'+data.student+'" , "'+data.timeCustom1+'" , "'+data.timeCustom2+'" , "'+data.timeCustom3+'" , "'+data.timeCustom4+'" , "'+data.timeCustom5+'" , "'+data.timeCustom6+'" , "'+data.timeCustom7+'" , "'+data.timeCustom8+'" , "'+data.timeCustom9+'" , "'+data.timeCustom10+'" , "'+data.to_airportID+'" , "'+data.to_altitude+'" , "'+data.to_city+'" , "'+data.to_country+'" , "'+data.to_dayLightSaving+'" , "'+data.to_source+'" , "'+data.to_lat+'" , "'+data.to_long+'" , "'+data.to_name+'" , "'+data.to_nameIATA+'" , "'+data.to_nameICAO+'" , "'+data.to_timeZone+'" , "'+data.to_type+'" , "'+data.to_dst_status+'" , "'+data.totalTime+'" , "'+data.touch_n_gos+'" , "'+data.waterLanding+'" , "'+data.waterTO+'" , "'+data.x_country_day+'" , "'+data.x_country_night+'" , "'+data.x_country_day_leg+'" , "'+data.x_country_night_leg+'" , "'+data.outTime_LT+'" , "'+data.offTime_LT+'" , "'+data.onTime_LT+'" , "'+data.inTime_LT+'" , "'+data.sim_type+'" , "'+data.sim_exercise+'" , "'+data.pf_hours+'" , "'+data.pm_hours+'" , "'+data.sfi_sfe+'" , "'+data.simCustom1+'" , "'+data.simCustom2+'" , "'+data.simCustom3+'" , "'+data.simCustom4+'" , "'+data.simCustom5+'","'+data.simLocation+'","'+data.p1_ut_day+'","'+data.p1_ut_night+'","'+data.remark+'","'+data.autolanding+'","'+data.flight_date+'","'+data.selected_flight_timelog+'","'+data.imported_log+'","'+orderedDate+'","'+data.timeCustom1+'")',
+            'INSERT INTO logbook (tag, user_id, flight_no, date, day,  actual_Instrument, aircraftReg, aircraftType, approach1, approach2, approach3, approach4, approach5, approach6, approach7, approach8, approach9, approach10, crewCustom1, crewCustom2, crewCustom3, crewCustom4, crewCustom5, dayLanding, dayTO, dual_day, dual_night, flight, from_airportID, from_altitude, from_city, from_country, from_dayLightSaving, from_source, from_lat, from_long, from_name, from_nameICAO, from_nameIATA, from_timeZone, from_type, from_dst_status, fullStop, ifr_vfr, instructional, instructor, inTime, landingCustom1, landingCustom2, landingCustom3, landingCustom4, landingCustom5, landingCustom6, landingCustom7, landingCustom8, landingCustom9, landingCustom10, night,nightLanding, nightTO, offTime, onTime, outTime, p1, p1_us_day, p1_us_night, p2, pic_day, pic_night, stl, reliefCrew1, reliefCrew2, reliefCrew3, reliefCrew4, route, sic_day, sic_night, sim_instructional, sim_instrument, selected_role, student, timeCustom1, timeCustom2, timeCustom3, timeCustom4, timeCustom5, timeCustom6, timeCustom7, timeCustom8, timeCustom9, timeCustom10, to_airportID, to_altitude, to_city, to_country, to_dayLightSaving, to_source, to_lat, to_long, to_name, to_nameIATA, to_nameICAO, to_timeZone, to_type, to_dst_status, totalTime, touch_n_gos, waterLanding, waterTO, x_country_day, x_country_night, x_country_day_leg, x_country_night_leg, outTime_LT, offTime_LT, onTime_LT, inTime_LT, sim_type, sim_exercise, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, simLocation, p1_ut_day, p1_ut_night, remark, autolanding, flight_date, selected_flight_timelog, imported_log, orderedDate,purpose1) VALUES ("'+data.tag+'","'+resData.data.id+'","'+data.flight_no+'","'+PerfectDate+'","'+data.day+'","'+data.actual_Instrument+'","'+data.aircraftReg+'","'+nameAircrfat+'","'+data.approach1+'","'+data.approach2+'","'+data.approach3+'","'+data.approach4+'","'+data.approach5+'","'+data.approach6+'","'+data.approach7+'","'+data.approach8+'","'+data.approach9+'","'+data.approach10+'","'+data.crewCustom1+'","'+data.crewCustom2+'","'+data.crewCustom3+'","'+data.crewCustom4+'","'+data.crewCustom5+'","'+data.dayLanding+'" , "'+data.dayTO+'" , "'+data.dual_day+'" , "'+data.dual_night+'" , "'+data.flight+'" , "'+data.from_airportID+'" , "'+data.from_altitude+'" , "'+data.from_city+'" , "'+data.from_country+'" , "'+data.from_dayLightSaving+'" , "'+data.from_source+'" , "'+data.from_lat+'" , "'+data.from_long+'" , "'+data.from_name+'" ,"'+data.from_nameICAO+'" , "'+data.from_nameIATA+'" , "'+data.from_timeZone+'" , "'+data.from_type+'" , "'+data.from_dst_status+'" , "'+data.fullStop+'" , "'+data.ifr_vfr+'" , "'+data.instructional+'" , "'+data.instructor+'" , "'+data.inTime+'" , "'+data.landingCustom1+'" , "'+data.landingCustom2+'" , "'+data.landingCustom3+'" , "'+data.landingCustom4+'" , "'+data.landingCustom5+'" , "'+data.landingCustom6+'" , "'+data.landingCustom7+'" , "'+data.landingCustom8+'" , "'+data.landingCustom9+'" , "'+data.landingCustom10+'" , "'+data.night+'" , "'+data.nightLanding+'" , "'+data.nightTO+'" , "'+takeoffTime+'" , "'+LandingTime+'" , "'+data.outTime+'" , "'+conditonalP1+'" , "'+data.p1_us_day+'" , "'+data.p1_us_night+'" , "'+data.p2+'" , "'+data.pic_day+'" , "'+data.pic_night+'" , "'+data.stl+'" , "'+data.reliefCrew1+'" , "'+data.reliefCrew2+'" , "'+data.reliefCrew3+'" , "'+data.reliefCrew4+'" , "'+data.route+'" , "'+data.sic_day+'" , "'+data.sic_night+'" , "'+data.sim_instructional+'" , "'+data.sim_instrument+'" , "'+data.selected_role+'" , "'+data.student+'" , "'+data.timeCustom1+'" , "'+data.timeCustom2+'" , "'+data.timeCustom3+'" , "'+data.timeCustom4+'" , "'+data.timeCustom5+'" , "'+data.timeCustom6+'" , "'+data.timeCustom7+'" , "'+data.timeCustom8+'" , "'+data.timeCustom9+'" , "'+data.timeCustom10+'" , "'+data.to_airportID+'" , "'+data.to_altitude+'" , "'+data.to_city+'" , "'+data.to_country+'" , "'+data.to_dayLightSaving+'" , "'+data.to_source+'" , "'+data.to_lat+'" , "'+data.to_long+'" , "'+data.to_name+'" , "'+data.to_nameIATA+'" , "'+data.to_nameICAO+'" , "'+data.to_timeZone+'" , "'+data.to_type+'" , "'+data.to_dst_status+'" , "'+data.totalTime+'" , "'+data.touch_n_gos+'" , "'+data.waterLanding+'" , "'+data.waterTO+'" , "'+data.x_country_day+'" , "'+data.x_country_night+'" , "'+data.x_country_day_leg+'" , "'+data.x_country_night_leg+'" , "'+data.outTime_LT+'" , "'+data.offTime_LT+'" , "'+data.onTime_LT+'" , "'+data.inTime_LT+'" , "'+data.sim_type+'" , "'+data.sim_exercise+'" , "'+data.pf_hours+'" , "'+data.pm_hours+'" , "'+data.sfi_sfe+'" , "'+data.simCustom1+'" , "'+data.simCustom2+'" , "'+data.simCustom3+'" , "'+data.simCustom4+'" , "'+data.simCustom5+'","'+data.simLocation+'","'+data.p1_ut_day+'","'+data.p1_ut_night+'","'+data.remark+'","'+data.autolanding+'","'+data.flight_date+'","'+data.selected_flight_timelog+'","'+data.imported_log+'","'+orderedDate+'","'+data.timeCustom1+'")',
             );
 
             // tx.executeSql(
@@ -194,14 +195,12 @@ const Login = ({navigation}) => {
                   Total_time1[1] = '0'
                 }
               })
-        
-            //console.log('flying hours',Total_time1)
+
             dataDispatcher(FlyingData({totalFlyingHours: Total_time1}))
             tx.executeSql(
               'UPDATE userProfileData set Total_flying_hours = "'+Total_time1+'" where user_id="'+resData.data.id+'"'
               );
 
-            //console.log('index:', index+1) 
             dataDispatcher(ProgressData({ProgressValue: index+1, totalvalue: syncData.data.length}))
             if((index+1) == syncData.data.length ){
             let temData = [];
@@ -209,7 +208,18 @@ const Login = ({navigation}) => {
             tx.executeSql('SELECT id,tag,date,aircraftType,from_lat,from_long,from_nameICAO,offTime,onTime,p1,p2,to_nameICAO,to_lat,to_long,outTime,inTime,orderedDate,purpose1,timeCustom2 from logbook WHERE user_id = "'+resData.data.id+'" ORDER BY orderedDate DESC, onTime DESC limit 100', [], (tx, result) => {
                 //setOffset(offset + 10);
                 for (let i = 0; i < result.rows.length; i++) {
-                  //console.log('rows', result.rows.length)
+                  const chocksOFF =  result.rows.item(i).offTime.split(':')
+                  if(chocksOFF[0]<10){
+                    chocksOFF[0] = '0'+chocksOFF[0]
+                  }
+                  const getChocksOff = chocksOFF[0]+':'+chocksOFF[1]
+
+                  const chocksON = result.rows.item(i).onTime.split(':')
+                  if(chocksON[0]<10){
+                    chocksON[0] = '0'+chocksON[0]
+                  }
+                  const getChocksOn = chocksON[0]+':'+chocksON[1]
+              
                   temData.push({
                         id : result.rows.item(i).id,
                         tag : result.rows.item(i).tag,
@@ -218,8 +228,8 @@ const Login = ({navigation}) => {
                         from_lat : result.rows.item(i).from_lat,
                         from_long : result.rows.item(i).from_long,
                         from : result.rows.item(i).from_nameICAO, 
-                        chocksOffTime : result.rows.item(i).offTime, 
-                        chocksOnTime : result.rows.item(i).onTime,
+                        chocksOffTime : getChocksOff, 
+                        chocksOnTime : getChocksOn,
                         outTime : result.rows.item(i).outTime,
                         inTime : result.rows.item(i).inTime,
                         p1 : result.rows.item(i).p1,
@@ -254,7 +264,7 @@ const Login = ({navigation}) => {
 
  const ForgotPassword = async() => {
 
-  await fetch(BaseUrl+'forgot_password',{
+  await fetch(Platform.OS==='ios'?BaseUrl+'forgot_password':BaseUrlAndroid+'forgot_password',{
     method : 'POST',
     headers:{
         'Accept': 'application/json',

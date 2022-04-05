@@ -8,6 +8,7 @@ import Colors from '../components/colors';
 import AsyncStorage from '@react-native-community/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {BaseUrl} from '../components/url.json';
+import {BaseUrlAndroid} from '../components/urlAndroid.json';
 import DgcaLogbookStyles from '../styles/dgcaLogbookStyles';
 import { useDispatch, useSelector } from 'react-redux';
 import {FTOData,Elog_verifiers,trainingV,testV,commercialV} from '../components/dummydropdown'
@@ -41,7 +42,7 @@ const EGCAUpload = ({navigation}) => {
     const [egca_user,setEGCAUSER] = React.useState('IPLTM2020023010'); //IPLTM2020023010
     const [egca_pwd,setEGCAPWD] = React.useState('Fighters12!');//Fighters12!
     const [arrow,setArrow] = React.useState(true);
-    const [arrowSettings, setArrowSettings] = React.useState(false)
+    const [arrowSettings, setArrowSettings] = React.useState(true)
     const [FTOopen, setFTOOpen] = React.useState(false);
     const [FTOvalue, setFTOValue] = React.useState('');
     const [FTOitems, setFTOItems] = React.useState(FTOData);
@@ -60,7 +61,7 @@ const EGCAUpload = ({navigation}) => {
     const [AuthPersonitems, setAuthPersonItems] = React.useState(Elog_verifiers);
 
     const [egca, setEgca] = React.useState('Commercial');
-    const [choice, setChoice] = React.useState('');
+    const [choice, setChoice] = React.useState('no');
     const [open, setOpen] = React.useState(false);
     const [training, setTraining] = React.useState([]);
     const [trainingValue, setTrainingValue] = React.useState(trainingV);
@@ -74,7 +75,7 @@ const EGCAUpload = ({navigation}) => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
       
-        await fetch(BaseUrl+'update_egca_upload',{
+        await fetch(Platform.OS==='ios'?BaseUrl+'update_egca_upload':BaseUrlAndroid+'update_egca_upload',{
           method : 'POST',
           headers:{
               'Accept': 'application/json',

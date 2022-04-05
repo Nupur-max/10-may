@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet,SafeAreaView, TextInput,Dimensions, FlatList ,TouchableOpacity ,ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet,SafeAreaView, TextInput,Dimensions, FlatList ,TouchableOpacity ,ActivityIndicator,Platform } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ThemeContext } from '../../theme-context';
 import {PeopleDummy} from '../../components/dummyLogBookListing';
@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { PilotData } from '../../store/actions/pilotsAction';
 
 import {BaseUrl} from '../../components/url.json';
+import {BaseUrlAndroid} from '../../components/urlAndroid.json'
 
 import SQLite from 'react-native-sqlite-storage';
 
@@ -66,7 +67,7 @@ const People = ({navigation,route}) => {
   let user = await AsyncStorage.getItem('userdetails');
   user = JSON.parse(user);
 
-  await fetch(BaseUrl+'display_people',{
+  await fetch(Platform.OS==='ios'?BaseUrl+'display_people':BaseUrlAndroid+'display_people',{
     method : 'POST',
     headers:{
         'Accept': 'application/json',
@@ -151,13 +152,14 @@ const searchQuery = (dataToSearch) => {
 }
 
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
-  <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-    {item.Egca_reg_no === 'self' ?
+ <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
+    {item.Egca_reg_no === 'self' ||  item.Egca_reg_no === '' ?
     <Text style={[styles.Name, textColor]}>{item.Name}</Text> : <Text style={[styles.Name, textColor]}>{item.Name}({item.Egca_reg_no})</Text> }
   </TouchableOpacity>
   );
 
   const renderItem = ({item}) => {
+    console.log('item.Egca_reg_no',item.Egca_reg_no)
     const backgroundColor = item.id === selectedId ? dark?"#000":"#fff" : dark?"#000":"#fff";
     const color = dark?'#fff':'#000';
 
@@ -168,7 +170,7 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
       setParamsPic(previousParams => ({
         ...(previousParams || {}),
         childParam: 'value',
-        RoasterP1:item.Egca_reg_no === 'self' ? item.Name : item.Name+'('+item.Egca_reg_no+')',
+        RoasterP1:item.Egca_reg_no === 'self'|| item.Egca_reg_no === '' ? item.Name : item.Name+'('+item.Egca_reg_no+')',
         RoasteronlynameP1 : item.Name
       }));
       navigation.goBack();
@@ -178,7 +180,7 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
       setParamsSic(previousParams => ({
         ...(previousParams || {}),
         childParam : 'value',
-        RoasterP2:item.Egca_reg_no === 'self' ? item.Name : item.Name+'('+item.Egca_reg_no+')',
+        RoasterP2:item.Egca_reg_no === 'self' || item.Egca_reg_no === '' ? item.Name : item.Name+'('+item.Egca_reg_no+')',
         RoasteronlynameP2: item.Name,
 
       }));
@@ -282,7 +284,7 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
             //ListFooterComponent={renderFooter}
             />
             <View style={dark?styles.Darkfooter:styles.footer}>
-            <TouchableOpacity onPress={()=> navigation.navigate('SetPeople')}>
+            <TouchableOpacity onPress={()=> navigation.navigate('SetPeople',{from:route.params.from})}>
                 <View style={styles.button}>
                 <Text style={styles.buttonText}>ADD New</Text>
                 </View>

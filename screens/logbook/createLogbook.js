@@ -20,6 +20,7 @@ import { ProgressBar } from 'react-native-paper';
 import BackupStyle from '../../styles/backupStyles';
 import { PilotData } from '../../store/actions/pilotsAction';
 import { BaseUrl } from '../../components/url.json';
+import {BaseUrlAndroid} from '../../components/urlAndroid.json';
 import SQLite from 'react-native-sqlite-storage';
 import { useIsFocused } from "@react-navigation/native";
 import {trainingV,testV,commercialV} from '../../components/dummydropdown'
@@ -51,10 +52,8 @@ const CreateLogbook = ({ navigation }) => {
     const dataDispatcher = useDispatch();
 
     const getReduxDisplayData = useSelector(state => state.display.ActualI);
-
-
-const CalcActualInstrument = (inputText) => {
-    console.log(getReduxDisplayData.ActualI)
+ 
+   const CalcActualInstrument = (inputText) => {
      if (getReduxDisplayData.ActualI === true) {
         var t1 = filghtTimeM
         var t2 = getReduxDisplayData.TimeofAi
@@ -68,16 +67,24 @@ const CalcActualInstrument = (inputText) => {
         if (hour < 10) { hour = "0" + hour; }  
         var min=Math.floor((t1cm-t2cm)%60); 
         var m = (Math.round(min/15) * 15) % 60;
-        if (m < 10) { m = "0" + m; } 
+        if (m < 10) { m = "0" + m; }
         setAi(hour+':'+m)
+        //setAi(inputText)
     }
 }
 
-React.useEffect(() => {
-if (filghtTimeM) {
-CalcActualInstrument()}}, [filghtTimeM, CalcActualInstrument]);
+// React.useEffect(() => {
+//     if (isFocused) {
+//     CalcActualInstrument()}
+// }
+// , [isFocused,CalcActualInstrument]); 
+
 
 const day_editable = (dayTime) => {
+    if(rosterNameSic === 'Self'){
+        alert('Please check your role')
+        return;
+    }
       setSic_day(dayTime)
       setDayTime(dayTime)
       setP1_us_day(dayTime)
@@ -101,6 +108,10 @@ const day_editable = (dayTime) => {
 }
 
 const night_editable = (nightTime) => {
+    if(rosterNameSic === 'Self'){
+        alert('Please check your role')
+        return;
+    }
        setSic_night(nightTime)
        setNightTime(nightTime)
        setP1_us_night(nightTime)
@@ -123,8 +134,13 @@ const night_editable = (nightTime) => {
     setP1_us_day(DayHour+':'+Daymin)
 }
 
+//console.log('pic_day',params.RoasterP1)
 
 const SICday_editable = (inputText) => {
+    if(rosterNamePic === 'Self'){
+        alert('Please check your role')
+        return;
+    }
     setSic_day(inputText)
     setDayTime(inputText)
     setP1_us_day(inputText)
@@ -145,6 +161,10 @@ const SICday_editable = (inputText) => {
 }
 
 const SICnight_editable = (inputText) => {
+    if(rosterNamePic === 'Self'){
+        alert('Please check your role')
+        return;
+    }
      setSic_night(inputText)
      setNightTime(inputText)
      setP1_us_night(inputText)
@@ -396,6 +416,8 @@ const SICnight_editable = (inputText) => {
     const [rosterFrom, setRosterFrom] = React.useState('')
     const [rosterChocksOff, setRosterChocksOff] = React.useState('')
     const [savedChocksOff, setSavedChocksOff] = React.useState('')
+    const [savedChocksOn, setSavedChocksOn] = React.useState('')
+
     const [rosterTo, setRosterTo] = React.useState('')
     const [rosterChocksOn, setRosterChocksOn] = React.useState('')
     const [rosterAType, setRosterAType] = React.useState('')
@@ -576,7 +598,7 @@ const Roaster = async() => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
   
-      await fetch(BaseUrl+'roasterImport',{
+      await fetch(Platform.OS==='ios'?BaseUrl+'roasterImport':BaseUrlAndroid+'roasterImport',{
         method : 'POST',
         headers:{
             'Accept': 'application/json',
@@ -703,7 +725,7 @@ const importPilotList = async() => {
     setModalVisible(false);
     setPilotListProgress(0.3)
     setPilotsFetched(true)
-    await fetch(BaseUrl+'fetch_pilots',{
+    await fetch(Platform.OS==='ios'?BaseUrl+'fetch_pilots':BaseUrlAndroid+'fetch_pilots',{
       method : 'POST',
       headers:{
           'Accept': 'application/json',
@@ -832,9 +854,9 @@ const removeApproachInputTime = (ApproachIndex) => {
 
 
     //for configuration
-    const [config, setConfig] = React.useState(false);
+    //const [config, setConfig] = React.useState(false);
 
-    const { datee, Dateform, DateFormat, role } = React.useContext(DisplayContext);
+    const { datee, Dateform, DateFormat, role, config, configCheck } = React.useContext(DisplayContext);
    
     dataDispatcher(CreateLogbookData({AircraftType: rosterAType, FromICAO: rosterFrom, toICAO: rosterTo}))  // data dispatching to set aircraft screen
 
@@ -891,24 +913,20 @@ const removeApproachInputTime = (ApproachIndex) => {
     }, [params]);
 
     React.useEffect(() => {
-        if (Approachparams.childParam) {
-            setApproach1(Approachparams.ApproachMixture)
-            setApproach2(Approachparams.ApproachMixture)
-        }
-    }, [Approachparams]);
+        setRosterChocksOff(params.RoasterChocksOff)
+        setRosterChocksOn(params.RoasterChocksOn)
+    }, []);
 
     const purposeCheck = params.RosterPurpose
     const purposeCheck1 = purposeCheck == null? [] : purposeCheck.split(",");
 
-    console.log('rosterChocksOff',params.RoasterSavedChocksOff)
-
-    React.useEffect(async() => {
+    React.useEffect(() => {
         if(isFocused){
             setRosterId(params.RoasterId)
             setRosterFrom(params.RoasterFrom)
-            setRosterChocksOff(params.RoasterChocksOff)
+            //setRosterChocksOff(params.RoasterChocksOff)
             setRosterTo(params.RoasterTo)
-            setRosterChocksOn(params.RoasterChocksOn)
+            //setRosterChocksOn(params.RoasterChocksOn)
             setRosterAType(params.RoasterAType)
             setRosterNamePic(params.RoasterP1)
             setRosterNameSic(params.RoasterP2)
@@ -922,10 +940,14 @@ const removeApproachInputTime = (ApproachIndex) => {
             setSt(params.RoasterSim_type)
             setLocation(params.RoasterSimLoc)
             setSim_exercise(params.RoasterSim_exc)
+            setInstructional(params.RoasterInstructional)
+            setRemark(params.RoasterRemark)
+            setAi(params.RoasterAi)
 
             setTraining(purposeCheck1)
             setTest(purposeCheck1)
             setCommercial(purposeCheck1)
+            CalcActualInstrument()
         }
     }, [isFocused]);
 
@@ -1025,7 +1047,7 @@ React.useEffect(() => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
 
-        await fetch(BaseUrl + 'addLogbook', {
+        await fetch(Platform.OS==='ios'?BaseUrl + 'addLogbook':BaseUrlAndroid + 'addLogbook', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -1034,6 +1056,7 @@ React.useEffect(() => {
             body: JSON.stringify({
                 "roaster_id": rosterId,
                 "user_id": user.id,
+                "local_id" : rosterId,
                 "tag": 'server',
                 "date": ServeroriginalDate,
                 "flight_no": '',
@@ -1138,30 +1161,29 @@ React.useEffect(() => {
             })
         }).then(res => res.json())
             .then(resData => {
-            //    Alert.alert(resData.message);
+               //Alert.alert(resData.message);
             })
     };
-
 
     const deleteLogbbok = async () => {
-        let user = await AsyncStorage.getItem('userdetails');
-        user = JSON.parse(user);
-
-        await fetch(BaseUrl + 'deletelogbook', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "user_id": user.id,
-                "roaster_id": rosterId
-            })
-        }).then(res => res.json())
-            .then(resData => {
-                Alert.alert(resData.message);
-            });
-    };
+                let user = await AsyncStorage.getItem('userdetails');
+                user = JSON.parse(user);
+        
+                await fetch(Platform.OS==='ios'?BaseUrl + 'deletelogbook':BaseUrlAndroid + 'deletelogbook', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "user_id": user.id,
+                        "local_id": rosterId
+                    })
+                }).then(res => res.json())
+                    .then(resData => {
+                        Alert.alert(resData.message);
+                    });
+            };
 
     const DeleteLogs = () => {
         prePopulateddb.transaction(tx => {
@@ -1226,7 +1248,7 @@ React.useEffect(() => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
 
-        await fetch(BaseUrl + 'updateLogbook', {
+        await fetch(Platform.OS==='ios'?BaseUrl + 'updateLogbook':BaseUrlAndroid + 'updateLogbook', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -1328,13 +1350,13 @@ React.useEffect(() => {
     const constUpdateP2 = () => {
         prePopulateddb.transaction(tx => {
             if (rosterNameSic !== '') {
-                console.log('UPDATE logbook set p2="'+rosterNameSic+'",purpose1="'+PurposeData+'" where date="'+originalDate+'" AND isSaved != true')
                 tx.executeSql(
                     'UPDATE logbook set p2="'+rosterNameSic+'",purpose1="'+PurposeData+'" where date="'+originalDate+'" AND isSaved IS NOT "true" ',
                 );
             }
         });
     }
+    
     const insertQuery = async() => {
 
         const SimulatedInstrument = (si) ? si: null
@@ -2064,6 +2086,10 @@ React.useEffect(() => {
      const Approach1 = A+';'+B+';'+rosterTo;
 
      const ut_control = () => {
+        if(rosterNamePic==='Self') {
+            alert('please check your role')
+            return;
+        }
          setP1_us_day('')
          setP1_us_night('')
          setSic_day('')
@@ -2075,6 +2101,10 @@ React.useEffect(() => {
      } 
 
      const us_control = () => {
+        if(rosterNamePic==='Self') {
+            alert('please check your role')
+            return;
+        }
         setP1_us_day(dayTime)
         setP1_us_night(nightTime)
         setSic_day('')
@@ -2086,6 +2116,10 @@ React.useEffect(() => {
     }
 
     const dual_control = () => {
+        if(rosterNamePic==='Self') {
+            alert('please check your role')
+            return;
+        }
         setP1_us_day('')
         setP1_us_night('')
         setSic_day('')
@@ -2096,30 +2130,161 @@ React.useEffect(() => {
         setDual_night(nightTime)
     }
 
-     const returnTrip = () => {
-         if(!originalDate || rosterAType.length===1 || !rosterFrom || !rosterTo && !rosterChocksOff || !rosterChocksOn){
+     const returnTrip = async() => {
+         if(!originalDate || rosterAType.length===1 || !rosterFrom || !rosterTo){
              alert('Please Fill mandatory fields');
              setModalVisible(false)
          }
          else {
+            const SimulatedInstrument = (si) ? si: null
+            const NIGHTtemp = (nightTime) ? nightTime : '00:52'
+            let user = await AsyncStorage.getItem('userdetails');
+            user = JSON.parse(user);
+            if (!originalDate) {
+              alert('Please select Date');
+              return;
+            }
+            if (rosterAType.length === 1) {
+              alert('Please select Aircraft Type');
+              return;
+            }
+            if (!rosterFrom) {
+              alert('Please select from');
+              return;
+            }
+            if (!rosterTo) {
+              alert('Please select to');
+              return;
+            }
+            if (!rosterChocksOff && rosterAId!=='SIMU') {
+              alert('Please fill chocks off time');
+              return;
+            }
+            if (!rosterChocksOn && rosterAId!=='SIMU') {
+                alert('Please fill chocks on time');
+                return;
+              }
+            if (!rosterNameSic && rosterAId!=='SIMU') {
+                alert('Please fill P2');
+                return;
+              }
+    
+            prePopulateddb.transaction(tx => {
+            if (rosterId && rosterAId !== 'SIMU') {
+               //let temData = [];
+                tx.executeSql(
+                    'UPDATE logbook set tag="manual", user_id="'+user.id+'" , flight_no="", date="'+originalDate+'", day="'+dayTime+'", actual_Instrument="'+ai+'", aircraftReg="'+rosterAId+'", aircraftType="'+rosterAType+'", approach1="'+Approach1+'", approach2="'+approach2+'", approach3="", approach4="", approach5="", approach6="", approach7="", approach8="", approach9="", approach10="", crewCustom1="", crewCustom2="", crewCustom3="", crewCustom4="", crewCustom5="", dayLanding="'+dayLanding+'", dayTO="'+day_to+'", dual_day="'+dual_day+'", dual_night="'+dual_night+'", flight="'+flight+'", from_airportID="'+fromAirportid+'", from_altitude="'+fromElevation+'", from_city="", from_country="'+fromCountry+'", from_dayLightSaving="'+fromDst+'", from_source="'+fromSource+'", from_lat="'+fromLatitude+'", from_long="'+fromLongitude+'", from_name="'+fromAirportname+'", from_nameIATA="", from_nameICAO="'+rosterFrom+'", from_timeZone="'+fromTimeZone+'", from_type="'+fromType+'", from_dst_status="'+fromDstStatus+'", fullStop="'+fullStop+'", ifr_vfr="'+fr+'", instructional="'+instructional+'", instructor="'+instructor+'", inTime="'+landing+'", landingCustom1="", landingCustom2="", landingCustom3="", landingCustom4="", landingCustom5="", landingCustom6="", landingCustom7="", landingCustom8="", landingCustom9="", landingCustom10="", night="'+nightTime+'", nightLanding="'+nightLanding+'", nightTO="'+night_to+'", offTime="'+rosterChocksOff+'", onTime="'+rosterChocksOn+'", outTime="'+takeOff+'", p1="'+rosterNamePic+'", p1_us_day="'+p1_us_day+'", p1_us_night="'+p1_us_night+'", p2="'+rosterNameSic+'", pic_day="'+selfPICday+'", pic_night="'+selfPICnight+'", stl="'+stl+'", reliefCrew1="'+reliefCrew1+'", reliefCrew2="'+reliefCrew2+'", reliefCrew3="'+reliefCrew3+'", reliefCrew4="'+reliefCrew4+'", route="'+route+'", sic_day="'+SelfSICday+'", sic_night="'+SelfSICnight+'", sim_instructional="", sim_instrument="'+SimulatedInstrument+'", selected_role="", student="'+student+'", timeCustom1="", timeCustom2="", timeCustom3="", timeCustom4="", timeCustom5="", timeCustom6="", timeCustom7="", timeCustom8="", timeCustom9="", timeCustom10="", to_airportID="'+toAirportid+'", to_altitude="'+toElevation+'", to_city="", to_country="'+toCountry+'", to_dayLightSaving="'+toDst+'", to_source="'+toSource+'", to_lat="'+toLatitude+'", to_long="'+toLongitude+'", to_name="'+toAirportname+'", to_nameIATA="", to_nameICAO="'+rosterTo+'", to_timeZone="'+toTimeZone+'", to_type="'+toType+'", to_dst_status="'+toDstStatus+'", totalTime="'+filghtTimeM+'", touch_n_gos="'+touchGo+'", waterLanding="'+waterLanding+'", waterTO="'+water_to+'", x_country_day="'+xc_day+'", x_country_night="'+xc_night+'", x_country_day_leg="'+xc_day_leg+'", x_country_night_leg="'+xc_night_leg+'", outTime_LT="", offTime_LT="", onTime_LT="", inTime_LT="", sim_type="'+St+'", sim_exercise="'+Sim_exercise+'", pf_time="'+pfHours+'", pm_time="'+pmHours+'", sfi_sfe="'+sf+'", simCustom1="", simCustom2="", simCustom3="", simCustom4="", simCustom5="", simLocation="'+location+'", p1_ut_day="'+p1_ut_day+'", p1_ut_night="'+p1_ut_night+'", remark="'+remark+'", autolanding="'+autoLanding+'", flight_date="", selected_flight_timelog="", imported_log="", orderedDate="'+sortedDate+'", purpose1="'+PurposeData+'", distance="'+distance+'",isSaved="true" where id="'+rosterId+'"')
+                }
+            else if(rosterAId !== 'SIMU'){
+                tx.executeSql(
+                'INSERT INTO logbook (tag, user_id, flight_no, date, day,  actual_Instrument, aircraftReg, aircraftType, approach1, approach2, approach3, approach4, approach5, approach6, approach7, approach8, approach9, approach10, crewCustom1, crewCustom2, crewCustom3, crewCustom4, crewCustom5, dayLanding, dayTO, dual_day, dual_night, flight, from_airportID, from_altitude, from_city, from_country, from_dayLightSaving, from_source, from_lat, from_long, from_name, from_nameIATA, from_nameICAO, from_timeZone, from_type, from_dst_status, fullStop, ifr_vfr, instructional, instructor, inTime, landingCustom1, landingCustom2, landingCustom3, landingCustom4, landingCustom5, landingCustom6, landingCustom7, landingCustom8, landingCustom9, landingCustom10, night, nightLanding, nightTO, offTime, onTime, outTime, p1, p1_us_day, p1_us_night, p2, pic_day, pic_night, stl, reliefCrew1, reliefCrew2, reliefCrew3, reliefCrew4, route, sic_day, sic_night, sim_instructional, sim_instrument, selected_role, student, timeCustom1, timeCustom2, timeCustom3, timeCustom4, timeCustom5, timeCustom6, timeCustom7, timeCustom8, timeCustom9, timeCustom10, to_airportID, to_altitude, to_city, to_country, to_dayLightSaving, to_source, to_lat, to_long, to_name, to_nameIATA, to_nameICAO, to_timeZone, to_type, to_dst_status, totalTime, touch_n_gos, waterLanding, waterTO, x_country_day, x_country_night, x_country_day_leg, x_country_night_leg, outTime_LT, offTime_LT, onTime_LT, inTime_LT, sim_type, sim_exercise, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, simLocation, p1_ut_day, p1_ut_night, remark, autolanding, flight_date, selected_flight_timelog, imported_log, orderedDate,purpose1,distance,isSaved)  VALUES ("manual","'+user.id+'", "" ,"'+originalDate+'" , "'+dayTime+'" , "'+ai+'" , "'+rosterAId+'" , "'+rosterAType+'" , "'+Approach1+'" , "'+approach2+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+dayLanding+'" , "'+day_to+'" , "'+dual_day+'" , "'+dual_night+'" , "'+flight+'" , "'+fromAirportid+'" , "'+fromElevation+'" , "" , "'+fromCountry+'" , "'+fromDst+'" , "'+fromSource+'" , "'+fromLatitude+'" , "'+fromLongitude+'" , "'+fromAirportname+'" , "" , "'+rosterFrom+'", "'+fromTimeZone+'" , "'+fromType+'" , "'+fromDstStatus+'" , "'+fullStop+'" , "'+fr+'" , "'+instructional+'" , "'+instructor+'" , "'+landing+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+nightTime+'" , "'+nightLanding+'" , "'+night_to+'" , "'+rosterChocksOff+'" , "'+rosterChocksOn+'" , "'+takeOff+'" , "'+rosterNamePic+'" , "'+p1_us_day+'" , "'+p1_us_night+'" , "'+rosterNameSic+'" , "'+selfPICday+'" , "'+selfPICnight+'" , "'+stl+'" , "'+reliefCrew1+'" , "'+reliefCrew2+'" , "'+reliefCrew3+'" , "'+reliefCrew4+'" , "'+route+'" , "'+SelfSICday+'" , "'+SelfSICnight+'" , "" , "'+SimulatedInstrument+'" , "" , "'+student+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+toAirportid+'" , "'+toElevation+'" , "" , "'+toCountry+'" , "'+toDst+'" , "'+toSource+'" , "'+toLatitude+'" , "'+toLongitude+'" , "'+toAirportname+'" , "" , "'+rosterTo+'" , "'+toTimeZone+'" , "'+toType+'" , "'+toDstStatus+'" , "'+filghtTimeM+'" , "'+touchGo+'" , "'+waterLanding+'" , "'+water_to+'" , "'+xc_day+'" , "'+xc_night+'" , "'+xc_day_leg+'" , "'+xc_night_leg+'" , "" , "" , "" , "" , "'+St+'" , "'+Sim_exercise+'" , "'+pfHours+'" , "'+pmHours+'" , "'+sf+'" , "" , "" , "" , "" , "" , "'+location+'" , "'+p1_ut_day+'" , "'+p1_ut_night+'" , "'+remark+'" , "'+autoLanding+'" , "" , "" , "" , "'+sortedDate+'", "'+PurposeData+'", "'+distance+'","true")',
+              )
+            }
+            else if (rosterId && rosterAId==='SIMU') {
+                tx.executeSql(
+                    'UPDATE logbook set tag="manual",user_id="'+user.id+'",date="'+originalDate+'",flight="'+flight+'",aircraftType="'+rosterAType+'",aircraftReg="'+rosterAId+'",sim_type="'+St+'",from_nameICAO="'+rosterFrom+'",to_nameICAO="'+rosterTo+'",simLocation="'+location+'",sim_exercise="'+Sim_exercise+'",outTime="'+takeOff+'",inTime="'+landing+'",totalTime="'+filghtTimeM+'",pf_time="'+pfHours+'",pm_time="'+pmHours+'",sfi_sfe="'+sf+'",remark="'+remark+'",orderedDate="'+sortedDate+'" , isSaved="true" where id="'+rosterId+'"'
+                );
+            }
+            else if (rosterAId==='SIMU') {
+                tx.executeSql(
+                    'INSERT INTO logbook (tag, user_id, date, flight, aircraftType, aircraftReg, sim_type, from_nameICAO, to_nameICAO, simLocation, sim_exercise, outTime, inTime, totalTime, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, remark,orderedDate,isSaved ) VALUES ("manual","'+user.id+'","'+originalDate+'", "'+flight+'", "'+rosterAType+'", "'+rosterAId+'", "'+St+'", "'+rosterFrom+'", "'+rosterTo+'", "'+location+'", "'+Sim_exercise+'", "'+takeOff+'", "'+landing+'", "'+filghtTimeM+'", "'+pfHours+'", "'+pmHours+'", "'+sf+'", "", "", "", "", "", "'+remark+'", "'+sortedDate+'","true")',
+    
+                );
+            }
+            });
              setRosterFrom(rosterTo)
              setRosterTo(rosterFrom)
+             setRosterChocksOff('')
+             setRosterChocksOn('')
              setModalVisible(false)
          }
      }
 
-     const nextLeg = () => {
-        if(!originalDate || rosterAType.length===1 || !rosterFrom || !rosterTo && !rosterChocksOff || !rosterChocksOn){
+     const nextLeg = async() => {
+        if(!originalDate || rosterAType.length===1 || !rosterFrom || !rosterTo){
             alert('Please Fill mandatory fields');
             setModalVisible(false)
         }
         else {
+            const SimulatedInstrument = (si) ? si: null
+            const NIGHTtemp = (nightTime) ? nightTime : '00:52'
+            let user = await AsyncStorage.getItem('userdetails');
+            user = JSON.parse(user);
+            if (!originalDate) {
+              alert('Please select Date');
+              return;
+            }
+            if (rosterAType.length === 1) {
+              alert('Please select Aircraft Type');
+              return;
+            }
+            if (!rosterFrom) {
+              alert('Please select from');
+              return;
+            }
+            if (!rosterTo) {
+              alert('Please select to');
+              return;
+            }
+            if (!rosterChocksOff && rosterAId!=='SIMU') {
+              alert('Please fill chocks off time');
+              return;
+            }
+            if (!rosterChocksOn && rosterAId!=='SIMU') {
+                alert('Please fill chocks on time');
+                return;
+              }
+            if (!rosterNameSic && rosterAId!=='SIMU') {
+                alert('Please fill P2');
+                return;
+              }
+    
+            prePopulateddb.transaction(tx => {
+            if (rosterId && rosterAId !== 'SIMU') {
+               //let temData = [];
+                tx.executeSql(
+                    'UPDATE logbook set tag="manual", user_id="'+user.id+'" , flight_no="", date="'+originalDate+'", day="'+dayTime+'", actual_Instrument="'+ai+'", aircraftReg="'+rosterAId+'", aircraftType="'+rosterAType+'", approach1="'+Approach1+'", approach2="'+approach2+'", approach3="", approach4="", approach5="", approach6="", approach7="", approach8="", approach9="", approach10="", crewCustom1="", crewCustom2="", crewCustom3="", crewCustom4="", crewCustom5="", dayLanding="'+dayLanding+'", dayTO="'+day_to+'", dual_day="'+dual_day+'", dual_night="'+dual_night+'", flight="'+flight+'", from_airportID="'+fromAirportid+'", from_altitude="'+fromElevation+'", from_city="", from_country="'+fromCountry+'", from_dayLightSaving="'+fromDst+'", from_source="'+fromSource+'", from_lat="'+fromLatitude+'", from_long="'+fromLongitude+'", from_name="'+fromAirportname+'", from_nameIATA="", from_nameICAO="'+rosterFrom+'", from_timeZone="'+fromTimeZone+'", from_type="'+fromType+'", from_dst_status="'+fromDstStatus+'", fullStop="'+fullStop+'", ifr_vfr="'+fr+'", instructional="'+instructional+'", instructor="'+instructor+'", inTime="'+landing+'", landingCustom1="", landingCustom2="", landingCustom3="", landingCustom4="", landingCustom5="", landingCustom6="", landingCustom7="", landingCustom8="", landingCustom9="", landingCustom10="", night="'+nightTime+'", nightLanding="'+nightLanding+'", nightTO="'+night_to+'", offTime="'+rosterChocksOff+'", onTime="'+rosterChocksOn+'", outTime="'+takeOff+'", p1="'+rosterNamePic+'", p1_us_day="'+p1_us_day+'", p1_us_night="'+p1_us_night+'", p2="'+rosterNameSic+'", pic_day="'+selfPICday+'", pic_night="'+selfPICnight+'", stl="'+stl+'", reliefCrew1="'+reliefCrew1+'", reliefCrew2="'+reliefCrew2+'", reliefCrew3="'+reliefCrew3+'", reliefCrew4="'+reliefCrew4+'", route="'+route+'", sic_day="'+SelfSICday+'", sic_night="'+SelfSICnight+'", sim_instructional="", sim_instrument="'+SimulatedInstrument+'", selected_role="", student="'+student+'", timeCustom1="", timeCustom2="", timeCustom3="", timeCustom4="", timeCustom5="", timeCustom6="", timeCustom7="", timeCustom8="", timeCustom9="", timeCustom10="", to_airportID="'+toAirportid+'", to_altitude="'+toElevation+'", to_city="", to_country="'+toCountry+'", to_dayLightSaving="'+toDst+'", to_source="'+toSource+'", to_lat="'+toLatitude+'", to_long="'+toLongitude+'", to_name="'+toAirportname+'", to_nameIATA="", to_nameICAO="'+rosterTo+'", to_timeZone="'+toTimeZone+'", to_type="'+toType+'", to_dst_status="'+toDstStatus+'", totalTime="'+filghtTimeM+'", touch_n_gos="'+touchGo+'", waterLanding="'+waterLanding+'", waterTO="'+water_to+'", x_country_day="'+xc_day+'", x_country_night="'+xc_night+'", x_country_day_leg="'+xc_day_leg+'", x_country_night_leg="'+xc_night_leg+'", outTime_LT="", offTime_LT="", onTime_LT="", inTime_LT="", sim_type="'+St+'", sim_exercise="'+Sim_exercise+'", pf_time="'+pfHours+'", pm_time="'+pmHours+'", sfi_sfe="'+sf+'", simCustom1="", simCustom2="", simCustom3="", simCustom4="", simCustom5="", simLocation="'+location+'", p1_ut_day="'+p1_ut_day+'", p1_ut_night="'+p1_ut_night+'", remark="'+remark+'", autolanding="'+autoLanding+'", flight_date="", selected_flight_timelog="", imported_log="", orderedDate="'+sortedDate+'", purpose1="'+PurposeData+'", distance="'+distance+'",isSaved="true" where id="'+rosterId+'"')
+                }
+            else if(rosterAId !== 'SIMU'){
+                tx.executeSql(
+                'INSERT INTO logbook (tag, user_id, flight_no, date, day,  actual_Instrument, aircraftReg, aircraftType, approach1, approach2, approach3, approach4, approach5, approach6, approach7, approach8, approach9, approach10, crewCustom1, crewCustom2, crewCustom3, crewCustom4, crewCustom5, dayLanding, dayTO, dual_day, dual_night, flight, from_airportID, from_altitude, from_city, from_country, from_dayLightSaving, from_source, from_lat, from_long, from_name, from_nameIATA, from_nameICAO, from_timeZone, from_type, from_dst_status, fullStop, ifr_vfr, instructional, instructor, inTime, landingCustom1, landingCustom2, landingCustom3, landingCustom4, landingCustom5, landingCustom6, landingCustom7, landingCustom8, landingCustom9, landingCustom10, night, nightLanding, nightTO, offTime, onTime, outTime, p1, p1_us_day, p1_us_night, p2, pic_day, pic_night, stl, reliefCrew1, reliefCrew2, reliefCrew3, reliefCrew4, route, sic_day, sic_night, sim_instructional, sim_instrument, selected_role, student, timeCustom1, timeCustom2, timeCustom3, timeCustom4, timeCustom5, timeCustom6, timeCustom7, timeCustom8, timeCustom9, timeCustom10, to_airportID, to_altitude, to_city, to_country, to_dayLightSaving, to_source, to_lat, to_long, to_name, to_nameIATA, to_nameICAO, to_timeZone, to_type, to_dst_status, totalTime, touch_n_gos, waterLanding, waterTO, x_country_day, x_country_night, x_country_day_leg, x_country_night_leg, outTime_LT, offTime_LT, onTime_LT, inTime_LT, sim_type, sim_exercise, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, simLocation, p1_ut_day, p1_ut_night, remark, autolanding, flight_date, selected_flight_timelog, imported_log, orderedDate,purpose1,distance,isSaved)  VALUES ("manual","'+user.id+'", "" ,"'+originalDate+'" , "'+dayTime+'" , "'+ai+'" , "'+rosterAId+'" , "'+rosterAType+'" , "'+Approach1+'" , "'+approach2+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+dayLanding+'" , "'+day_to+'" , "'+dual_day+'" , "'+dual_night+'" , "'+flight+'" , "'+fromAirportid+'" , "'+fromElevation+'" , "" , "'+fromCountry+'" , "'+fromDst+'" , "'+fromSource+'" , "'+fromLatitude+'" , "'+fromLongitude+'" , "'+fromAirportname+'" , "" , "'+rosterFrom+'", "'+fromTimeZone+'" , "'+fromType+'" , "'+fromDstStatus+'" , "'+fullStop+'" , "'+fr+'" , "'+instructional+'" , "'+instructor+'" , "'+landing+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+nightTime+'" , "'+nightLanding+'" , "'+night_to+'" , "'+rosterChocksOff+'" , "'+rosterChocksOn+'" , "'+takeOff+'" , "'+rosterNamePic+'" , "'+p1_us_day+'" , "'+p1_us_night+'" , "'+rosterNameSic+'" , "'+selfPICday+'" , "'+selfPICnight+'" , "'+stl+'" , "'+reliefCrew1+'" , "'+reliefCrew2+'" , "'+reliefCrew3+'" , "'+reliefCrew4+'" , "'+route+'" , "'+SelfSICday+'" , "'+SelfSICnight+'" , "" , "'+SimulatedInstrument+'" , "" , "'+student+'" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "'+toAirportid+'" , "'+toElevation+'" , "" , "'+toCountry+'" , "'+toDst+'" , "'+toSource+'" , "'+toLatitude+'" , "'+toLongitude+'" , "'+toAirportname+'" , "" , "'+rosterTo+'" , "'+toTimeZone+'" , "'+toType+'" , "'+toDstStatus+'" , "'+filghtTimeM+'" , "'+touchGo+'" , "'+waterLanding+'" , "'+water_to+'" , "'+xc_day+'" , "'+xc_night+'" , "'+xc_day_leg+'" , "'+xc_night_leg+'" , "" , "" , "" , "" , "'+St+'" , "'+Sim_exercise+'" , "'+pfHours+'" , "'+pmHours+'" , "'+sf+'" , "" , "" , "" , "" , "" , "'+location+'" , "'+p1_ut_day+'" , "'+p1_ut_night+'" , "'+remark+'" , "'+autoLanding+'" , "" , "" , "" , "'+sortedDate+'", "'+PurposeData+'", "'+distance+'","true")',
+              )
+            }
+            else if (rosterId && rosterAId==='SIMU') {
+                tx.executeSql(
+                    'UPDATE logbook set tag="manual",user_id="'+user.id+'",date="'+originalDate+'",flight="'+flight+'",aircraftType="'+rosterAType+'",aircraftReg="'+rosterAId+'",sim_type="'+St+'",from_nameICAO="'+rosterFrom+'",to_nameICAO="'+rosterTo+'",simLocation="'+location+'",sim_exercise="'+Sim_exercise+'",outTime="'+takeOff+'",inTime="'+landing+'",totalTime="'+filghtTimeM+'",pf_time="'+pfHours+'",pm_time="'+pmHours+'",sfi_sfe="'+sf+'",remark="'+remark+'",orderedDate="'+sortedDate+'" , isSaved="true" where id="'+rosterId+'"'
+                );
+            }
+            else if (rosterAId==='SIMU') {
+                tx.executeSql(
+                    'INSERT INTO logbook (tag, user_id, date, flight, aircraftType, aircraftReg, sim_type, from_nameICAO, to_nameICAO, simLocation, sim_exercise, outTime, inTime, totalTime, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, remark,orderedDate,isSaved ) VALUES ("manual","'+user.id+'","'+originalDate+'", "'+flight+'", "'+rosterAType+'", "'+rosterAId+'", "'+St+'", "'+rosterFrom+'", "'+rosterTo+'", "'+location+'", "'+Sim_exercise+'", "'+takeOff+'", "'+landing+'", "'+filghtTimeM+'", "'+pfHours+'", "'+pmHours+'", "'+sf+'", "", "", "", "", "", "'+remark+'", "'+sortedDate+'","true")',
+    
+                );
+            }
+            });
+            setRosterFrom('')
             setRosterFrom(rosterTo)
             setRosterTo('')
+            setfilghtTimeM('')
+            setDayTime('')
+            setNightTime('')
             setModalVisible(false)
             setRosterChocksOff('')
             setRosterChocksOn('')
         }
+    }
+
+    copyTrip = () => {
+        setRosterChocksOff('')
+        setRosterChocksOn('')
+        setfilghtTimeM('')
+        setDayTime('')
+        setNightTime('')
+        setDayLanding('')
+        setNightLanding('')
+        setDay_to('')
+        setNight_to('')
+        setModalVisible(false)
     }
 
     const SelectEGCADETAILS = async() => {
@@ -2155,7 +2320,6 @@ React.useEffect(() => {
    }
 
    const SaveChocksOff = async(inputText) => {
-    console.log('inputText',inputText)
     if(isFocused){
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
@@ -2163,14 +2327,12 @@ React.useEffect(() => {
     prePopulateddb.transaction(tx => {
         if(inputText!==undefined){
         tx.executeSql('UPDATE logbook set savedChocksOff="'+inputText+'" where user_id="'+user.id+'"')
-        console.log('UPDATE logbook set savedChocksOff="'+inputText+'" where user_id="'+user.id+'"')
         }
         tx.executeSql('SELECT savedChocksOff FROM logbook Where user_id = "'+user.id+'"', [], (tx, result) => {
             for (let i = 0; i <= result.rows.length; i++) {
                 syncChocksOff.push({
                     savedChocksOff: result.rows.item(i).savedChocksOff,
                 })
-                //console.log('saved Chocks Off', result.rows.item(i).savedChocksOff)
                 if(params.RoasterChocksOff===''){
                     setRosterChocksOff(result.rows.item(i).savedChocksOff)
                     setSavedChocksOff(result.rows.item(i).savedChocksOff)
@@ -2183,21 +2345,205 @@ React.useEffect(() => {
         });
     }
 }
+
+const SaveChocksOn = async(inputText) => {
+    if(isFocused){
+    let user = await AsyncStorage.getItem('userdetails');
+    user = JSON.parse(user);
+    let syncChocksOn =  []
+    prePopulateddb.transaction(tx => {
+        if(inputText!==undefined){
+        tx.executeSql('UPDATE logbook set savedChocksOn="'+inputText+'" where user_id="'+user.id+'"')
+        }
+        tx.executeSql('SELECT savedChocksOn FROM logbook Where user_id = "'+user.id+'"', [], (tx, result) => {
+            for (let i = 0; i <= result.rows.length; i++) {
+                syncChocksOn.push({
+                    savedChocksOn: result.rows.item(i).savedChocksOn,
+                })
+                if(params.RoasterChocksOff===''){
+                    setRosterChocksOn(result.rows.item(i).savedChocksOn)
+                    setSavedChocksOn(result.rows.item(i).savedChocksOn)
+                }
+                
+             }
+        })
+        });
+    }
+}
+
 React.useEffect(()=>{
     if(isFocused){
-        //console.log('chocksOffTime',rosterChocksOff)
         SaveChocksOff()
+        SaveChocksOn()
     }
 },[isFocused])
 
 React.useEffect(()=>{
         if(params.RoasterChocksOff==='' && rosterChocksOff===''){
-            console.log('dfd',savedChocksOff)
             setRosterChocksOff(savedChocksOff)
         }
 },[rosterChocksOff])
-   
 
+//errors constants
+
+const [chocksoffErr, setChocksOffErr] = React.useState(false)
+
+const ChocksOffError = (inputText) => {
+    const splitRosterChocksOff = inputText.split(':');
+    //const RosterchocksOff = rosterChocksOff.split(':')
+
+    //console.log('sdhsd',RosterchocksOff)
+    if(inputText===''){
+        setChocksOffErr(false)
+    }
+    else if(splitRosterChocksOff[0]<10){
+        setChocksOffErr(true)
+    }
+    else if (splitRosterChocksOff[1]==["00"]){
+        setChocksOffErr(false)
+
+    }
+    else if(splitRosterChocksOff[1]<10){
+        setChocksOffErr(true)
+
+    }
+    else if(splitRosterChocksOff.length<2){
+        setChocksOffErr(true) 
+    }
+    else{
+        setChocksOffErr(false)
+    }
+    }
+
+const [takeoffErr, setTakeOffErr] = React.useState(false)
+   
+const TakeOffError = (inputText) => {
+    const splitTakeOff = inputText.split(':')
+    if(inputText===''){
+        setTakeOffErr(false)
+    }
+    else if(splitTakeOff[0]<10){
+        setTakeOffErr(true)
+    }
+    else if (splitTakeOff[1]==["00"]){
+        setTakeOffErr(false)
+    }
+    else if(splitTakeOff[1]<10){
+        setTakeOffErr(true)
+    }
+    else if(splitTakeOff.length<2){
+        setTakeOffErr(true) 
+    }
+    else{
+        setTakeOffErr(false)
+    }
+    }
+
+const [landingErr, setLandingErr] = React.useState(false)
+
+const checkLandingErr = (inputText) => {
+    const splitLanding = inputText.split(':')
+    if(inputText===''){
+        setLandingErr(false)
+    }
+    else if(splitLanding[0]<10){
+        setLandingErr(true)
+    }
+    else if (splitLanding[1]==["00"]){
+        setLandingErr(false)
+    }
+    else if(splitLanding[1]<10){
+        setLandingErr(true)
+    }
+    else if(splitLanding.length<2){
+        setLandingErr(true) 
+    }
+    else{
+        setLandingErr(false)
+    }
+    }
+
+const [chocksOnErr, setChocksOnErr] = React.useState(false)
+
+   const checkChocksOnErr = (inputText) => {
+    const splitChocksOn = inputText.split(':')
+    if(inputText===''){
+        setChocksOnErr(false)
+    }
+    else if(splitChocksOn[0]<10){
+        setChocksOnErr(true)
+    }
+    else if (splitChocksOn[1]==["00"]){
+        setChocksOnErr(false)
+    }
+    else if(splitChocksOn[1]<10){
+        setChocksOnErr(true)
+    }
+    else if(splitChocksOn.length<2){
+        setChocksOnErr(true) 
+    }
+    else{
+        setChocksOnErr(false)
+    }
+   }
+
+const [simulatedErr, setSimulatedErr] = React.useState(false)
+
+    const checkSiErr = (inputText) => {
+    const splitSi = inputText.split(':')
+    if(inputText===''){
+        setSimulatedErr(false)
+    }
+    else if(splitSi[0]<10){
+        setSimulatedErr(true)
+    }
+    else if (splitSi[1]==["00"]){
+        setSimulatedErr(false)
+    }
+    else if(splitSi[1]<10){
+        setSimulatedErr(true)
+    }
+    else if(splitSi.length<2){
+        setSimulatedErr(true) 
+    }
+    else{
+        setSimulatedErr(false)
+    }
+   }
+
+   
+   React.useEffect(() => {
+    //if(isFocused){
+    SelectDisplayQuery()
+    //}
+  },[]);
+  
+  //Sql starts
+  const SelectDisplayQuery = async() => {
+    let user = await AsyncStorage.getItem('userdetails');
+    user = JSON.parse(user);
+    let selectedData = []; 
+    prePopulateddb.transaction(tx => {
+        tx.executeSql(
+            'SELECT * from displayDetails WHERE user_id = "'+user.id+'"', [], (tx, result) => {
+                for (let i = 0; i <= result.rows.length; i++) {
+                selectedData.push({
+                  aircraftType :  result.rows.item(i).aircraftType, 
+                  aircraftId :  result.rows.item(i).aircraftId, 
+                  role :  result.rows.item(i).role,
+                  blockTime : result.rows.item(i).blockTime,
+
+                 });
+                 console.log('selected Data', selectedData)
+                 if(!params.RoasterAType){
+                 setRosterAType(result.rows.item(i).aircraftType)
+                 setRosterAId(result.rows.item(i).aircraftId)
+                 }
+                }
+            }
+        );
+    });
+}
    return (
         <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
         
@@ -2207,7 +2553,6 @@ React.useEffect(()=>{
         <View style={styles.header}>
         <MaterialCommunityIcons name="arrow-left" color={'#fff'} size={20} style={{padding:6}} onPress={()=>navigation.navigate('LogBookListing')} />
         <Text style={styles.aircrafts}>LogBook</Text>
-        {config?<TouchableOpacity style={{paddingLeft:150}} onPress={HideDoneConfig}><Text style={{color:'#fff'}}>Done config</Text></TouchableOpacity>:null}
         </View>
 
         <View style={SsStyle.centeredView}>
@@ -2510,26 +2855,32 @@ React.useEffect(()=>{
 
                 {rosterAId !== 'SIMU' && (<View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}><Text style={{ color: 'red' }}>*</Text>Chocks Off</Text>
+                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, paddingBottom:8 } }}><Text style={{ color: 'red' }}>*</Text>Chocks Off</Text>
+                        <View style={{justifyContent:'flex-end',position:'absolute',left:0,bottom:0,top:15}}>
+                        {chocksoffErr===true?<Text style={{color:'red'}}>Enter value in hh:mm form</Text>:null}
+                        </View>
                         <MaskedTextInput
                             mask='99:99'
                             value={ rosterChocksOff }
-                            onChangeText={inputText => {setRosterChocksOff(inputText);SaveChocksOff(inputText)}}
+                            onChangeText={inputText => {setRosterChocksOff(inputText);SaveChocksOff(inputText);ChocksOffError(inputText)}}
                             keyboardType="numeric"
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
                             style={dark?{color:'#fff'}:{color:'#000'}}
                         />
                     </View>
-                </View>)}
+               </View>)}
 
                 {takeOffToggle1 === true || rosterAId === "SIMU"?<View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Take-Off </Text>
+                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35,paddingBottom:8 } }}>Take-Off </Text>
+                        <View style={{justifyContent:'flex-end',position:'absolute',left:0,bottom:0,top:15}}>
+                        {takeoffErr===true?<Text style={{color:'red'}}>Enter value in hh:mm form</Text>:null}
+                        </View>
                         <MaskedTextInput
                             mask='99:99'
                             value={ rosterAId !== 'SIMU'? null : takeOff}
-                            onChangeText={inputText => setTakeOff(inputText)}
+                            onChangeText={inputText => {setTakeOff(inputText);TakeOffError(inputText)}}
                             keyboardType="numeric"
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
@@ -2540,11 +2891,14 @@ React.useEffect(()=>{
 
                 {landingToggle1 === true || rosterAId==="SIMU"?<View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Landing </Text>
+                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35,paddingBottom:8 } }}>Landing </Text>
+                        <View style={{justifyContent:'flex-end',position:'absolute',left:0,bottom:0,top:15}}>
+                        {landingErr===true?<Text style={{color:'red'}}>Enter value in hh:mm form</Text>:null}
+                        </View>
                         <MaskedTextInput
                             mask='99:99'
                             value={rosterAId !== 'SIMU'? null : landing}
-                            onChangeText={inputText => setLanding(inputText)}
+                            onChangeText={inputText => {setLanding(inputText);checkLandingErr(inputText)}}
                             keyboardType="numeric"
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
@@ -2555,11 +2909,14 @@ React.useEffect(()=>{
 
                 {rosterAId!== 'SIMU' && (<View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}><Text style={{ color: 'red' }}>*</Text>Chocks On</Text>
+                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35,paddingBottom:8 } }}><Text style={{ color: 'red' }}>*</Text>Chocks On</Text>
+                        <View style={{justifyContent:'flex-end',position:'absolute',left:0,bottom:0,top:15}}>
+                        {chocksOnErr===true?<Text style={{color:'red'}}>Enter value in hh:mm form</Text>:null}
+                        </View>
                         <MaskedTextInput
                             mask='99:99'
                             value={rosterChocksOn }
-                            onChangeText={inputText => setRosterChocksOn(inputText)}
+                            onChangeText={inputText => {setRosterChocksOn(inputText);SaveChocksOn(inputText);checkChocksOnErr(inputText)}}
                             keyboardType="numeric"
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
@@ -2765,7 +3122,7 @@ React.useEffect(()=>{
                             
                             <View style={{paddingVertical:10, alignItems: 'center'}}>
                             <MaterialCommunityIcons name="check-circle-outline" color={'#000'} size={50} style={{}}/>
-                            <Text style={styles.modalText} onPress={removeTextInput}>Set Title</Text>
+                            <Text style={styles.modalText} onPress={removeTextInput}>Custom Field</Text>
                             </View>
 
                             <View style={{backgroundColor: '#EFEFEF', width:'100%', alignItems:'center',padding:10,borderRadius:10}}>
@@ -2836,7 +3193,7 @@ React.useEffect(()=>{
                         <MaskedTextInput
                             mask='99:99'
                             value={filghtTimeM}
-                            onChangeText={inputText => setfilghtTimeM(inputText)}
+                            onChangeText={inputText => {setfilghtTimeM(inputText)}}
                             keyboardType="numeric"
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
@@ -2927,7 +3284,7 @@ React.useEffect(()=>{
                         <MaskedTextInput
                             mask='99:99'
                             value={ai}
-                            onChangeText={getReduxDisplayData.ActualI===undefined || getReduxDisplayData.ActualI===false?(inputText)=>setAi(inputText):CalcActualInstrument}
+                            onChangeText={(inputText)=>{setAi(inputText); CalcActualInstrument}}
                             keyboardType="numeric"
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
@@ -2969,12 +3326,12 @@ React.useEffect(()=>{
                     </View>
                 </View> : null}
 
-                {instructionalToggle === true && rosterAId !== 'SIMU'  ? <View style={Logbook.fieldWithoutBottom}>
+                {instructionalToggle === true && rosterAId !== 'SIMU' ? <View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
                         <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Instructional</Text>
                         <MaskedTextInput
                             mask='99:99'
-                            value={instructional}
+                            value={instructional==='null'?'00:00':instructional}
                             onChangeText={inputText => setInstructional(inputText)}
                             keyboardType="numeric"
                             placeholder="hh:mm"
@@ -3082,6 +3439,7 @@ React.useEffect(()=>{
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
                             style={{color:dark?'#fff':'#000'}}
+                            onFocus = {ut_control}
                         />
                     </View>
                 </View> : null}
@@ -3137,11 +3495,14 @@ React.useEffect(()=>{
 
                 {siToggle && rosterAId!== 'SIMU' ? <View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
-                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Simulated Instrument</Text>
+                        <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35,paddingBottom:8 } }}>Simulated Instrument</Text>
+                        <View style={{justifyContent:'flex-end',position:'absolute',left:0,bottom:0,top:15}}>
+                        {simulatedErr===true?<Text style={{color:'red'}}>Enter value in hh:mm form</Text>:null}
+                        </View>
                         <MaskedTextInput
                             mask='99:99'
                             value={si}
-                            onChangeText={inputText => setSi(inputText)}
+                            onChangeText={inputText => {setSi(inputText);checkSiErr(inputText)}}
                             keyboardType="numeric"
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
@@ -3285,7 +3646,7 @@ React.useEffect(()=>{
                             
                             <View style={{paddingVertical:10, alignItems: 'center'}}>
                             <MaterialCommunityIcons name="check-circle-outline" color={'#000'} size={50} style={{}}/>
-                            <Text style={styles.modalText}>Set Title</Text>
+                            <Text style={styles.modalText}>Custom Field</Text>
                             </View>
 
                             <View style={{backgroundColor: '#EFEFEF', width:'100%', alignItems:'center', padding:10}}>
@@ -3481,7 +3842,7 @@ React.useEffect(()=>{
                             
                             <View style={{paddingVertical:10, alignItems: 'center'}}>
                             <MaterialCommunityIcons name="check-circle-outline" color={'#000'} size={50} style={{}}/>
-                            <Text style={styles.modalText}>Set Title</Text>
+                            <Text style={styles.modalText}>Custom Field</Text>
                             </View>
 
                             <View style={{backgroundColor: '#EFEFEF', width:'100%', alignItems:'center', padding:10}}>
@@ -3588,7 +3949,7 @@ React.useEffect(()=>{
                             
                             <View style={{paddingVertical:10, alignItems: 'center'}}>
                             <MaterialCommunityIcons name="check-circle-outline" color={'#000'} size={50} style={{}}/>
-                            <Text style={styles.modalText}>Set Title</Text>
+                            <Text style={styles.modalText}>Custom Field</Text>
                             </View>
 
                             <View style={{backgroundColor: '#EFEFEF', width:'100%', alignItems:'center',padding:10}}>
@@ -3652,7 +4013,7 @@ React.useEffect(()=>{
                         <TextInput
                             placeholder=' Your Remarks'
                             placeholderTextColor='#393F45'
-                            value={remark}
+                            value={remark==='null'?'':remark}
                             onChangeText={(inputText) => setRemark(inputText)}
                             style={Platform.OS === 'android' ? { marginTop: -20, color:dark?'#fff':'#000' } : { marginTop: -10, color:dark?'#fff':'#000' }} 
                             />
@@ -3679,7 +4040,7 @@ React.useEffect(()=>{
                 <View style={{paddingVertical:10, alignItems: 'center'}}>
                     <MaterialCommunityIcons name="close-circle" color={'#000'} size={20} style={{paddingLeft:300}} onPress={()=>setRosterModalVisible(false)}/>
                     <MaterialCommunityIcons name="check-circle-outline" color={'#000'} size={50} style={{}}/>
-                    <Text style={styles.modalText} onPress={removeTextInput}>Set Title</Text>
+                    <Text style={styles.modalText} onPress={removeTextInput}>Roster Import</Text>
                 </View>
             </View>
             <View style={{flexDirection:'row', paddingTop:10}}>
@@ -3800,14 +4161,14 @@ React.useEffect(()=>{
                             <View style={ModalView.Modal}>
                                 <Text style={ModalView.ModalHeading}>Select Option</Text>
                             </View>
-                            <TouchableOpacity style={ModalView.Modal} onPress={Configuration}>
+                            <TouchableOpacity style={ModalView.Modal} onPress={()=>{configCheck(),setModalVisible(false)}}>
                             <MaterialCommunityIcons name="pin" color={dark?'#fff':'#000'} size={20}/>
                                 <View>
                                     {config ? <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}> Done Config</Text> : <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}>Config</Text>}
                                 </View>
                             </TouchableOpacity>
                             {rosterId ?
-                                <TouchableOpacity style={ModalView.Modal} onPress={()=>{DeleteLogs()}}>
+                                <TouchableOpacity style={ModalView.Modal} onPress={()=>{deleteLogbbok();DeleteLogs()}}>
                                     <MaterialCommunityIcons name="account-plus" color={dark?'#fff':'#000'} size={20}/>
                                     <View>
                                         <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}>Delete</Text>
@@ -3825,7 +4186,7 @@ React.useEffect(()=>{
                                     <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}>New Flight</Text>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity style={ModalView.Modal}>
+                            <TouchableOpacity style={ModalView.Modal} onPress={copyTrip}>
                             <MaterialCommunityIcons name="content-copy" color={dark?'#fff':'#000'} size={20}/>
                             <View>
                                 <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}>Copy Trip</Text>

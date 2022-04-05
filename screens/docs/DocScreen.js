@@ -223,22 +223,30 @@ const Docs = ({ navigation }) => {
   //   getLogbookData()
   // }, [getReduxDocData]);
 
-  React.useEffect(() => {
+  React.useEffect(async() => {
     if (isFocused) {
       onRefresh();
+      let allErrors = await AsyncStorage.getItem('failed');
+      console.log(allErrors)
+      if (allErrors !== null) {
+        allErrors = JSON.parse(allErrors);
+        console.log("All Error",allErrors)
+        setfailedUpload(allErrors)
+        setErrorModal(true)
+      }
     }
   }, [isFocused]);
 
-  React.useEffect(async() => { 
-    let allErrors = await AsyncStorage.getItem('failed');
-    console.log(allErrors)
-    if (allErrors !== null) {
-      allErrors = JSON.parse(allErrors);
-      console.log("All Error",allErrors)
-      setfailedUpload(allErrors)
-      setErrorModal(true)
-    }
-  });
+  // React.useEffect(async() => { 
+  //   let allErrors = await AsyncStorage.getItem('failed');
+  //   console.log(allErrors)
+  //   if (allErrors !== null) {
+  //     allErrors = JSON.parse(allErrors);
+  //     console.log("All Error",allErrors)
+  //     setfailedUpload(allErrors)
+  //     setErrorModal(true)
+  //   }
+  // });
 
   const [successUpload, setsuccessUpload] = React.useState([])
 
@@ -473,6 +481,9 @@ const Docs = ({ navigation }) => {
     }
     if (!data[index].aircraftReg) {
       errors.push({ message: "You can't upload this log to dgca due to missing Aircraft Registration" })
+    }
+    if (!data[index].Purpose) {
+      errors.push({ message: "You can't upload this log to dgca due to missing Purpose in the flight" })
     }
     if (errors.length) {
       alert("Errors:\n" + errors.map(function (e) { return e.message; }).join('\n'));

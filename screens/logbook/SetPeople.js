@@ -1,6 +1,6 @@
 //import liraries
 import React from 'react';
-import { View, Text,SafeAreaView, TouchableOpacity, ImageBackground, TextInput} from 'react-native';
+import { View, Text,SafeAreaView, TouchableOpacity, ImageBackground, TextInput, Platform} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ThemeContext } from '../../theme-context';
@@ -8,8 +8,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SetPeopleScreenStyle from '../../styles/setPeopleStyles';
 import { useSelector, useDispatch } from 'react-redux';
+import { ParamsContext } from '../../params-context';
 
 import {BaseUrl} from '../../components/url.json';
+import {BaseUrlAndroid} from '../../components/urlAndroid.json';
 
 import SQLite from 'react-native-sqlite-storage';
 
@@ -28,7 +30,7 @@ const db = SQLite.openDatabase(
 );
 
 // create a component
-const SetPeople = ({navigation}) => {
+const SetPeople = ({navigation,route}) => {
   
   const dataDispatcher = useDispatch();
     const [image, setImage] = React.useState(null);
@@ -38,6 +40,9 @@ const SetPeople = ({navigation}) => {
     const [airlineCode, setAirlineCode] = React.useState('')
     const [egcaId, setEgcaId ] = React.useState('')
     const [comments, setComments] = React.useState('')
+
+    const [, setParamsPic ] = React.useContext(ParamsContext);
+    const [, setParamsSic ] = React.useContext(ParamsContext);
 
     const selectingImage = () => {
         ImagePicker.showImagePicker({quality: 0.3}, responseGet => {
@@ -66,7 +71,7 @@ const SetPeople = ({navigation}) => {
         formData.append('comments', comments);
         const splittedBase64 = imageData.split(';base64');
         formData.append('img', splittedBase64[1]);
-        var Url = BaseUrl+'add_people'
+        var Url = Platform.OS==='ios'?BaseUrl+'add_people':BaseUrlAndroid+'add_people'
           fetch(Url, {
           method: 'POST',
           headers: {
@@ -94,7 +99,7 @@ const SetPeople = ({navigation}) => {
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
         let temData = [];
-        prePopulateddb.transaction(tx => {
+        db.transaction(tx => {
           tx.executeSql('SELECT airline_type FROM userProfileData Where user_id = "' + user.id + '"', [], (tx, result) => {
             if (result.rows.length > 0) {
             }
@@ -137,10 +142,26 @@ const SetPeople = ({navigation}) => {
           'INSERT INTO pilots (Airline,Egca_reg_no,Name,pilotId,selectedAirline,comments) VALUES ("'+userAirlineType+'","'+egcaId+'","'+name+'", "'+airlineCode+'", "'+userAirlineType+'", "'+comments+'")',
         );
       });
-      alert('Saved successfully');
+      //alert('Saved successfully');
     };
 
     //sqlite ends
+
+    const selectParams = () =>{ 
+      if(route.params.from === 'pic'){
+      setParamsPic(previousParams => ({
+        ...(previousParams || {}),
+      RoasterP1:egcaId === 'self' || egcaId=== '' ? name : name+'('+egcaId+')',
+      }));
+    }
+    else if(route.params.from === 'sic'){
+      setParamsSic(previousParams => ({
+        ...(previousParams || {}),
+        RoasterP2:egcaId === 'self' || egcaId=== '' ? name : name+'('+egcaId+')',
+      }));
+    }
+      navigation.navigate('CreateLogbook');
+    }
 
     return (
       <ScrollView style={[SetPeopleScreenStyle.container, {backgroundColor: theme.backgroundColor}]}>
@@ -232,7 +253,7 @@ const SetPeople = ({navigation}) => {
             </View>
             </View>
           
-            <TouchableOpacity onPress={()=>{insertQuery();uploadDataToServer();}}>
+            <TouchableOpacity onPress={()=>{insertQuery();uploadDataToServer();selectParams()}}>
                 <View style= {{alignItems:'center'}}>
                 <View style={SetPeopleScreenStyle.button}>
                 <Text style={SetPeopleScreenStyle.buttonText}>Save</Text>

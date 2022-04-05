@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Dimensions, Platform, SafeAreaView,KeyboardAvoidingView } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Dimensions, Platform, SafeAreaView,KeyboardAvoidingView,Modal } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RadioButton, List, Switch } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,6 +15,9 @@ import { DisplayData } from '../store/actions/displayAction';
 import { TotalTypeData } from '../store/actions/totalTypeAction';
 import { useSelector, useDispatch } from 'react-redux';
 import SQLite from 'react-native-sqlite-storage';
+import { useIsFocused } from "@react-navigation/native";
+
+import SsStyle from '../styles/settingScreenStyle';
 
 
 const prePopulateddb = SQLite.openDatabase(
@@ -34,20 +37,28 @@ const prePopulateddb = SQLite.openDatabase(
 // create a component
 const Display = ({navigation}) => {
 
+  const isFocused = useIsFocused();
+
     const dataDispatcher = useDispatch();
     const getReduxData = useSelector(state => state.display.ActualI);
     //console.log ('hjhygtdfd', getReduxData)
 
+    const[aircraftType, setAircraftType] = React.useState('')
     const[aircraftId, setAircraftId] = React.useState('')
+
+    console.log('idddddd',aircraftId)
 
     const [params] = React.useContext(ParamsContext);
 
+    const [modalVisible, setModalVisible] = React.useState(false);
+
     React.useEffect(() => {
-      if (params.childParam1) {
+      if (isFocused) {
         //console.log('The value of child param is: ', params.childParam1);
         setAircraftId(params.displayAirId)
+        setAircraftType(params.RoasterAType)
       }
-    }, [params]);
+    }, [isFocused]);
 
     const [country, setCountry] = React.useState(false);
     const [instrument, setInstrument] = React.useState(false);
@@ -57,18 +68,79 @@ const Display = ({navigation}) => {
 
     const handleActualInstrument = () => {
         dataDispatcher(DisplayData({ActualI: instrument, TimeofAi: blockTime[blockTimeValue], Xc: country}))
-        if(blockTime[blockTimeValue]===undefined){
-          alert('Please Select Block Time to proceed!')
-        }
-        else{
-        alert('Changes Saved')
-        }
+        // if(blockTime[blockTimeValue]===undefined){
+        //   alert('Please Select Block Time to proceed!')
+        // }
+        // else{
+        // //alert('Changes Saved')
+        // }
         //console.log('Pressed',blockTime[blockTimeValue]);
     }
 
     const { dark, theme, toggle } = React.useContext(ThemeContext);
 
     const { datee, Dateform, DateFormat, role, roleChecked } = React.useContext(DisplayContext);
+
+    console.log('roleeee',role)
+
+    React.useEffect(() => {
+      //if(isFocused){
+      SelectQuery()
+      //}
+    },[]);
+    
+    //Sql starts
+    const SelectQuery = async() => {
+      let user = await AsyncStorage.getItem('userdetails');
+      user = JSON.parse(user);
+      let selectedData = []; 
+      prePopulateddb.transaction(tx => {
+          tx.executeSql(
+              'SELECT * from displayDetails WHERE user_id = "'+user.id+'"', [], (tx, result) => {
+                  for (let i = 0; i <= result.rows.length; i++) {
+                  selectedData.push({
+                    aircraftType :  result.rows.item(i).aircraftType, 
+                    aircraftId :  result.rows.item(i).aircraftId, 
+                    role :  result.rows.item(i).role,
+                    blockTime : result.rows.item(i).blockTime,
+
+                   });
+                   console.log('selected Data', selectedData)
+                   setAircraftType(result.rows.item(i).aircraftType)
+                   setAircraftId(result.rows.item(i).aircraftId)
+                  }
+              }
+          );
+      });
+  }
+
+    const insertDisplayDetails = async() => {
+      let user = await AsyncStorage.getItem('userdetails');
+      user = JSON.parse(user);
+      // if (!role) {
+      //   alert('Please select role');
+      //   return;
+      // }
+      // if (!blockTimeValue) {
+      //   alert('Please select Block time to proceed');
+      //   return;
+      // }
+      prePopulateddb.transaction(tx => {
+        tx.executeSql('SELECT * FROM displayDetails Where user_id = "'+user.id+'"', [], (tx, result) => {
+          //setOffset(offset + 10);
+          if (result.rows.length > 0) {
+            tx.executeSql('UPDATE displayDetails set aircraftType="'+aircraftType+'",aircraftId="'+aircraftId+'", role="'+role+'",blockTime="'+blockTime[blockTimeValue]+'"  where user_id="'+user.id+'"')
+
+            alert('updated successfully')
+          }
+          else{
+            tx.executeSql( 'INSERT INTO displayDetails (user_id, aircraftType, aircraftId, role, blockTime) VALUES ("'+user.id+'","'+aircraftType+'","'+aircraftId+'", "'+role+'", "'+blockTime[blockTimeValue]+'")')
+
+            alert('Saved successfully')
+          }
+        });
+      });
+    }
     
     
 
@@ -169,7 +241,7 @@ const Display = ({navigation}) => {
         <View>
         <View style={{flexDirection:'row', justifyContent:'space-between'}}>
            <Text style={dark?DisplayStyles.DarkAircraftTypeText:DisplayStyles.AircraftTypeText}>Aircraft Type</Text>
-           <Text style={dark?{paddingLeft:200, lineHeight:30, color:'#fff'}:{paddingLeft:200, lineHeight:30}}>{params.displayAirType}</Text>
+           <Text style={dark?{paddingLeft:200, lineHeight:30, color:'#fff'}:{paddingLeft:200, lineHeight:30}}>{aircraftType}</Text>
            <MaterialCommunityIcons name="chevron-right" color={dark?'#fff':'#000'} size={20} style={{padding:6}}/>
         </View>
         </View>
@@ -180,7 +252,7 @@ const Display = ({navigation}) => {
            <View style={DisplayStyles.textInputView}>
            <TextInput 
             placeholder='Aircraft ID'
-            value={aircraftId}
+            value={aircraftId==='null'?'':aircraftId}
             onChangeText = {(inputText)=>setAircraftId(inputText)}
             placeholderTextColor='#D0D0D0'
             style={DisplayStyles.aircraftIdTextInput} />
@@ -247,8 +319,42 @@ const Display = ({navigation}) => {
         </View>
         </View>
         </RadioButton.Group>
+
+        <TouchableOpacity style={dark?DisplayStyles.DarkHeadline:DisplayStyles.headline} onPress={() => setModalVisible(true)}>
+          <Text style={dark?DisplayStyles.DarkHeadlineText:DisplayStyles.HeadlineText}>Default Flight Hours</Text>
+          <MaterialCommunityIcons  
+                name="help-circle-outline" color='#256173' size={25} onPress={() => setModalVisible(true)}/>
+        </TouchableOpacity>
+
+        <View style={SsStyle.centeredView}>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={SsStyle.centeredView}>
+                <View style={SsStyle.modalView1}>
+                    <View style={{width:'100%', backgroundColor:'#EFEFEF', padding:5, flexDirection:'row', justifyContent:'space-between',borderRadius:10}}>
+                    <Text style={SsStyle.modalText}>Default Flight Hours</Text>
+                    <MaterialCommunityIcons  
+                    name="close" color='#256173' size={25} style={{padding: 5,}} onPress={() => setModalVisible(!modalVisible)} />
+                    </View>
+                    <View>
+                        <Text style={SsStyle.mainText}>
+                        1.select cross country and approach to fill in the fields automatically in the relevant field. {'\n'}
+                        2.Actual instruments hours can be selected and will be added everytime to the flight by reducing from block hours.
+                        </Text>
+                    </View>
+                </View>
+                </View>
+            </Modal>
+            </View>
         
-        <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+        <View>
         <View style={{flexDirection:'row', padding:5}}>
            <Checkbox.Android
             color = {dark?'#fff':'#256173'}
@@ -300,7 +406,7 @@ const Display = ({navigation}) => {
         </View>
 
         <View style={{alignItems:'center'}}>
-            <TouchableOpacity onPress = {handleActualInstrument} style={dark?DisplayStyles.darkSaveChanges:DisplayStyles.saveChanges}>
+            <TouchableOpacity onPress = {()=>{handleActualInstrument(),insertDisplayDetails()}} style={dark?DisplayStyles.darkSaveChanges:DisplayStyles.saveChanges}>
                 <Text style={{color:'#fff', padding:5,textAlign:'center'}}>Save Changes</Text>
             </TouchableOpacity>
         </View>

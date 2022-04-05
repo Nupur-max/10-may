@@ -8,6 +8,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { RadioButton,} from 'react-native-paper';
 import { ThemeContext } from '../theme-context';
 import {BaseUrl} from '../components/url.json';
+import {BaseUrlAndroid} from '../components/urlAndroid.json';
 import { useSelector, useDispatch } from "react-redux";
 import { saveAircrafts, loadNotes } from "../store/reducers/aircraftReducer";
 import SQLite from 'react-native-sqlite-storage';
@@ -103,7 +104,7 @@ const SetAircraft = ({navigation, route}) => {
         formData.append('aircraftPhoto', splittedBase64[1]);
         // console.log('form data' , data._parts[0][1].uri)
         //console.log('form data' , formData)
-        var Url = BaseUrl+'add_logbook'
+        var Url = Platform.OS==='ios'?BaseUrl+'add_logbook':BaseUrlAndroid+'add+logbook'
           fetch(Url, {
           method: 'POST',
           headers: {

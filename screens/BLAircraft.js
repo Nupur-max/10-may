@@ -62,13 +62,13 @@ const searchQuery = async(dataToSearch) => {
           SearchedData.push(SingleResult);
           //console.log('single', SingleResult)
           //console.log(' Searched data', SearchedData);
-          setFilteredData(SearchedData);
+          //setFilteredData(SearchedData);
           dataDispatcher(BuildLogbookData({data: SearchedData}))
         }
         //setFilteredData(SearchedData);
         //console.log('Searched Result array: ', SearchedData)
       }else{
-        setFilteredData([]);
+        //setFilteredData([]);
         dataDispatcher(BuildLogbookData({data: []}))
         //console.log('No Data found')
       }
@@ -82,7 +82,7 @@ const getAircrafts = async() => {
   dataDispatcher(BuildLogbookData({data: []}))
   let data = [];
   db.transaction(tx => {
-    tx.executeSql('SELECT id,user_id,aircraft_type from buildLogbook WHERE user_id="'+user.id+'" limit 20', [], (tx, result) => {
+    tx.executeSql('SELECT id,user_id,aircraft_type from buildLogbook WHERE user_id="'+user.id+'"', [], (tx, result) => {
       //console.log(result);
       for (let i = 0 ; i <= result.rows.length ; i++) {
         data.push({
@@ -90,10 +90,10 @@ const getAircrafts = async() => {
           user_id: result.rows.item(i).user_id,
           aircraft_type : result.rows.item(i).aircraft_type,
         });
-        //console.log('Aircrafts',data);
+        console.log('Aircrafts',data);
       
       // setData(data);
-      setFilteredData(data);
+      //setFilteredData(data);
       dataDispatcher(BuildLogbookData({data: data}))
       }
       });
@@ -101,7 +101,7 @@ const getAircrafts = async() => {
 }
 
 const getReduxData = useSelector(state => state.bl.data);
-//console.log('from BLAircrafts list details', getReduxData.data);
+console.log('from BLAircrafts list details', getReduxData.data);
 
 //from sqlite
 
@@ -164,7 +164,7 @@ return (
             renderItem={renderItem}
             keyExtractor={(item, index) => {item.type,index}}
             numColumns={1}
-            extraData={selectedId, selectedIndex}
+            extraData={selectedId}
             />
         </View>
     );

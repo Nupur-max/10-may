@@ -18,6 +18,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {BaseUrl} from '../components/url.json';
+import {BaseUrlAndroid} from '../components/urlAndroid.json';
 import Colors from '../components/colors';
 
 // create a component
@@ -43,7 +44,7 @@ const Register = ({navigation}) => {
 
   const myfun = async() => {
     //Alert.alert(petname);
-    await fetch(BaseUrl+'register',{
+    await fetch(Platform.OS==='ios'?BaseUrl+'register':BaseUrlAndroid+'register',{
         method : 'POST',
         headers:{
             'Accept': 'application/json',
@@ -85,7 +86,6 @@ const Register = ({navigation}) => {
              <TextInput style={styles.textInputBox}
              placeholder='Name' 
              placeholderTextColor = "#266173"
-             style={{color:'#000'}}
              value={name}
              onChangeText={name => setName(name)}/>
            </View>
@@ -96,8 +96,7 @@ const Register = ({navigation}) => {
              placeholder='Email' 
              placeholderTextColor = "#266173"
              value={email}
-             onChangeText={email => setEmail(email)}
-             style={{color:'#000'}}/>
+             onChangeText={email => setEmail(email)}/>
            </View>
 
            <View style = {styles.inputBox}>
@@ -113,12 +112,12 @@ const Register = ({navigation}) => {
            <View style = {styles.inputBox}>
             <MaterialCommunityIcons 
              name="lock-outline" color='#266173' size={20} style={styles.icon}/>
-             <TextInput style={styles.textInputBox} 
+             <TextInput 
+             style={styles.textInputBox} 
              placeholder='Confirm Password' 
              placeholderTextColor = "#266173"
              value={cp}
-             onChangeText={cp => setCp(cp)}
-             style={{color:'#000'}}/>
+             onChangeText={cp => setCp(cp)}      />
            </View>
 
           {/* country, CountryCode */}
@@ -178,7 +177,6 @@ const Register = ({navigation}) => {
              placeholderTextColor = "#266173"
              value={mobile}
              onChangeText={mobile => setMobile(mobile)}
-             style={{color:'#000'}}
              />
            </View>
 
@@ -293,7 +291,7 @@ const styles = StyleSheet.create({
     },
     textInputBox:{
         width: '100%',
-        color: '#256173'
+        color: '#000'
     },
 });
 

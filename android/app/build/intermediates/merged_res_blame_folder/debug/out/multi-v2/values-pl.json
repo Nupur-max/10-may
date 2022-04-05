@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/gadgetzone/Desktop/react-native1/cojo-21-01-2020/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-pl/values-pl.xml",
+            "outputFile": "/Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-pl/values-pl.xml",
             "map": [
                 {
                     "source": "/Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/2d7bcf9b8d1b19f42adfdb3b06ba9f99/jetified-play-services-base-17.6.0/res/values-pl/values.xml",

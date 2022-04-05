@@ -30,40 +30,41 @@ const Support = ({navigation}) => {
             </Text>
             
             {/* supports */}
-            <View style={{flexDirection: 'row', marginTop:30, paddingHorizontal:5,}}>
+            <View style={{flexDirection: 'row', marginTop:30,justifyContent:'space-between'}}>
                 <Text style={styles.supportText}>Techsupport:</Text>
-                <Text style={{color: 'blue', paddingHorizontal: Platform.OS == 'android' ? 84 : 64}}
+                <Text style={{color: 'blue',}}
                       onPress={() => Linking.openURL('mailto:techsupport@autoflightlog.com')}>techsupport@autoflightlog.com
                 </Text>
             </View>
 
-            <View style={{flexDirection: 'row', marginTop:30, paddingHorizontal:5,}}>
+            <View style={{flexDirection: 'row', marginTop:30,}}>
                 <Text style={styles.supportText}>Subscriptions:</Text>
-                <Text style={{color: 'blue', paddingHorizontal: Platform.OS == 'android' ? 68 : 46}}
+                <Text style={{color: 'blue',}}
                       onPress={() => Linking.openURL('mailto:subscriptions@autoflightlog.com')}>subscriptions@autoflightlog.com
                 </Text>
             </View>
 
-            <View style={{flexDirection: 'row', marginTop:30, paddingHorizontal:5, }}>
+            <View style={{flexDirection: 'row', marginTop:30, }}>
                 <Text style={styles.supportText }>Youtube Tutorials:</Text>
-                <Text style={{color: 'blue', paddingHorizontal: Platform.OS == 'android' ? 48 : 24}}
-                      onPress={() => Linking.openURL('https://m.youtube.com/channel/UCEC6vnb1_C1Dyw7ncqpQRCQ')}>https://m.youtube.com/channel/UCEC6vnb1_C1Dyw7ncqpQRCQ
+                <Text style={{color: 'blue',}}
+                      onPress={() => Linking.openURL('https://m.youtube.com/channel/UCEC6vnb1_C1Dyw7ncqpQRCQ')}>https://m.youtube.com/channel/{
+                        '\n'}UCEC6vnb1_C1Dyw7ncqpQRCQ
                 </Text>
             </View>
 
-            <View style={{flexDirection: 'row', marginTop:30, paddingHorizontal:5,}}>
+            <View style={{flexDirection: 'row', marginTop:30,}}>
                 <Text style={styles.supportText}>Whatsapp Tech Support:</Text>
-                <Text style={{color: 'blue', paddingHorizontal: Platform.OS == 'android' ? 104 : 64}}
+                <Text style={{color: 'blue',}}
                       onPress={() => Linking.openURL('tel:+91-6366403020')}>+91-6366403020
                 </Text>
             </View>
 
-            <Text style={{...styles.supportText , ...{marginTop:50, paddingHorizontal:5}}}>
+            <Text style={{...styles.supportText , ...{marginTop:50}}}>
             Please Help us improve the app with your valuable Feedback
             </Text>
-            <View style={{flexDirection: 'row', marginTop:20, paddingHorizontal:5,}}>
+            <View style={{flexDirection: 'row', marginTop:20,}}>
                 <Text style={styles.supportText}>Feedback:</Text>
-                <Text style={{color: 'blue', paddingHorizontal: Platform.OS == 'android' ? 84 : 64}}
+                <Text style={{color: 'blue',}}
                       onPress={() => Linking.openURL('mailto:feedback@autoflightlog.com')}>feedback@autoflightlog.com
                 </Text>
             </View>
@@ -85,9 +86,10 @@ const Support = ({navigation}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexWrap:'wrap',
         alignItems: 'flex-start',
         backgroundColor: '#fff',
-        padding: 5,
+        padding: 15,
         width:'100%'
     },
     Email:{
