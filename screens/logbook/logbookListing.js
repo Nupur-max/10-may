@@ -630,16 +630,16 @@ const LogBookListing = ({ navigation }) => {
   //   }
   // }
 
-  React.useEffect(() => {
-    if(isFocused){
-      if(subscribe==='0'){
-        navigation.navigate('subscribe')
-      }
-      else{
-      onRefresh();
-      }
-    }
-  }, [isFocused,subscribe]);
+  // React.useEffect(() => {
+  //   if(isFocused){
+  //     if(subscribe==='0'){
+  //       navigation.navigate('subscribe')
+  //     }
+  //     else{
+  //     onRefresh();
+  //     }
+  //   }
+  // }, [isFocused,subscribe]);
 
   const getLogbookData = async () => {
     setLoadmore(true)

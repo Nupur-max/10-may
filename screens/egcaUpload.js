@@ -260,6 +260,7 @@ const EGCAUpload = ({navigation}) => {
         <View style={Platform.OS==='ios'?{padding: 20,zIndex:666}:{padding: 20}}>
         <DropDownPicker
           searchable={true}
+          searchPlaceholder="Type Name....."
           open={FTOopen}
           value={FTOvalue}
           items={FTOitems}
@@ -414,6 +415,7 @@ const EGCAUpload = ({navigation}) => {
           zIndex={1000}
           zIndexInverse={3000}
           searchable={true}
+          searchPlaceholder="Type Name....."
           open={AuthPersonOpen}
           value={AuthPersonvalue}
           items={AuthPersonitems}
