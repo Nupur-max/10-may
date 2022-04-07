@@ -80,6 +80,7 @@ const CreateLogbook = ({ navigation }) => {
 // , [isFocused,CalcActualInstrument]); 
 
 
+
 const day_editable = (dayTime) => {
     if(rosterNameSic === 'Self'){
         alert('Please check your role')
@@ -1321,7 +1322,7 @@ React.useEffect(() => {
 
     //sqlite starts
 
-    const selfPICday = rosterNamePic === 'Self' ? dayTime : setPic_day
+    const selfPICday = rosterNamePic === 'Self' ? dayTime : pic_day
     const selfPICnight = rosterNamePic === 'Self' ? nightTime : pic_night
 
     const SelfSICday = rosterNameSic === 'Self' ? dayTime : sic_day
@@ -2544,10 +2545,12 @@ const [simulatedErr, setSimulatedErr] = React.useState(false)
         );
     });
 }
+
+console.log('actual',instructional)
    return (
         <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
         
-        <ScrollView contentContainerStyle={{paddingBottom: 60}}>
+        <ScrollView nestedScrollEnabled={true} contentContainerStyle={{paddingBottom: 60}}>
         <SafeAreaView style={modalVisible || FlightmodalVisible || TimemodalVisible || LandingmodalVisible || ApproachmodalVisible || FlightAlertmodalVisible || TimeAlertmodalVisible || AppAlertmodalVisible || lndgAlertmodalVisible || importModal || RostermodalVisible ? {...Logbook.container, ...{backgroundColor: 'rgba(0,0,0,0.4)'}} : [Logbook.container, {backgroundColor: theme.backgroundColor}]}>
 
         <View style={styles.header}>
@@ -3047,51 +3050,7 @@ const [simulatedErr, setSimulatedErr] = React.useState(false)
                     {flightType !== "Non-commercial" ?<View>
                     <Text style = {dark?styles.DarkInnnerHeadings:styles.InnnerHeadings}>Purpose</Text>
                     </View>: null}
-
-                {flightType !== "Non-commercial" ? <View style={Platform.OS==='ios'?{padding: 20,zIndex:888}:{padding:20,}}>
-                    <DropDownPicker
-                        mode="BADGE"
-                        zIndex={3000}
-                        zIndexInverse={1000}
-                        searchable={true}
-                        multiple={true}
-                        min={0}
-                        max={5}
-                        open={open}
-                        value={PurposeData}
-                        items={flightType === "Training" ? trainingValue : flightType === "Test" ? testValue : flightType === "Commercial" ? commercialValue : []}
-                        setOpen={setOpen}
-                        setValue={ flightType === "Training" ? setTraining : flightType === "Test" ? setTest : flightType === "Commercial" ? setCommercial : ''}
-                        setItems={ flightType === "Training" ? setTrainingValue : flightType === "Test" ? setTestValue : flightType === "Commercial" ? setCommercialValue : []}
-                        placeholder="Select *"
-                        style = {{flex:1,width: '100%', flexWrap:'wrap'}}
-                        onPress={(open) => {console.log('was the picker open?', open); flightType===''?isFlightTypeSelected():null}}
-                        dropDownContainerStyle={{
-                        width: '100%',
-                        elevation: 15,
-                    }}
-                    listMode="SCROLLVIEW"
-                    selectedItemLabelStyle={{
-                        fontWeight: "bold"
-                      }}
-                      selectedItemContainerStyle={{
-                        backgroundColor: "grey"
-                      }}
-                      badgeStyle={{
-                        //padding:5,
-                      }}
-                      badgeColors={["red", "green", "orange"]}
-                      showBadgeDot={false}
-                      listItemContainer={{
-                        height: 100
-                      }}
-                      badgeSeparatorStyle={{
-                        width: 5
-                      }}
-                    />
-                    </View> : null}
-                    
-
+                
                 {studentToggle ? <View style={Logbook.fieldWithoutBottom}>
                     <View style={Logbook.fields}>
                         <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Student</Text>
@@ -3153,6 +3112,54 @@ const [simulatedErr, setSimulatedErr] = React.useState(false)
                          </View>
                     </View>
                 </Modal>
+
+                {flightType !== "Non-commercial" ? <View style={Platform.OS==='ios'?{padding: 20,zIndex:888}:{padding:20,zIndex:999}}>
+                    <DropDownPicker
+                        mode="BADGE"
+                        zIndex={3000}
+                        zIndexInverse={1000}
+                        searchable={true}
+                        multiple={true}
+                        min={0}
+                        max={5}
+                        open={open}
+                        value={PurposeData}
+                        items={flightType === "Training" ? trainingValue : flightType === "Test" ? testValue : flightType === "Commercial" ? commercialValue : []}
+                        setOpen={setOpen}
+                        setValue={ flightType === "Training" ? setTraining : flightType === "Test" ? setTest : flightType === "Commercial" ? setCommercial : ''}
+                        setItems={ flightType === "Training" ? setTrainingValue : flightType === "Test" ? setTestValue : flightType === "Commercial" ? setCommercialValue : []}
+                        placeholder="Select *"
+                        style = {{flex:1,width: '100%', flexWrap:'wrap'}}
+                        onPress={(open) => {console.log('was the picker open?', open); flightType===''?isFlightTypeSelected():null}}
+                        dropDownContainerStyle={{
+                        width: '100%',
+                        //elevation: 15,
+                        height:250,
+                        position:'absolute'
+                    }}
+                    listMode="MODAL"
+                    scrollViewProps={{
+                        nestedScrollEnabled: true,
+                      }}
+                    selectedItemLabelStyle={{
+                        fontWeight: "bold"
+                      }}
+                      selectedItemContainerStyle={{
+                        backgroundColor: "grey"
+                      }}
+                      badgeStyle={{
+                        //padding:5,
+                      }}
+                      badgeColors={["red", "green", "orange"]}
+                      showBadgeDot={false}
+                      listItemContainer={{
+                        height: 100
+                      }}
+                      badgeSeparatorStyle={{
+                        width: 5
+                      }}
+                    />
+                    </View> : null}
 
 
                 {config && rosterAId !== 'SIMU' ? <View style={Logbook.fieldWithoutBottom}>
@@ -3283,7 +3290,7 @@ const [simulatedErr, setSimulatedErr] = React.useState(false)
                     <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Actual Instrument</Text>
                         <MaskedTextInput
                             mask='99:99'
-                            value={ai}
+                            value={ai===undefined?setAi("00:00"):ai}
                             onChangeText={(inputText)=>{setAi(inputText); CalcActualInstrument}}
                             keyboardType="numeric"
                             placeholder="hh:mm"
@@ -3331,7 +3338,7 @@ const [simulatedErr, setSimulatedErr] = React.useState(false)
                         <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}>Instructional</Text>
                         <MaskedTextInput
                             mask='99:99'
-                            value={instructional==='null'?'00:00':instructional}
+                            value={instructional==='null'||instructional==='undefined'?setInstructional(''):instructional}
                             onChangeText={inputText => setInstructional(inputText)}
                             keyboardType="numeric"
                             placeholder="hh:mm"

@@ -451,7 +451,7 @@ const Docs = ({ navigation }) => {
   };
 
   const getReduxDocData = useSelector(state => state.docList.data);
-  //console.log(getReduxDocData.data.length)
+  console.log('redux',getReduxDocData.data)
 
   const openList = () => { setOpen(true); setSelectedItem([]); }
   const closeList = () => { setOpen(false); setSelectedItem([]); }
@@ -859,7 +859,6 @@ const Docs = ({ navigation }) => {
                     onEndReached={() => { search !== '' ? null : getLogbookData() }}
                     onEndReachedThreshold={1}
                     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-
                   />
 
                   <View style={DocScreenStyle.footer}>

@@ -112,23 +112,6 @@
                     }
                 },
                 {
-                    "source": "/Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/113f5c59d710335d1029ac465b0ec74c/jetified-android-pdf-viewer-2.8.2/res/values/values.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "288",
-                        "endOffsets": "339"
-                    },
-                    "to": {
-                        "startLines": "6685",
-                        "startColumns": "4",
-                        "startOffsets": "419783",
-                        "endColumns": "288",
-                        "endOffsets": "420067"
-                    }
-                },
-                {
                     "source": "/Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/410b5a416261503fbecdc3d2fe698667/jetified-drawee-2.2.0/res/values/values.xml",
                     "from": {
                         "startLines": "2,141",
@@ -200,6 +183,23 @@
                         "startOffsets": "44497",
                         "endColumns": "41",
                         "endOffsets": "44534"
+                    }
+                },
+                {
+                    "source": "/Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/9ba1d51c8beab00cf414b2f1cb117152/jetified-android-pdf-viewer-2.8.2/res/values/values.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "288",
+                        "endOffsets": "339"
+                    },
+                    "to": {
+                        "startLines": "6685",
+                        "startColumns": "4",
+                        "startOffsets": "419783",
+                        "endColumns": "288",
+                        "endOffsets": "420067"
                     }
                 },
                 {

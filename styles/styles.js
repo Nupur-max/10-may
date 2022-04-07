@@ -27,7 +27,8 @@ const Logbook = StyleSheet.create({
         backgroundColor: "#F3F3F3",
         width: '100%',
         //justifyContent:'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        zIndex:-1
     },
     Darkheadline: {
         padding: 15,

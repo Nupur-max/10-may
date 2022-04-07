@@ -71,12 +71,12 @@ class Sample extends Component {
     let dep = departure.replace(/-/g, '/');
     var p = logData[0].Purpose;
     var pur = p.split(",");
-    var Pic_Name = logData[this.state.index].p1.split("(")
-    var Pic_Name_Split = Pic_Name
-    var Sic_Name = logData[this.state.index].p2.split("(")
-    var Sic_Name_Split = Sic_Name[1]==='Self'?Sic_Name[1]:Sic_Name[1].split(")")
+    var Pic_Name = logData[this.state.index].p1 ==='Self'? logData[this.state.index].p1 : logData[this.state.index].p1.split("(")
+    var Pic_Name_Split =  Pic_Name === 'Self' ? Pic_Name : Pic_Name[1].split(")")
+    var Sic_Name =  logData[this.state.index].p2 ==='Self'? logData[this.state.index].p2 : logData[this.state.index].p2.split("(")
+    var Sic_Name_Split = Sic_Name === 'Self' ? Sic_Name : Sic_Name[1].split(")")
     const takeOffTime =logData[this.state.index].chocksOffTime.split(":");
-    const  landingTime=logData[this.state.index].chocksOnTime.split(":");
+    const landingTime=logData[this.state.index].chocksOnTime.split(":");
      
     const chokOff = Number(takeOffTime[0]) < 10 ? "0" + takeOffTime[0] + ":" + takeOffTime[1] : takeOffTime[0] + ":" + takeOffTime[1]
     const chokOn = Number(landingTime[0]) < 10 ? "0" + landingTime[0] + ":" + landingTime[1] : landingTime[0] + ":" + landingTime[1]
@@ -86,8 +86,8 @@ class Sample extends Component {
       egcaUploadedData: uploadedEData,
       loading: false,
       purpse: pur,
-      PIC: Pic_Name_Split[0] ,
-      SIC: Sic_Name_Split[0],
+      PIC: Pic_Name === 'Self' ? Pic_Name_Split : Pic_Name_Split[0] ,
+      SIC: Sic_Name === 'Self' ? Sic_Name_Split : Sic_Name_Split[0],
       chocksOffTime: chokOff,
       chocksOnTime: chokOn,
     })
@@ -458,7 +458,7 @@ class Sample extends Component {
                 document.querySelector('#farInstrumentSimulated').click();
                 document.querySelector('#farInstrumentSimulatedTime').value = '${this.state.egcaData[dataPos].sim_instrument}';
             }
-            else if ('${this.state.egcaData[dataPos].actual_Instrument}' !== "") {
+            else if ('${this.state.egcaData[dataPos].actual_Instrument}' !== "00:00") {
               document.querySelector('#farInstrumentActual').click();
               document.querySelector('#farInstrumentActualTime').value = '${this.state.egcaData[dataPos].actual_Instrument}';
           }

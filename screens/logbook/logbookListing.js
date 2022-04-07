@@ -630,16 +630,16 @@ const LogBookListing = ({ navigation }) => {
   //   }
   // }
 
-  // React.useEffect(() => {
-  //   if(isFocused){
-  //     if(subscribe==='0'){
-  //       navigation.navigate('subscribe')
-  //     }
-  //     else{
-  //     onRefresh();
-  //     }
-  //   }
-  // }, [isFocused,subscribe]);
+  React.useEffect(() => {
+    if(isFocused){
+      // if(subscribe==='0'){
+      //   navigation.navigate('subscribe')
+      // }
+      // else{
+      onRefresh();
+      //}
+    }
+  }, [isFocused]);
 
   const getLogbookData = async () => {
     setLoadmore(true)
@@ -788,7 +788,7 @@ const LogBookListing = ({ navigation }) => {
     let temData =  []
     let pur = []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff,instructional from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC, onTime DESC  LIMIT 50 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff,instructional,pic_day from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC, onTime DESC  LIMIT 50 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           //setLoadmore(false)
@@ -841,7 +841,7 @@ const LogBookListing = ({ navigation }) => {
             //p1_us_day: result.rows.item(i).p1_us_day,
             //p1_us_night: result.rows.item(i).p1_us_night,
             p2: result.rows.item(i).p2,
-            //pic_day: result.rows.item(i).pic_day,
+            pic_day: result.rows.item(i).pic_day,
             //pic_night: result.rows.item(i).pic_night,
             //stl: result.rows.item(i).stl,
             //route: result.rows.item(i).route,
@@ -894,12 +894,14 @@ const LogBookListing = ({ navigation }) => {
             isSaved: result.rows.item(i).isSaved,
             savedChocksOff: result.rows.item(i).savedChocksOff,
             remark: result.rows.item(i).remark,
+            
           })
         }
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>
           index === self.findIndex((t) => (t.chocksOffTime === arr.chocksOffTime && t.date === arr.date && t.from === arr.from)))
+          //console.log('data',clean[1])
           dataDispatcher(LogListData({ data: clean, inProgress: false }))
           //setLoadmore(false)
 
