@@ -1,5 +1,5 @@
 //import liraries
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity,ActivityIndicator,Linking, TextInput, Button,KeyboardAvoidingView, Modal, Dimensions,Pressable, StyleSheet, Alert, SafeAreaView, Platform, TouchableWithoutFeedback } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DatePicker from 'react-native-datepicker';
@@ -2416,6 +2416,14 @@ const ChocksOffError = (inputText) => {
     }
     }
 
+const [showError, setShowError] = React.useState(false)
+
+// const checkChocksOffNotEqualsToChocksOn = (inputText) => {
+//     if (rosterChocksOff===inputText && rosterChocksOn===inputText){
+//         alert('chocks off cant be equal to chocks on')
+//     }
+// }
+
 const [takeoffErr, setTakeOffErr] = React.useState(false)
    
 const TakeOffError = (inputText) => {
@@ -3137,7 +3145,7 @@ console.log('actual',instructional)
                         height:250,
                         position:'absolute'
                     }}
-                    listMode="MODAL"
+                    listMode={Platform.OS==='ios'?"SCROLLVIEW":"MODAL"}
                     scrollViewProps={{
                         nestedScrollEnabled: true,
                       }}

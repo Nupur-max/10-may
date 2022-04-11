@@ -11,7 +11,7 @@ import {BaseUrl} from '../components/url.json';
 import {BaseUrlAndroid} from '../components/urlAndroid.json';
 import DgcaLogbookStyles from '../styles/dgcaLogbookStyles';
 import { useDispatch, useSelector } from 'react-redux';
-import {FTOData,Elog_verifiers,trainingV,testV,commercialV} from '../components/dummydropdown'
+import {FTOData,Elog_verifiers,Elog_verifiers_spicejet,trainingV,testV,commercialV} from '../components/dummydropdown'
 import { ThemeContext } from '../theme-context';
 
 import SQLite from 'react-native-sqlite-storage';
@@ -59,6 +59,8 @@ const EGCAUpload = ({navigation}) => {
     const [AuthPersonOpen, setAuthPersonOpen] = React.useState(false);
     const [AuthPersonvalue, setAuthPersonValue] = React.useState('');
     const [AuthPersonitems, setAuthPersonItems] = React.useState(Elog_verifiers);
+    const [AuthPersonitemsSpicejet, setAuthPersonItemsSpicejet] = React.useState(Elog_verifiers_spicejet);
+
 
     const [egca, setEgca] = React.useState('Commercial');
     const [choice, setChoice] = React.useState('no');
@@ -194,6 +196,8 @@ const EGCAUpload = ({navigation}) => {
       //console.log('From EGCADATA', getReduxData);
 
       //Sql ends
+
+      console.log('FTO VALUE', FTOvalue)
 
     return (
       
@@ -397,9 +401,9 @@ const EGCAUpload = ({navigation}) => {
             width: '100%',
             //height: 50
             //zIndex: 999,
-            //elevation:10,
+            //elevation:50,
           }}
-           listMode="SCROLLVIEW"
+           listMode={Platform.OS==='ios'?"SCROLLVIEW":"MODAL"}
           // scrollViewProps={{
           //   nestedScrollEnabled: true,
           // }}
@@ -418,10 +422,10 @@ const EGCAUpload = ({navigation}) => {
           searchPlaceholder="Type Name....."
           open={AuthPersonOpen}
           value={AuthPersonvalue}
-          items={AuthPersonitems}
+          items={FTOvalue==='Indigo'?AuthPersonitems:AuthPersonitemsSpicejet}
           setOpen={setAuthPersonOpen}
           setValue={setAuthPersonValue}
-          setItems={setAuthPersonItems}
+          setItems={FTOvalue==='Indigo'?setAuthPersonItems:setAuthPersonItemsSpicejet}
           style = {{width: '100%',}}
           dropDownContainerStyle={{
             width: '100%',

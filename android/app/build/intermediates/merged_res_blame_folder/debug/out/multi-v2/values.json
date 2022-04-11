@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
+            "outputFile": "/Users/gadgetzone/Desktop/react-native/cojo-freetrial/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
             "map": [
                 {
                     "source": "/Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/0b72cca5aef8e2f071ebd052cd8ee1aa/coordinatorlayout-1.1.0/res/values/values.xml",
@@ -37,23 +37,6 @@
                         "startOffsets": "41172,49823",
                         "endColumns": "67,166",
                         "endOffsets": "41235,49985"
-                    }
-                },
-                {
-                    "source": "/Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/build/generated/res/resValues/debug/values/gradleResValues.xml",
-                    "from": {
-                        "startLines": "6,8",
-                        "startColumns": "4,4",
-                        "startOffsets": "156,262",
-                        "endColumns": "63,68",
-                        "endOffsets": "215,326"
-                    },
-                    "to": {
-                        "startLines": "655,656",
-                        "startColumns": "4,4",
-                        "startOffsets": "41920,41984",
-                        "endColumns": "63,68",
-                        "endOffsets": "41979,42048"
                     }
                 },
                 {
@@ -112,6 +95,25 @@
                     }
                 },
                 {
+                    "source": "/Users/gadgetzone/Desktop/react-native/cojo-freetrial/node_modules/@react-native-community/datetimepicker/android/build/intermediates/packaged_res/debug/values/values.xml",
+                    "from": {
+                        "startLines": "2,5",
+                        "startColumns": "4,4",
+                        "startOffsets": "100,301",
+                        "endLines": "4,7",
+                        "endColumns": "12,12",
+                        "endOffsets": "296,485"
+                    },
+                    "to": {
+                        "startLines": "3059,3062",
+                        "startColumns": "4,4",
+                        "startOffsets": "207078,207279",
+                        "endLines": "3061,3064",
+                        "endColumns": "12,12",
+                        "endOffsets": "207274,207463"
+                    }
+                },
+                {
                     "source": "/Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/410b5a416261503fbecdc3d2fe698667/jetified-drawee-2.2.0/res/values/values.xml",
                     "from": {
                         "startLines": "2,141",
@@ -150,26 +152,7 @@
                     }
                 },
                 {
-                    "source": "/Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-image-picker/android/build/intermediates/packaged_res/debug/values/values.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endLines": "9",
-                        "endColumns": "12",
-                        "endOffsets": "461"
-                    },
-                    "to": {
-                        "startLines": "2707",
-                        "startColumns": "4",
-                        "startOffsets": "183363",
-                        "endLines": "2714",
-                        "endColumns": "12",
-                        "endOffsets": "183769"
-                    }
-                },
-                {
-                    "source": "/Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/res/values/strings.xml",
+                    "source": "/Users/gadgetzone/Desktop/react-native/cojo-freetrial/android/app/src/main/res/values/strings.xml",
                     "from": {
                         "startLines": "1",
                         "startColumns": "4",
@@ -241,22 +224,22 @@
                     }
                 },
                 {
-                    "source": "/Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/@react-native-community/datetimepicker/android/build/intermediates/packaged_res/debug/values/values.xml",
+                    "source": "/Users/gadgetzone/Desktop/react-native/cojo-freetrial/android/app/src/main/res/values/styles.xml",
                     "from": {
-                        "startLines": "2,5",
-                        "startColumns": "4,4",
-                        "startOffsets": "100,301",
-                        "endLines": "4,7",
-                        "endColumns": "12,12",
-                        "endOffsets": "296,485"
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "57",
+                        "endLines": "6",
+                        "endColumns": "12",
+                        "endOffsets": "240"
                     },
                     "to": {
-                        "startLines": "3059,3062",
-                        "startColumns": "4,4",
-                        "startOffsets": "207078,207279",
-                        "endLines": "3061,3064",
-                        "endColumns": "12,12",
-                        "endOffsets": "207274,207463"
+                        "startLines": "862",
+                        "startColumns": "4",
+                        "startOffsets": "63667",
+                        "endLines": "865",
+                        "endColumns": "12",
+                        "endOffsets": "63847"
                     }
                 },
                 {
@@ -370,44 +353,6 @@
                     }
                 },
                 {
-                    "source": "/Users/gadgetzone/Desktop/rN1/cojo-freetrial/node_modules/react-native-date-picker/android/build/intermediates/packaged_res/debug/values/values.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,29,32",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "100,158,215,270,327,371,434,483,542,598,667,735,801,869,943,1013,1077,1145,1190,1247,1614,1745",
-                        "endLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,28,31,34",
-                        "endColumns": "57,56,54,56,43,62,48,58,55,68,67,65,67,73,69,63,67,44,56,12,12,12",
-                        "endOffsets": "153,210,265,322,366,429,478,537,593,662,730,796,864,938,1008,1072,1140,1185,1242,1609,1740,1864"
-                    },
-                    "to": {
-                        "startLines": "691,750,751,761,762,770,771,772,807,819,820,821,822,823,824,825,826,837,840,4423,4431,4434",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "44439,51184,51241,52208,52265,52923,52986,53035,59265,60581,60650,60718,60784,60852,60926,60996,61060,61914,62110,298718,299085,299216",
-                        "endLines": "691,750,751,761,762,770,771,772,807,819,820,821,822,823,824,825,826,837,840,4430,4433,4436",
-                        "endColumns": "57,56,54,56,43,62,48,58,55,68,67,65,67,73,69,63,67,44,56,12,12,12",
-                        "endOffsets": "44492,51236,51291,52260,52304,52981,53030,53089,59316,60645,60713,60779,60847,60921,60991,61055,61123,61954,62162,299080,299211,299335"
-                    }
-                },
-                {
-                    "source": "/Users/gadgetzone/Desktop/rN1/cojo-freetrial/android/app/src/main/res/values/styles.xml",
-                    "from": {
-                        "startLines": "3",
-                        "startColumns": "4",
-                        "startOffsets": "57",
-                        "endLines": "6",
-                        "endColumns": "12",
-                        "endOffsets": "240"
-                    },
-                    "to": {
-                        "startLines": "862",
-                        "startColumns": "4",
-                        "startOffsets": "63667",
-                        "endLines": "865",
-                        "endColumns": "12",
-                        "endOffsets": "63847"
-                    }
-                },
-                {
                     "source": "/Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/1e1f894f3187e0e4737e7e00626d423c/media-1.0.0/res/values/values.xml",
                     "from": {
                         "startLines": "2,5,6,7,8,10,11,12,13,14",
@@ -441,6 +386,61 @@
                         "endLines": "6636",
                         "endColumns": "24",
                         "endOffsets": "417271"
+                    }
+                },
+                {
+                    "source": "/Users/gadgetzone/Desktop/react-native/cojo-freetrial/android/app/build/generated/res/resValues/debug/values/gradleResValues.xml",
+                    "from": {
+                        "startLines": "6,8",
+                        "startColumns": "4,4",
+                        "startOffsets": "156,262",
+                        "endColumns": "63,68",
+                        "endOffsets": "215,326"
+                    },
+                    "to": {
+                        "startLines": "655,656",
+                        "startColumns": "4,4",
+                        "startOffsets": "41920,41984",
+                        "endColumns": "63,68",
+                        "endOffsets": "41979,42048"
+                    }
+                },
+                {
+                    "source": "/Users/gadgetzone/Desktop/react-native/cojo-freetrial/node_modules/react-native-image-picker/android/build/intermediates/packaged_res/debug/values/values.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "9",
+                        "endColumns": "12",
+                        "endOffsets": "461"
+                    },
+                    "to": {
+                        "startLines": "2707",
+                        "startColumns": "4",
+                        "startOffsets": "183363",
+                        "endLines": "2714",
+                        "endColumns": "12",
+                        "endOffsets": "183769"
+                    }
+                },
+                {
+                    "source": "/Users/gadgetzone/Desktop/react-native/cojo-freetrial/node_modules/react-native-date-picker/android/build/intermediates/packaged_res/debug/values/values.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,29,32",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "100,158,215,270,327,371,434,483,542,598,667,735,801,869,943,1013,1077,1145,1190,1247,1614,1745",
+                        "endLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,28,31,34",
+                        "endColumns": "57,56,54,56,43,62,48,58,55,68,67,65,67,73,69,63,67,44,56,12,12,12",
+                        "endOffsets": "153,210,265,322,366,429,478,537,593,662,730,796,864,938,1008,1072,1140,1185,1242,1609,1740,1864"
+                    },
+                    "to": {
+                        "startLines": "691,750,751,761,762,770,771,772,807,819,820,821,822,823,824,825,826,837,840,4423,4431,4434",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "44439,51184,51241,52208,52265,52923,52986,53035,59265,60581,60650,60718,60784,60852,60926,60996,61060,61914,62110,298718,299085,299216",
+                        "endLines": "691,750,751,761,762,770,771,772,807,819,820,821,822,823,824,825,826,837,840,4430,4433,4436",
+                        "endColumns": "57,56,54,56,43,62,48,58,55,68,67,65,67,73,69,63,67,44,56,12,12,12",
+                        "endOffsets": "44492,51236,51291,52260,52304,52981,53030,53089,59316,60645,60713,60779,60847,60921,60991,61055,61123,61954,62162,299080,299211,299335"
                     }
                 },
                 {

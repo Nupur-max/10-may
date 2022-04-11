@@ -35,14 +35,6 @@ const prePopulateddb = SQLite.openDatabase(
   },
 );
 
-// NetInfo.addEventListener(networkState => {
-//   console.log("Connection type - ", networkState.type);
-//   console.log("Is connected? - ", networkState.isConnected);
-
-//   if (networkState.isConnected === false) {
-//     //alert ("Couldn't be able to sync data from server cause of non availability of network")
-//   }
-// });
 
 // create a component
 const LogBookListing = ({ navigation }) => {
@@ -101,6 +93,31 @@ const LogBookListing = ({ navigation }) => {
 
   const [, setParamsLogbook] = React.useContext(ParamsContext);
 
+  const dataToServer = async() => {
+    
+    let user = await AsyncStorage.getItem('userdetails');
+    user = JSON.parse(user);
+
+    NetInfo.addEventListener(networkState => {
+      // console.log("Connection type - ", networkState.type);
+      // console.log("Is connected? - ", networkState.isConnected);
+      if (networkState.isConnected === false) {
+        console.log("due to network unavailability your data is not syncronized with server but whenever the network would be availbale it would automatically sync with server...")
+      }
+      else {
+         prePopulateddb.transaction(tx => {
+          tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff,instructional,pic_day from logbook WHERE user_id = "' + user.id + '"  AND tag = "manual"' + offset, [], (tx, result1) => {
+            console.log('manual length',result1.rows)
+          })
+        })
+      }
+    });
+}
+
+React.useEffect(() => {
+    dataToServer()
+});
+
 
   React.useEffect(() => {
     if(isFocused){
@@ -122,7 +139,6 @@ const LogBookListing = ({ navigation }) => {
           console.log('error')
         }
         for (let i = 0; i <= result.rows.length; i++) {
-          //console.log('name:', result.rows.item(i).airline_name, 'loginlink: ', result.rows.item(i).loginUrl)
           temData.push({
             user_id: result.rows.item(i).user_id,
             reg_date: result.rows.item(i).reg_date,
@@ -268,7 +284,6 @@ const LogBookListing = ({ navigation }) => {
           })
       }).then(res => res.json())
           .then(resData => {
-              console.log(resData)
               //Alert.alert(resData.message);
           });
   };
@@ -897,13 +912,12 @@ const LogBookListing = ({ navigation }) => {
             
           })
         }
+        console.log('tagssss',result.rows.item(i).isSaved)
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>
           index === self.findIndex((t) => (t.chocksOffTime === arr.chocksOffTime && t.date === arr.date && t.from === arr.from)))
-          //console.log('data',clean[1])
           dataDispatcher(LogListData({ data: clean, inProgress: false }))
-          //setLoadmore(false)
 
           setFindTag(result.rows.item(i).tag);
           setRefreshing(false);

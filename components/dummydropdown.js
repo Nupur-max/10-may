@@ -396,6 +396,19 @@ export const Elog_verifiers = [
     {label: 'Vinoy Sivaraman(OOPRM20200000110180)' , value:'Vinoy Sivaraman(OOPRM20200000110180)'},
 ];
 
+export const Elog_verifiers_spicejet = [
+    {label: 'Select', value : 'Select'},
+    {label: 'Anup  Kumar(OOPRM20200000150007)' , value:'Anup  Kumar(OOPRM20200000150007)'},
+    {label: 'RAHUL  JAICHANDRA(OOPRM20200000150018)' , value:'RAHUL  JAICHANDRA(OOPRM20200000150018)'},
+    {label: 'Mansingh  Yadav(OOPRM20200000150019)' , value:'Mansingh  Yadav(OOPRM20200000150019)'},
+    {label: 'RAJNI   BHASIN(OOPRM20200000150020)' , value:'RAJNI   BHASIN(OOPRM20200000150020)'},
+    {label: 'POOJA  MALIK(OOPRM20200000150021)' , value:'POOJA  MALIK(OOPRM20200000150021)'},
+    {label: 'VIKAS  SINGH(OOPRM20200000150022)' , value:'VIKAS  SINGH(OOPRM20200000150022)'},
+    {label: 'MANANJAY  KUMAR(OOPRM20200000150023)' , value:'MANANJAY  KUMAR(OOPRM20200000150023)'},
+    {label: 'Shekhar   Chandra(OOPRM20200000150025)' , value:'Shekhar   Chandra(OOPRM20200000150025)'},
+    {label: 'Kunal  Kishore(OOPRM20200000150026)' , value:'Kunal  Kishore(OOPRM20200000150026)'},
+];
+
 export const trainingV = [
     {label: '300 NM Cross-Country (for CPL)', value: '300 NM Cross-Country (for CPL)'},
     {label: 'Abnormal Emergency Procedures', value: 'Abnormal Emergency Procedures'},
