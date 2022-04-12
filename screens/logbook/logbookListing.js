@@ -1,7 +1,7 @@
 //import liraries
 import React from 'react';
 import { useIsFocused } from "@react-navigation/native";
-import { View, Text, StyleSheet,RefreshControl,Alert, TouchableOpacity, TextInput, FlatList, ActivityIndicator, Dimensions, Modal,SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet,RefreshControl,Alert, TouchableOpacity, TextInput, FlatList, ActivityIndicator, Dimensions, Modal,SafeAreaView,Platform } from 'react-native';
 import { LogbookListing } from '../../styles/styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -16,6 +16,8 @@ import NetInfo from "@react-native-community/netinfo";
 import Swipeout from 'react-native-swipeout';
 import { BaseUrl } from '../../components/url.json';
 import {BaseUrlAndroid} from '../../components/urlAndroid.json';
+
+import { DisplayContext } from '../../display-context';
 
 import SQLite from 'react-native-sqlite-storage';
 
@@ -38,6 +40,8 @@ const prePopulateddb = SQLite.openDatabase(
 
 // create a component
 const LogBookListing = ({ navigation }) => {
+
+  const { datee, Dateform, DateFormat, role, config, configCheck } = React.useContext(DisplayContext);
 
   const isFocused = useIsFocused();
 
@@ -100,23 +104,160 @@ const LogBookListing = ({ navigation }) => {
 
     NetInfo.addEventListener(networkState => {
       // console.log("Connection type - ", networkState.type);
-      // console.log("Is connected? - ", networkState.isConnected);
+       //console.log("Is connected? - ", networkState.isConnected);
       if (networkState.isConnected === false) {
         console.log("due to network unavailability your data is not syncronized with server but whenever the network would be availbale it would automatically sync with server...")
       }
       else {
          prePopulateddb.transaction(tx => {
-          tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff,instructional,pic_day from logbook WHERE user_id = "' + user.id + '"  AND tag = "manual"' + offset, [], (tx, result1) => {
-            console.log('manual length',result1.rows)
-          })
+          tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '"AND tag = "manual"', [], (tx, result1) => {
+
+            //console.log('hello',result1.rows.length)
+
+            const Serverddmmyy = ("0" + result1.rows.item(i).date.getDate()).slice(-2) + "-" + (monthNames[result1.rows.item(i).date.getMonth()]) + "-" + result1.rows.item(i).date.getFullYear();
+            const Servermmddyy = (monthNames[result1.rows.item(i).date.getMonth()]) + "-" + ("0" + result1.rows.item(i).date.getDate()).slice(-2) + "-" + result1.rows.item(i).date.getFullYear()
+
+            const ServeroriginalDate = datee == 'DDMM' ? Serverddmmyy : Servermmddyy;
+
+           for(i = 0; i <= result1.rows.length; i++) {
+            //if(result1.rows.length>0){
+               console.log('uploading to server')
+              // console.log('dsgfdgfd',result1.rows.item(i).id)
+               fetch(Platform.OS==='ios'?BaseUrl + 'addLogbook':BaseUrlAndroid + 'addLogbook', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "roaster_id": result1.rows.item(i).id,
+                    "user_id": user.id,
+                    "local_id" : result1.rows.item(i).id,
+                    "tag": 'server',
+                    "date": ServeroriginalDate,
+                    "flight_no": '',
+                    "aircraftReg": result1.rows.item(i).aircraftReg,
+                    "aircraftType": result1.rows.item(i).aircraftType,
+                    "route": result1.rows.item(i).route,
+                    "from_city": 'hello',
+                    "from_nameICAO": result1.rows.item(i).from_nameICAO,
+                    "to_city": 'hello',
+                    "to_nameICAO": result1.rows.item(i).to_nameICAO,
+                    "p1": result1.rows.item(i).p1,
+                    "p2": result1.rows.item(i).p2,
+                    "totalTime": result1.rows.item(i).totalTime,
+                    "day": result1.rows.item(i).day,
+                    "night": result1.rows.item(i).night,
+                    "actual_Instrument": result1.rows.item(i).actual_Instrument,
+                    "dual_day": result1.rows.item(i).dual_day,
+                    "dual_night": result1.rows.item(i).dual_night,
+                    "ifr_vfr": result1.rows.item(i).ifr_vfr,
+                    "p1_us_day": result1.rows.item(i).p1_us_day,
+                    "p1_us_night": result1.rows.item(i).p1_us_night,
+                    "p1_ut_day": result1.rows.item(i).p1_ut_day,
+                    "p1_ut_night": result1.rows.item(i).p1_ut_night,
+                    "pic_day": result1.rows.item(i).pic_day,
+                    "pic_night": result1.rows.item(i).pic_night,
+                    "sim_instrument": result1.rows.item(i).sim_instrument,
+                    "stl": result1.rows.item(i).stl,
+                    "sic_day": result1.rows.item(i).sic_day,
+                    "sic_night": result1.rows.item(i).sic_night,
+                    "x_country_day": result1.rows.item(i).x_country_day,
+                    "x_country_night": result1.rows.item(i).x_country_night,
+                    "x_country_day_leg": result1.rows.item(i).x_country_day_leg,
+                    "x_country_night_leg": result1.rows.item(i).x_country_night_leg,
+                    "dayLanding": result1.rows.item(i).dayLanding,
+                    "nightLanding": result1.rows.item(i).nightLanding,
+                    "dayTO": result1.rows.item(i).dayTO,
+                    "nightTO": result1.rows.item(i).nightTO,
+                    "remark": result1.rows.item(i).remark,
+                    "timeCustom1": result1.rows.item(i).purpose1,
+                    "timeCustom2": "",
+                    "timeCustom3": "",
+                    "timeCustom4": "",
+                    "timeCustom5": "",
+                    "timeCustom6": "",
+                    "timeCustom7": "",
+                    "timeCustom8": "",
+                    "timeCustom9": "",
+                    "timeCustom10": "",
+                    "landingCustom1": "",
+                    "landingCustom2": "",
+                    "landingCustom3": "",
+                    "landingCustom4":"",
+                    "landingCustom5": "",
+                    "landingCustom6": "",
+                    "landingCustom7": "",
+                    "landingCustom8": "",
+                    "landingCustom9": "",
+                    "landingCustom10": "",
+                    "approach1": result1.rows.item(i).approach1,
+                    "approach2" : result1.rows.item(i).approach2,
+                    "approach3": "",
+                    "approach4": "",
+                    "approach5": "",
+                    "approach6": "",
+                    "approach7": "",
+                    "approach8": "",
+                    "approach9": "",
+                    "approach10": "",
+                    "crewCustom1": "",
+                    "crewCustom2": "",
+                    "crewCustom3": "",
+                    "crewCustom4": "",
+                    "crewCustom5": "",
+                    "onTime": result1.rows.item(i).onTime,
+                    "offTime": result1.rows.item(i).offTime,
+                    "inTime": result1.rows.item(i).inTime,
+                    "outTime": result1.rows.item(i).outTime,
+                    "reliefCrew1":result1.rows.item(i).reliefCrew1,
+                    "reliefCrew2":result1.rows.item(i).reliefCrew2,
+                    "reliefCrew3":result1.rows.item(i).reliefCrew3,
+                    "reliefCrew4":result1.rows.item(i).reliefCrew4,
+                    "reliefCrew5":"",
+                    "instructor":result1.rows.item(i).instructor,
+                    "instructional":result1.rows.item(i).instructional,
+                    "student":result1.rows.item(i).student,
+                    "waterLanding":result1.rows.item(i).waterLanding,
+                    "waterTO":result1.rows.item(i).waterTO,
+                    "touch_n_gos":result1.rows.item(i).touch_n_gos,
+                    "fullStop":result1.rows.item(i).fullStop,
+                    "autolanding":result1.rows.item(i).autolanding,
+                    "flight":result1.rows.item(i).flight,
+                    "sim_type": result1.rows.item(i).sim_type,
+                    "simLocation":result1.rows.item(i).simLocation,
+                    "sim_exercise":result1.rows.item(i).sim_exercise,	
+                    "pf_hours":result1.rows.item(i).pf_time,
+                    "pm_hours":result1.rows.item(i).pm_time,
+                    "sfi_sfe":result1.rows.item(i).sfi_sfe,
+                    "from_lat":result1.rows.item(i).from_lat,
+                    "from_long":result1.rows.item(i).from_long,
+                    "to_lat":result1.rows.item(i).to_lat,
+                    "to_long":result1.rows.item(i).to_long,
+                })
+            }).then(res => res.json())
+                .then(resData => {
+                   console.log(resData);
+                   //alert('hello')
+                }).catch((error) => {
+                  console.log('error',error)
+                });
+            //}
+            // else{
+            //   console.log('No available data')
+            // }
+          }
+        })
         })
       }
     });
 }
 
 React.useEffect(() => {
+  if(isFocused){
     dataToServer()
-});
+  }
+},[isFocused]);
 
 
   React.useEffect(() => {
@@ -912,7 +1053,7 @@ React.useEffect(() => {
             
           })
         }
-        console.log('tagssss',result.rows.item(i).isSaved)
+          console.log('tagssss',result.rows.item(i).tag)
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>
