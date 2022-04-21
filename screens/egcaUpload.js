@@ -39,8 +39,8 @@ const EGCAUpload = ({navigation}) => {
   const { dark, theme, toggle } = React.useContext(ThemeContext);
   const dataDispatcher = useDispatch();
 
-    const [egca_user,setEGCAUSER] = React.useState('IPLTM2020023010'); //IPLTM2020023010
-    const [egca_pwd,setEGCAPWD] = React.useState('Fighters12!');//Fighters12!
+    const [egca_user,setEGCAUSER] = React.useState(''); //IPLTM2020023010
+    const [egca_pwd,setEGCAPWD] = React.useState('');//Fighters12!
     const [arrow,setArrow] = React.useState(true);
     const [arrowSettings, setArrowSettings] = React.useState(true)
     const [FTOopen, setFTOOpen] = React.useState(false);

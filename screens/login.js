@@ -142,6 +142,7 @@ const Login = ({navigation}) => {
             console.log('synced data',syncData.data.length)
             const takeoffTime = data.offTime===''?data.outTime : data.offTime;
             const LandingTime = data.onTime===''?data.inTime : data.onTime;
+            console.log('data.date',data.date)
             var d = new Date(data.date);
             let month = '' + (d.getMonth() + 1),
             day = '' + d.getDate(),

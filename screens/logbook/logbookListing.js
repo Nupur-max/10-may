@@ -9,13 +9,14 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { ParamsContext } from '../../params-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { LogListData } from '../../store/actions/loglistAction';
-import { Divider } from 'react-native-paper';
+import { Divider,ProgressBar } from 'react-native-paper';
 import { ThemeContext } from '../../theme-context';
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import NetInfo from "@react-native-community/netinfo";
 import Swipeout from 'react-native-swipeout';
 import { BaseUrl } from '../../components/url.json';
 import {BaseUrlAndroid} from '../../components/urlAndroid.json';
+import DatePicker from 'react-native-datepicker';
 
 import { DisplayContext } from '../../display-context';
 
@@ -81,6 +82,27 @@ const LogBookListing = ({ navigation }) => {
 
   const [refreshing,setRefreshing] = React.useState(false)
 
+  const [openButtons,setOpenButtons] = React.useState(false)
+
+  const [RostermodalVisible, setRosterModalVisible] = React.useState(false);
+
+  const [fromDate, setFromDate] = React.useState('')
+  
+  const [toDate, setToDate] = React.useState('')
+
+  const [dataFetched, setDataFetched]=React.useState(false);
+
+  const [userRosterId,setUserRosterId] = React.useState('');
+
+  const [userRosterPwd, setUserRosterPwd]= React.useState('');
+
+  const [userRosterAirlineType, setUserAirlineType]= React.useState('');
+
+  const [progressValue, setProgressValue] = React.useState('')
+
+  const [showProgress, setShowProgress] = React.useState(true)
+
+
 
   const [selectedId, setSelectedId] = React.useState('')
   const [focused, setFocused] = React.useState(false);
@@ -90,12 +112,221 @@ const LogBookListing = ({ navigation }) => {
   const [totalFlyingHours, setTotalFlyingHours] = React.useState('')
 
   const [activeRowKey, setActiveRowKey] = React.useState(null)
+
+  const Roaster = async() => {
+    setShowProgress(true)
+    setProgressValue(0.3)
+    //dataDispatcher(LogListData({ data: [], inProgress: false }))
+    setDataFetched(true)
+    let user = await AsyncStorage.getItem('userdetails');
+    user = JSON.parse(user);
+
+    await fetch(Platform.OS==='ios'?BaseUrl + 'roasterImport':BaseUrlAndroid + 'roasterImport', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "user_id": user.id,
+        "user": userRosterId, 
+        "pass": userRosterPwd,
+        "airline_type": userRosterAirlineType,
+        "from": fromDate,
+        "to": toDate,
+      })
+    }).then(res => res.json())
+      .then(resData => {
+      if(resData.msg!==false){
+        for (let i = 0; i < resData.data.length; i++) {
+
+          const AircraftReg = resData.data[i].Aircraft_Reg
+          const AircraftType = resData.data[i].Aircraft_type
+          const chocksOn = resData.data[i].Arrival_time
+          const date = resData.data[i].Dept_date
+          const fromCity = resData.data[i].Dept_place_ICAO
+          const toCity = resData.data[i].Arrival_place_ICAO
+          const chocksOff = resData.data[i].Dept_time
+          const dayland = resData.data[i].Lands_Day
+          const nightLand = resData.data[i].Lands_Night
+          const SelfField = resData.data[i].Name_PIC
+          const dayTO = resData.data[i].TkkOff_Day
+          const nightTO = resData.data[i].TkkOff_Night
+          const RosterFromLat = resData.data[i].RosterFromLat
+          const RosterFromLong = resData.data[i].RosterFromLong
+          const RosterToLat = resData.data[i].RosterToLat
+          const RosterToLong = resData.data[i].RosterToLong
+          const Pilot_Pic = resData.data[i].Pilot_function_PIC
+          const Pilot_Copilot = resData.data[i].Pilot_function_Copilot
+          const Pilot_Instructor = resData.data[i].error
+
+          const RealAircraftType = AircraftType === '320' || AircraftType === '321' ? 'A-' + AircraftType : AircraftType;
+
+         console.log('Pilot_Copilot', Pilot_Copilot)
+
+          let text = date;
+          const myArray = text.split("-");
+          const day = myArray[2] + myArray[1] + myArray[0]
+
+      prePopulateddb.transaction((tx) => {
+        tx.executeSql(
+          'SELECT * from logbook WHERE user_id="'+user.id+'" AND tag="roster" AND onTime="'+chocksOn+'"', [], (tx, result1) => {
+
+            if(result1.rows.length>0){
+              if ((i + 1) == resData.data.length) {
+              Alert.alert(
+                "This data is already fetched",
+                "Do you want to skip?",
+                [
+                  {
+                    text: "Skip",
+                    onPress: () => {console.log('cancel pressed')}
+                  },
+                  //{ text: "Cancel", onPress: () => console.log('cancel pressed') }
+                ]
+              )
+              }
+              if (Pilot_Pic !== '') {
+                tx.executeSql(
+                  'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'",instructional="'+Pilot_Instructor+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
+                );
+              }
+              else if (Pilot_Copilot === '' && Pilot_Pic === ''){
+                tx.executeSql(
+                  'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'",instructional="'+Pilot_Instructor+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
+                );
+              }
+              else if (Pilot_Instructor !== ''){
+                tx.executeSql(
+                  'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'",instructional="'+Pilot_Instructor+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
+                );
+              }
+              setProgressValue(1)
+              setShowProgress(false)
+              setRosterModalVisible(false)
+            }
+            else{
+            prePopulateddb.transaction((tx) => {
+            if (Pilot_Pic !== '') {
+              //Alert.alert('Pilot_Pic')
+              tx.executeSql(
+                'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate,instructional) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","' + SelfField + '","","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '","'+Pilot_Instructor+'")',
+              );
+            }
+            else if (Pilot_Copilot === '' && Pilot_Pic === '') {
+              //Alert.alert ('Pilot_Copilot')
+              tx.executeSql(
+                'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate,instructional) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","' + SelfField + '","","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '","'+Pilot_Instructor+'")',
+              );
+            }
+            else if (Pilot_Instructor !== '') {
+              //Alert.alert ('Pilot_Instructor')
+              tx.executeSql(
+                'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate,instructional) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","' + SelfField + '","","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '","'+Pilot_Instructor+'")',
+              );
+            }
+            console.log('data pos ' + i + ' ' + resData.data.length);
+            
+            if (resData.data.length > 10) {
+              setProgressValue(0.5)
+            }
+
+            if(resData.msg!==false){
+            if ((i + 1) == resData.data.length) {
+              //selection from table logbook
+              let temData = [];
+              prePopulateddb.transaction(tx => {
+                tx.executeSql('SELECT id,tag,aircraftType,aircraftReg,user_id,date,from_nameICAO,to_nameICAO,offTime,onTime,from_lat,from_long,to_lat,to_long,p1,p2,dayLanding,nightLanding,dayTO,nightTO,instructional from logbook WHERE user_id = "' + user.id + '" AND tag ="roster" AND from_nameICAO != "null" ORDER BY orderedDate DESC, onTime DESC', [], (tx, result) => {
+                  setOffset(offset + 10);
+                  
+                  for (let j = 0; j < result.rows.length; j++) {
+                    temData.push({
+                      id: result.rows.item(j).id,
+                      tag: result.rows.item(j).tag,
+                      aircraftType: result.rows.item(j).aircraftType,
+                      aircraftReg: result.rows.item(j).aircraftReg,
+                      user_id: result.rows.item(j).user_id,
+                      date: result.rows.item(j).date,
+                      from: result.rows.item(j).from_nameICAO, //add here
+                      to: result.rows.item(j).to_nameICAO,
+                      chocksOffTime: result.rows.item(j).offTime,
+                      chocksOnTime: result.rows.item(j).onTime,
+                      from_lat: result.rows.item(j).from_lat,
+                      from_long: result.rows.item(j).from_long,
+                      to_lat: result.rows.item(j).to_lat,
+                      to_long: result.rows.item(j).to_long,
+                      p1: result.rows.item(j).p1,
+                      p2: result.rows.item(j).p2,
+                      dayLanding: result.rows.item(j).dayLanding,
+                      nightLanding: result.rows.item(j).nightLanding,
+                      dayTO: result.rows.item(j).dayTO,
+                      nightTO: result.rows.item(j).nightTO,
+                      instructional: result.rows.item(j).instructional,
+                    });
+                    console.log('Entry fetched ' + j + ' out of :' + result.rows.length);
+                    setProgressValue(1)
+                    dataDispatcher(LogListData({ data: temData, inProgress: false }))
+                    let jPos = j + 1
+                    if (jPos == result.rows.length) {
+                        fetch(Platform.OS==='ios'?BaseUrl + 'edit_profile':BaseUrlAndroid + 'edit_profile', {
+                          method: 'POST',
+                          headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                          },
+                          body: JSON.stringify({
+                            "user_id": user.id,
+                            "rosterLength" : result.rows.length,
+                    
+                          })
+                        }).then(res => res.json())
+                          .then(resData => {
+                            //console.log(resData);
+                            //GetUserDetails()
+                            //Alert.alert(resData.message);
+                    });
+                    
+                      Alert.alert("Message", 'Data fetched successfully');
+                      setDataFetched(false)
+                      //setModalVisible(false)
+                      return false;
+                    }
+                  }
+                });
+              });
+            }
+          }
+          });
+        }
+        });
+        });
+
+        }
+      }
+      else {
+        alert('Invalid Credentials')
+        setShowProgress(false)
+      }
+       })
+      .catch((error) => {
+          console.log(error)
+        setShowProgress(false)
+        //setModalVisible(false)
+        alert('Something Went wrong')
+      });
+  }
  
 
   const onFocusChange = () => setFocused(true);
   const onFocusCancelled = () => setFocused(false);
 
   const [, setParamsLogbook] = React.useContext(ParamsContext);
+
+  React.useEffect(() => {
+    if(isFocused){
+      dataToServer()
+    }
+  },[isFocused]);
 
   const dataToServer = async() => {
     
@@ -114,13 +345,17 @@ const LogBookListing = ({ navigation }) => {
 
             //console.log('hello',result1.rows.length)
 
-            const Serverddmmyy = ("0" + result1.rows.item(i).date.getDate()).slice(-2) + "-" + (monthNames[result1.rows.item(i).date.getMonth()]) + "-" + result1.rows.item(i).date.getFullYear();
-            const Servermmddyy = (monthNames[result1.rows.item(i).date.getMonth()]) + "-" + ("0" + result1.rows.item(i).date.getDate()).slice(-2) + "-" + result1.rows.item(i).date.getFullYear()
+            
+            
+            for(i = 0; i <= result1.rows.length; i++) {
+           
+             console.log(result1.rows.item(i).date.split('-')[1])
 
-            const ServeroriginalDate = datee == 'DDMM' ? Serverddmmyy : Servermmddyy;
+               const monthNames = ["Jan", "Feb", "March", "April", "May", "June",
+              "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+              ];
 
-           for(i = 0; i <= result1.rows.length; i++) {
-            //if(result1.rows.length>0){
+              if(result1.rows.length>0){
                console.log('uploading to server')
               // console.log('dsgfdgfd',result1.rows.item(i).id)
                fetch(Platform.OS==='ios'?BaseUrl + 'addLogbook':BaseUrlAndroid + 'addLogbook', {
@@ -134,7 +369,7 @@ const LogBookListing = ({ navigation }) => {
                     "user_id": user.id,
                     "local_id" : result1.rows.item(i).id,
                     "tag": 'server',
-                    "date": ServeroriginalDate,
+                    "date": result1.rows.item(i).date,
                     "flight_no": '',
                     "aircraftReg": result1.rows.item(i).aircraftReg,
                     "aircraftType": result1.rows.item(i).aircraftType,
@@ -242,23 +477,16 @@ const LogBookListing = ({ navigation }) => {
                 }).catch((error) => {
                   console.log('error',error)
                 });
-            //}
-            // else{
-            //   console.log('No available data')
-            // }
+            }
+            else{
+              console.log('No available data')
+            }
           }
         })
         })
       }
     });
 }
-
-React.useEffect(() => {
-  if(isFocused){
-    dataToServer()
-  }
-},[isFocused]);
-
 
   React.useEffect(() => {
     if(isFocused){
@@ -271,7 +499,7 @@ React.useEffect(() => {
     user = JSON.parse(user);
     let temData = [];
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT reg_date,roster_id,Total_flying_hours,rosterLength,freeHours,subscribe FROM userProfileData Where user_id = "' + user.id + '"', [], (tx, result) => {
+      tx.executeSql('SELECT roster_id,roster_pwd,airline_type,reg_date,roster_id,Total_flying_hours,rosterLength,freeHours,subscribe FROM userProfileData Where user_id = "' + user.id + '"', [], (tx, result) => {
         //setOffset(offset + 10);
         if (result.rows.length > 0) {
           //alert('data available '); 
@@ -286,6 +514,9 @@ React.useEffect(() => {
             roster_id: result.rows.item(i).roster_id,
             Total_flying_hours: result.rows.item(i).Total_flying_hours,
             rosterLength : result.rows.item(i).rosterLength,
+            roster_id: result.rows.item(i).roster_id,
+            roster_pwd: result.rows.item(i).roster_pwd,
+            airline_type: result.rows.item(i).airline_type,
           });
           console.log('subscription', result.rows.item(i).subscribe);
           console.log('rosterLength', result.rows.item(i).rosterLength);
@@ -296,6 +527,9 @@ React.useEffect(() => {
           //setTotalFlyingHours(result.rows.item(i).Total_flying_hours)
           setFreeHours(result.rows.item(i).freeHours)
           setSubscribe(result.rows.item(i).subscribe)
+          setUserRosterId(result.rows.item(i).roster_id)
+          setUserRosterPwd(result.rows.item(i).roster_pwd)
+          setUserAirlineType(result.rows.item(i).airline_type)
          }
         });
     });
@@ -311,7 +545,7 @@ React.useEffect(() => {
   // local data
 
   const getReduxProgressData = useSelector(state => state.progressBar.ProgressValue);
-  const ProgressBar = getReduxProgressData.ProgressValue + '/' + getReduxProgressData.totalvalue
+  const ProgressBar1 = getReduxProgressData.ProgressValue + '/' + getReduxProgressData.totalvalue
 
  const Item = ({ item, onPress, backgroundColor, textColor }) => (
     <TouchableOpacity onPress={onPress} style={[LogbookListing.item]}>
@@ -524,6 +758,13 @@ React.useEffect(() => {
 
   }
 
+  const ToOpenButtons = () => {
+    setOpenButtons(!openButtons)
+  }
+
+  const OpenRosterDateModal = () => {
+    setRosterModalVisible(true)
+   }
 
   const PlusNavigation = () => {
     setSelectedId('')
@@ -1180,7 +1421,7 @@ const handleIndexChange = (index) => {
               <View style={styles.modalView}>
                 <Text style={styles.modalText}>Logs are Downloading!!</Text>
                 <ActivityIndicator color={'#fff'} />
-                {getReduxProgressData.ProgressValue !== undefined ? <Text style={{ color: '#fff' }}>{ProgressBar}</Text> : null}
+                {getReduxProgressData.ProgressValue !== undefined ? <Text style={{ color: '#fff' }}>{ProgressBar1}</Text> : null}
               </View>
             </View>
           </Modal>
@@ -1207,17 +1448,130 @@ const handleIndexChange = (index) => {
               <View style={styles.modalView}>
                 <Text style={styles.modalText}>Logs are Downloading!!</Text>
                 <ActivityIndicator color={'#fff'} />
-                {getReduxProgressData.ProgressValue !== undefined ? <Text style={{ color: '#fff' }}>{ProgressBar}</Text> : null}
+                {getReduxProgressData.ProgressValue !== undefined ? <Text style={{ color: '#fff' }}>{ProgressBar1}</Text> : null}
               </View>
             </View>
           </Modal>
         </View>  
       :null}
 
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={RostermodalVisible}
+            onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setRosterModalVisible(!RostermodalVisible);
+            }}
+            >
+            <View style={styles.RostercenteredView}>
+            <View style={styles.modalView1}>
+            <View style={{backgroundColor:'#fff',width:'100%',borderRadius: 10}}>
+                <View style={{paddingVertical:10, alignItems: 'center'}}>
+                    <MaterialCommunityIcons name="close-circle" color={'#000'} size={20} style={{paddingLeft:300}} onPress={()=>setRosterModalVisible(false)}/>
+                    <MaterialCommunityIcons name="check-circle-outline" color={'#000'} size={50} style={{}}/>
+                    <Text style={styles.modalText1}>Roster Import</Text>
+                </View>
+            </View>
+            <View style={{flexDirection:'row', paddingTop:10}}>
+            <Text style={{paddingRight:120}}>From</Text>
+            <Text>To</Text>
+            </View>
+              <View style={{flexDirection:'row',padding:10}}>
+              <DatePicker
+                    //style={styles.datePickerStyle}
+                    date={fromDate} // Initial date from state
+                    mode="date" // The enum of date, datetime and time
+                    placeholder="From"
+                    placeholderTextColor = "#266173"
+                    format= "DD-MM-YYYY"
+                    //minDate="01-01-2016"
+                    //maxDate="01-01-2019"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    suffixIcon={null}
+                    customStyles={{
+                        dateInput: {
+                        borderWidth:0.2,
+                        borderRadius: 15,
+                        borderColor: '#EFEFEF',
+                        width: '100%',
+                        backgroundColor: '#fff',
+                        },
+                        dateIcon: {
+                        width:0,
+                        height:0,
+                        },
+                    }}
+                    onDateChange={(fromDate) => {
+                        setFromDate(fromDate);
+                    }}
+                    />
+                    <DatePicker
+                    //style={styles.datePickerStyle}
+                    date={toDate} // Initial date from state
+                    mode="date" // The enum of date, datetime and time
+                    placeholder="To"
+                    placeholderTextColor = "#266173"
+                    format = "DD-MM-YYYY" 
+                    //minDate="01-01-2016"
+                    //maxDate="01-01-2019"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    suffixIcon={null}
+                    customStyles={{
+                        dateInput: {
+                        borderWidth:0.2,
+                        borderRadius: 15,
+                        borderColor: '#EFEFEF',
+                        width: '100%',
+                        backgroundColor: '#fff'
+                        },
+                        dateIcon: {
+                        width:0,
+                        height:0,
+                        },
+                    }}
+                    onDateChange={(toDate) => {
+                        setToDate(toDate);
+                    }}
+                    />
+                    </View>
+                {dataFetched === true ?
+                <View>
+                    <ProgressBar progress={progressValue} color={'#256173'} style={{width:200, marginTop:15}} visible={showProgress}/>
+                </View>: 
+                    null}
+              
+              <View style={{flexDirection:'row', padding:10}}>
+              <TouchableOpacity
+              style={[styles.Modalbutton, styles.buttonClose]}
+              onPress={Roaster}
+              >
+              <Text style={{color: '#fff'}}>Import Log Data</Text>
+              </TouchableOpacity>
+              </View>
+
+              </View>
+              </View>
+          </Modal>
+
       <Draggable
         debug x={300} y={450} z={5} renderColor={'#256173'} renderSize={70} isCircle={true}
-        onShortPressRelease={() => PlusNavigation()}
+        onShortPressRelease={() => ToOpenButtons()}
       />
+      {openButtons===true?<Draggable
+        debug x={300} y={370} z={5} renderColor={'#ff6347'} renderSize={60} isCircle={true}
+        onShortPressRelease={() => PlusNavigation()} renderText='New Aircraft'
+      />:null}
+      {openButtons===true?<Draggable
+      debug x={310} y={540} z={5} renderColor={'#ff6347'} renderSize={60} isCircle={true}
+      onShortPressRelease={() => navigation.navigate('EGCAUpload')} renderText='EGCA Upload'
+      />:null}
+      {openButtons===true?<Draggable
+        debug x={230} y={460} z={5} renderColor={'#ff6347'} renderSize={60} isCircle={true}
+        onShortPressRelease={() => OpenRosterDateModal()} renderText='Roster Import'
+      />:null}
 
       <View style={dark?LogbookListing.DarkbottomView:LogbookListing.bottomView}>
       {loadmore==true?<ActivityIndicator color={dark?'#fff':'#000'}/>:null}
@@ -1231,7 +1585,7 @@ const handleIndexChange = (index) => {
             </TouchableOpacity>
           </View> : null
         }
-        {getReduxProgressData.ProgressValue !== undefined? <Text>Downloading logs : {ProgressBar}</Text> : null}
+        {getReduxProgressData.ProgressValue !== undefined? <Text>Downloading logs : {ProgressBar1}</Text> : null}
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={{color:dark?'#fff':'#000'}}> TOTAL ON TYPE-</Text>
           <View style={{ backgroundColor: '#256173', paddingHorizontal: 8, paddingVertical: 2 }}>
@@ -1288,11 +1642,45 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
   },
+  modalView1:{
+    marginLeft: '5%',
+        backgroundColor: "#EFEFEF",
+        borderRadius: 10,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        width: '90%',
+        position: 'absolute',
+        bottom: '1%',
+  },
   modalText: {
     marginBottom: 15,
     textAlign: "center",
     color: '#fff',
-  }
+  },
+  modalText1: {
+    textAlign: "center", 
+    fontFamily: 'WorkSans-Bold',
+    fontSize: 20,
+  },
+  RostercenteredView:{
+    //flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 400,
+    //padding:100
+  },
+  Modalbutton:{
+    backgroundColor: '#256173',
+      padding: 5,
+      marginTop: 20,
+      width: Dimensions.get('window').width*0.3,
+      borderRadius:10,
+      alignItems:'center',
+      
+  },
 });
 
 //make this component available to the app

@@ -44,6 +44,66 @@ const SetPeople = ({navigation,route}) => {
     const [, setParamsPic ] = React.useContext(ParamsContext);
     const [, setParamsSic ] = React.useContext(ParamsContext);
 
+    const getReduxData = useSelector(state => state.cl.AircraftType);
+    console.log(getReduxData.p2Name)
+    console.log(getReduxData.p1Name)
+
+
+    
+    React.useEffect(() => {selectQuery()}, []);
+
+    const selectQuery = () => {
+      let tempdata = [];
+        db.transaction(tx => {
+          if (route.params.from === 'pic') {
+          tx.executeSql('SELECT * FROM pilots WHERE id="'+getReduxData.p1Name+'"', [], (tx, result) => {
+            if (result.rows.length > 0) {
+            for (let i = 0; i <= result.rows.length; i++) {
+              tempdata.push({
+                id : result.rows.item(i).id,
+                Airline : result.rows.item(i).Airline,
+                Egca_reg_no : result.rows.item(i).Egca_reg_no,
+                Name : result.rows.item(i).Name,
+                pilotId : result.rows.item(i).pilotId,
+                selectedAirline : result.rows.item(i).selectedAirline,
+                emp_code : result.rows.item(i).emp_code,
+                comments : result.rows.item(i).comments,
+              
+              });
+                setName(result.rows.item(i).Name)
+                setAirlineCode(result.rows.item(i).Airline)
+                setEgcaId(result.rows.item(i).Egca_reg_no)
+                setComments(result.rows.item(i).comments)
+              }
+            }
+          });
+        }
+        else if (route.params.from === 'sic'){
+          tx.executeSql('SELECT * FROM pilots WHERE id="'+getReduxData.p2Name+'"', [], (tx, result) => {
+            if (result.rows.length > 0) {
+            for (let i = 0; i <= result.rows.length; i++) {
+              tempdata.push({
+                id : result.rows.item(i).id,
+                Airline : result.rows.item(i).Airline,
+                Egca_reg_no : result.rows.item(i).Egca_reg_no,
+                Name : result.rows.item(i).Name,
+                pilotId : result.rows.item(i).pilotId,
+                selectedAirline : result.rows.item(i).selectedAirline,
+                emp_code : result.rows.item(i).emp_code,
+                comments : result.rows.item(i).comments,
+              
+              });
+                setName(result.rows.item(i).Name)
+                setAirlineCode(result.rows.item(i).Airline)
+                setEgcaId(result.rows.item(i).Egca_reg_no)
+                setComments(result.rows.item(i).comments)
+              }
+            }
+          });
+        }
+        });
+    }
+
     const selectingImage = () => {
         ImagePicker.showImagePicker({quality: 0.3}, responseGet => {
           console.log('Response = ', responseGet);
@@ -138,10 +198,18 @@ const SetPeople = ({navigation,route}) => {
       let user = await AsyncStorage.getItem('userdetails');
       user = JSON.parse(user);
       db.transaction(tx => {
+        tx.executeSql('SELECT * FROM Airport_table Where  id="'+getReduxData.p1Name+'"', [], (tx, result) => {
+        if(result.rows.length>0){
+          tx.executeSql('UPDATE pilots set Airline="'+userAirlineType+'", Egca_reg_no="'+egcaId+'" , Name="'+name+'", pilotId="'+airlineCode+'", selectedAirline="'+userAirlineType+'", comments="'+comments+'"where ICAO_code="'+getReduxData.FromICAO+'"')
+          alert('Updated')
+        }
+        else {
         tx.executeSql(
           'INSERT INTO pilots (Airline,Egca_reg_no,Name,pilotId,selectedAirline,comments) VALUES ("'+userAirlineType+'","'+egcaId+'","'+name+'", "'+airlineCode+'", "'+userAirlineType+'", "'+comments+'")',
         );
+        }
       });
+    });
       //alert('Saved successfully');
     };
 

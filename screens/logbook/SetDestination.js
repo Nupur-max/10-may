@@ -52,6 +52,7 @@ const SetDestination = ({navigation, route}) => {
     const [iata, setIATA] = React.useState('');
 
     const getReduxData = useSelector(state => state.cl.AircraftType);
+    //console.log(getReduxData)
 
     React.useEffect(() => {selectQuery()}, []);
 
@@ -84,6 +85,7 @@ const SetDestination = ({navigation, route}) => {
                 source : result.rows.item(i).source,
               
               });
+              console.log('lat',result.rows.item(i).latitude)
                 setIdent(result.rows.item(i).ident)
                 setAirportName(result.rows.item(i).name)
                 setType(result.rows.item(i).type)
@@ -206,38 +208,21 @@ const SetDestination = ({navigation, route}) => {
           return;
         }
         db.transaction(tx => {
+          tx.executeSql('SELECT * FROM Airport_table Where  ICAO_code="'+getReduxData.FromICAO+'"', [], (tx, result) => {
+          if(result.rows.length > 0){
+            tx.executeSql('UPDATE Airport_table set ident="'+ident+'", name="'+airportName+'" , type="'+type+'", city1="'+city1+'", city2="'+city2+'", country="'+country+'", latitude="'+lat+'", longitude="'+long+'", elevation="'+al+'", timeZone="'+tz+'", DST="'+day_light+'",ICAO_code="'+icao+'",IATA_code="'+iata+'" where ICAO_code="'+getReduxData.FromICAO+'"')
+
+            alert('Updated successfully')
+          }
+          else {
           tx.executeSql(
             'INSERT INTO Airport_table (ident, name, type, city1, city2, country, latitude, longitude, elevation, timeZone, DST, ICAO_code, IATA_code) VALUES ("'+ident+'", "'+airportName+'", "'+type+'", "'+city1+'" , "'+city2+'", "'+country+'", "'+lat+'", "'+long+'", "'+al+'", "'+tz+'", "'+day_light+'", "'+icao+'", "'+iata+'")',
           );
+          alert('Saved successfully');
+          }
         });
-        alert('Saved successfully');
-      };
-
-      const getDataQuery = () => {
-        let data = [];
-        db.transaction(tx => {
-          tx.executeSql('SELECT * from Places', [], (tx, result) => {
-            if (result.rows.length > 0) {
-            }
-            for (let i = 1; i <= result.rows.length; i++) {
-              data.push({
-                ident: result.rows.item(i).ident,
-                Airport_name: result.rows.item(i).airport_name,
-                type: result.rows.item(i).type,
-                city: result.rows.item(i).city,
-                country: result.rows.item(i).country,
-                lat: result.rows.item(i).lat,
-                long: result.rows.item(i).long,
-                altitude: result.rows.item(i).Altitutde,
-                timeZone: result.rows.item(i).timeZone,
-                Day_light_saving: result.rows.item(i).Day_light_saving,
-                icao_code: result.rows.item(i).icao_code,
-                iata_code: result.rows.item(i).iata_code,
-              });
-            }
-          });
-        });
-      };
+      });
+    };
 
     return (
         <View style={[styles.container, {backgroundColor: theme.backgroundColor}]}>

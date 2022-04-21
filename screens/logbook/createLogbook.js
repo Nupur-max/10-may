@@ -73,14 +73,6 @@ const CreateLogbook = ({ navigation }) => {
     }
 }
 
-// React.useEffect(() => {
-//     if (isFocused) {
-//     CalcActualInstrument()}
-// }
-// , [isFocused,CalcActualInstrument]); 
-
-
-
 const day_editable = (dayTime) => {
     if(rosterNameSic === 'Self'){
         alert('Please check your role')
@@ -210,6 +202,7 @@ const SICnight_editable = (inputText) => {
     const [testValue, setTestValue] = React.useState(testV);
     const [commercial, setCommercial] = React.useState([]); 
     const [commercialValue, setCommercialValue] = React.useState(commercialV);
+    const [showProgress, setShowProgress] = React.useState(true)
 
     const [ddvalue,setDDValue]= React.useState([]);
 
@@ -433,6 +426,8 @@ const SICnight_editable = (inputText) => {
     const [rosterToLat, setRosterToLat] = React.useState('')
     const [rosterFromLat, setRosterFromLat] = React.useState('')
     const [rosterFromParams, setRosterFromParams] = React.useState('')
+    const [rosterP1Id, setRosterP1Id] = React.useState('')
+    const [rosterP2Id, setRosterP2Id] = React.useState('')
 
     //for simu
     const [St, setSt] = React.useState('')
@@ -592,134 +587,208 @@ React.useEffect(() => {
       });
     }
 
-const Roaster = async() => {
-    setProgressValue(0.3)
-    dataDispatcher(LogListData({data: [], inProgress:false}))
-    setDataFetched(true)
-    let user = await AsyncStorage.getItem('userdetails');
-    user = JSON.parse(user);
-  
-      await fetch(Platform.OS==='ios'?BaseUrl+'roasterImport':BaseUrlAndroid+'roasterImport',{
-        method : 'POST',
-        headers:{
+    const Roaster = async () => {
+        setShowProgress(true)
+        setProgressValue(0.3)
+        dataDispatcher(LogListData({ data: [], inProgress: false }))
+        setDataFetched(true)
+        let user = await AsyncStorage.getItem('userdetails');
+        user = JSON.parse(user);
+    
+        await fetch(Platform.OS==='ios'?BaseUrl + 'roasterImport':BaseUrlAndroid + 'roasterImport', {
+          method: 'POST',
+          headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "user_id": user.id,
-          "user": userRosterId, 
-          "pass": userRosterPwd,
-          "airline_type": userRosterAirlineType,
-          "from": fromDate,
-          "to": toDate,
-      })
-    }).then(res => res.json())
-    .then(resData => {
-  
-      for(let i=0; i<resData.data.length; i++) 
-       {
-           const AircraftReg = resData.data[i].Aircraft_Reg
-           const AircraftType = resData.data[i].Aircraft_type
-           const chocksOn = resData.data[i].Arrival_time
-           const date = resData.data[i].Dept_date
-           const newDateFormat = resData.data[i].Dept_date
-           const fromCity = resData.data[i].Dept_place_ICAO
-           const toCity = resData.data[i].Arrival_place_ICAO
-           const chocksOff = resData.data[i].Dept_time
-           const dayland = resData.data[i].Lands_Day
-           const nightLand = resData.data[i].Lands_Night
-           const SelfField = resData.data[i].Name_PIC
-           const dayTO = resData.data[i].TkkOff_Day
-           const nightTO = resData.data[i].TkkOff_Night
-           const RosterFromLat = resData.data[i].RosterFromLat
-           const RosterFromLong = resData.data[i].RosterFromLong
-           const RosterToLat = resData.data[i].RosterToLat
-           const RosterToLong = resData.data[i].RosterToLong
-           const Pilot_Pic = resData.data[i].Pilot_function_PIC
-           const Pilot_Copilot = resData.data[i].Pilot_function_Copilot
-           const Pilot_Instructor = resData.data[i].Pilot_function_Instructor
-  
-          const RealAircraftType = AircraftType === '320' || AircraftType === '321' ? 'A-'+ AircraftType : AircraftType;
-  
-          let text = date;
-          const myArray = text.split("-");
-          const day =  myArray[2]+ myArray[1] + myArray[0] 
-  
-           prePopulateddb.transaction((tx) => {
-            if (Pilot_Pic !== ''){
-            //Alert.alert('Pilot_Pic')
+          },
+          body: JSON.stringify({
+            "user_id": user.id,
+            "user": userRosterId, 
+            "pass": userRosterPwd,
+            "airline_type": userRosterAirlineType,
+            "from": fromDate,
+            "to": toDate,
+          })
+        }).then(res => res.json())
+          .then(resData => {
+          if(resData.msg!==false){
+            for (let i = 0; i < resData.data.length; i++) {
+    
+              const AircraftReg = resData.data[i].Aircraft_Reg
+              const AircraftType = resData.data[i].Aircraft_type
+              const chocksOn = resData.data[i].Arrival_time
+              const date = resData.data[i].Dept_date
+              const fromCity = resData.data[i].Dept_place_ICAO
+              const toCity = resData.data[i].Arrival_place_ICAO
+              const chocksOff = resData.data[i].Dept_time
+              const dayland = resData.data[i].Lands_Day
+              const nightLand = resData.data[i].Lands_Night
+              const SelfField = resData.data[i].Name_PIC
+              const dayTO = resData.data[i].TkkOff_Day
+              const nightTO = resData.data[i].TkkOff_Night
+              const RosterFromLat = resData.data[i].RosterFromLat
+              const RosterFromLong = resData.data[i].RosterFromLong
+              const RosterToLat = resData.data[i].RosterToLat
+              const RosterToLong = resData.data[i].RosterToLong
+              const Pilot_Pic = resData.data[i].Pilot_function_PIC
+              const Pilot_Copilot = resData.data[i].Pilot_function_Copilot
+              const Pilot_Instructor = resData.data[i].error
+    
+              const RealAircraftType = AircraftType === '320' || AircraftType === '321' ? 'A-' + AircraftType : AircraftType;
+    
+             console.log('Pilot_Copilot', Pilot_Copilot)
+    
+              let text = date;
+              const myArray = text.split("-");
+              const day = myArray[2] + myArray[1] + myArray[0]
+    
+          prePopulateddb.transaction((tx) => {
             tx.executeSql(
-             'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate) VALUES ("roster","'+user.id+'","'+AircraftReg+'","'+RealAircraftType+'","'+toCity+'","'+chocksOn+'","'+date+'","'+fromCity+'","'+chocksOff+'","'+dayland+'","'+nightLand+'","'+SelfField+'","","'+dayTO+'","'+nightTO+'","'+RosterFromLat+'","'+RosterFromLong+'","'+RosterToLat+'","'+RosterToLong+'","'+day+'")', 
-            );
-            }
-            else if (Pilot_Copilot !== '') {
-              //Alert.alert ('Pilot_Copilot')
-              tx.executeSql(
-                'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate) VALUES ("roster","'+user.id+'","'+AircraftReg+'","'+RealAircraftType+'","'+toCity+'","'+chocksOn+'","'+date+'","'+fromCity+'","'+chocksOff+'","'+dayland+'","'+nightLand+'","","'+SelfField+'","'+dayTO+'","'+nightTO+'","'+RosterFromLat+'","'+RosterFromLong+'","'+RosterToLat+'","'+RosterToLong+'","'+day+'")', 
-               );
-            }
-            else if (Pilot_Instructor !== ''){
-              //Alert.alert ('Pilot_Instructor')
-              tx.executeSql(
-                'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate) VALUES ("roster","'+user.id+'","'+AircraftReg+'","'+RealAircraftType+'","'+toCity+'","'+chocksOn+'","'+date+'","'+fromCity+'","'+chocksOff+'","'+dayland+'","'+nightLand+'","'+SelfField+'","","'+dayTO+'","'+nightTO+'","'+RosterFromLat+'","'+RosterFromLong+'","'+RosterToLat+'","'+RosterToLong+'","'+day+'")', 
-               );
-            }
-  
-            if(resData.data.length>10){
-              setProgressValue(0.5)
-            }
-  
-            if((i+1) == resData.data.length){
-            //selection from table logbook
-              let RostertemData = [];
-              prePopulateddb.transaction(tx => {
-              tx.executeSql('SELECT id,tag,aircraftType,aircraftReg,user_id,date,from_nameICAO,to_nameICAO,offTime,onTime,from_lat,from_long,to_lat,to_long,p1,p2,dayLanding,nightLanding,dayTO,nightTO from logbook WHERE user_id = "'+user.id+'" AND tag ="roster" ORDER BY orderedDate DESC', [], (tx, result) => {
-                  setOffset(offset + 10);
-                    for (let j = 0; j < result.rows.length; j++) {
-                        RostertemData.push({
-                          id : result.rows.item(j).id,
-                          tag : result.rows.item(j).tag,
-                          aircraftType : result.rows.item(j).aircraftType,
-                          aircraftReg : result.rows.item(j).aircraftReg,
+              'SELECT * from logbook WHERE user_id="'+user.id+'" AND tag="roster" AND onTime="'+chocksOn+'"', [], (tx, result1) => {
+    
+                if(result1.rows.length>0){
+                  if ((i + 1) == resData.data.length) {
+                  Alert.alert(
+                    "This data is already fetched",
+                    "Do you want to skip?",
+                    [
+                      {
+                        text: "Skip",
+                        onPress: () => console.log('cancel pressed')
+                      },
+                      //{ text: "Cancel", onPress: () => console.log('cancel pressed') }
+                    ]
+                  )
+                  }
+                  if (Pilot_Pic !== '') {
+                    tx.executeSql(
+                      'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'",instructional="'+Pilot_Instructor+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
+                    );
+                  }
+                  else if (Pilot_Copilot === '' && Pilot_Pic === ''){
+                    tx.executeSql(
+                      'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'",instructional="'+Pilot_Instructor+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
+                    );
+                  }
+                  else if (Pilot_Instructor !== ''){
+                    tx.executeSql(
+                      'UPDATE logbook set tag="roster",aircraftReg="'+AircraftReg+'",aircraftType="'+RealAircraftType+'",to_nameICAO="'+toCity+'",onTime="'+chocksOn+'",date="'+date+'",from_nameICAO="'+fromCity+'",offTime="'+chocksOff+'",dayLanding="'+dayland+'",nightLanding="'+nightLand+'",p1="'+SelfField+'",p2="",dayTO="'+dayTO+'",nightTO="'+nightTO+'",from_lat="'+RosterFromLat+'",from_long="'+RosterFromLong+'",to_lat="'+RosterToLat+'",to_long="'+RosterToLong+'",orderedDate="'+day+'",instructional="'+Pilot_Instructor+'" WHERE tag = "roster" AND user_id="'+user.id+'" AND date="'+date+'" AND onTime="'+chocksOn+'"'
+                    );
+                  }
+                  setProgressValue(1)
+                  setShowProgress(false)
+                  setRosterModalVisible(false)
+                }
+                else{
+                prePopulateddb.transaction((tx) => {
+                if (Pilot_Pic !== '') {
+                  //Alert.alert('Pilot_Pic')
+                  tx.executeSql(
+                    'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate,instructional) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","' + SelfField + '","","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '","'+Pilot_Instructor+'")',
+                  );
+                }
+                else if (Pilot_Copilot === '' && Pilot_Pic === '') {
+                  //Alert.alert ('Pilot_Copilot')
+                  tx.executeSql(
+                    'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate,instructional) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","' + SelfField + '","","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '","'+Pilot_Instructor+'")',
+                  );
+                }
+                else if (Pilot_Instructor !== '') {
+                  //Alert.alert ('Pilot_Instructor')
+                  tx.executeSql(
+                    'INSERT INTO logbook (tag,user_id,aircraftReg,aircraftType,to_nameICAO,onTime,date,from_nameICAO,offTime,dayLanding,nightLanding,p1,p2,dayTO,nightTO,from_lat,from_long,to_lat,to_long,orderedDate,instructional) VALUES ("roster","' + user.id + '","' + AircraftReg + '","' + RealAircraftType + '","' + toCity + '","' + chocksOn + '","' + date + '","' + fromCity + '","' + chocksOff + '","' + dayland + '","' + nightLand + '","' + SelfField + '","","' + dayTO + '","' + nightTO + '","' + RosterFromLat + '","' + RosterFromLong + '","' + RosterToLat + '","' + RosterToLong + '","' + day + '","'+Pilot_Instructor+'")',
+                  );
+                }
+                console.log('data pos ' + i + ' ' + resData.data.length);
+                
+                if (resData.data.length > 10) {
+                  setProgressValue(0.5)
+                }
+    
+                if(resData.msg!==false){
+                if ((i + 1) == resData.data.length) {
+                  //selection from table logbook
+                  let temData = [];
+                  prePopulateddb.transaction(tx => {
+                    tx.executeSql('SELECT id,tag,aircraftType,aircraftReg,user_id,date,from_nameICAO,to_nameICAO,offTime,onTime,from_lat,from_long,to_lat,to_long,p1,p2,dayLanding,nightLanding,dayTO,nightTO,instructional from logbook WHERE user_id = "' + user.id + '" AND tag ="roster" AND from_nameICAO != "null" ORDER BY orderedDate DESC, onTime DESC', [], (tx, result) => {
+                      setOffset(offset + 10);
+                      
+                      for (let j = 0; j < result.rows.length; j++) {
+                        temData.push({
+                          id: result.rows.item(j).id,
+                          tag: result.rows.item(j).tag,
+                          aircraftType: result.rows.item(j).aircraftType,
+                          aircraftReg: result.rows.item(j).aircraftReg,
                           user_id: result.rows.item(j).user_id,
                           date: result.rows.item(j).date,
-                          from : result.rows.item(j).from_nameICAO, //add here
-                          to : result.rows.item(j).to_nameICAO,
-                          chocksOffTime : result.rows.item(j).offTime, 
-                          chocksOnTime : result.rows.item(j).onTime,
-                          from_lat : result.rows.item(j).from_lat,
-                          from_long : result.rows.item(j).from_long,
-                          to_lat : result.rows.item(j).to_lat,
-                          to_long : result.rows.item(j).to_long,
-                          p1 : result.rows.item(j).p1,
-                          p2 : result.rows.item(j).p2,
-                          dayLanding : result.rows.item(j).dayLanding,
-                          nightLanding : result.rows.item(j).nightLanding,
-                          dayTO : result.rows.item(j).dayTO,
-                          nightTO : result.rows.item(j).nightTO,
-                      });
-                      setProgressValue(1)
-                      dataDispatcher(LogListData({data: RostertemData, inProgress:false}))
-                      let jPos = j+1
-                      if(jPos == result.rows.length){
-                        Alert.alert("Message",'Data fetched successfully');
-                        setDataFetched(false)
-                        setRosterModalVisible(false)
-                        return false;
+                          from: result.rows.item(j).from_nameICAO, //add here
+                          to: result.rows.item(j).to_nameICAO,
+                          chocksOffTime: result.rows.item(j).offTime,
+                          chocksOnTime: result.rows.item(j).onTime,
+                          from_lat: result.rows.item(j).from_lat,
+                          from_long: result.rows.item(j).from_long,
+                          to_lat: result.rows.item(j).to_lat,
+                          to_long: result.rows.item(j).to_long,
+                          p1: result.rows.item(j).p1,
+                          p2: result.rows.item(j).p2,
+                          dayLanding: result.rows.item(j).dayLanding,
+                          nightLanding: result.rows.item(j).nightLanding,
+                          dayTO: result.rows.item(j).dayTO,
+                          nightTO: result.rows.item(j).nightTO,
+                          instructional: result.rows.item(j).instructional,
+                        });
+                        console.log('Entry fetched ' + j + ' out of :' + result.rows.length);
+                        setProgressValue(1)
+                        dataDispatcher(LogListData({ data: temData, inProgress: false }))
+                        let jPos = j + 1
+                        if (jPos == result.rows.length) {
+                            fetch(Platform.OS==='ios'?BaseUrl + 'edit_profile':BaseUrlAndroid + 'edit_profile', {
+                              method: 'POST',
+                              headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                              },
+                              body: JSON.stringify({
+                                "user_id": user.id,
+                                "rosterLength" : result.rows.length,
+                        
+                              })
+                            }).then(res => res.json())
+                              .then(resData => {
+                                //console.log(resData);
+                                //GetUserDetails()
+                                //Alert.alert(resData.message);
+                        });
+                        
+                          Alert.alert("Message", 'Data fetched successfully');
+                          setDataFetched(false)
+                          setModalVisible(false)
+                          return false;
+                        }
                       }
-                  }
-                });
+                    });
+                  });
+                }
+              }
+              });
+            }
             });
-           }
-        //Select Query end
-       });
+            });
+    
+            }
+          }
+          else {
+            alert('Invalid Credentials')
+            setShowProgress(false)
+          }
+           })
+          .catch((error) => {
+              console.log(error)
+            setShowProgress(false)
+            setModalVisible(false)
+            alert('Something Went wrong')
+          });
       }
-  
-    }).catch((error) => {
-      alert('Credentials incorrect',error)
-      setModalVisible(false)
-    });
-  }
 
 const importPilotList = async() => {
     setImportModal(true);
@@ -859,7 +928,7 @@ const removeApproachInputTime = (ApproachIndex) => {
 
     const { datee, Dateform, DateFormat, role, config, configCheck } = React.useContext(DisplayContext);
    
-    dataDispatcher(CreateLogbookData({AircraftType: rosterAType, FromICAO: rosterFrom, toICAO: rosterTo}))  // data dispatching to set aircraft screen
+    dataDispatcher(CreateLogbookData({AircraftType: rosterAType, FromICAO: rosterFrom, toICAO: rosterTo, p1Name: rosterP1Id, p2Name: rosterP2Id}))  // data dispatching to set aircraft screen
 
     React.useEffect(() => {
         if (ConfigParams.childParam) {
@@ -944,6 +1013,8 @@ const removeApproachInputTime = (ApproachIndex) => {
             setInstructional(params.RoasterInstructional)
             setRemark(params.RoasterRemark)
             setAi(params.RoasterAi)
+            setRosterP1Id(params.RoasterP1Id)
+            setRosterP2Id(params.RoasterP2Id)
 
             setTraining(purposeCheck1)
             setTest(purposeCheck1)
@@ -951,6 +1022,8 @@ const removeApproachInputTime = (ApproachIndex) => {
             CalcActualInstrument()
         }
     }, [isFocused]);
+
+    console.log('p2Id',rosterP2Id)
 
 React.useEffect(() => {
    if(rosterAId==="SIMU"){
@@ -1432,6 +1505,7 @@ React.useEffect(() => {
     const Serverddmmyy = ("0" + rosterDate.getDate()).slice(-2) + "-" + (monthNames[rosterDate.getMonth()]) + "-" + rosterDate.getFullYear();
     const Servermmddyy = (monthNames[rosterDate.getMonth()]) + "-" + ("0" + rosterDate.getDate()).slice(-2) + "-" + rosterDate.getFullYear()
 
+    console.log('rosterDate', rosterDate)
 
 
     const sortedDate  = rosterDate.getFullYear() + ("0" + (rosterDate.getMonth() + 1)).slice(-2) + ("0" + rosterDate.getDate()).slice(-2)
@@ -2981,10 +3055,17 @@ console.log('actual',instructional)
                             <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35,paddingHorizontal:5 } }}><Text style={{ color: 'red' }}>*</Text>PIC/P1</Text>
                             <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                                 <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35 } }}>{rosterNamePic === 'undefined' ?'':rosterNamePic}</Text>
+                                {rosterNamePic===''?
                                 <TouchableOpacity onPress={() => {navigation.navigate('People', { from: 'pic' })}}>
                                     <MaterialCommunityIcons
-                                        name="chevron-right" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
+                                    name="chevron-right" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
                                 </TouchableOpacity>
+                                :
+                                <TouchableOpacity onPress={() => {navigation.navigate('SetPeople', { from: 'pic' })}}>
+                                    <MaterialCommunityIcons
+                                        name="alert-circle-outline" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
+                                </TouchableOpacity>
+                                }
                             </View>
                         </View>
                     </View>
@@ -3047,10 +3128,15 @@ console.log('actual',instructional)
                         <Text style={{...Logbook.fieldText,...{ paddingHorizontal:5}}}><Text style={{ color: 'red' }}>*</Text>SIC/P2</Text>
                         <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
                             <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, ...{alignItems:'center', lineHeight: 20,} } }}>{rosterNameSic}</Text>
-                            <TouchableOpacity onPress={() => {navigation.navigate('People', { from: 'sic' })}}>
+                            {rosterNameSic===''?<TouchableOpacity onPress={() => {navigation.navigate('People', { from: 'sic' })}}>
                                 <MaterialCommunityIcons
                                     name="chevron-right" color={'#256173'} size={25} style={{ lineHeight: 35,}} />
                             </TouchableOpacity>
+                            :
+                            <TouchableOpacity onPress={() => {navigation.navigate('SetPeople', { from: 'sic' })}}>
+                                <MaterialCommunityIcons
+                                    name="alert-circle-outline" color={'#256173'} size={25} style={{ lineHeight: 35 }} />
+                            </TouchableOpacity>}
                         </View>
                     </View>
                 </View></TouchableOpacity>: null}
@@ -4037,9 +4123,6 @@ console.log('actual',instructional)
 
             </ScrollView>
 
-
-            
-            
             <Modal
             animationType="fade"
             transparent={true}
@@ -4051,7 +4134,7 @@ console.log('actual',instructional)
             >
             <View style={styles.RostercenteredView}>
             <View style={styles.modalView}>
-              <View style={{backgroundColor:'#fff',width:'100%',borderRadius: 10}}>
+            <View style={{backgroundColor:'#fff',width:'100%',borderRadius: 10}}>
                 <View style={{paddingVertical:10, alignItems: 'center'}}>
                     <MaterialCommunityIcons name="close-circle" color={'#000'} size={20} style={{paddingLeft:300}} onPress={()=>setRosterModalVisible(false)}/>
                     <MaterialCommunityIcons name="check-circle-outline" color={'#000'} size={50} style={{}}/>
@@ -4124,7 +4207,7 @@ console.log('actual',instructional)
                     </View>
                 {dataFetched === true ?
                 <View>
-                    <ProgressBar progress={progressValue} color={'#256173'} style={{width:200, marginTop:15}}/>
+                    <ProgressBar progress={progressValue} color={'#256173'} style={{width:200, marginTop:15}} visible={showProgress}/>
                 </View>: 
                     null}
               
