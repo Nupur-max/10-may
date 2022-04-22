@@ -70,7 +70,7 @@ const P1 = ({ navigation }) => {
   const [airlineValue, setAirlineValue] = React.useState('');
   const [airline, setAirline] = React.useState([
     { label: 'Spicejet', value: 'Spicejet' },
-    { label: 'indigo', value: 'indigo' },
+    { label: 'Indigo', value: 'indigo' },
   ]);
 
   //Modal fields
@@ -93,9 +93,27 @@ const P1 = ({ navigation }) => {
 
   const [showAlert, setShowAlert] = React.useState(true)
 
-  const checkEcrewFields = () => {
+  const checkEcrewFields = async() => {
+    let user = await AsyncStorage.getItem('userdetails');
+      user = JSON.parse(user);
     if (eId !== '' && ePwd !== '' && airlineValue !== null) {
-      setModalVisible(true)
+      db.transaction(tx => {
+        tx.executeSql('SELECT * FROM userProfileData Where user_id = "'+user.id+'"', [], (tx, result) => {
+        if(result.rows.length>0){
+          tx.executeSql(
+            'UPDATE userProfileData set roster_id="'+eId+'", roster_pwd="'+ePwd+'" , airline_type="'+airlineValue+'" where user_id="'+user.id+'"'
+          );
+          //alert('Updated')
+        }
+        else{
+        tx.executeSql(
+          'INSERT INTO userProfileData (user_id,roster_id,roster_pwd,airline_type) VALUES ("'+user.id+'","'+eId+'","'+ePwd+'","'+airlineValue+'")'
+        );
+        //alert('added')
+        }
+        setModalVisible(true)
+      });
+    });
     }
     else {
       Alert.alert('Please fill the required details')
@@ -132,7 +150,6 @@ const P1 = ({ navigation }) => {
             country: result.rows.item(i).Country,
             profile_pic : result.rows.item(i).profile_pic,
           });
-          //console.log('user Data', result.rows.item(i).profile_pic);
           setDate(result.rows.item(i).validity)
           setLt(result.rows.item(i).LicenceType)
           setLn(result.rows.item(i).LicenceNumber)
@@ -142,7 +159,6 @@ const P1 = ({ navigation }) => {
           setEPwd(result.rows.item(i).roster_pwd);
           setAirlineValue(result.rows.item(i).airline_type)
           setCountryName(result.rows.item(i).Country)
-          //setImage({uri:result.rows.item(i).profile_pic})
         }
       });
     });
@@ -443,10 +459,7 @@ const P1 = ({ navigation }) => {
       });
   }
 
-
-
-
-  const selectingImage = () => {
+ const selectingImage = () => {
     ImagePicker.showImagePicker({quality: 0.3}, responseGet => {
       // console.log('Response = ', responseGet);
       if (responseGet.didCancel) {
@@ -916,7 +929,7 @@ const P1 = ({ navigation }) => {
             <TextInput
               placeholder='Ecrew Id *'
               placeholderTextColor="#266173"
-              value={eId}  //need to be dynamic
+              value={eId==='null'?'':eId}  //need to be dynamic
               onChangeText={(inputText) => setEId(inputText)}
               style={{ color: dark ? '#fff' : '#000' }}
             />
@@ -925,7 +938,7 @@ const P1 = ({ navigation }) => {
             <TextInput
               placeholder='Ecrew Password *'
               placeholderTextColor="#266173"
-              value={ePwd}
+              value={ePwd==='null'?'':ePwd}
               onChangeText={(inputText) => setEPwd(inputText)}
               style={{ color: dark ? '#fff' : '#000' }}
             />

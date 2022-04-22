@@ -31,8 +31,8 @@ MERGED from [:react-native-view-pdf] /Users/gadgetzone/Desktop/react-native/cojo
 MERGED from [:react-native-webview] /Users/gadgetzone/Desktop/react-native/cojo-freetrial/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-21:12
 MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-45:12
 MERGED from [com.facebook.react:react-native:0.64.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/6919320cd8fe6a426254323c79c8908a/jetified-react-native-0.64.2/AndroidManifest.xml:2:1-13:12
-MERGED from [com.github.barteksc:android-pdf-viewer:2.8.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/9ba1d51c8beab00cf414b2f1cb117152/jetified-android-pdf-viewer-2.8.2/AndroidManifest.xml:2:1-11:12
-MERGED from [com.github.barteksc:pdfium-android:1.7.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/9dbc6099c95b8606edcffe37aa379405/jetified-pdfium-android-1.7.1/AndroidManifest.xml:2:1-11:12
+MERGED from [com.github.barteksc:android-pdf-viewer:2.8.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a85cfafc5001abc2a9b6d8d8c380de71/jetified-android-pdf-viewer-2.8.2/AndroidManifest.xml:2:1-11:12
+MERGED from [com.github.barteksc:pdfium-android:1.7.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/40e4dcbfe5455e4d179d5f122bfcd487/jetified-pdfium-android-1.7.1/AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/233f29e05d3f62c91d94717ecf57158d/legacy-support-v4-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/b913b577636afb646741ffd904028e15/legacy-support-core-ui-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a4aa212df090916fdc5167a61460eb35/swiperefreshlayout-1.0.0/AndroidManifest.xml:17:1-22:12
@@ -289,10 +289,10 @@ MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native/cojo-freetri
 MERGED from [:rn-fetch-blob] /Users/gadgetzone/Desktop/react-native/cojo-freetrial/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.react:react-native:0.64.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/6919320cd8fe6a426254323c79c8908a/jetified-react-native-0.64.2/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.64.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/6919320cd8fe6a426254323c79c8908a/jetified-react-native-0.64.2/AndroidManifest.xml:7:5-9:41
-MERGED from [com.github.barteksc:android-pdf-viewer:2.8.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/9ba1d51c8beab00cf414b2f1cb117152/jetified-android-pdf-viewer-2.8.2/AndroidManifest.xml:7:5-9:41
-MERGED from [com.github.barteksc:android-pdf-viewer:2.8.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/9ba1d51c8beab00cf414b2f1cb117152/jetified-android-pdf-viewer-2.8.2/AndroidManifest.xml:7:5-9:41
-MERGED from [com.github.barteksc:pdfium-android:1.7.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/9dbc6099c95b8606edcffe37aa379405/jetified-pdfium-android-1.7.1/AndroidManifest.xml:7:5-9:41
-MERGED from [com.github.barteksc:pdfium-android:1.7.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/9dbc6099c95b8606edcffe37aa379405/jetified-pdfium-android-1.7.1/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.barteksc:android-pdf-viewer:2.8.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a85cfafc5001abc2a9b6d8d8c380de71/jetified-android-pdf-viewer-2.8.2/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.barteksc:android-pdf-viewer:2.8.2] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/a85cfafc5001abc2a9b6d8d8c380de71/jetified-android-pdf-viewer-2.8.2/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.barteksc:pdfium-android:1.7.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/40e4dcbfe5455e4d179d5f122bfcd487/jetified-pdfium-android-1.7.1/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.barteksc:pdfium-android:1.7.1] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/40e4dcbfe5455e4d179d5f122bfcd487/jetified-pdfium-android-1.7.1/AndroidManifest.xml:7:5-9:41
 MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/233f29e05d3f62c91d94717ecf57158d/legacy-support-v4-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/233f29e05d3f62c91d94717ecf57158d/legacy-support-v4-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/gadgetzone/.gradle/caches/transforms-2/files-2.1/b913b577636afb646741ffd904028e15/legacy-support-core-ui-1.0.0/AndroidManifest.xml:20:5-44

@@ -130,7 +130,7 @@ const SetPeople = ({navigation,route}) => {
         formData.append('airline', airlineCode);
         formData.append('comments', comments);
         const splittedBase64 = imageData.split(';base64');
-        formData.append('img', splittedBase64[1]);
+        //formData.append('img', splittedBase64[1]);
         var Url = Platform.OS==='ios'?BaseUrl+'add_people':BaseUrlAndroid+'add_people'
           fetch(Url, {
           method: 'POST',
@@ -198,19 +198,35 @@ const SetPeople = ({navigation,route}) => {
       let user = await AsyncStorage.getItem('userdetails');
       user = JSON.parse(user);
       db.transaction(tx => {
-        tx.executeSql('SELECT * FROM Airport_table Where  id="'+getReduxData.p1Name+'"', [], (tx, result) => {
+      if(route.params.from==='pic'){
+        tx.executeSql('SELECT * FROM pilots Where  id="'+getReduxData.p1Name+'"', [], (tx, result) => {
         if(result.rows.length>0){
-          tx.executeSql('UPDATE pilots set Airline="'+userAirlineType+'", Egca_reg_no="'+egcaId+'" , Name="'+name+'", pilotId="'+airlineCode+'", selectedAirline="'+userAirlineType+'", comments="'+comments+'"where ICAO_code="'+getReduxData.FromICAO+'"')
+          tx.executeSql('UPDATE pilots set Airline="'+userAirlineType+'", Egca_reg_no="'+egcaId+'" , Name="'+name+'", pilotId="'+airlineCode+'", selectedAirline="'+userAirlineType+'", comments="'+comments+'"where id="'+getReduxData.p1Name+'"')
           alert('Updated')
         }
         else {
         tx.executeSql(
           'INSERT INTO pilots (Airline,Egca_reg_no,Name,pilotId,selectedAirline,comments) VALUES ("'+userAirlineType+'","'+egcaId+'","'+name+'", "'+airlineCode+'", "'+userAirlineType+'", "'+comments+'")',
         );
+        alert('Saved successfully');
         }
       });
+    }
+    else if(route.params.from==='sic'){
+      tx.executeSql('SELECT * FROM pilots Where  id="'+getReduxData.p2Name+'"', [], (tx, result) => {
+        if(result.rows.length>0){
+          tx.executeSql('UPDATE pilots set Airline="'+userAirlineType+'", Egca_reg_no="'+egcaId+'" , Name="'+name+'", pilotId="'+airlineCode+'", selectedAirline="'+userAirlineType+'", comments="'+comments+'"where id="'+getReduxData.p2Name+'"')
+          alert('Updated')
+        }
+        else {
+        tx.executeSql(
+          'INSERT INTO pilots (Airline,Egca_reg_no,Name,pilotId,selectedAirline,comments) VALUES ("'+userAirlineType+'","'+egcaId+'","'+name+'", "'+airlineCode+'", "'+userAirlineType+'", "'+comments+'")',
+        );
+        alert('Saved successfully');
+        }
+      });
+    }
     });
-      //alert('Saved successfully');
     };
 
     //sqlite ends

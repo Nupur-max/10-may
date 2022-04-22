@@ -85,7 +85,6 @@ const SetDestination = ({navigation, route}) => {
                 source : result.rows.item(i).source,
               
               });
-              console.log('lat',result.rows.item(i).latitude)
                 setIdent(result.rows.item(i).ident)
                 setAirportName(result.rows.item(i).name)
                 setType(result.rows.item(i).type)
@@ -315,7 +314,7 @@ const SetDestination = ({navigation, route}) => {
             <TextInput 
                 placeholder='12.345 For N/- FOR S'
                 placeholderTextColor='#393F45'
-                value = {lat}
+                value = {lat.toString()}
                 onChangeText = {(inputText) => setLat(inputText)}
                 style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
@@ -325,7 +324,7 @@ const SetDestination = ({navigation, route}) => {
             <TextInput 
                 placeholder='12.345 For E/- FOR W'
                 placeholderTextColor='#393F45'
-                value = {long}
+                value = {long.toString()}
                 onChangeText = {(inputText) => setLong(inputText)}
                 style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
@@ -335,7 +334,7 @@ const SetDestination = ({navigation, route}) => {
             <TextInput 
                 placeholder='Enter Altitude'
                 placeholderTextColor='#393F45'
-                value = {al}
+                value = {al.toString()}
                 onChangeText = {(inputText) => setAl(inputText)}
                 style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
@@ -355,7 +354,7 @@ const SetDestination = ({navigation, route}) => {
             <TextInput 
                 placeholder='X'
                 placeholderTextColor='#393F45'
-                value = {day_light}
+                value = {day_light.toString()}
                 onChangeText = {(inputText) => setDay_light(inputText)}
                 style={{marginTop: -5,color:dark?'#fff':'#000'}} />
             </View>
