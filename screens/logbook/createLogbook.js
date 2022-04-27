@@ -205,6 +205,7 @@ const SICnight_editable = (inputText) => {
     const [showProgress, setShowProgress] = React.useState(true)
 
     const [ddvalue,setDDValue]= React.useState([]);
+    const [alertPresent,setAlertPresent] = React.useState('');
 
     //custom input fields end
 
@@ -555,6 +556,11 @@ const removelandingInputTime = (LandingIndex) => {
     </View>);
    setLandingTextInput(LandingTextInput1);
    setLandingModalVisible(false);
+   if(rosterChocksOff!==''&&rosterChocksOn!==''){
+            if(rosterChocksOff===rosterChocksOn){
+                alert('Hello');
+            }
+        } 
     }
   }
 
@@ -1441,10 +1447,14 @@ React.useEffect(() => {
           alert('Please select Date');
           return;
         }
-        if (rosterAType.length === 1) {
+        if (rosterAType==='') {
           alert('Please select Aircraft Type');
           return;
         }
+        if (rosterAId==='') {
+            alert('Please Enter Aircraft Id to proceed');
+            return;
+          }
         if (!rosterFrom) {
           alert('Please select from');
           return;
@@ -2391,7 +2401,7 @@ React.useEffect(() => {
 
    const isFlightTypeSelected = () => {
        alert('Please Fill egcaUpload details first from settings-> EGCA Upload to proceed!!')
-       navigation.navigate('EGCAUpload')
+       navigation.navigate('CreateEgcaUpload')
    }
 
    const SaveChocksOff = async(inputText) => {
@@ -2628,7 +2638,43 @@ const [simulatedErr, setSimulatedErr] = React.useState(false)
     });
 }
 
-console.log('actual',instructional)
+console.log('chocksOff',rosterChocksOff)
+console.log('chocksOn',rosterChocksOn)
+console.log('condition',rosterChocksOff===rosterChocksOn)
+
+
+//const ChocksValues = (inputText) => {
+    //if (!alertPresent) {
+        //setAlertPresent(true)
+        // if(rosterChocksOff!==''&&rosterChocksOn!==''){
+        //     if(rosterChocksOff===rosterChocksOn){
+        //         alert('Hello');
+        //     }
+        // } 
+        // else {
+        //     setAlertPresent(false)
+        // }
+    //}
+//}
+
+React.useEffect(()=>{
+    if(rosterChocksOff!==''&&rosterChocksOn!==''){
+        if(rosterChocksOff===rosterChocksOn){
+            alert('Hello');
+            //setRosterChocksOff('')
+        }
+    } 
+},[rosterChocksOff]);
+
+React.useEffect(()=>{
+    if(rosterChocksOff!==''&&rosterChocksOn!==''){
+        if(rosterChocksOff===rosterChocksOn){
+            alert('Hello');
+            //setRosterChocksOn('')
+        }
+    } 
+},[rosterChocksOn]);
+
    return (
         <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
         
@@ -2942,7 +2988,7 @@ console.log('actual',instructional)
                     <View style={Logbook.fields}>
                         <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, paddingBottom:8 } }}><Text style={{ color: 'red' }}>*</Text>Chocks Off</Text>
                         <View style={{justifyContent:'flex-end',position:'absolute',left:0,bottom:0,top:15}}>
-                        {chocksoffErr===true?<Text style={{color:'red'}}>Enter value in hh:mm form</Text>:null}
+                        {/* {chocksoffErr===true?<Text style={{color:'red'}}>Enter value in hh:mm form</Text>:null} */}
                         </View>
                         <MaskedTextInput
                             mask='99:99'
@@ -2996,7 +3042,7 @@ console.log('actual',instructional)
                     <View style={Logbook.fields}>
                         <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35,paddingBottom:8 } }}><Text style={{ color: 'red' }}>*</Text>Chocks On</Text>
                         <View style={{justifyContent:'flex-end',position:'absolute',left:0,bottom:0,top:15}}>
-                        {chocksOnErr===true?<Text style={{color:'red'}}>Enter value in hh:mm form</Text>:null}
+                        {/* {chocksOnErr===true?<Text style={{color:'red'}}>Enter value in hh:mm form</Text>:null} */}
                         </View>
                         <MaskedTextInput
                             mask='99:99'
@@ -4314,7 +4360,7 @@ console.log('actual',instructional)
                                 <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}>Import Pilot List</Text>
                             </View>
                             </TouchableOpacity>
-                            <TouchableOpacity style={ModalView.Modal} onPress={()=>{navigation.navigate('EGCAUpload'); setModalVisible(false)}}>
+                            <TouchableOpacity style={ModalView.Modal} onPress={()=>{navigation.navigate('CreateEgcaUpload'); setModalVisible(false)}}>
                             <MaterialCommunityIcons name="application-import" color={dark?'#fff':'#000'} size={20}/>
                             <View>
                                 <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}>EGCA UPLOAD</Text>

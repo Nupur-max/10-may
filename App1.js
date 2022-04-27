@@ -199,6 +199,7 @@ const HomeTabs = () => {
         component={SetAircraft}
         options={{headerShown: false}} />
         <LogBookStack.Screen name="CreateLogbook" component={CreateLogbook} options={{headerShown:false}} />
+        <LogBookStack.Screen name="CreateEgcaUpload" component={EGCAUpload} options={{headerShown:false}} />
         <LogBookStack.Screen name="Configuration" component={Configuration} options={{headerShown:false}} />
         <LogBookStack.Screen name="Destination"
         component={Destination}
@@ -249,6 +250,9 @@ const HomeTabs = () => {
     options={{headerShown:false}} />
     <DocStack.Screen name="PdfGenerator"
     component={PdfGenerator}
+    options={{headerShown:false}} />
+    <DocStack.Screen name="DocEgcaUpload"
+    component={EGCAUpload}
     options={{headerShown:false}} />
     <DocStack.Screen name="ShowPDF"
     component={ShowPDF}

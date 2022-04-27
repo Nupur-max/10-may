@@ -322,11 +322,11 @@ const LogBookListing = ({ navigation }) => {
 
   const [, setParamsLogbook] = React.useContext(ParamsContext);
 
-  React.useEffect(() => {
-    if(isFocused){
-      dataToServer()
-    }
-  },[isFocused]);
+  // React.useEffect(() => {
+  //   if(isFocused){
+  //     dataToServer()
+  //   }
+  // },[isFocused]);
 
   const dataToServer = async() => {
     
@@ -342,18 +342,10 @@ const LogBookListing = ({ navigation }) => {
       else {
          prePopulateddb.transaction(tx => {
           tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '"AND tag = "manual"', [], (tx, result1) => {
-
             //console.log('hello',result1.rows.length)
-
-            
-            
             for(i = 0; i <= result1.rows.length; i++) {
            
-             console.log(result1.rows.item(i).date.split('-')[1])
-
-               const monthNames = ["Jan", "Feb", "March", "April", "May", "June",
-              "July", "Aug", "Sep", "Oct", "Nov", "Dec"
-              ];
+             console.log(result1.rows.item(i).date)
 
               if(result1.rows.length>0){
                console.log('uploading to server')
@@ -1179,7 +1171,7 @@ const LogBookListing = ({ navigation }) => {
 
   const onRefresh = React.useCallback(async () => {
     dataDispatcher(LogListData({ data: [], inProgress: false }))
-    setRefreshing(true);
+    //setRefreshing(true);
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
     let temData =  []
@@ -1294,7 +1286,7 @@ const LogBookListing = ({ navigation }) => {
             
           })
         }
-          console.log('tagssss',result.rows.item(i).tag)
+          //console.log('tagssss',result.rows.item(i).tag)
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>
@@ -1435,6 +1427,12 @@ const handleIndexChange = (index) => {
           numColumns={1}
           onEndReached={()=>{search !== ''? null:getLogbookData();console.log('called')}}
           onEndReachedThreshold={0.8}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={dataToServer}
+            />
+          }
         />
       }
       {getReduxProgressData.ProgressValue!== undefined? 
@@ -1561,15 +1559,15 @@ const handleIndexChange = (index) => {
         onShortPressRelease={() => ToOpenButtons()}
       />
       {openButtons===true?<Draggable
-        debug x={300} y={370} z={5} renderColor={'#ff6347'} renderSize={60} isCircle={true}
+        debug x={300} y={370} z={5} renderColor={'#256173'} renderSize={60} isCircle={false}
         onShortPressRelease={() => PlusNavigation()} renderText='New Aircraft'
       />:null}
       {openButtons===true?<Draggable
-      debug x={310} y={540} z={5} renderColor={'#ff6347'} renderSize={60} isCircle={true}
-      onShortPressRelease={() => navigation.navigate('EGCAUpload')} renderText='EGCA Upload'
+      debug x={310} y={540} z={5} renderColor={'#256173'} renderSize={60} isCircle={false}
+      onShortPressRelease={() => navigation.navigate('CreateEgcaUpload')} renderText='EGCA Upload'
       />:null}
       {openButtons===true?<Draggable
-        debug x={230} y={460} z={5} renderColor={'#ff6347'} renderSize={60} isCircle={true}
+        debug x={230} y={460} z={5} renderColor={'#256173'} renderSize={60} isCircle={false}
         onShortPressRelease={() => OpenRosterDateModal()} renderText='Roster Import'
       />:null}
 

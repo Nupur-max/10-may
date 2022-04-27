@@ -535,7 +535,7 @@ const Docs = ({ navigation }) => {
         else {
           alert('Please Upload EGCA Settings from settings First')
           setOpen(false)
-          navigation.navigate('EGCAUpload')
+          navigation.navigate('DocEgcaUpload')
         }
       });
     });
