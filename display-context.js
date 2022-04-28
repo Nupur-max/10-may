@@ -34,7 +34,7 @@ const initialState = {
     roleChecked : () => {},
     config: false,
     configCheck : () => {},
-
+    egcaModalOpen : false,
 }
 const DisplayContext = createContext(initialState);
 
@@ -45,6 +45,7 @@ function DisplayProvider({ children }) {
     const [roleavail, setRoleAvail] = useState('') 
     const [dataLength, setDataLength] = useState('')
     const [config, setConfig] = useState(false)
+    const [egcaModalOpen,setEgcaModalOpen] = useState(false)
 
     React.useEffect(() => {
         //if(isFocused){
@@ -93,7 +94,7 @@ function DisplayProvider({ children }) {
     const Dateform = datee ? Dateforms.ddmm : Dateforms.mmdd
 
     return (
-        <DisplayContext.Provider value={{ datee, Dateform, DateFormat, role, roleChecked, config, configCheck }}>
+        <DisplayContext.Provider value={{ datee, Dateform, DateFormat, role, roleChecked, config, configCheck,egcaModalOpen,setEgcaModalOpen }}>
             {children}
         </DisplayContext.Provider>
     )

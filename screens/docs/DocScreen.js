@@ -19,6 +19,7 @@ import { DocListData } from '../../store/actions/DocListAction';
 import { DocData } from '../../store/actions/docAction';
 import { useIsFocused } from "@react-navigation/native";
 import SsStyle from '../../styles/settingScreenStyle';
+import { DisplayContext } from '../../display-context';
 
 
 const prePopulateddb = SQLite.openDatabase(
@@ -57,6 +58,8 @@ const Docs = ({ navigation }) => {
   const dataDispatcher = useDispatch();
   const onFocusChange = () => setFocused(true);
   const onFocusCancelled = () => setFocused(false);
+
+  const { datee, Dateform, DateFormat, role, config, configCheck,egcaModalOpen,setEgcaModalOpen } = React.useContext(DisplayContext);
 
   //Sqlite starts
   const searchQuery = (dataToSearch) => {
@@ -453,8 +456,8 @@ const Docs = ({ navigation }) => {
   const getReduxDocData = useSelector(state => state.docList.data);
   console.log('redux',getReduxDocData.data)
 
-  const openList = () => { setOpen(true); setSelectedItem([]); }
-  const closeList = () => { setOpen(false); setSelectedItem([]); }
+  const openList = () => { setEgcaModalOpen(true); setSelectedItem([]); }
+  const closeList = () => { setEgcaModalOpen(false); setSelectedItem([]); }
 
   const onUpdateValue = (index, value) => {
     var errors = [];
@@ -534,7 +537,7 @@ const Docs = ({ navigation }) => {
         }
         else {
           alert('Please Upload EGCA Settings from settings First')
-          setOpen(false)
+          setEgcaModalOpen(false)
           navigation.navigate('DocEgcaUpload')
         }
       });
@@ -601,7 +604,7 @@ const Docs = ({ navigation }) => {
     );
   }
   const openWebView = () => {
-    setOpen(false)
+    setEgcaModalOpen(false)
     navigation.navigate('webview')
   }
 
@@ -811,7 +814,7 @@ const Docs = ({ navigation }) => {
   }
   return (
     <SafeAreaView style={logModalVisible===true||reportModalVisible?[DocScreenStyle.container, {backgroundColor: 'rgba(0,0,0,0.3)'}]:[DocScreenStyle.container, {backgroundColor: theme.backgroundColor}]}>
-      <Modal animationType='slide' transparent={true} visible={open === true}>
+      <Modal animationType='slide' transparent={true} visible={egcaModalOpen === true}>
         {/* <TouchableOpacity activeOpacity={1} onPress={closeList} style={{ flex: 1 }}> */}
         <SafeAreaView style={{ flex: 1 }}>
           <View style={styles.listWrapper}>

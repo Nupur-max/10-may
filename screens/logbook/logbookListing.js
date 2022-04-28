@@ -42,7 +42,7 @@ const prePopulateddb = SQLite.openDatabase(
 // create a component
 const LogBookListing = ({ navigation }) => {
 
-  const { datee, Dateform, DateFormat, role, config, configCheck } = React.useContext(DisplayContext);
+  const { datee, Dateform, DateFormat, role, config, configCheck,egcaModalOpen,setEgcaModalOpen } = React.useContext(DisplayContext);
 
   const isFocused = useIsFocused();
 
@@ -1560,11 +1560,11 @@ const handleIndexChange = (index) => {
       />
       {openButtons===true?<Draggable
         debug x={300} y={370} z={5} renderColor={'#256173'} renderSize={60} isCircle={false}
-        onShortPressRelease={() => PlusNavigation()} renderText='New Aircraft'
+        onShortPressRelease={() => PlusNavigation()} renderText='New Flight'
       />:null}
       {openButtons===true?<Draggable
       debug x={310} y={540} z={5} renderColor={'#256173'} renderSize={60} isCircle={false}
-      onShortPressRelease={() => navigation.navigate('CreateEgcaUpload')} renderText='EGCA Upload'
+      onShortPressRelease={() => {navigation.navigate('Docs');setEgcaModalOpen(true)}} renderText='EGCA Upload'
       />:null}
       {openButtons===true?<Draggable
         debug x={230} y={460} z={5} renderColor={'#256173'} renderSize={60} isCircle={false}

@@ -2660,7 +2660,7 @@ console.log('condition',rosterChocksOff===rosterChocksOn)
 React.useEffect(()=>{
     if(rosterChocksOff!==''&&rosterChocksOn!==''){
         if(rosterChocksOff===rosterChocksOn){
-            alert('Hello');
+            alert('chocks Off cannot be Equal to chocks On');
             //setRosterChocksOff('')
         }
     } 
@@ -2669,7 +2669,7 @@ React.useEffect(()=>{
 React.useEffect(()=>{
     if(rosterChocksOff!==''&&rosterChocksOn!==''){
         if(rosterChocksOff===rosterChocksOn){
-            alert('Hello');
+            alert('chocks Off cannot be Equal to chocks On');
             //setRosterChocksOn('')
         }
     } 

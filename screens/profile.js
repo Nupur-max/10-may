@@ -14,6 +14,7 @@ import { LogListData } from '../store/actions/loglistAction';
 import { PilotData } from '../store/actions/pilotsAction';
 import { ProfileData } from '../store/actions/displayAction';
 import { ProgressBar } from 'react-native-paper';
+import NetInfo from "@react-native-community/netinfo";
 
 import { BaseUrl } from '../components/url.json';
 import {BaseUrlAndroid} from '../components/urlAndroid.json';
@@ -92,6 +93,17 @@ const P1 = ({ navigation }) => {
   const [showPilotsProgress, setShowPilotsProgress] = React.useState(true)
 
   const [showAlert, setShowAlert] = React.useState(true)
+
+  React.useEffect(()=>{
+    NetInfo.addEventListener(networkState => {
+      if (networkState.isConnected === false) {
+        console.log("due to network unavailability your data is not syncronized with server but whenever the network would be availbale it would automatically sync with server...")
+      }
+      else{
+        uploadImageToServer()
+      }
+    })
+  },[])
 
   const checkEcrewFields = async() => {
     let user = await AsyncStorage.getItem('userdetails');
@@ -586,7 +598,6 @@ const P1 = ({ navigation }) => {
       });
     });
   }
-
   //sqlite ends
 
   //console.log('imageeē', image);
