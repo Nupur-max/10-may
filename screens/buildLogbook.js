@@ -1185,7 +1185,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>PIC/P1</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit?editDay_pic:day_pic}
                     onChangeText={edit?(inputText) => editSetday_pic(inputText):(inputText) => setday_pic(inputText)}
                     keyboardType="numeric"
@@ -1197,7 +1197,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Dual</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit?editDay_dual=='null'?'00:00':editDay_dual:day_dual}
                     onChangeText={edit?inputText => editSetDay_dual(inputText):inputText => setDay_dual(inputText)}
                     keyboardType="numeric"
@@ -1208,7 +1208,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>SIC/P2</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit?editDay_sic:day_sic}
                     onChangeText={edit?inputText => editSetday_sic(inputText):inputText => setday_sic(inputText)}
                     keyboardType="numeric"
@@ -1221,7 +1221,7 @@ return (
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>P1(U/S)</Text>
            { Class=== 'SE Land' || Class=== 'SE Sea' || editClass==='SE Land' || editClass==='SE Sea' ? <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>N/A</Text>:
            <MaskedTextInput
-           mask= '99999:99'
+           mask= {['99:99','99999:99']}
            value={edit?editDayp1_us:dayp1_us}
            onChangeText={edit?inputText => editSetDayp1_us(inputText):inputText => setDayp1_us(inputText)}
            keyboardType="numeric"
@@ -1234,7 +1234,7 @@ return (
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>P1(U/T)</Text>
            { Class=== 'SE Land' || Class=== 'SE Sea' || editClass==='SE Land' || editClass==='SE Sea' ? <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>N/A</Text>:
            <MaskedTextInput
-           mask= '99999:99'
+           mask= {['99:99','99999:99']}
            value={edit?editDayp1_ut:dayp1_ut}
            onChangeText={edit?inputText => editSetDayp1_ut(inputText):inputText => setDayp1_ut(inputText)}
            keyboardType="numeric"
@@ -1246,7 +1246,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Total</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={ edit?editDay_total:Class=== 'SE Land' || Class=== 'SE Sea' ? DaySETotalH :DayMETotalH }
                     onChangeText={edit?editDay_total => editSetDay_total(editDay_total):day_total => setDay_total(day_total)}
                     keyboardType="numeric"
@@ -1263,7 +1263,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>PIC/P1</Text>
            <MaskedTextInput
-                    mask= '99999:99' 
+                    mask= {['99:99','99999:99']} 
                     value={edit? editNight_pic : night_pic}
                     onChangeText={edit?(inputText) => editSetNight_pic(inputText):night_pic => setnight_pic(night_pic)}
                     keyboardType="numeric"
@@ -1275,7 +1275,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Dual</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit?editNight_dual== 'null'?'00:00':editNight_dual:night_dual}
                     onChangeText={edit?(inputText) => editSetNight_dual(inputText):night_dual => setNight_dual(night_dual)}
                     keyboardType="numeric"
@@ -1286,7 +1286,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>SIC/P2</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit? editNight_sic :night_sic}
                     onChangeText={edit?(inputText) => editSetNight_sic(inputText):night_sic => setnight_sic(night_sic)}
                     keyboardType="numeric"
@@ -1299,7 +1299,7 @@ return (
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>P1(U/S)</Text>
            { Class=== 'SE Land' || Class=== 'SE Sea' ||  editClass==='SE Land' || editClass==='SE Sea' ? <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>N/A</Text>:
            <MaskedTextInput
-           mask= '99999:99'
+           mask= {['99:99','99999:99']}
            value={edit? editNightp1_us : nightp1_us}
            onChangeText={edit?(inputText) => editSetNightp1_us(inputText):nightp1_us => setNightp1_us(nightp1_us)}
            keyboardType="numeric"
@@ -1312,7 +1312,7 @@ return (
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>P1(U/T)</Text>
            { Class=== 'SE Land' || Class=== 'SE Sea' || editClass==='SE Land' || editClass==='SE Sea'? <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>N/A</Text>:
            <MaskedTextInput
-           mask= '99999:99'
+           mask= {['99:99','99999:99']}
            value={edit? editNightp1_ut :nightp1_ut}
            onChangeText={edit?(inputText) => editSetNightp1_ut(inputText):nightp1_ut => setNightp1_ut(nightp1_ut)}
            keyboardType="numeric"
@@ -1324,7 +1324,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Total</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit?editNight_total:Class=== 'SE Land' || Class=== 'SE Sea' ? NightSETotalH : NightMETotalH }
                     onChangeText={edit?editNight_total => editSetNight_total(editNight_total):night_total => setNight_total(night_total)}
                     keyboardType="numeric"
@@ -1337,7 +1337,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Total Flying Time *</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit?editTotal_flying_time:Class=== 'SE Land' || Class=== 'SE Sea' ? TotalSEFlyingTime : TotalMEFlyingTime}
                     onChangeText={edit?editTotal_flying_time => editSetTotal_flyingTime(editTotal_flying_time):total_flying_time => setTotal_flyingTime(total_flying_time)}
                     keyboardType="numeric"
@@ -1354,7 +1354,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Day</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit?editStl_day=== 'null'?'00:00':editStl_day:stl_day}
                     onChangeText={edit?(InputText) => editSetStl_day(InputText):(InputText) => setStl_Day(InputText)}
                     keyboardType="numeric"
@@ -1367,7 +1367,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Night</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit?editStl_night==='null'?'00:00':editStl_night:stl_night}
                     onChangeText={edit?InputText => editSetStl_night(InputText):InputText => setStl_Night(InputText)}
                     keyboardType="numeric"
@@ -1380,7 +1380,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Total</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit?editStl_total==='null'?'00:00':editStl_total:TotalStlTime}
                     onChangeText={edit?InputText => editSetStl_total(InputText):InputText => setStl_Total(InputText)}
                     keyboardType="numeric"
@@ -1397,7 +1397,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Actual</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit?editActual:actual}
                     onChangeText={edit?(inputText) => editSetActual(inputText):actual => setActual(actual)}
                     keyboardType="numeric"
@@ -1410,7 +1410,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Simulated</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit? editSimulated : simulated}
                     onChangeText={edit?(inputText) => editSetSimulated(inputText):simulated => setSimulated(simulated)}
                     keyboardType="numeric"
@@ -1423,7 +1423,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Simulator</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit?editSimulator:simulator}
                     onChangeText={edit?(inputText) => editSetSimulator(inputText):simulator => setSimulator(simulator)}
                     keyboardType="numeric"
@@ -1440,7 +1440,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Day</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit?editInstructional_day:instructional_day}
                     onChangeText={edit?(inputText) => editSetInstructional_day(inputText):instructional_day => setInstructional_day(instructional_day)}
                     keyboardType="numeric"
@@ -1453,7 +1453,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Night</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit?editInstructional_night:instructional_night}
                     onChangeText={edit?(inputText) => editSetInstructional_night(inputText):instructional_night => setInstructional_night(instructional_night)}
                     keyboardType="numeric"
@@ -1466,7 +1466,7 @@ return (
         <View style={styles.fields}>
            <Text style={{...styles.fieldText, ...{lineHeight:35,}}}>Total</Text>
            <MaskedTextInput
-                    mask= '99999:99'
+                    mask= {['99:99','99999:99']}
                     value={edit?editInstructional_total:TotalInsTime}
                     onChangeText={edit?editInstructional_total => editSetInstructional_total(editInstructional_total):instructional_total => setInstructional_total(instructional_total)}
                     keyboardType="numeric"

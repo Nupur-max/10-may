@@ -2087,6 +2087,10 @@ React.useEffect(() => {
         showMode('date');
     };
 
+    React.useEffect(()=>{
+        showDatepicker()
+    },[])
+
     const STL_CONDITIONS = () =>  {
         if (stl === false && rosterNameSic==='Self') {
             setP1_us_day(sic_day)
@@ -2643,20 +2647,6 @@ console.log('chocksOn',rosterChocksOn)
 console.log('condition',rosterChocksOff===rosterChocksOn)
 
 
-//const ChocksValues = (inputText) => {
-    //if (!alertPresent) {
-        //setAlertPresent(true)
-        // if(rosterChocksOff!==''&&rosterChocksOn!==''){
-        //     if(rosterChocksOff===rosterChocksOn){
-        //         alert('Hello');
-        //     }
-        // } 
-        // else {
-        //     setAlertPresent(false)
-        // }
-    //}
-//}
-
 React.useEffect(()=>{
     if(rosterChocksOff!==''&&rosterChocksOn!==''){
         if(rosterChocksOff===rosterChocksOn){
@@ -2828,7 +2818,7 @@ React.useEffect(()=>{
                         name="help-circle-outline" color='#256173' size={25} onPress={() => setFlightAlertModalVisible(true)} style={{lineHeight:45, position:'absolute', left: 350 }} />
                     </View>
 
-                <TouchableOpacity onPress={showDatepicker} >
+                <TouchableOpacity onPress={()=>{showDatepicker();setShow(true)}} >
                     <View style={Logbook.fieldWithoutBottom}>
                         <View style={Logbook.fields}>
                             <Text style={{ ...Logbook.fieldText, ...{ lineHeight: 35, } }}><Text style={{ color: 'red' }}>*</Text>Date</Text>
@@ -2840,7 +2830,7 @@ React.useEffect(()=>{
                                 mode="date" // The enum of date, datetime and time
                                 placeholder="From"
                                 placeholderTextColor = "#266173"
-                                format= "DD-MM-YYYY"
+                                format= {datee == 'DDMM'?"DD-MM-YYYY":"MM-DD-YYYY"}
                                 //minDate="01-01-2016"
                                 //maxDate="01-01-2019"
                                 confirmBtnText="Confirm"
@@ -2859,12 +2849,12 @@ React.useEffect(()=>{
                                     height:40,
                                     },
                                 }}
-                                hideText={true}
+                                hideText={false}
                                 onDateChange={flightDate}
                                 />
                             )}
                             {/* <Text style={{paddingTop:8}}>{onlyDate}</Text> */}
-                            <Text style={dark?{ paddingTop: 8, color:'#fff' }:{ paddingTop: 8 }}>{originalDate}</Text>
+                            {/* <Text style={dark?{ paddingTop: 8, color:'#fff' }:{ paddingTop: 8 }}>{originalDate}</Text> */}
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -4348,22 +4338,10 @@ React.useEffect(()=>{
                                 <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}>Next Leg</Text>
                             </View>
                             </TouchableOpacity>
-                            <TouchableOpacity style={ModalView.Modal} onPress={OpenRosterDateModal}>
-                            <MaterialCommunityIcons name="application-import" color={dark?'#fff':'#000'} size={20}/>
-                            <View>
-                                <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}>Roster Import</Text>
-                            </View>
-                            </TouchableOpacity>
                             <TouchableOpacity style={ModalView.Modal} onPress={importPilotList}>
                             <MaterialCommunityIcons name="database-import" color={dark?'#fff':'#000'} size={20}/>
                             <View>
                                 <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}>Import Pilot List</Text>
-                            </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={ModalView.Modal} onPress={()=>{navigation.navigate('CreateEgcaUpload'); setModalVisible(false)}}>
-                            <MaterialCommunityIcons name="application-import" color={dark?'#fff':'#000'} size={20}/>
-                            <View>
-                                <Text style={dark?ModalView.DarkModalListingText:ModalView.ModalListingText}>EGCA UPLOAD</Text>
                             </View>
                             </TouchableOpacity>
                         </View>
