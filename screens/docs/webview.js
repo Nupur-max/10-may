@@ -69,14 +69,14 @@ class Sample extends Component {
     let departure = logData[this.state.index].date;
     let arr = arrival.replace(/-/g, '/');
     let dep = departure.replace(/-/g, '/');
-    var p = logData[0].Purpose;
+    var p = logData[this.state.index].timeCustom1;
     var pur = p.split(",");
     var Pic_Name = logData[this.state.index].p1 ==='Self'? logData[this.state.index].p1 : logData[this.state.index].p1.split("(")
     var Pic_Name_Split =  Pic_Name === 'Self' ? Pic_Name : Pic_Name[1].split(")")
     var Sic_Name =  logData[this.state.index].p2 ==='Self'? logData[this.state.index].p2 : logData[this.state.index].p2.split("(")
     var Sic_Name_Split = Sic_Name === 'Self' ? Sic_Name : Sic_Name[1].split(")")
-    const takeOffTime =logData[this.state.index].chocksOffTime.split(":");
-    const landingTime=logData[this.state.index].chocksOnTime.split(":");
+    const takeOffTime =logData[this.state.index].offTime.split(":");
+    const landingTime=logData[this.state.index].onTime.split(":");
      
     const chokOff = Number(takeOffTime[0]) < 10 ? "0" + takeOffTime[0] + ":" + takeOffTime[1] : takeOffTime[0] + ":" + takeOffTime[1]
     const chokOn = Number(landingTime[0]) < 10 ? "0" + landingTime[0] + ":" + landingTime[1] : landingTime[0] + ":" + landingTime[1]

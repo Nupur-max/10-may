@@ -20,6 +20,8 @@ import { DocData } from '../../store/actions/docAction';
 import { useIsFocused } from "@react-navigation/native";
 import SsStyle from '../../styles/settingScreenStyle';
 import { DisplayContext } from '../../display-context';
+import { BaseUrl } from '../../components/url.json';
+import {BaseUrlAndroid} from '../../components/urlAndroid.json';
 
 
 const prePopulateddb = SQLite.openDatabase(
@@ -254,161 +256,205 @@ const Docs = ({ navigation }) => {
   const [successUpload, setsuccessUpload] = React.useState([])
 
 
+  // const onRefresh = React.useCallback(async () => {
+  //   getATPLData()
+  //   //selection()
+  //   setRefreshing(true);
+  //   let user = await AsyncStorage.getItem('userdetails');
+  //   user = JSON.parse(user);
+  //   let temData = []
+  //   let pur = []
+  //   prePopulateddb.transaction(tx => {
+  //     tx.executeSql('SELECT * from logbook WHERE  user_id = "' + user.id + '" AND tag= "manual" ORDER BY orderedDate DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+  //       if (result.rows.length == 0) {
+  //         console.log('no data to load')
+  //         setLoadmore(false)
+  //         return false;
+  //       }
+  //       setOffset(offset + 10);
+  //       for (let i = 0; i <= result.rows.length; i++) {
+  //         if (result.rows.length !== 0) {
+  //           pur.push(result.rows.item(i).purpose1)
+  //           temData.push({
+  //             id: result.rows.item(i).id,
+  //             tag: result.rows.item(i).tag,
+  //             user_id: result.rows.item(i).user_id,
+  //             flight_no: result.rows.item(i).flight_no,
+  //             date: result.rows.item(i).date,
+  //             day: result.rows.item(i).day,
+  //             actual_Instrument: result.rows.item(i).actual_Instrument,
+  //             aircraftReg: result.rows.item(i).aircraftReg,
+  //             aircraftType: result.rows.item(i).aircraftType,
+  //             dayLanding: result.rows.item(i).dayLanding,
+  //             dual_day: result.rows.item(i).dual_day,
+  //             dual_night: result.rows.item(i).dual_night,
+  //             flight: result.rows.item(i).flight,
+  //             from: result.rows.item(i).from_nameICAO,
+  //             ifr_vfr: result.rows.item(i).ifr_vfr,
+  //             instructional: result.rows.item(i).instructional,
+  //             instructor: result.rows.item(i).instructor,
+  //             landing: result.rows.item(i).inTime,
+  //             night: result.rows.item(i).night,
+  //             chocksOffTime: result.rows.item(i).offTime,
+  //             nightLanding: result.rows.item(i).nightLanding,
+  //             chocksOnTime: result.rows.item(i).onTime,
+  //             takeOff: result.rows.item(i).outTime,
+  //             p1: result.rows.item(i).p1,
+  //             p1_us_day: result.rows.item(i).p1_us_day,
+  //             p1_us_night: result.rows.item(i).p1_us_night,
+  //             p2: result.rows.item(i).p2,
+  //             pic_day: result.rows.item(i).pic_day,
+  //             pic_night: result.rows.item(i).pic_night,
+  //             stl: result.rows.item(i).stl,
+  //             route: result.rows.item(i).route,
+  //             sic_day: result.rows.item(i).sic_day,
+  //             sic_night: result.rows.item(i).sic_night,
+  //             sim_instructional: result.rows.item(i).sim_instructional,
+  //             sim_instrument: result.rows.item(i).sim_instrument,
+  //             selected_role: result.rows.item(i).selected_role,
+  //             student: result.rows.item(i).student,
+  //             to: result.rows.item(i).to_nameICAO,
+  //             totalTime: result.rows.item(i).totalTime,
+  //             x_country_day: result.rows.item(i).x_country_day,
+  //             x_country_night: result.rows.item(i).x_country_night,
+  //             x_country_day_leg: result.rows.item(i).x_country_day_leg,
+  //             x_country_night_leg: result.rows.item(i).x_country_night_leg,
+  //             p1_ut_day: result.rows.item(i).p1_ut_day,
+  //             p1_ut_night: result.rows.item(i).p1_ut_night,
+  //             remark: result.rows.item(i).remark,
+  //             Purpose: result.rows.item(i).purpose1,
+  //             distance: result.rows.item(i).distance,
+  //           });
+  //           setData(temData);
+  //           dataDispatcher(DocListData({ data: temData }))
+  //           setRefreshing(false);
+  //         }
+  //         else {
+  //           console.log('no data to show')
+  //           dataDispatcher(DocListData({ data: [], inProgress: false }))
+  //           setRefreshing(false);
+  //         }
+  //       }
+  //     });
+  //   });
+  //   //test()
+  // }, [getReduxDocData]);
+
   const onRefresh = React.useCallback(async () => {
-    getATPLData()
-    //selection()
-    setRefreshing(true);
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
-    let temData = []
-    let pur = []
-    prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT * from logbook WHERE  user_id = "' + user.id + '" AND tag= "manual" ORDER BY orderedDate DESC LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
-        if (result.rows.length == 0) {
-          console.log('no data to load')
-          setLoadmore(false)
-          return false;
-        }
-        setOffset(offset + 10);
-        for (let i = 0; i <= result.rows.length; i++) {
-          if (result.rows.length !== 0) {
-            pur.push(result.rows.item(i).purpose1)
-            temData.push({
-              id: result.rows.item(i).id,
-              tag: result.rows.item(i).tag,
-              user_id: result.rows.item(i).user_id,
-              flight_no: result.rows.item(i).flight_no,
-              date: result.rows.item(i).date,
-              day: result.rows.item(i).day,
-              actual_Instrument: result.rows.item(i).actual_Instrument,
-              aircraftReg: result.rows.item(i).aircraftReg,
-              aircraftType: result.rows.item(i).aircraftType,
-              dayLanding: result.rows.item(i).dayLanding,
-              dual_day: result.rows.item(i).dual_day,
-              dual_night: result.rows.item(i).dual_night,
-              flight: result.rows.item(i).flight,
-              from: result.rows.item(i).from_nameICAO,
-              ifr_vfr: result.rows.item(i).ifr_vfr,
-              instructional: result.rows.item(i).instructional,
-              instructor: result.rows.item(i).instructor,
-              landing: result.rows.item(i).inTime,
-              night: result.rows.item(i).night,
-              chocksOffTime: result.rows.item(i).offTime,
-              nightLanding: result.rows.item(i).nightLanding,
-              chocksOnTime: result.rows.item(i).onTime,
-              takeOff: result.rows.item(i).outTime,
-              p1: result.rows.item(i).p1,
-              p1_us_day: result.rows.item(i).p1_us_day,
-              p1_us_night: result.rows.item(i).p1_us_night,
-              p2: result.rows.item(i).p2,
-              pic_day: result.rows.item(i).pic_day,
-              pic_night: result.rows.item(i).pic_night,
-              stl: result.rows.item(i).stl,
-              route: result.rows.item(i).route,
-              sic_day: result.rows.item(i).sic_day,
-              sic_night: result.rows.item(i).sic_night,
-              sim_instructional: result.rows.item(i).sim_instructional,
-              sim_instrument: result.rows.item(i).sim_instrument,
-              selected_role: result.rows.item(i).selected_role,
-              student: result.rows.item(i).student,
-              to: result.rows.item(i).to_nameICAO,
-              totalTime: result.rows.item(i).totalTime,
-              x_country_day: result.rows.item(i).x_country_day,
-              x_country_night: result.rows.item(i).x_country_night,
-              x_country_day_leg: result.rows.item(i).x_country_day_leg,
-              x_country_night_leg: result.rows.item(i).x_country_night_leg,
-              p1_ut_day: result.rows.item(i).p1_ut_day,
-              p1_ut_night: result.rows.item(i).p1_ut_night,
-              remark: result.rows.item(i).remark,
-              Purpose: result.rows.item(i).purpose1,
-              distance: result.rows.item(i).distance,
-            });
-            setData(temData);
-            dataDispatcher(DocListData({ data: temData }))
-            setRefreshing(false);
-          }
-          else {
-            console.log('no data to show')
-            dataDispatcher(DocListData({ data: [], inProgress: false }))
-            setRefreshing(false);
-          }
-        }
-      });
-    });
-    //test()
+
+    await fetch(Platform.OS==='ios'?BaseUrl + 'getSaveLogbook':BaseUrlAndroid + 'getSaveLogbook', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "user_id": user.id,
+            "is_saved": 1
+        })
+    }).then(res => res.json())
+        .then(resData => {
+            console.log('DocData',resData);
+            setData(resData);
+            dataDispatcher(DocListData({ data: resData }))
+        });
   }, [getReduxDocData]);
 
-  const getLogbookData = async () => {
+  // const getLogbookData = async () => {
+  //   let user = await AsyncStorage.getItem('userdetails');
+  //   user = JSON.parse(user);
+  //   let pur = []
+  //   let temData = (getReduxDocData.data === undefined) ? [] : getReduxDocData.data;
+  //   prePopulateddb.transaction(tx => {
+  //     tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND tag= "manual" ORDER BY orderedDate DESC , inTime DESC LIMIT 5 OFFSET "' + offset + '"', [], (tx, result) => {
+  //       if (result.rows.length == 0) {
+  //         console.log('no data to load')
+  //         return false;
+  //       }
+  //       //console.log(result)
+  //       setOffset(offset + 5);
+  //       for (let i = 0; i <= result.rows.length; i++) {
+  //         console.log("123456789======",result.rows.item(i))
+  //         temData.push({
+  //           id: result.rows.item(i).id,
+  //           tag: result.rows.item(i).tag,
+  //           user_id: result.rows.item(i).user_id,
+  //           flight_no: result.rows.item(i).flight_no,
+  //           date: result.rows.item(i).date,
+  //           day: result.rows.item(i).day,
+  //           actual_Instrument: result.rows.item(i).actual_Instrument,
+  //           aircraftReg: result.rows.item(i).aircraftReg,
+  //           aircraftType: result.rows.item(i).aircraftType,
+  //           dayLanding: result.rows.item(i).dayLanding,
+  //           dual_day: result.rows.item(i).dual_day,
+  //           dual_night: result.rows.item(i).dual_night,
+  //           flight: result.rows.item(i).flight,
+  //           from: result.rows.item(i).from_nameICAO,
+  //           ifr_vfr: result.rows.item(i).ifr_vfr,
+  //           instructional: result.rows.item(i).instructional,
+  //           instructor: result.rows.item(i).instructor,
+  //           landing: result.rows.item(i).inTime,
+  //           night: result.rows.item(i).night,
+  //           chocksOffTime: result.rows.item(i).offTime,
+  //           nightLanding: result.rows.item(i).nightLanding,
+  //           chocksOnTime: result.rows.item(i).onTime,
+  //           takeOff: result.rows.item(i).outTime,
+  //           p1: result.rows.item(i).p1,
+  //           p1_us_day: result.rows.item(i).p1_us_day,
+  //           p1_us_night: result.rows.item(i).p1_us_night,
+  //           p2: result.rows.item(i).p2,
+  //           pic_day: result.rows.item(i).pic_day,
+  //           pic_night: result.rows.item(i).pic_night,
+  //           stl: result.rows.item(i).stl,
+  //           route: result.rows.item(i).route,
+  //           sic_day: result.rows.item(i).sic_day,
+  //           sic_night: result.rows.item(i).sic_night,
+  //           sim_instructional: result.rows.item(i).sim_instructional,
+  //           sim_instrument: result.rows.item(i).sim_instrument,
+  //           selected_role: result.rows.item(i).selected_role,
+  //           student: result.rows.item(i).student,
+  //           to: result.rows.item(i).to_nameICAO,
+  //           totalTime: result.rows.item(i).totalTime,
+  //           x_country_day: result.rows.item(i).x_country_day,
+  //           x_country_night: result.rows.item(i).x_country_night,
+  //           x_country_day_leg: result.rows.item(i).x_country_day_leg,
+  //           x_country_night_leg: result.rows.item(i).x_country_night_leg,
+  //           p1_ut_day: result.rows.item(i).p1_ut_day,
+  //           p1_ut_night: result.rows.item(i).p1_ut_night,
+  //           remark: result.rows.item(i).remark,
+  //           Purpose: result.rows.item(i).purpose1,
+  //           distance: result.rows.item(i).distance,
+  //         });
+  //         setData(temData);
+  //         dataDispatcher(DocListData({ data: temData }))
+  //       }
+  //     });
+  //   });
+  // };
+
+  const getLogbookData = async() => {
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
-    let pur = []
-    let temData = (getReduxDocData.data === undefined) ? [] : getReduxDocData.data;
-    prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT * from logbook WHERE user_id = ' + user.id + ' AND tag= "manual" ORDER BY orderedDate DESC , inTime DESC LIMIT 5 OFFSET "' + offset + '"', [], (tx, result) => {
-        if (result.rows.length == 0) {
-          console.log('no data to load')
-          return false;
-        }
-        //console.log(result)
-        setOffset(offset + 5);
-        for (let i = 0; i <= result.rows.length; i++) {
-          console.log("123456789======",result.rows.item(i))
-          temData.push({
-            id: result.rows.item(i).id,
-            tag: result.rows.item(i).tag,
-            user_id: result.rows.item(i).user_id,
-            flight_no: result.rows.item(i).flight_no,
-            date: result.rows.item(i).date,
-            day: result.rows.item(i).day,
-            actual_Instrument: result.rows.item(i).actual_Instrument,
-            aircraftReg: result.rows.item(i).aircraftReg,
-            aircraftType: result.rows.item(i).aircraftType,
-            dayLanding: result.rows.item(i).dayLanding,
-            dual_day: result.rows.item(i).dual_day,
-            dual_night: result.rows.item(i).dual_night,
-            flight: result.rows.item(i).flight,
-            from: result.rows.item(i).from_nameICAO,
-            ifr_vfr: result.rows.item(i).ifr_vfr,
-            instructional: result.rows.item(i).instructional,
-            instructor: result.rows.item(i).instructor,
-            landing: result.rows.item(i).inTime,
-            night: result.rows.item(i).night,
-            chocksOffTime: result.rows.item(i).offTime,
-            nightLanding: result.rows.item(i).nightLanding,
-            chocksOnTime: result.rows.item(i).onTime,
-            takeOff: result.rows.item(i).outTime,
-            p1: result.rows.item(i).p1,
-            p1_us_day: result.rows.item(i).p1_us_day,
-            p1_us_night: result.rows.item(i).p1_us_night,
-            p2: result.rows.item(i).p2,
-            pic_day: result.rows.item(i).pic_day,
-            pic_night: result.rows.item(i).pic_night,
-            stl: result.rows.item(i).stl,
-            route: result.rows.item(i).route,
-            sic_day: result.rows.item(i).sic_day,
-            sic_night: result.rows.item(i).sic_night,
-            sim_instructional: result.rows.item(i).sim_instructional,
-            sim_instrument: result.rows.item(i).sim_instrument,
-            selected_role: result.rows.item(i).selected_role,
-            student: result.rows.item(i).student,
-            to: result.rows.item(i).to_nameICAO,
-            totalTime: result.rows.item(i).totalTime,
-            x_country_day: result.rows.item(i).x_country_day,
-            x_country_night: result.rows.item(i).x_country_night,
-            x_country_day_leg: result.rows.item(i).x_country_day_leg,
-            x_country_night_leg: result.rows.item(i).x_country_night_leg,
-            p1_ut_day: result.rows.item(i).p1_ut_day,
-            p1_ut_night: result.rows.item(i).p1_ut_night,
-            remark: result.rows.item(i).remark,
-            Purpose: result.rows.item(i).purpose1,
-            distance: result.rows.item(i).distance,
-          });
-          setData(temData);
-          dataDispatcher(DocListData({ data: temData }))
-        }
-      });
-    });
-  };
+
+    await fetch(Platform.OS==='ios'?BaseUrl + 'getSaveLogbook':BaseUrlAndroid + 'getSaveLogbook', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "user_id": user.id,
+            "is_saved": 1
+        })
+    }).then(res => res.json())
+        .then(resData => {
+            console.log('DocData',resData);
+            setData(resData);
+            dataDispatcher(DocListData({ data: resData }))
+        });
+  }
 
   const getATPLData = async () => {
     let user = await AsyncStorage.getItem('userdetails');
@@ -470,22 +516,22 @@ const Docs = ({ navigation }) => {
     if (!data[index].p1) {
       errors.push({ message: "You can't upload this log to dgca due to missing PIC name" })
     }
-    if (!data[index].from) {
+    if (!data[index].from_nameICAO) {
       errors.push({ message: "You can't upload this log to dgca due to missing Departure Place" })
     }
-    if (!data[index].chocksOffTime) {
+    if (!data[index].offTime) {
       errors.push({ message: "You can't upload this log to dgca due to missing Departure time" })
     }
-    if (!data[index].to) {
+    if (!data[index].to_nameICAO) {
       errors.push({ message: "You can't upload this log to dgca due to missing Arrival Place" })
     }
-    if (!data[index].chocksOnTime) {
+    if (!data[index].onTime) {
       errors.push({ message: "You can't upload this log to dgca due to missing Arrival time" })
     }
     if (!data[index].aircraftReg) {
       errors.push({ message: "You can't upload this log to dgca due to missing Aircraft Registration" })
     }
-    if (!data[index].Purpose) {
+    if (!data[index].timeCustom1) {
       errors.push({ message: "You can't upload this log to dgca due to missing Purpose in the flight" })
     }
     if (errors.length) {
@@ -566,19 +612,20 @@ const Docs = ({ navigation }) => {
             </View>
             <Divider />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={dark ? { color: '#fff', fontWeight: 'bold', paddingTop: 10 } : { fontWeight: 'bold', paddingTop: 10 }}>{item.from}</Text>
+              <Text style={dark ? { color: '#fff', fontWeight: 'bold', paddingTop: 10 } : { fontWeight: 'bold', paddingTop: 10 }}>{item.from_nameICAO}</Text>
               <MaterialCommunityIcons name="airplane-takeoff" color={dark ? '#fff' : '#000'} size={30} style={{ paddingHorizontal: 10, paddingTop: 10 }} />
-              <Text style={dark ? { color: '#fff', fontWeight: 'bold', paddingTop: 10 } : { fontWeight: 'bold', paddingTop: 10 }}>{item.to}</Text>
+              <Text style={dark ? { color: '#fff', fontWeight: 'bold', paddingTop: 10 } : { fontWeight: 'bold', paddingTop: 10 }}>{item.to_nameICAO}</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={{ color: dark ? '#fff' : '#000' }}>{item.chocksOffTime}</Text>
-              <Text style={dark ? { color: '#fff', paddingLeft: 28 } : { paddingLeft: 28 }}>{item.chocksOnTime}</Text>
+              <Text style={{ color: dark ? '#fff' : '#000' }}>{item.offTime}</Text>
+              <Text style={dark ? { color: '#fff', paddingLeft: 28 } : { paddingLeft: 28 }}>{item.onTime}</Text>
             </View>
           </View>
         </ScrollView>
       </TouchableOpacity>
     );
   }
+
   const UploadRenderer = ({ item }) => {
     return (
       <TouchableOpacity style={[styles.item]}>

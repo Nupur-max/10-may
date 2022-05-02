@@ -1238,10 +1238,11 @@ React.useEffect(() => {
                 "from_long":fromLongitude,
                 "to_lat":toLatitude,
                 "to_long":toLongitude,
+                "is_saved":1,
             })
         }).then(res => res.json())
             .then(resData => {
-               //Alert.alert(resData.message);
+              console.log(resData);
             })
     };
 
@@ -2462,7 +2463,7 @@ const SaveChocksOn = async(inputText) => {
 
 React.useEffect(()=>{
     if(isFocused){
-        SaveChocksOff()
+        //SaveChocksOff()
         SaveChocksOn()
     }
 },[isFocused])
@@ -2665,7 +2666,37 @@ React.useEffect(()=>{
     } 
 },[rosterChocksOn]);
 
-   return (
+const CheckFromTo = () => {
+    if(rosterFrom==='' && rosterTo===''){
+        alert('Please fill From and To')
+    }
+}
+
+const chocksOffCheck = () => {
+    if(rosterChocksOff!==''){
+    if(rosterChocksOff.split(':')[1]===undefined){
+        const e = rosterChocksOff.split(':')[1] = '00';
+        setRosterChocksOff(rosterChocksOff.split(':')[0]+':'+e)
+        //alert('Please fill chocks off in the form of hh:mm')
+    }
+    }
+}
+
+// React.useEffect(()=>{
+//     if(isFocused){
+//         chocksOffCheck() 
+//     }
+// },[isFocused])
+
+const chocksOnCheck = () => {
+    if(rosterChocksOn.split(':')[1]===undefined){
+        const f = rosterChocksOn.split(':')[1] = '00';
+        setRosterChocksOn(rosterChocksOn.split(':')[0]+':'+f)
+        //alert('Please fill chocks off in the form of hh:mm')
+    }
+}
+
+return (
         <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
         
         <ScrollView nestedScrollEnabled={true} contentContainerStyle={{paddingBottom: 60}}>
@@ -2983,11 +3014,12 @@ React.useEffect(()=>{
                         <MaskedTextInput
                             mask='99:99'
                             value={ rosterChocksOff }
-                            onChangeText={inputText => {setRosterChocksOff(inputText);SaveChocksOff(inputText);ChocksOffError(inputText)}}
+                            onChangeText={inputText => {setRosterChocksOff(inputText);SaveChocksOff(inputText);}}
                             keyboardType="numeric"
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
                             style={dark?{color:'#fff'}:{color:'#000'}}
+                            onFocus={CheckFromTo}
                         />
                     </View>
                </View>)}
@@ -3042,6 +3074,7 @@ React.useEffect(()=>{
                             placeholder="hh:mm"
                             placeholderTextColor='grey'
                             style={dark?{color:'#fff'}:{color:'#000'}}
+                            onFocus={()=>{CheckFromTo();chocksOffCheck()}}
                         />
                     </View>
                 </View>)}

@@ -461,6 +461,7 @@ const LogBookListing = ({ navigation }) => {
                     "from_long":result1.rows.item(i).from_long,
                     "to_lat":result1.rows.item(i).to_lat,
                     "to_long":result1.rows.item(i).to_long,
+                    "is_Saved":1,
                 })
             }).then(res => res.json())
                 .then(resData => {
@@ -1160,6 +1161,32 @@ const LogBookListing = ({ navigation }) => {
     });
   };
 
+  const getLatestData = async() => {
+    let user = await AsyncStorage.getItem('userdetails');
+    user = JSON.parse(user);
+
+    await fetch(Platform.OS==='ios'?BaseUrl + 'getSaveLogbook':BaseUrlAndroid + 'getSaveLogbook', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "user_id": user.id,
+            "is_saved": 1
+        })
+    }).then(res => res.json())
+        .then(resData => {
+            console.log('DocData',resData);
+            for (let i = 0; i < resData.length; i++) {
+              const AircraftReg = resData[i].aircraftReg
+              console.log('AircraftReg',AircraftReg)
+            }
+            //setData(resData);
+            //dataDispatcher(LogListData({ data: resData, inProgress:false }))
+        });
+  }
+
   const onRefresh = React.useCallback(async () => {
     dataDispatcher(LogListData({ data: [], inProgress: false }))
     //setRefreshing(true);
@@ -1433,7 +1460,7 @@ const handleIndexChange = (index) => {
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
-              onRefresh={dataToServer}
+              onRefresh={getLatestData}
             />
           }
         />
