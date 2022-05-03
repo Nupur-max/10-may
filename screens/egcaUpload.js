@@ -73,26 +73,26 @@ const EGCAUpload = ({navigation}) => {
     const [commercialValue, setCommercialValue] = React.useState(commercialV);
 
     //console.log('egca',egca)
-    const egca_upload = async() => {
-        let user = await AsyncStorage.getItem('userdetails');
-        user = JSON.parse(user);
+    // const egca_upload = async() => {
+    //     let user = await AsyncStorage.getItem('userdetails');
+    //     user = JSON.parse(user);
       
-        await fetch(Platform.OS==='ios'?BaseUrl+'update_egca_upload':BaseUrlAndroid+'update_egca_upload',{
-          method : 'POST',
-          headers:{
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            "user_id": user.id,
-            "egca_upload": egca,                
-       })
-      }).then(res => res.json())
-      .then(resData => {
-         //console.log(resData);
-         Alert.alert(resData.message);
-      });
-      }
+    //     await fetch(Platform.OS==='ios'?BaseUrl+'update_egca_upload':BaseUrlAndroid+'update_egca_upload',{
+    //       method : 'POST',
+    //       headers:{
+    //           'Accept': 'application/json',
+    //           'Content-Type': 'application/json'
+    //       },
+    //       body: JSON.stringify({
+    //         "user_id": user.id,
+    //         "egca_upload": egca,                
+    //    })
+    //   }).then(res => res.json())
+    //   .then(resData => {
+    //      //console.log(resData);
+    //      Alert.alert(resData.message);
+    //   });
+    //   }
 
       React.useEffect(() => {
         if(isFocused){
@@ -125,10 +125,6 @@ const EGCAUpload = ({navigation}) => {
                      setEGCAPWD(result.rows.item(i).egcaPwd)
                      setFTOValue(result.rows.item(i).FtoOperator)
                      setEgca(result.rows.item(i).FlightType)
-
-                      // setTraining(result.rows.item(i).Purpose)
-                      // setTest(result.rows.item(i).Purpose)
-                      // setCommercial(result.rows.item(i).Purpose)
 
                       setAuthValue(result.rows.item(i).AuthVerifier)
                       setAuthPersonValue(result.rows.item(i).NameOfAuthVerifier)
@@ -198,6 +194,63 @@ const EGCAUpload = ({navigation}) => {
       //Sql ends
 
       console.log('FTO VALUE', FTOvalue)
+
+      const UpdateEgcaDataToServer = async() => {
+        let user = await AsyncStorage.getItem('userdetails');
+        user = JSON.parse(user);
+
+        await fetch(Platform.OS==='ios'?BaseUrl + 'save_egca_details':BaseUrlAndroid + 'save_egca_details', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "user_id": user.id,
+                "egca_id": egca_user,
+                "egca_pwd": egca_pwd,
+                "ftp_operator": FTOvalue,
+                "flight_type": egca,
+                "purpose": PurposeData,
+                "auth_verifier": Authvalue,
+                "name_auth_verifier": AuthPersonvalue,
+              
+              })
+        }).then(res => res.json())
+            .then(resData => {
+              console.log(resData)
+            });
+      }
+
+      const getEgcaDataFromServer = async() => {
+        let user = await AsyncStorage.getItem('userdetails');
+        user = JSON.parse(user);
+
+        await fetch(Platform.OS==='ios'?BaseUrl + 'get_egca_details':BaseUrlAndroid + 'get_egca_details', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "user_id": user.id,
+              })
+        }).then(res => res.json())
+            .then(resData => {
+              for (let i = 0; i < resData.data.length; i++) {
+                setEGCAUSER(resData.data[i].egca_id)
+                setEGCAPWD(resData.data[i].egca_pwd)
+                setFTOValue(resData.data[i].ftp_operator)
+                setEgca(resData.data[i].flight_type)
+                setAuthValue(resData.data[i].auth_verifier)
+                setAuthPersonValue(resData.data[i].name_auth_verifier)
+              }
+            });
+      }
+
+     React.useEffect(()=>{
+      getEgcaDataFromServer()
+     },[]) 
 
     return (
       
@@ -470,7 +523,7 @@ const EGCAUpload = ({navigation}) => {
 
       </View> : null }
 
-      <TouchableOpacity style={{alignItems:'center',zIndex:-1}} onPress={UpdateQuery}>
+      <TouchableOpacity style={{alignItems:'center',zIndex:-1}} onPress={()=>{UpdateQuery();UpdateEgcaDataToServer()}}>
                 <View style={styles.button}>
                 <Text style={styles.buttonText}>Save</Text>
                 </View>

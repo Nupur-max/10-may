@@ -67,8 +67,8 @@ class Sample extends Component {
     var uploadedEData = EData.data.data
     let arrival = logData[this.state.index].date;
     let departure = logData[this.state.index].date;
-    let arr = arrival.replace(/-/g, '/');
-    let dep = departure.replace(/-/g, '/');
+    let arr = '01/05/2022'//arrival.replace(/-/g, '/');
+    let dep = '01/05/2022'//departure.replace(/-/g, '/');
     var p = logData[this.state.index].timeCustom1;
     var pur = p.split(",");
     var Pic_Name = logData[this.state.index].p1 ==='Self'? logData[this.state.index].p1 : logData[this.state.index].p1.split("(")
@@ -423,7 +423,7 @@ class Sample extends Component {
                 }
                 document.querySelector('#exerciseTypeId').onchange();
             
-                var from = '${this.state.egcaData[dataPos].from}'
+                var from = '${this.state.egcaData[dataPos].from_nameICAO}'
                 var From = document.getElementById('tkoffAerodrome');
                 for (var i = 0; i < From.options.length; i++) {
                     if (From.options[i].text.substring(0, from.length) === from) {
@@ -435,7 +435,7 @@ class Sample extends Component {
                 document.querySelector('#departuredate').value = '${depD}';
                 document.querySelector('#departuretime').value = '${chocksOff}';
             
-                var to = '${this.state.egcaData[dataPos].to}'
+                var to = '${this.state.egcaData[dataPos].to_nameICAO}'
                 var To = document.getElementById('lndgAerodrome');
                 for (var i = 0; i < To.options.length; i++) {
                     if (To.options[i].text.substring(0, from.length) === to) {
@@ -449,7 +449,7 @@ class Sample extends Component {
                 document.querySelector('#numberOfLandings').value = ${this.state.egcaData[dataPos].nightLanding} + ${this.state.egcaData[dataPos].dayLanding};
                   var myElement = "#showHideCrsCountryDist";
                   if($(myElement).is(":hidden") == false ){
-                      document.querySelector('#distance').value = '${depD}';
+                      document.querySelector('#distance').value = '${this.state.egcaData[dataPos].landingCustom1}';
                   }
               }, 40000)
             

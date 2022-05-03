@@ -1185,7 +1185,7 @@ React.useEffect(() => {
                 "timeCustom8": "",
                 "timeCustom9": "",
                 "timeCustom10": "",
-                "landingCustom1": "",
+                "landingCustom1": distance,
                 "landingCustom2": "",
                 "landingCustom3": "",
                 "landingCustom4":"",
@@ -1247,24 +1247,24 @@ React.useEffect(() => {
     };
 
     const deleteLogbbok = async () => {
-                let user = await AsyncStorage.getItem('userdetails');
-                user = JSON.parse(user);
-        
-                await fetch(Platform.OS==='ios'?BaseUrl + 'deletelogbook':BaseUrlAndroid + 'deletelogbook', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "user_id": user.id,
-                        "local_id": rosterId
-                    })
-                }).then(res => res.json())
-                    .then(resData => {
-                        Alert.alert(resData.message);
-                    });
-            };
+        let user = await AsyncStorage.getItem('userdetails');
+        user = JSON.parse(user);
+
+        await fetch(Platform.OS==='ios'?BaseUrl + 'deletelogbook':BaseUrlAndroid + 'deletelogbook', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "user_id": user.id,
+                "local_id": rosterId
+            })
+        }).then(res => res.json())
+            .then(resData => {
+                Alert.alert(resData.message);
+            });
+    };
 
     const DeleteLogs = () => {
         prePopulateddb.transaction(tx => {

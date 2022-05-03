@@ -1,5 +1,5 @@
 //import liraries
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Dimensions, Platform, SafeAreaView,KeyboardAvoidingView,Modal } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RadioButton, List, Switch } from 'react-native-paper';
@@ -16,9 +16,10 @@ import { TotalTypeData } from '../store/actions/totalTypeAction';
 import { useSelector, useDispatch } from 'react-redux';
 import SQLite from 'react-native-sqlite-storage';
 import { useIsFocused } from "@react-navigation/native";
+import {BaseUrl} from '../components/url.json';
+import {BaseUrlAndroid} from '../components/urlAndroid.json';
 
 import SsStyle from '../styles/settingScreenStyle';
-
 
 const prePopulateddb = SQLite.openDatabase(
     {
@@ -194,6 +195,55 @@ const Display = ({navigation}) => {
         getTotalTime()
        }
     }, [params.displayAirType]);
+
+    const DisplayDataToServer = async() => {
+      let user = await AsyncStorage.getItem('userdetails');
+      user = JSON.parse(user);
+
+      await fetch(Platform.OS==='ios'?BaseUrl + 'save_display_details':BaseUrlAndroid + 'save_display_details', {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              "user_id": user.id,
+              "aircraftType": aircraftType,
+              "aircraftId": aircraftId,
+              "role": role,
+              "block_time": blockTime[blockTimeValue],
+            })
+      }).then(res => res.json())
+          .then(resData => {
+             console.log(resData)
+          });
+    }
+
+    const GetDisplayDetails = async() => {
+      let user = await AsyncStorage.getItem('userdetails');
+      user = JSON.parse(user);
+
+      await fetch(Platform.OS==='ios'?BaseUrl + 'get_display_details':BaseUrlAndroid + 'get_display_details', {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              "user_id": user.id,
+            })
+      }).then(res => res.json())
+          .then(resData => {
+            for (let i = 0; i < resData.data.length; i++) {
+              setAircraftType(resData.data[i].aircraftType)
+              setAircraftId(resData.data[i].aircraftId)
+            }
+          });
+    }
+
+   React. useEffect(()=>{
+    GetDisplayDetails()
+   },[])
     
     return (
       <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>  
@@ -406,7 +456,7 @@ const Display = ({navigation}) => {
         </View>
 
         <View style={{alignItems:'center'}}>
-            <TouchableOpacity onPress = {()=>{handleActualInstrument(),insertDisplayDetails()}} style={dark?DisplayStyles.darkSaveChanges:DisplayStyles.saveChanges}>
+            <TouchableOpacity onPress = {()=>{handleActualInstrument(),insertDisplayDetails(),DisplayDataToServer()}} style={dark?DisplayStyles.darkSaveChanges:DisplayStyles.saveChanges}>
                 <Text style={{color:'#fff', padding:5,textAlign:'center'}}>Save Changes</Text>
             </TouchableOpacity>
         </View>

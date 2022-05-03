@@ -2,6 +2,8 @@ import React, { createContext, useState } from 'react';
 import { ConfigContext } from './config-Context';
 import SQLite from 'react-native-sqlite-storage';
 import AsyncStorage from '@react-native-community/async-storage';
+import {BaseUrl} from './components/url.json';
+import {BaseUrlAndroid} from './components/urlAndroid.json';
 
 const prePopulateddb = SQLite.openDatabase(
     {
@@ -72,6 +74,31 @@ function DisplayProvider({ children }) {
             );
         });
     }
+
+    const GetDisplayDetails = async() => {
+        let user = await AsyncStorage.getItem('userdetails');
+        user = JSON.parse(user);
+  
+        await fetch(Platform.OS==='ios'?BaseUrl + 'get_display_details':BaseUrlAndroid + 'get_display_details', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "user_id": user.id,
+              })
+        }).then(res => res.json())
+            .then(resData => {
+              for (let i = 0; i < resData.data.length; i++) {
+                setRole(resData.data[i].role)
+              }
+            });
+      }
+  
+     React. useEffect(()=>{
+      GetDisplayDetails()
+     },[])
 
     
     const { 
