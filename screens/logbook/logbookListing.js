@@ -648,13 +648,15 @@ const LogBookListing = ({ navigation }) => {
           },
           body: JSON.stringify({
               "user_id": user.id,
-              "local_id": item.id
+              "id": item.serverId,
           })
       }).then(res => res.json())
           .then(resData => {
               //Alert.alert(resData.message);
           });
   };
+
+  console.log(item.serverId)
 
     const DeleteLogs = () => {
       prePopulateddb.transaction(tx => {
@@ -707,7 +709,7 @@ const LogBookListing = ({ navigation }) => {
         ...(previousParams || {}),
         childParamList: 'Listvalue',
         fromParams: 'Logbook',
-        RoasterId: item.id,
+        RoasterId: item.serverId,
         RoasterDate: changDateFormat(item.date),
         RoasterAType: item.aircraftType,
         RoasterFrom: item.from,
@@ -1029,7 +1031,7 @@ const LogBookListing = ({ navigation }) => {
     let temData = (getReduxData.data === undefined) ? [] : getReduxData.data;
     let pur = []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff,instructional from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC, onTime DESC LIMIT 20 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT id,tag,serverId,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff,instructional from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC, onTime DESC LIMIT 20 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           setLoadmore(false)
@@ -1059,6 +1061,7 @@ const LogBookListing = ({ navigation }) => {
           temData.push({
             id: result.rows.item(i).id,
             tag: result.rows.item(i).tag,
+            serverId: result.rows.item(i).serverId,
             user_id: result.rows.item(i).user_id,
             //flight_no: result.rows.item(i).flight_no,
             date: result.rows.item(i).date,
@@ -1117,6 +1120,7 @@ const LogBookListing = ({ navigation }) => {
           temData.push({
             id: result.rows.item(i).id,
             tag: result.rows.item(i).tag,
+            serverId: result.rows.item(i).serverId,
             user_id: result.rows.item(i).user_id,
             date: result.rows.item(i).date,
             //flight: result.rows.item(i).flight,
@@ -1204,8 +1208,6 @@ const LogBookListing = ({ navigation }) => {
                 tx.executeSql(
                   'INSERT INTO logbook (tag, user_id, flight_no, date, day,  actual_Instrument, aircraftReg, aircraftType, approach1, approach2, approach3, approach4, approach5, approach6, approach7, approach8, approach9, approach10, crewCustom1, crewCustom2, crewCustom3, crewCustom4, crewCustom5, dayLanding, dayTO, dual_day, dual_night, flight, from_airportID, from_altitude, from_city, from_country, from_dayLightSaving, from_source, from_lat, from_long, from_name, from_nameICAO, from_nameIATA, from_timeZone, from_type, from_dst_status, fullStop, ifr_vfr, instructional, instructor, inTime, landingCustom1, landingCustom2, landingCustom3, landingCustom4, landingCustom5, landingCustom6, landingCustom7, landingCustom8, landingCustom9, landingCustom10, night,nightLanding, nightTO, offTime, onTime, outTime, p1, p1_us_day, p1_us_night, p2, pic_day, pic_night, stl, reliefCrew1, reliefCrew2, reliefCrew3, reliefCrew4, route, sic_day, sic_night, sim_instructional, sim_instrument, selected_role, student, timeCustom1, timeCustom2, timeCustom3, timeCustom4, timeCustom5, timeCustom6, timeCustom7, timeCustom8, timeCustom9, timeCustom10, to_airportID, to_altitude, to_city, to_country, to_dayLightSaving, to_source, to_lat, to_long, to_name, to_nameIATA, to_nameICAO, to_timeZone, to_type, to_dst_status, totalTime, touch_n_gos, waterLanding, waterTO, x_country_day, x_country_night, x_country_day_leg, x_country_night_leg, outTime_LT, offTime_LT, onTime_LT, inTime_LT, sim_type, sim_exercise, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, simLocation, p1_ut_day, p1_ut_night, remark, autolanding, flight_date, selected_flight_timelog, imported_log, orderedDate,purpose1,isSaved) VALUES ("'+resData[i].tag+'","'+resData[i].user_id+'","'+resData[i].flight_no+'","'+PerfectDate+'","'+resData[i].day+'","'+resData[i].actual_Instrument+'","'+resData[i].aircraftReg+'","'+nameAircrfat+'","'+resData[i].approach1+'","'+resData[i].approach2+'","'+resData[i].approach3+'","'+resData[i].approach4+'","'+resData[i].approach5+'","'+resData[i].approach6+'","'+resData[i].approach7+'","'+resData[i].approach8+'","'+resData[i].approach9+'","'+resData[i].approach10+'","'+resData[i].crewCustom1+'","'+resData[i].crewCustom2+'","'+resData[i].crewCustom3+'","'+resData[i].crewCustom4+'","'+resData[i].crewCustom5+'","'+resData[i].dayLanding+'" , "'+resData[i].dayTO+'" , "'+resData[i].dual_day+'" , "'+resData[i].dual_night+'" , "'+resData[i].flight+'" , "'+resData[i].from_airportID+'" , "'+resData[i].from_altitude+'" , "'+resData[i].from_city+'" , "'+resData[i].from_country+'" , "'+resData[i].from_dayLightSaving+'" , "'+resData[i].from_source+'" , "'+resData[i].from_lat+'" , "'+resData[i].from_long+'" , "'+resData[i].from_name+'" ,"'+resData[i].from_nameICAO+'" , "'+resData[i].from_nameIATA+'" , "'+resData[i].from_timeZone+'" , "'+resData[i].from_type+'" , "'+resData[i].from_dst_status+'" , "'+resData[i].fullStop+'" , "'+resData[i].ifr_vfr+'" , "'+resData[i].instructional+'" , "'+resData[i].instructor+'" , "'+resData[i].inTime+'" , "'+resData[i].landingCustom1+'" , "'+resData[i].landingCustom2+'" , "'+resData[i].landingCustom3+'" , "'+resData[i].landingCustom4+'" , "'+resData[i].landingCustom5+'" , "'+resData[i].landingCustom6+'" , "'+resData[i].landingCustom7+'" , "'+resData[i].landingCustom8+'" , "'+resData[i].landingCustom9+'" , "'+resData[i].landingCustom10+'" , "'+resData[i].night+'" , "'+resData[i].nightLanding+'" , "'+resData[i].nightTO+'" , "'+takeoffTime+'" , "'+LandingTime+'" , "'+resData[i].outTime+'" , "'+conditonalP1+'" , "'+resData[i].p1_us_day+'" , "'+resData[i].p1_us_night+'" , "'+resData[i].p2+'" , "'+resData[i].pic_day+'" , "'+resData[i].pic_night+'" , "'+resData[i].stl+'" , "'+resData[i].reliefCrew1+'" , "'+resData[i].reliefCrew2+'" , "'+resData[i].reliefCrew3+'" , "'+resData[i].reliefCrew4+'" , "'+resData[i].route+'" , "'+resData[i].sic_day+'" , "'+resData[i].sic_night+'" , "'+resData[i].sim_instructional+'" , "'+resData[i].sim_instrument+'" , "'+resData[i].selected_role+'" , "'+resData[i].student+'" , "'+resData[i].timeCustom1+'" , "'+resData[i].timeCustom2+'" , "'+resData[i].timeCustom3+'" , "'+resData[i].timeCustom4+'" , "'+resData[i].timeCustom5+'" , "'+resData[i].timeCustom6+'" , "'+resData[i].timeCustom7+'" , "'+resData[i].timeCustom8+'" , "'+resData[i].timeCustom9+'" , "'+resData[i].timeCustom10+'" , "'+resData[i].to_airportID+'" , "'+resData[i].to_altitude+'" , "'+resData[i].to_city+'" , "'+resData[i].to_country+'" , "'+resData[i].to_dayLightSaving+'" , "'+resData[i].to_source+'" , "'+resData[i].to_lat+'" , "'+resData[i].to_long+'" , "'+resData[i].to_name+'" , "'+resData[i].to_nameIATA+'" , "'+resData[i].to_nameICAO+'" , "'+resData[i].to_timeZone+'" , "'+resData[i].to_type+'" , "'+resData[i].to_dst_status+'" , "'+resData[i].totalTime+'" , "'+resData[i].touch_n_gos+'" , "'+resData[i].waterLanding+'" , "'+resData[i].waterTO+'" , "'+resData[i].x_country_day+'" , "'+resData[i].x_country_night+'" , "'+resData[i].x_country_day_leg+'" , "'+resData[i].x_country_night_leg+'" , "'+resData[i].outTime_LT+'" , "'+resData[i].offTime_LT+'" , "'+resData[i].onTime_LT+'" , "'+resData[i].inTime_LT+'" , "'+resData[i].sim_type+'" , "'+resData[i].sim_exercise+'" , "'+resData[i].pf_hours+'" , "'+resData[i].pm_hours+'" , "'+resData[i].sfi_sfe+'" , "'+resData[i].simCustom1+'" , "'+resData[i].simCustom2+'" , "'+resData[i].simCustom3+'" , "'+resData[i].simCustom4+'" , "'+resData[i].simCustom5+'","'+resData[i].simLocation+'","'+resData[i].p1_ut_day+'","'+resData[i].p1_ut_night+'","'+resData[i].remark+'","'+resData[i].autolanding+'","'+resData[i].flight_date+'","'+resData[i].selected_flight_timelog+'","'+resData[i].imported_log+'","'+orderedDate+'","'+resData[i].timeCustom1+'","'+resData[i].is_saved+'")',
                   );
-                  console.log('INSERT INTO logbook (tag, user_id, flight_no, date, day,  actual_Instrument, aircraftReg, aircraftType, approach1, approach2, approach3, approach4, approach5, approach6, approach7, approach8, approach9, approach10, crewCustom1, crewCustom2, crewCustom3, crewCustom4, crewCustom5, dayLanding, dayTO, dual_day, dual_night, flight, from_airportID, from_altitude, from_city, from_country, from_dayLightSaving, from_source, from_lat, from_long, from_name, from_nameICAO, from_nameIATA, from_timeZone, from_type, from_dst_status, fullStop, ifr_vfr, instructional, instructor, inTime, landingCustom1, landingCustom2, landingCustom3, landingCustom4, landingCustom5, landingCustom6, landingCustom7, landingCustom8, landingCustom9, landingCustom10, night,nightLanding, nightTO, offTime, onTime, outTime, p1, p1_us_day, p1_us_night, p2, pic_day, pic_night, stl, reliefCrew1, reliefCrew2, reliefCrew3, reliefCrew4, route, sic_day, sic_night, sim_instructional, sim_instrument, selected_role, student, timeCustom1, timeCustom2, timeCustom3, timeCustom4, timeCustom5, timeCustom6, timeCustom7, timeCustom8, timeCustom9, timeCustom10, to_airportID, to_altitude, to_city, to_country, to_dayLightSaving, to_source, to_lat, to_long, to_name, to_nameIATA, to_nameICAO, to_timeZone, to_type, to_dst_status, totalTime, touch_n_gos, waterLanding, waterTO, x_country_day, x_country_night, x_country_day_leg, x_country_night_leg, outTime_LT, offTime_LT, onTime_LT, inTime_LT, sim_type, sim_exercise, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, simLocation, p1_ut_day, p1_ut_night, remark, autolanding, flight_date, selected_flight_timelog, imported_log, orderedDate,purpose1,isSaved) VALUES ("'+resData[i].tag+'","'+resData[i].user_id+'","'+resData[i].flight_no+'","'+PerfectDate+'","'+resData[i].day+'","'+resData[i].actual_Instrument+'","'+resData[i].aircraftReg+'","'+nameAircrfat+'","'+resData[i].approach1+'","'+resData[i].approach2+'","'+resData[i].approach3+'","'+resData[i].approach4+'","'+resData[i].approach5+'","'+resData[i].approach6+'","'+resData[i].approach7+'","'+resData[i].approach8+'","'+resData[i].approach9+'","'+resData[i].approach10+'","'+resData[i].crewCustom1+'","'+resData[i].crewCustom2+'","'+resData[i].crewCustom3+'","'+resData[i].crewCustom4+'","'+resData[i].crewCustom5+'","'+resData[i].dayLanding+'" , "'+resData[i].dayTO+'" , "'+resData[i].dual_day+'" , "'+resData[i].dual_night+'" , "'+resData[i].flight+'" , "'+resData[i].from_airportID+'" , "'+resData[i].from_altitude+'" , "'+resData[i].from_city+'" , "'+resData[i].from_country+'" , "'+resData[i].from_dayLightSaving+'" , "'+resData[i].from_source+'" , "'+resData[i].from_lat+'" , "'+resData[i].from_long+'" , "'+resData[i].from_name+'" ,"'+resData[i].from_nameICAO+'" , "'+resData[i].from_nameIATA+'" , "'+resData[i].from_timeZone+'" , "'+resData[i].from_type+'" , "'+resData[i].from_dst_status+'" , "'+resData[i].fullStop+'" , "'+resData[i].ifr_vfr+'" , "'+resData[i].instructional+'" , "'+resData[i].instructor+'" , "'+resData[i].inTime+'" , "'+resData[i].landingCustom1+'" , "'+resData[i].landingCustom2+'" , "'+resData[i].landingCustom3+'" , "'+resData[i].landingCustom4+'" , "'+resData[i].landingCustom5+'" , "'+resData[i].landingCustom6+'" , "'+resData[i].landingCustom7+'" , "'+resData[i].landingCustom8+'" , "'+resData[i].landingCustom9+'" , "'+resData[i].landingCustom10+'" , "'+resData[i].night+'" , "'+resData[i].nightLanding+'" , "'+resData[i].nightTO+'" , "'+takeoffTime+'" , "'+LandingTime+'" , "'+resData[i].outTime+'" , "'+conditonalP1+'" , "'+resData[i].p1_us_day+'" , "'+resData[i].p1_us_night+'" , "'+resData[i].p2+'" , "'+resData[i].pic_day+'" , "'+resData[i].pic_night+'" , "'+resData[i].stl+'" , "'+resData[i].reliefCrew1+'" , "'+resData[i].reliefCrew2+'" , "'+resData[i].reliefCrew3+'" , "'+resData[i].reliefCrew4+'" , "'+resData[i].route+'" , "'+resData[i].sic_day+'" , "'+resData[i].sic_night+'" , "'+resData[i].sim_instructional+'" , "'+resData[i].sim_instrument+'" , "'+resData[i].selected_role+'" , "'+resData[i].student+'" , "'+resData[i].timeCustom1+'" , "'+resData[i].timeCustom2+'" , "'+resData[i].timeCustom3+'" , "'+resData[i].timeCustom4+'" , "'+resData[i].timeCustom5+'" , "'+resData[i].timeCustom6+'" , "'+resData[i].timeCustom7+'" , "'+resData[i].timeCustom8+'" , "'+resData[i].timeCustom9+'" , "'+resData[i].timeCustom10+'" , "'+resData[i].to_airportID+'" , "'+resData[i].to_altitude+'" , "'+resData[i].to_city+'" , "'+resData[i].to_country+'" , "'+resData[i].to_dayLightSaving+'" , "'+resData[i].to_source+'" , "'+resData[i].to_lat+'" , "'+resData[i].to_long+'" , "'+resData[i].to_name+'" , "'+resData[i].to_nameIATA+'" , "'+resData[i].to_nameICAO+'" , "'+resData[i].to_timeZone+'" , "'+resData[i].to_type+'" , "'+resData[i].to_dst_status+'" , "'+resData[i].totalTime+'" , "'+resData[i].touch_n_gos+'" , "'+resData[i].waterLanding+'" , "'+resData[i].waterTO+'" , "'+resData[i].x_country_day+'" , "'+resData[i].x_country_night+'" , "'+resData[i].x_country_day_leg+'" , "'+resData[i].x_country_night_leg+'" , "'+resData[i].outTime_LT+'" , "'+resData[i].offTime_LT+'" , "'+resData[i].onTime_LT+'" , "'+resData[i].inTime_LT+'" , "'+resData[i].sim_type+'" , "'+resData[i].sim_exercise+'" , "'+resData[i].pf_hours+'" , "'+resData[i].pm_hours+'" , "'+resData[i].sfi_sfe+'" , "'+resData[i].simCustom1+'" , "'+resData[i].simCustom2+'" , "'+resData[i].simCustom3+'" , "'+resData[i].simCustom4+'" , "'+resData[i].simCustom5+'","'+resData[i].simLocation+'","'+resData[i].p1_ut_day+'","'+resData[i].p1_ut_night+'","'+resData[i].remark+'","'+resData[i].autolanding+'","'+resData[i].flight_date+'","'+resData[i].selected_flight_timelog+'","'+resData[i].imported_log+'","'+orderedDate+'","'+resData[i].timeCustom1+'","'+resData[i].is_saved+'"')
-
                   let temData = [];
                   tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff,instructional from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" AND isSaved = 1 ORDER BY orderedDate DESC, onTime DESC', [], (tx, result) => {
                     console.log('e',result.rows.length)
@@ -1324,7 +1326,7 @@ const LogBookListing = ({ navigation }) => {
     let temData =  []
     let pur = []
     prePopulateddb.transaction(tx => {
-      tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff,instructional,pic_day from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC, onTime ASC  LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
+      tx.executeSql('SELECT id,tag,serverId,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff,instructional,pic_day from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" ORDER BY orderedDate DESC, onTime ASC  LIMIT 10 OFFSET ' + offset, [], (tx, result) => {
         if (result.rows.length == 0) {
           console.log('no data to load')
           //setLoadmore(false)
@@ -1352,6 +1354,7 @@ const LogBookListing = ({ navigation }) => {
           temData.push({
             id: result.rows.item(i).id,
             tag: result.rows.item(i).tag,
+            serverId: result.rows.item(i).serverId,
             user_id: result.rows.item(i).user_id,
             //flight_no: result.rows.item(i).flight_no,
             date: result.rows.item(i).date,
@@ -1410,6 +1413,7 @@ const LogBookListing = ({ navigation }) => {
           temData.push({
             id: result.rows.item(i).id,
             tag: result.rows.item(i).tag,
+            serverId: result.rows.item(i).serverId,
             user_id: result.rows.item(i).user_id,
             date: result.rows.item(i).date,
             //flight: result.rows.item(i).flight,
@@ -1461,6 +1465,7 @@ const LogBookListing = ({ navigation }) => {
       //   navigation.navigate('subscribe')
       // }
       // else{
+      getLatestData();
       onRefresh();
       //}
     }
@@ -1586,12 +1591,13 @@ const handleIndexChange = (index) => {
           numColumns={1}
           onEndReached={()=>{search !== ''? null:getLogbookData();console.log('called')}}
           onEndReachedThreshold={0.8}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={getLatestData}
-            />
-          }
+          //initialNumToRender={100}
+          // refreshControl={
+          //   <RefreshControl
+          //     refreshing={refreshing}
+          //     onRefresh={getLatestData}
+          //   />
+          // }
         />
       }
       {getReduxProgressData.ProgressValue!== undefined? 

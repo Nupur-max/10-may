@@ -1041,7 +1041,7 @@ React.useEffect(() => {
    }
 }, [rosterAId]);
 
-
+console.log('rosterId',rosterId);
 
 React.useEffect(() => {
         setInstructor(Peopleparams.InstructorItemName)
@@ -1258,7 +1258,7 @@ React.useEffect(() => {
             },
             body: JSON.stringify({
                 "user_id": user.id,
-                "local_id": rosterId
+                "id": rosterId
             })
         }).then(res => res.json())
             .then(resData => {
@@ -1269,7 +1269,7 @@ React.useEffect(() => {
     const DeleteLogs = () => {
         prePopulateddb.transaction(tx => {
           tx.executeSql(
-            'DELETE FROM logbook WHERE id = "'+rosterId+'"', [], (tx, Delresult) => {
+            'DELETE FROM logbook WHERE serverId = "'+rosterId+'"', [], (tx, Delresult) => {
               SELECTAfterDel(true)
               navigation.navigate('LogBookListing')
             }
@@ -2695,6 +2695,8 @@ const chocksOnCheck = () => {
         //alert('Please fill chocks off in the form of hh:mm')
     }
 }
+
+console.log('rosterAId',rosterAId)
 
 return (
         <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
