@@ -389,52 +389,6 @@ const EGCAUpload = ({navigation}) => {
         </View>
       </View>
 
-      
-
-      {/* {selectedPurpose!==[]?<View style={{paddingLeft:20,paddingBottom: 5}}>
-        <Text>{selectedPurpose.Purpose}</Text>
-       </View>:null} */}
-
-        {/* {egca !== "Non-commercial" ?<View>
-        <Text style = {dark?styles.DarkInnnerHeadings:styles.InnnerHeadings}>Purpose</Text>
-        </View>: null}
-        {egca !== "Non-commercial" ? <View style={Platform.OS==='ios'?{padding: 20,zIndex:888}:{padding:20,}}>
-          <DropDownPicker
-            zIndex={3000}
-            zIndexInverse={1000}
-            searchable={true}
-            multiple={true}
-            min={0}
-            max={5}
-            open={open}
-            value={PurposeData}
-            items={egca === "Training" ? trainingValue : egca === "Test" ? testValue : egca === "Commercial" ? commercialValue : []}
-            setOpen={setOpen}
-            setValue={ egca === "Training" ? setTraining : egca === "Test" ? setTest : egca === "Commercial" ? setCommercial : ''}
-            setItems={ egca === "Training" ? setTrainingValue : egca === "Test" ? setTestValue : egca === "Commercial" ? setCommercialValue : []}
-            placeholder="Select *"
-            style = {{width: '100%',}}
-            dropDownContainerStyle={{
-            width: '100%',
-            //zIndex:99,
-            elevation: 15,
-          }}
-          listMode="SCROLLVIEW"
-          scrollViewProps={{
-            nestedScrollEnabled: true,
-          }}
-          //onChangeItem={(value)=> setSelectedPurpose(value)}
-        />
-        </View> : null}
-
-        {PurposeData!==[]?<View style={{paddingLeft:20,paddingBottom: 5}}>
-        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[0]}</Text>
-        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[1]}</Text>
-        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[2]}</Text>
-        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[3]}</Text>
-        <Text style={{color:dark?'#fff':'#000'}}>{PurposeData[4]}</Text>
-      </View>: null} */}
-
         <View>
         <Text style = {dark?{...styles.DarkInnnerHeadings}:{...styles.InnnerHeadings,}}>Authorised Person For Verification</Text>
         </View>
