@@ -25,6 +25,7 @@ import SQLite from 'react-native-sqlite-storage';
 import { useIsFocused } from "@react-navigation/native";
 import {trainingV,testV,commercialV} from '../../components/dummydropdown'
 import DropDownPicker from 'react-native-dropdown-picker';
+import md5 from 'md5';
 
 
 const prePopulateddb = SQLite.openDatabase(
@@ -72,6 +73,9 @@ const CreateLogbook = ({ navigation }) => {
         //setAi(inputText)
     }
 }
+
+//console.log('md5',md5(CONCAT(rosterDate,rosterChocksOff,rosterChocksOn,landing,takeOff)))
+//console.log('md5',md5(rosterDate))
 
 const day_editable = (dayTime) => {
     if(rosterNameSic === 'Self'){
@@ -1242,7 +1246,128 @@ React.useEffect(() => {
             })
         }).then(res => res.json())
             .then(resData => {
-              console.log(resData);
+              console.log('get it',resData.message);
+                if(resData.message==='Record already existed.'){
+                 fetch(Platform.OS==='ios'?BaseUrl + 'updateLogbook':BaseUrlAndroid + 'updateLogbook', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "roaster_id": rosterId,
+                        "user_id": user.id,
+                        "onTime": rosterChocksOn,
+                        "date": originalDate,
+                        "local_id" : rosterId,
+                        "tag": 'server',
+                        "flight_no": '',
+                        "aircraftReg": rosterAId,
+                        "aircraftType": rosterAType,
+                        "route": route,
+                        "from_city": 'hello',
+                        "from_nameICAO": rosterFrom,
+                        "to_city": 'hello',
+                        "to_nameICAO": rosterTo,
+                        "p1": rosterNamePic,
+                        "p2": rosterNameSic,
+                        "totalTime": filghtTimeM,
+                        "day": dayTime,
+                        "night": nightTime,
+                        "actual_Instrument": ai,
+                        "dual_day": dual_day,
+                        "dual_night": dual_night,
+                        "ifr_vfr": fr,
+                        "p1_us_day": p1_us_day,
+                        "p1_us_night": p1_us_night,
+                        "p1_ut_day": p1_ut_day,
+                        "p1_ut_night": p1_ut_night,
+                        "pic_day": selfPICday,
+                        "pic_night": selfPICnight,
+                        "sim_instrument": si,
+                        "stl": stl,
+                        "sic_day": SelfSICday,
+                        "sic_night": SelfSICnight,
+                        "x_country_day": xc_day,
+                        "x_country_night": xc_night,
+                        "x_country_day_leg": xc_day_leg,
+                        "x_country_night_leg": xc_night_leg,
+                        "dayLanding": dayLanding,
+                        "nightLanding": nightLanding,
+                        "dayTO": day_to,
+                        "nightTO": night_to,
+                        "remark": remark,
+                        "timeCustom1": PurposeData.toString(),
+                        "timeCustom2": flightType,
+                        "timeCustom3": "",
+                        "timeCustom4": "",
+                        "timeCustom5": "",
+                        "timeCustom6": "",
+                        "timeCustom7": "",
+                        "timeCustom8": "",
+                        "timeCustom9": "",
+                        "timeCustom10": "",
+                        "landingCustom1": distance,
+                        "landingCustom2": "",
+                        "landingCustom3": "",
+                        "landingCustom4":"",
+                        "landingCustom5": "",
+                        "landingCustom6": "",
+                        "landingCustom7": "",
+                        "landingCustom8": "",
+                        "landingCustom9": "",
+                        "landingCustom10": "",
+                        "approach1": Approach1,
+                        "approach2" : approach2,
+                        "approach3": "",
+                        "approach4": "",
+                        "approach5": "",
+                        "approach6": "",
+                        "approach7": "",
+                        "approach8": "",
+                        "approach9": "",
+                        "approach10": "",
+                        "crewCustom1": "",
+                        "crewCustom2": "",
+                        "crewCustom3": "",
+                        "crewCustom4": "",
+                        "crewCustom5": "",
+                        "offTime": rosterChocksOff,
+                        "inTime": landing,
+                        "outTime": takeOff,
+                        "reliefCrew1":reliefCrew1,
+                        "reliefCrew2":reliefCrew2,
+                        "reliefCrew3":reliefCrew3,
+                        "reliefCrew4":reliefCrew4,
+                        "reliefCrew5":"",
+                        "instructor":instructor,
+                        "instructional":instructional,
+                        "student":student,
+                        "waterLanding":waterLanding,
+                        "waterTO":water_to,
+                        "touch_n_gos":touchGo,
+                        "fullStop":fullStop,
+                        "autolanding":autoLanding,
+                        "flight":flight,
+                        "sim_type": St,
+                        "simLocation":location,
+                        "sim_exercise":Sim_exercise,	
+                        "pf_hours":pfHours,
+                        "pm_hours":pmHours,
+                        "sfi_sfe":sf,
+                        "from_lat":fromLatitude,
+                        "from_long":fromLongitude,
+                        "to_lat":toLatitude,
+                        "to_long":toLongitude,
+                        "is_saved":1,
+                    })
+                }).then(res => res.json())
+                    .then(resData => {
+                        //Alert.alert(resData.message);
+                    }).catch((error) => {
+                        console.log(error)
+                      });
+              }
             })
     };
 
@@ -1258,18 +1383,19 @@ React.useEffect(() => {
             },
             body: JSON.stringify({
                 "user_id": user.id,
-                "id": rosterId
+                "date": rosterDate,
+                "onTime":rosterChocksOn,
             })
         }).then(res => res.json())
             .then(resData => {
-                Alert.alert(resData.message);
+                //Alert.alert(resData.message);
             });
     };
 
     const DeleteLogs = () => {
         prePopulateddb.transaction(tx => {
           tx.executeSql(
-            'DELETE FROM logbook WHERE serverId = "'+rosterId+'"', [], (tx, Delresult) => {
+            'DELETE FROM logbook WHERE id = "'+rosterId+'"', [], (tx, Delresult) => {
               SELECTAfterDel(true)
               navigation.navigate('LogBookListing')
             }
@@ -1336,61 +1462,111 @@ React.useEffect(() => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                "roaster_id": rosterId,
                 "user_id": user.id,
-                "id": listId,
-                "from_city": listFrom,
-                "to_city": listTo,
-                "p1": listP1,
-                "p2": listP2,
-                "date": listDate,
-                "flight_no": listFlight,
-                "aircraftReg": listAircraftId,
-                "aircraftType": listAircraftType,
-                "route": listRoute,
-                "totalTime": listTotalTime,
-                "day": listDay,
-                "night": listNight,
-                "actual_Instrument": listAi,
-                "dual_day": listDualDay,
-                "dual_night": listDualNight,
-                "ifr_vfr": listFr,
-                "p1_us_day": listP1UsDay,
-                "p1_us_night": listP1UsNight,
-                "p1_ut_day": listP1UtDay,
-                "p1_ut_night": listP1UtNight,
-                "pic_day": listPicDay,
-                "pic_night": listPicNight,
-                "sim_instrument": listSi,
-                "stl": listStl,
-                "sic_day": listSicDay,
-                "sic_night": listSicNight,
-                "x_country_day": listXcDay,
-                "x_country_night": listXcNight,
-                "x_country_day_leg": listXcDayLegs,
-                "x_country_night_leg": listXcNightLegs,
-                "dayLanding": listDayLanding,
-                "nightLanding": listNightLanding,
-                "dayTO": listDayTO,
-                "nightTO": listNightTO,
-                "remark": listRemark,
-                "approach1": listApproach1,
-                "approach2": listApproach2,
-                "onTime": listChocksOn,
-                "offTime": listChocksOff,
-                "inTime": listLanding,
-                "outTime": listTakeOff,
-                "reliefCrew1": reliefCrew1,
-                "reliefCrew2": reliefCrew2,
-                "reliefCrew3": reliefCrew3,
-                "reliefCrew4": reliefCrew4,
-                "instructor": instructor,
-                "instructional": listInstructional,
-                "student": student,
-                "waterLanding": waterLanding,
-                "waterTO": water_to,
-                "touch_n_gos": touchGo,
-                "fullStop": fullStop,
-                "autolanding": autoLanding,
+                "onTime": rosterChocksOn,
+                "date": originalDate,
+                "local_id" : rosterId,
+                "tag": 'server',
+                "flight_no": '',
+                "aircraftReg": rosterAId,
+                "aircraftType": rosterAType,
+                "route": route,
+                "from_city": 'hello',
+                "from_nameICAO": rosterFrom,
+                "to_city": 'hello',
+                "to_nameICAO": rosterTo,
+                "p1": rosterNamePic,
+                "p2": rosterNameSic,
+                "totalTime": filghtTimeM,
+                "day": dayTime,
+                "night": nightTime,
+                "actual_Instrument": ai,
+                "dual_day": dual_day,
+                "dual_night": dual_night,
+                "ifr_vfr": fr,
+                "p1_us_day": p1_us_day,
+                "p1_us_night": p1_us_night,
+                "p1_ut_day": p1_ut_day,
+                "p1_ut_night": p1_ut_night,
+                "pic_day": selfPICday,
+                "pic_night": selfPICnight,
+                "sim_instrument": si,
+                "stl": stl,
+                "sic_day": SelfSICday,
+                "sic_night": SelfSICnight,
+                "x_country_day": xc_day,
+                "x_country_night": xc_night,
+                "x_country_day_leg": xc_day_leg,
+                "x_country_night_leg": xc_night_leg,
+                "dayLanding": dayLanding,
+                "nightLanding": nightLanding,
+                "dayTO": day_to,
+                "nightTO": night_to,
+                "remark": remark,
+                "timeCustom1": PurposeData.toString(),
+                "timeCustom2": flightType,
+                "timeCustom3": "",
+                "timeCustom4": "",
+                "timeCustom5": "",
+                "timeCustom6": "",
+                "timeCustom7": "",
+                "timeCustom8": "",
+                "timeCustom9": "",
+                "timeCustom10": "",
+                "landingCustom1": distance,
+                "landingCustom2": "",
+                "landingCustom3": "",
+                "landingCustom4":"",
+                "landingCustom5": "",
+                "landingCustom6": "",
+                "landingCustom7": "",
+                "landingCustom8": "",
+                "landingCustom9": "",
+                "landingCustom10": "",
+                "approach1": Approach1,
+                "approach2" : approach2,
+                "approach3": "",
+                "approach4": "",
+                "approach5": "",
+                "approach6": "",
+                "approach7": "",
+                "approach8": "",
+                "approach9": "",
+                "approach10": "",
+                "crewCustom1": "",
+                "crewCustom2": "",
+                "crewCustom3": "",
+                "crewCustom4": "",
+                "crewCustom5": "",
+                "offTime": rosterChocksOff,
+                "inTime": landing,
+                "outTime": takeOff,
+                "reliefCrew1":reliefCrew1,
+                "reliefCrew2":reliefCrew2,
+                "reliefCrew3":reliefCrew3,
+                "reliefCrew4":reliefCrew4,
+                "reliefCrew5":"",
+                "instructor":instructor,
+                "instructional":instructional,
+                "student":student,
+                "waterLanding":waterLanding,
+                "waterTO":water_to,
+                "touch_n_gos":touchGo,
+                "fullStop":fullStop,
+                "autolanding":autoLanding,
+                "flight":flight,
+                "sim_type": St,
+                "simLocation":location,
+                "sim_exercise":Sim_exercise,	
+                "pf_hours":pfHours,
+                "pm_hours":pmHours,
+                "sfi_sfe":sf,
+                "from_lat":fromLatitude,
+                "from_long":fromLongitude,
+                "to_lat":toLatitude,
+                "to_long":toLongitude,
+                "is_saved":1,
             })
         }).then(res => res.json())
             .then(resData => {
@@ -1502,7 +1678,7 @@ React.useEffect(() => {
 
         });
         //alert('Saved Successfully');
-        navigation.goBack();
+       navigation.goBack();
       };
 
     //sqlite ends
