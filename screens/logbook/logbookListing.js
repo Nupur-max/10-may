@@ -326,17 +326,13 @@ const LogBookListing = ({ navigation }) => {
 
   const [, setParamsLogbook] = React.useContext(ParamsContext);
 
-  //React.useEffect(() => {
-  //   setInterval(() => {
-  //   //if(isFocused){
-  //     dataToServer()
-  //   //}
-  // },5000);
-  NetInfo.fetch().then(networkState => {
-    console.log("Connection type - ", networkState.type);
-    console.log("Is connected? - ", networkState.isConnected);
-  });
-  //},[]);
+// React.useEffect(() => {
+//     //setInterval(() => {
+//     if(isFocused){
+//       dataToServer()
+//     }
+//   //},5000);
+// },[isFocused]);
 
   const dataToServer = async() => {
     
@@ -353,7 +349,6 @@ const LogBookListing = ({ navigation }) => {
       else {
         setConnected(true)
         console.log('internet connected')
-        return;
          prePopulateddb.transaction(tx => {
           tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '"AND tag = "manual"', [], (tx, result1) => {
             //console.log('hello',result1.rows.length)
@@ -364,7 +359,24 @@ const LogBookListing = ({ navigation }) => {
               // ];
               // const Serverddmmyy = ("0" + result1.rows.item(i).date.getDate()).slice(-2) + "-" + (monthNames[result1.rows.item(i).date.getMonth()]) + "-" + result1.rows.item(i).date.getFullYear();
               
-              //console.log(result1.rows.item(i).date)
+              //console.log(new Date('10/05/2022'))
+              var d = result1.rows.item(i).date
+              var da = d.split('-');
+              var dat = da[0]+'/'+da[1]+'/'+da[2];
+              const monthNames = ["Jan", "Feb", "March", "April", "May", "June","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+              const Serverddmmyy = ("0" + new Date(dat).getDate()).slice(-2) + "-" + monthNames[new Date(dat).getMonth()] + "-" + new Date(dat).getFullYear();
+              console.log('serverDate',Serverddmmyy)
+
+              // var myDate = result1.rows.item(i).date;
+              // myDate = myDate.split("-");
+              // var newDate = new Date( myDate[2], myDate[1] - 1, myDate[0]);
+              // console.log('hello',newDate.getTime());
+
+              // console.log('hello1',new Date(newDate.getTime()))
+
+              // const currentMonth = new Date(newDate.getTime());
+              // const months = ["Jan", "Feb", "March", "April", "May", "June","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+              // console.log('dfdf',currentMonth.getDate()+'-'+months[currentMonth.getMonth()]+'-'+currentMonth.getFullYear());
 
               if(result1.rows.length>0){
                console.log('uploading to server')
@@ -380,7 +392,7 @@ const LogBookListing = ({ navigation }) => {
                     "user_id": user.id,
                     "local_id" : result1.rows.item(i).id,
                     "tag": 'server',
-                    "date": result1.rows.item(i).date,
+                    "date": Serverddmmyy,
                     "flight_no": '',
                     "aircraftReg": result1.rows.item(i).aircraftReg,
                     "aircraftType": result1.rows.item(i).aircraftType,
@@ -484,7 +496,7 @@ const LogBookListing = ({ navigation }) => {
                 })
             }).then(res => res.json())
                 .then(resData => {
-                   console.log(resData);
+                   console.log('uploaded Data',resData);
                    //alert('hello')
                 }).catch((error) => {
                   console.log('error',error)
@@ -1461,7 +1473,7 @@ const LogBookListing = ({ navigation }) => {
             
           })
         }
-          //console.log('tagssss',result.rows.item(i).tag)
+          console.log('tagssss',result.rows.item(i).tag)
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>
