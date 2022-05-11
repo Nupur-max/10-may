@@ -17,6 +17,7 @@ import Swipeout from 'react-native-swipeout';
 import { BaseUrl } from '../../components/url.json';
 import {BaseUrlAndroid} from '../../components/urlAndroid.json';
 import DatePicker from 'react-native-datepicker';
+import InternetConnectionAlert from "react-native-internet-connection-alert";
 
 import { DisplayContext } from '../../display-context';
 
@@ -166,7 +167,7 @@ const LogBookListing = ({ navigation }) => {
 
           const RealAircraftType = AircraftType === '320' || AircraftType === '321' ? 'A-' + AircraftType : AircraftType;
 
-         console.log('Pilot_Copilot', Pilot_Copilot)
+         //console.log('Pilot_Copilot', Pilot_Copilot)
 
           let text = date;
           const myArray = text.split("-");
@@ -326,13 +327,25 @@ const LogBookListing = ({ navigation }) => {
 
   const [, setParamsLogbook] = React.useContext(ParamsContext);
 
+  const [isInternetReachable, setIsInternetReachable] = React.useState(false)
+
 // React.useEffect(() => {
 //     //setInterval(() => {
-//     if(isFocused){
-//       dataToServer()
-//     }
+//     // if(isFocused){
+//     //   dataToServer()
+//     // }
 //   //},5000);
-// },[isFocused]);
+//   const unsubscribe = NetInfo.addEventListener((state) => {
+//     //setInterval(() => {
+//     setIsInternetReachable(state.isInternetReachable);
+//     console.log("Connection type", state.type);
+//     console.log("Is internet Reachable?", isInternetReachable);
+//     });
+//     return () => {
+//         unsubscribe();
+//     };
+//   //},5000)
+// },[isInternetReachable]);
 
   const dataToServer = async() => {
     
@@ -340,8 +353,9 @@ const LogBookListing = ({ navigation }) => {
     user = JSON.parse(user);
     
     NetInfo.addEventListener(networkState => {
-      // console.log("Connection type - ", networkState.type);
-       //console.log("Is connected? - ", networkState.isConnected);
+      console.log("Connection type - ", networkState.type);
+      console.log("Is connected? - ", networkState.isConnected);
+       return;
       if(networkState.isConnected === false) {
         console.log("due to network unavailability your data is not syncronized with server but whenever the network would be availbale it would automatically sync with server...")
         setConnected(false)
@@ -365,7 +379,7 @@ const LogBookListing = ({ navigation }) => {
               var dat = da[0]+'/'+da[1]+'/'+da[2];
               const monthNames = ["Jan", "Feb", "March", "April", "May", "June","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
               const Serverddmmyy = ("0" + new Date(dat).getDate()).slice(-2) + "-" + monthNames[new Date(dat).getMonth()] + "-" + new Date(dat).getFullYear();
-              console.log('serverDate',Serverddmmyy)
+              //console.log('serverDate',Serverddmmyy)
 
               // var myDate = result1.rows.item(i).date;
               // myDate = myDate.split("-");
@@ -379,7 +393,7 @@ const LogBookListing = ({ navigation }) => {
               // console.log('dfdf',currentMonth.getDate()+'-'+months[currentMonth.getMonth()]+'-'+currentMonth.getFullYear());
 
               if(result1.rows.length>0){
-               console.log('uploading to server')
+               //console.log('uploading to server')
               // console.log('dsgfdgfd',result1.rows.item(i).id)
                fetch(Platform.OS==='ios'?BaseUrl + 'addLogbook':BaseUrlAndroid + 'addLogbook', {
                 method: 'POST',
@@ -496,14 +510,14 @@ const LogBookListing = ({ navigation }) => {
                 })
             }).then(res => res.json())
                 .then(resData => {
-                   console.log('uploaded Data',resData);
+                   //console.log('uploaded Data',resData);
                    //alert('hello')
                 }).catch((error) => {
-                  console.log('error',error)
+                  //console.log('error',error)
                 });
             }
             else{
-              console.log('No available data')
+              //console.log('No available data')
             }
           }
         })
@@ -529,7 +543,7 @@ const LogBookListing = ({ navigation }) => {
           //alert('data available '); 
         }
         else {
-          console.log('error')
+          //console.log('error')
         }
         for (let i = 0; i <= result.rows.length; i++) {
           temData.push({
@@ -686,7 +700,7 @@ const LogBookListing = ({ navigation }) => {
           .then(resData => {
               //Alert.alert(resData.message);
           }).catch((error) => {
-            console.log(error)
+            //console.log(error)
           });
   };
 
@@ -1213,10 +1227,10 @@ const LogBookListing = ({ navigation }) => {
         })
     }).then(res => res.json())
         .then(resData => {
-            console.log('DocData',resData);
+            //console.log('DocData',resData);
             for (let i = 0; i < resData.length; i++) {
               const AircraftReg = resData[i].aircraftReg
-              console.log('AircraftReg',AircraftReg)
+              //console.log('AircraftReg',AircraftReg)
 
               const conditonalP1 = resData[i].p1 === 'SELF' ? 'Self' : resData[i].p1 
 
@@ -1245,7 +1259,7 @@ const LogBookListing = ({ navigation }) => {
                 //}
                   let temData = [];
                   tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff,instructional from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" AND isSaved = 1 ORDER BY orderedDate DESC, onTime DESC', [], (tx, result) => {
-                    console.log('e',result.rows.length)
+                    //console.log('e',result.rows.length)
                     if (result.rows.length == 0) {
                       console.log('no data to load')
                       //setLoadmore(false)
@@ -1473,7 +1487,7 @@ const LogBookListing = ({ navigation }) => {
             
           })
         }
-          console.log('tagssss',result.rows.item(i).tag)
+          //console.log('tagssss',result.rows.item(i).tag)
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>
@@ -1501,13 +1515,7 @@ const LogBookListing = ({ navigation }) => {
       //   navigation.navigate('subscribe')
       // }
       // else{
-        onRefresh();
-        //const timer = setInterval(() => {
-        //getLatestData();
-        //alert('hello')
-        //},1000)
-        //return () => clearTimeout(timer);
-      //}
+      onRefresh();
     }
   }, [isFocused]);
 
@@ -1576,6 +1584,11 @@ const handleIndexChange = (index) => {
   }, [getReduxData.data,isFocused]);
 
   return (
+    <InternetConnectionAlert
+      onChange={(connectionState) => {
+        console.log("Connection State: ", connectionState.isConnected);
+      }}
+      >
     <SafeAreaView style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
 
       <View style={LogbookListing.header}>
@@ -1806,8 +1819,8 @@ const handleIndexChange = (index) => {
         </View>
         
       </View>
-
     </SafeAreaView>
+    </InternetConnectionAlert>
   );
 };
 
