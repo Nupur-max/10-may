@@ -108,7 +108,6 @@ const LogBookListing = ({ navigation }) => {
   const [syncActive,setSyncActive] = React.useState(false)
 
 
-
   const [selectedId, setSelectedId] = React.useState('')
   const [focused, setFocused] = React.useState(false);
   const [offset, setOffset] = React.useState(0);
@@ -117,6 +116,8 @@ const LogBookListing = ({ navigation }) => {
   const [totalFlyingHours, setTotalFlyingHours] = React.useState('')
 
   const [activeRowKey, setActiveRowKey] = React.useState(null)
+
+  // console.log(connected);
 
   const Roaster = async() => {
     setShowProgress(true)
@@ -329,24 +330,6 @@ const LogBookListing = ({ navigation }) => {
 
   const [isInternetReachable, setIsInternetReachable] = React.useState(false)
 
-// React.useEffect(() => {
-//     //setInterval(() => {
-//     // if(isFocused){
-//     //   dataToServer()
-//     // }
-//   //},5000);
-//   const unsubscribe = NetInfo.addEventListener((state) => {
-//     //setInterval(() => {
-//     setIsInternetReachable(state.isInternetReachable);
-//     console.log("Connection type", state.type);
-//     console.log("Is internet Reachable?", isInternetReachable);
-//     });
-//     return () => {
-//         unsubscribe();
-//     };
-//   //},5000)
-// },[isInternetReachable]);
-
   const dataToServer = async() => {
     
     let user = await AsyncStorage.getItem('userdetails');
@@ -355,13 +338,12 @@ const LogBookListing = ({ navigation }) => {
     NetInfo.addEventListener(networkState => {
       console.log("Connection type - ", networkState.type);
       console.log("Is connected? - ", networkState.isConnected);
-       return;
       if(networkState.isConnected === false) {
-        console.log("due to network unavailability your data is not syncronized with server but whenever the network would be availbale it would automatically sync with server...")
-        setConnected(false)
+        alert('No network available,Please try again when network is available!!')
+        //setConnected(false)
       }
       else {
-        setConnected(true)
+        //setConnected(true)
         console.log('internet connected')
          prePopulateddb.transaction(tx => {
           tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '"AND tag = "manual"', [], (tx, result1) => {
@@ -374,11 +356,11 @@ const LogBookListing = ({ navigation }) => {
               // const Serverddmmyy = ("0" + result1.rows.item(i).date.getDate()).slice(-2) + "-" + (monthNames[result1.rows.item(i).date.getMonth()]) + "-" + result1.rows.item(i).date.getFullYear();
               
               //console.log(new Date('10/05/2022'))
-              var d = result1.rows.item(i).date
-              var da = d.split('-');
-              var dat = da[0]+'/'+da[1]+'/'+da[2];
-              const monthNames = ["Jan", "Feb", "March", "April", "May", "June","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-              const Serverddmmyy = ("0" + new Date(dat).getDate()).slice(-2) + "-" + monthNames[new Date(dat).getMonth()] + "-" + new Date(dat).getFullYear();
+              // var d = result1.rows.item(i).date
+              // var da = d.split('-');
+              // var dat = da[0]+'/'+da[1]+'/'+da[2];
+              // const monthNames = ["Jan", "Feb", "March", "April", "May", "June","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+              // const Serverddmmyy = ("0" + new Date(dat).getDate()).slice(-2) + "-" + monthNames[new Date(dat).getMonth()] + "-" + new Date(dat).getFullYear();
               //console.log('serverDate',Serverddmmyy)
 
               // var myDate = result1.rows.item(i).date;
@@ -406,7 +388,7 @@ const LogBookListing = ({ navigation }) => {
                     "user_id": user.id,
                     "local_id" : result1.rows.item(i).id,
                     "tag": 'server',
-                    "date": Serverddmmyy,
+                    "date": result1.rows.item(i).date,
                     "flight_no": '',
                     "aircraftReg": result1.rows.item(i).aircraftReg,
                     "aircraftType": result1.rows.item(i).aircraftType,
@@ -510,14 +492,18 @@ const LogBookListing = ({ navigation }) => {
                 })
             }).then(res => res.json())
                 .then(resData => {
-                   //console.log('uploaded Data',resData);
+                   console.log('uploaded Data',resData);
+                   if(resData.message==='Record already existed.'){
+                     alert ('No data to upload on server')
+                   }
                    //alert('hello')
                 }).catch((error) => {
-                  //console.log('error',error)
+                  console.log('error',error)
                 });
             }
             else{
               //console.log('No available data')
+              alert('No available data to upload')
             }
           }
         })
@@ -1586,7 +1572,8 @@ const handleIndexChange = (index) => {
   return (
     <InternetConnectionAlert
       onChange={(connectionState) => {
-        console.log("Connection State: ", connectionState.isConnected);
+        //alert("Connection State: ", connectionState.isConnected);
+        //setConnected(connectionState.isInternetReachable);
       }}
       >
     <SafeAreaView style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
@@ -1801,8 +1788,17 @@ const handleIndexChange = (index) => {
             </TouchableOpacity>
           </View> : null
         }
-        {connected===true?<Text>Status - online</Text>:<Text>Status - offline</Text>}
-        {syncActive===true && connected===true?<Text>Sync</Text>:null}
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding:10 }}>
+          <TouchableOpacity style={{ backgroundColor: '#256173', paddingHorizontal: 8, paddingVertical: 2 }} onPress={dataToServer}>
+            <Text>Sync data To server</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{ backgroundColor: '#256173', paddingHorizontal: 8, paddingVertical: 2 }}>
+            <Text>Sync data from server</Text>
+          </TouchableOpacity>
+        </View>
+
         {getReduxProgressData.ProgressValue !== undefined? <Text>Downloading logs : {ProgressBar1}</Text> : null}
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={{color:dark?'#fff':'#000'}}> TOTAL ON TYPE-</Text>
