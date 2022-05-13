@@ -355,24 +355,28 @@ const LogBookListing = ({ navigation }) => {
               // ];
               // const Serverddmmyy = ("0" + result1.rows.item(i).date.getDate()).slice(-2) + "-" + (monthNames[result1.rows.item(i).date.getMonth()]) + "-" + result1.rows.item(i).date.getFullYear();
               
-              //console.log(new Date('10/05/2022'))
+              // console.log(new Date('10/05/2022'))
               // var d = result1.rows.item(i).date
               // var da = d.split('-');
               // var dat = da[0]+'/'+da[1]+'/'+da[2];
               // const monthNames = ["Jan", "Feb", "March", "April", "May", "June","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
               // const Serverddmmyy = ("0" + new Date(dat).getDate()).slice(-2) + "-" + monthNames[new Date(dat).getMonth()] + "-" + new Date(dat).getFullYear();
-              //console.log('serverDate',Serverddmmyy)
+              // console.log('serverDate',Serverddmmyy)
 
-              // var myDate = result1.rows.item(i).date;
-              // myDate = myDate.split("-");
-              // var newDate = new Date( myDate[2], myDate[1] - 1, myDate[0]);
-              // console.log('hello',newDate.getTime());
+              //var myDate = '10-05-2022'
+              var myDate = result1.rows.item(i).date
+              console.log('myDate',myDate)
+              myDate = myDate.split("-");
+              var newDate = new Date( myDate[2], myDate[1] - 1, myDate[0]);
+              //console.log('hello',newDate.getTime());
 
-              // console.log('hello1',new Date(newDate.getTime()))
-
-              // const currentMonth = new Date(newDate.getTime());
-              // const months = ["Jan", "Feb", "March", "April", "May", "June","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-              // console.log('dfdf',currentMonth.getDate()+'-'+months[currentMonth.getMonth()]+'-'+currentMonth.getFullYear());
+              
+              //console.log('hello1',new Date(newDate.getTime()))
+              
+              const currentMonth = new Date(newDate.getTime());
+              const months = ["Jan", "Feb", "March", "April", "May", "June","July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+              console.log('dfdf',currentMonth.getDate()+'-'+months[currentMonth.getMonth()]+'-'+currentMonth.getFullYear());
+              const ResolvedDate = currentMonth.getDate()+'-'+months[currentMonth.getMonth()]+'-'+currentMonth.getFullYear()
 
               if(result1.rows.length>0){
                //console.log('uploading to server')
@@ -388,7 +392,7 @@ const LogBookListing = ({ navigation }) => {
                     "user_id": user.id,
                     "local_id" : result1.rows.item(i).id,
                     "tag": 'server',
-                    "date": result1.rows.item(i).date,
+                    "date": ResolvedDate,
                     "flight_no": '',
                     "aircraftReg": result1.rows.item(i).aircraftReg,
                     "aircraftType": result1.rows.item(i).aircraftType,
@@ -493,6 +497,7 @@ const LogBookListing = ({ navigation }) => {
             }).then(res => res.json())
                 .then(resData => {
                    console.log('uploaded Data',resData);
+                   alert('The app is up to date now!!')
                    if(resData.message==='Record already existed.'){
                      alert ('No data to upload on server')
                    }
@@ -996,7 +1001,6 @@ const LogBookListing = ({ navigation }) => {
                 outTime: result.rows.item(i).outTime,
                 inTime: result.rows.item(i).inTime,
               }
-              console.log('searched for', SingleResult)
               SearchedData.push(SingleResult);
               dataDispatcher(LogListData({ data: SearchedData, inProgress: false }))
             }
@@ -1197,11 +1201,26 @@ const LogBookListing = ({ navigation }) => {
     });
   };
 
+
+
+
+//////////////// 13 May -------------------------
+
+
+
+
   const getLatestData = async() => {
+    setRefreshing(true);
     let user = await AsyncStorage.getItem('userdetails');
     user = JSON.parse(user);
 
-    await fetch(Platform.OS==='ios'?BaseUrl + 'getSaveLogbook':BaseUrlAndroid + 'getSaveLogbook', {
+    NetInfo.addEventListener(networkState => {
+      if(networkState.isConnected === false) {
+        alert('No network available,Please try again when network is available!!')
+        //setConnected(false)
+      }
+    else{
+       fetch(Platform.OS==='ios'?BaseUrl + 'getSaveLogbook':BaseUrlAndroid + 'getSaveLogbook', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -1213,10 +1232,10 @@ const LogBookListing = ({ navigation }) => {
         })
     }).then(res => res.json())
         .then(resData => {
-            //console.log('DocData',resData);
+          console.log('resData',resData)
+           
             for (let i = 0; i < resData.length; i++) {
               const AircraftReg = resData[i].aircraftReg
-              //console.log('AircraftReg',AircraftReg)
 
               const conditonalP1 = resData[i].p1 === 'SELF' ? 'Self' : resData[i].p1 
 
@@ -1242,119 +1261,29 @@ const LogBookListing = ({ navigation }) => {
                 tx.executeSql(
                   'INSERT INTO logbook (tag, user_id, flight_no, date, day,  actual_Instrument, aircraftReg, aircraftType, approach1, approach2, approach3, approach4, approach5, approach6, approach7, approach8, approach9, approach10, crewCustom1, crewCustom2, crewCustom3, crewCustom4, crewCustom5, dayLanding, dayTO, dual_day, dual_night, flight, from_airportID, from_altitude, from_city, from_country, from_dayLightSaving, from_source, from_lat, from_long, from_name, from_nameICAO, from_nameIATA, from_timeZone, from_type, from_dst_status, fullStop, ifr_vfr, instructional, instructor, inTime, landingCustom1, landingCustom2, landingCustom3, landingCustom4, landingCustom5, landingCustom6, landingCustom7, landingCustom8, landingCustom9, landingCustom10, night,nightLanding, nightTO, offTime, onTime, outTime, p1, p1_us_day, p1_us_night, p2, pic_day, pic_night, stl, reliefCrew1, reliefCrew2, reliefCrew3, reliefCrew4, route, sic_day, sic_night, sim_instructional, sim_instrument, selected_role, student, timeCustom1, timeCustom2, timeCustom3, timeCustom4, timeCustom5, timeCustom6, timeCustom7, timeCustom8, timeCustom9, timeCustom10, to_airportID, to_altitude, to_city, to_country, to_dayLightSaving, to_source, to_lat, to_long, to_name, to_nameIATA, to_nameICAO, to_timeZone, to_type, to_dst_status, totalTime, touch_n_gos, waterLanding, waterTO, x_country_day, x_country_night, x_country_day_leg, x_country_night_leg, outTime_LT, offTime_LT, onTime_LT, inTime_LT, sim_type, sim_exercise, pf_time, pm_time, sfi_sfe, simCustom1, simCustom2, simCustom3, simCustom4, simCustom5, simLocation, p1_ut_day, p1_ut_night, remark, autolanding, flight_date, selected_flight_timelog, imported_log, orderedDate,purpose1,isSaved) VALUES ("'+resData[i].tag+'","'+resData[i].user_id+'","'+resData[i].flight_no+'","'+PerfectDate+'","'+resData[i].day+'","'+resData[i].actual_Instrument+'","'+resData[i].aircraftReg+'","'+nameAircrfat+'","'+resData[i].approach1+'","'+resData[i].approach2+'","'+resData[i].approach3+'","'+resData[i].approach4+'","'+resData[i].approach5+'","'+resData[i].approach6+'","'+resData[i].approach7+'","'+resData[i].approach8+'","'+resData[i].approach9+'","'+resData[i].approach10+'","'+resData[i].crewCustom1+'","'+resData[i].crewCustom2+'","'+resData[i].crewCustom3+'","'+resData[i].crewCustom4+'","'+resData[i].crewCustom5+'","'+resData[i].dayLanding+'" , "'+resData[i].dayTO+'" , "'+resData[i].dual_day+'" , "'+resData[i].dual_night+'" , "'+resData[i].flight+'" , "'+resData[i].from_airportID+'" , "'+resData[i].from_altitude+'" , "'+resData[i].from_city+'" , "'+resData[i].from_country+'" , "'+resData[i].from_dayLightSaving+'" , "'+resData[i].from_source+'" , "'+resData[i].from_lat+'" , "'+resData[i].from_long+'" , "'+resData[i].from_name+'" ,"'+resData[i].from_nameICAO+'" , "'+resData[i].from_nameIATA+'" , "'+resData[i].from_timeZone+'" , "'+resData[i].from_type+'" , "'+resData[i].from_dst_status+'" , "'+resData[i].fullStop+'" , "'+resData[i].ifr_vfr+'" , "'+resData[i].instructional+'" , "'+resData[i].instructor+'" , "'+resData[i].inTime+'" , "'+resData[i].landingCustom1+'" , "'+resData[i].landingCustom2+'" , "'+resData[i].landingCustom3+'" , "'+resData[i].landingCustom4+'" , "'+resData[i].landingCustom5+'" , "'+resData[i].landingCustom6+'" , "'+resData[i].landingCustom7+'" , "'+resData[i].landingCustom8+'" , "'+resData[i].landingCustom9+'" , "'+resData[i].landingCustom10+'" , "'+resData[i].night+'" , "'+resData[i].nightLanding+'" , "'+resData[i].nightTO+'" , "'+takeoffTime+'" , "'+LandingTime+'" , "'+resData[i].outTime+'" , "'+conditonalP1+'" , "'+resData[i].p1_us_day+'" , "'+resData[i].p1_us_night+'" , "'+resData[i].p2+'" , "'+resData[i].pic_day+'" , "'+resData[i].pic_night+'" , "'+resData[i].stl+'" , "'+resData[i].reliefCrew1+'" , "'+resData[i].reliefCrew2+'" , "'+resData[i].reliefCrew3+'" , "'+resData[i].reliefCrew4+'" , "'+resData[i].route+'" , "'+resData[i].sic_day+'" , "'+resData[i].sic_night+'" , "'+resData[i].sim_instructional+'" , "'+resData[i].sim_instrument+'" , "'+resData[i].selected_role+'" , "'+resData[i].student+'" , "'+resData[i].timeCustom1+'" , "'+resData[i].timeCustom2+'" , "'+resData[i].timeCustom3+'" , "'+resData[i].timeCustom4+'" , "'+resData[i].timeCustom5+'" , "'+resData[i].timeCustom6+'" , "'+resData[i].timeCustom7+'" , "'+resData[i].timeCustom8+'" , "'+resData[i].timeCustom9+'" , "'+resData[i].timeCustom10+'" , "'+resData[i].to_airportID+'" , "'+resData[i].to_altitude+'" , "'+resData[i].to_city+'" , "'+resData[i].to_country+'" , "'+resData[i].to_dayLightSaving+'" , "'+resData[i].to_source+'" , "'+resData[i].to_lat+'" , "'+resData[i].to_long+'" , "'+resData[i].to_name+'" , "'+resData[i].to_nameIATA+'" , "'+resData[i].to_nameICAO+'" , "'+resData[i].to_timeZone+'" , "'+resData[i].to_type+'" , "'+resData[i].to_dst_status+'" , "'+resData[i].totalTime+'" , "'+resData[i].touch_n_gos+'" , "'+resData[i].waterLanding+'" , "'+resData[i].waterTO+'" , "'+resData[i].x_country_day+'" , "'+resData[i].x_country_night+'" , "'+resData[i].x_country_day_leg+'" , "'+resData[i].x_country_night_leg+'" , "'+resData[i].outTime_LT+'" , "'+resData[i].offTime_LT+'" , "'+resData[i].onTime_LT+'" , "'+resData[i].inTime_LT+'" , "'+resData[i].sim_type+'" , "'+resData[i].sim_exercise+'" , "'+resData[i].pf_hours+'" , "'+resData[i].pm_hours+'" , "'+resData[i].sfi_sfe+'" , "'+resData[i].simCustom1+'" , "'+resData[i].simCustom2+'" , "'+resData[i].simCustom3+'" , "'+resData[i].simCustom4+'" , "'+resData[i].simCustom5+'","'+resData[i].simLocation+'","'+resData[i].p1_ut_day+'","'+resData[i].p1_ut_night+'","'+resData[i].remark+'","'+resData[i].autolanding+'","'+resData[i].flight_date+'","'+resData[i].selected_flight_timelog+'","'+resData[i].imported_log+'","'+orderedDate+'","'+resData[i].timeCustom1+'","'+resData[i].is_saved+'")',
                   );
-                //}
-                  let temData = [];
-                  tx.executeSql('SELECT id,tag,user_id,date,aircraftReg,aircraftType,from_nameICAO,inTime,offTime,onTime,outTime,p1,p2,to_nameICAO,remark,from_lat,from_long,to_lat,to_long,purpose1,distance,sim_type,sim_exercise,pf_time,pm_time,sfi_sfe,simLocation,isSaved,savedChocksOff,instructional from logbook WHERE user_id = "' + user.id + '" AND from_nameICAO != "null" AND isSaved = 1 ORDER BY orderedDate DESC, onTime DESC', [], (tx, result) => {
-                    //console.log('e',result.rows.length)
-                    if (result.rows.length == 0) {
-                      console.log('no data to load')
-                      //setLoadmore(false)
-                      return false;
-                    }
-                    
-                    //setOffset(offset + 20);
-                    //if (result.rows.length > 1){
-                    for (let i = 0; i <= result.rows.length; i++) {
-                      if (result.rows.length !== 0){
-            
-                        const chocksOFF =  result.rows.item(i).offTime.split(':')
-                        if(chocksOFF[0]<10){
-                          chocksOFF[0] = '0'+chocksOFF[0]
-                        }
-                        const getChocksOff = chocksOFF[0].slice(-2)+':'+chocksOFF[1].slice(-2)
-            
-                        const chocksON = result.rows.item(i).onTime.split(':')
-                        if(chocksON[0]<10){
-                          chocksON[0] = '0'+chocksON[0]
-                        }
-                        const getChocksOn = chocksON[0].slice(-2)+':'+chocksON[1].slice(-2)
-            
-                      setModalVisible(true)
-                      if(result.rows.item(i).aircraftReg!=="SIMU"){
-                        pur.push(result.rows.item(i).purpose1)
-                      temData.push({
-                        id: result.rows.item(i).id,
-                        tag: result.rows.item(i).tag,
-                        user_id: result.rows.item(i).user_id,
-                        //flight_no: result.rows.item(i).flight_no,
-                        date: result.rows.item(i).date,
-                        //day: result.rows.item(i).day,
-                        actual_Instrument: result.rows.item(i).actual_Instrument,
-                        aircraftReg: result.rows.item(i).aircraftReg,
-                        aircraftType: result.rows.item(i).aircraftType,
-                        from: result.rows.item(i).from_nameICAO,
-                        instructional: result.rows.item(i).instructional,
-                        landing: result.rows.item(i).inTime,
-                        chocksOffTime: getChocksOff,
-                        nightLanding: result.rows.item(i).nightLanding,
-                        chocksOnTime: getChocksOn,
-                        takeOff: result.rows.item(i).outTime,
-                        p1: result.rows.item(i).p1,
-                        p2: result.rows.item(i).p2,
-                        to: result.rows.item(i).to_nameICAO,
-                        remark: result.rows.item(i).remark,
-                        from_lat: result.rows.item(i).from_lat,
-                        from_long: result.rows.item(i).from_long,
-                        to_lat: result.rows.item(i).to_lat,
-                        to_long: result.rows.item(i).to_long,
-                        purpose1 : result.rows.item(i).purpose1,
-                        distance: result.rows.item(i).distance,
-                        isSaved: result.rows.item(i).isSaved,
-                        savedChocksOff: result.rows.item(i).savedChocksOff,
-                      });
-                    }
-                    else {
-                      temData.push({
-                        id: result.rows.item(i).id,
-                        tag: result.rows.item(i).tag,
-                        user_id: result.rows.item(i).user_id,
-                        date: result.rows.item(i).date,
-                        aircraftType: result.rows.item(i).aircraftType,
-                        aircraftReg: result.rows.item(i).aircraftReg,
-                        from: result.rows.item(i).from_nameICAO,
-                        to: result.rows.item(i).to_nameICAO,
-                        sim_type: result.rows.item(i).sim_type,
-                        sim_exercise: result.rows.item(i).sim_type,
-                        pf_time: result.rows.item(i).pf_time,
-                        pm_time: result.rows.item(i).pm_time,
-                        sfi_sfe: result.rows.item(i).sfi_sfe,
-                        simLocation: result.rows.item(i).simLocation,
-                        takeOff: result.rows.item(i).outTime,
-                        landing: result.rows.item(i).inTime,
-                        p1: "hello",
-                        isSaved: result.rows.item(i).isSaved,
-                        savedChocksOff: result.rows.item(i).savedChocksOff,
-                        remark: result.rows.item(i).remark,
-                      });
-                    }
-                      setLocalLogbookData(temData);
-                      var arr = temData;
-                      var clean = arr.filter((arr, index, self) =>
-                      index === self.findIndex((t) => (t.chocksOffTime === arr.chocksOffTime && t.date === arr.date && t.from === arr.from)))
-            
-                      dataDispatcher(LogListData({ data: clean, inProgress: false }))
-                      //setLoadmore(false)
-                      //setFindTag(result.rows.item(i).tag);
-                      //setRefreshing(false);
-                      //setLoadmore(false)
-                    }
-                    else {
-                      dataDispatcher(LogListData({ data: [], inProgress: false }))
-                      //setRefreshing(false);
-                      //setLoadmore(false)
-                    }
-                    
-                    }
-                });
+                  onRefresh()
               })
             });
             }
             //setData(resData);
             //dataDispatcher(LogListData({ data: resData, inProgress:false }))
         });
+      }
+    })
   }
+  
 
-  const onRefresh = React.useCallback(async () => {
+
+//////////////// 13 May -------------------------
+
+
+
+
+
+
+
+
+const onRefresh = React.useCallback(async () => {
     dataDispatcher(LogListData({ data: [], inProgress: false }))
     //setRefreshing(true);
     let user = await AsyncStorage.getItem('userdetails');
@@ -1473,7 +1402,7 @@ const LogBookListing = ({ navigation }) => {
             
           })
         }
-          //console.log('tagssss',result.rows.item(i).tag)
+          console.log('tagssss',temData)
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>
@@ -1632,12 +1561,12 @@ const handleIndexChange = (index) => {
           onEndReached={()=>{search !== ''? null:getLogbookData();console.log('called')}}
           onEndReachedThreshold={0.8}
           //initialNumToRender={100}
-          // refreshControl={
-          //   <RefreshControl
-          //     refreshing={refreshing}
-          //     onRefresh={getLatestData}
-          //   />
-          // }
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={getLatestData}
+            />
+          }
         />
       }
       {getReduxProgressData.ProgressValue!== undefined? 
@@ -1794,7 +1723,7 @@ const handleIndexChange = (index) => {
             <Text>Sync data To server</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{ backgroundColor: '#256173', paddingHorizontal: 8, paddingVertical: 2 }}>
+          <TouchableOpacity style={{ backgroundColor: '#256173', paddingHorizontal: 8, paddingVertical: 2 }} onPress={()=>{getLatestData()}}>
             <Text>Sync data from server</Text>
           </TouchableOpacity>
         </View>

@@ -2872,8 +2872,6 @@ const chocksOnCheck = () => {
     }
 }
 
-console.log('rosterAId',rosterAId)
-
 return (
         <KeyboardAvoidingView behavior= {Platform.OS === 'ios' ? "padding" : null}>
         
@@ -4573,7 +4571,7 @@ return (
         </ScrollView>
         <View style={dark?Logbook.DarkbuttonView:Logbook.buttonView}>
                 <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={()=>{insertQuery();constUpdateP2();Add_Logbook();}}> 
+                    <TouchableOpacity onPress={()=>{insertQuery();constUpdateP2();Add_Logbook()}}> 
                         <View style={Logbook.button}>
                             <Text style={Logbook.buttonText}>Save</Text>
                         </View>
