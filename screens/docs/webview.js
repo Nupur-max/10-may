@@ -268,7 +268,8 @@ class Sample extends Component {
                 setTimeout(function () {
                 document.querySelector('#username').value = '${this.state.egcaUploadedData[0].egcaId}';
                 document.querySelector('#password ').value = '${this.state.egcaUploadedData[0].egcaPwd}';
-        }, 2000)
+                window.alert('${this.state.egcaData[dataPos].from_nameICAO}')
+              }, 2000)
             
         }
             else if (window.location.href === "https://www.dgca.gov.in/digigov-portal/web?requestType=ApplicationRH&actionVal=checkLogin") {

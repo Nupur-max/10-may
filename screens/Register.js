@@ -20,6 +20,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {BaseUrl} from '../components/url.json';
 import {BaseUrlAndroid} from '../components/urlAndroid.json';
 import Colors from '../components/colors';
+import {Picker} from '@react-native-picker/picker';
 
 // create a component
 const Register = ({navigation}) => {
@@ -121,7 +122,8 @@ const Register = ({navigation}) => {
            </View>
 
           {/* country, CountryCode */}
-           <View style={{flexDirection:'row', justifyContent:'space-between', zIndex:9999, position:'relative', elevation:99}}>
+           <View style={{flexDirection:'row', justifyContent:'space-between', zIndex:999, elevation:99}}>
+
               <View style={styles.CountryBox}>  
               <MaterialCommunityIcons 
                 name="map-marker-radius-outline" color='#266173' size={20} style={styles.icon}/>
@@ -160,7 +162,7 @@ const Register = ({navigation}) => {
                 
                 }} 
                 />
-               </View> 
+               </View>
 
               <View style={styles.CountryCodeBox}>
               <MaterialCommunityIcons 

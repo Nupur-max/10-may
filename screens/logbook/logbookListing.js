@@ -1402,7 +1402,7 @@ const onRefresh = React.useCallback(async () => {
             
           })
         }
-          console.log('tagssss',temData)
+          //console.log('tagssss',temData)
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>
@@ -1723,9 +1723,9 @@ const handleIndexChange = (index) => {
             <Text>Sync data To server</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{ backgroundColor: '#256173', paddingHorizontal: 8, paddingVertical: 2 }} onPress={()=>{getLatestData()}}>
+          {/* <TouchableOpacity style={{ backgroundColor: '#256173', paddingHorizontal: 8, paddingVertical: 2 }} onPress={()=>{getLatestData()}}>
             <Text>Sync data from server</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         {getReduxProgressData.ProgressValue !== undefined? <Text>Downloading logs : {ProgressBar1}</Text> : null}
