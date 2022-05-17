@@ -492,16 +492,134 @@ const LogBookListing = ({ navigation }) => {
                     "from_long":result1.rows.item(i).from_long,
                     "to_lat":result1.rows.item(i).to_lat,
                     "to_long":result1.rows.item(i).to_long,
-                    "is_Saved":1,
+                    "is_saved":1,
                 })
             }).then(res => res.json())
                 .then(resData => {
                    console.log('uploaded Data',resData);
                    alert('The app is up to date now!!')
                    if(resData.message==='Record already existed.'){
-                     alert ('No data to upload on server')
+                    fetch(Platform.OS==='ios'?BaseUrl + 'updateLogbook':BaseUrlAndroid + 'updateLogbook', {
+                      method: 'POST',
+                      headers: {
+                          'Accept': 'application/json',
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({
+                          "roaster_id": result1.rows.item(i).id,
+                          "user_id": user.id,
+                          "onTime": result1.rows.item(i).onTime,
+                          "date": ResolvedDate,
+                          "local_id" : result1.rows.item(i).id,
+                          "tag": 'server',
+                          "flight_no": '',
+                          "aircraftReg": result1.rows.item(i).aircraftReg,
+                          "aircraftType": result1.rows.item(i).aircraftType,
+                          "route": result1.rows.item(i).route,
+                          "from_city": 'hello',
+                          "from_nameICAO": result1.rows.item(i).from_nameICAO,
+                          "to_city": 'hello',
+                          "to_nameICAO": result1.rows.item(i).to_nameICAO,
+                          "p1": result1.rows.item(i).p1,
+                          "p2": result1.rows.item(i).p2,
+                          "totalTime": result1.rows.item(i).totalTime,
+                          "day": result1.rows.item(i).day,
+                          "night": result1.rows.item(i).night,
+                          "actual_Instrument": result1.rows.item(i).actual_Instrument,
+                          "dual_day": result1.rows.item(i).dual_day,
+                          "dual_night": result1.rows.item(i).dual_night,
+                          "ifr_vfr": result1.rows.item(i).ifr_vfr,
+                          "p1_us_day": result1.rows.item(i).p1_us_day,
+                          "p1_us_night": result1.rows.item(i).p1_us_night,
+                          "p1_ut_day": result1.rows.item(i).p1_ut_day,
+                          "p1_ut_night": result1.rows.item(i).p1_ut_night,
+                          "pic_day": result1.rows.item(i).pic_day,
+                          "pic_night": result1.rows.item(i).pic_night,
+                          "sim_instrument": result1.rows.item(i).sim_instrument,
+                          "stl": result1.rows.item(i).stl,
+                          "sic_day": result1.rows.item(i).sic_day,
+                          "sic_night": result1.rows.item(i).sic_night,
+                          "x_country_day": result1.rows.item(i).x_country_day,
+                          "x_country_night": result1.rows.item(i).x_country_night,
+                          "x_country_day_leg": result1.rows.item(i).x_country_day_leg,
+                          "x_country_night_leg": result1.rows.item(i).x_country_night_leg,
+                          "dayLanding": result1.rows.item(i).dayLanding,
+                          "nightLanding": result1.rows.item(i).nightLanding,
+                          "dayTO": result1.rows.item(i).dayTO,
+                          "nightTO": result1.rows.item(i).nightTO,
+                          "remark": result1.rows.item(i).remark,
+                          "timeCustom1": result1.rows.item(i).purpose1,
+                          "timeCustom2": "",
+                          "timeCustom3": "",
+                          "timeCustom4": "",
+                          "timeCustom5": "",
+                          "timeCustom6": "",
+                          "timeCustom7": "",
+                          "timeCustom8": "",
+                          "timeCustom9": "",
+                          "timeCustom10": "",
+                          "landingCustom1": "",
+                          "landingCustom2": "",
+                          "landingCustom3": "",
+                          "landingCustom4":"",
+                          "landingCustom5": "",
+                          "landingCustom6": "",
+                          "landingCustom7": "",
+                          "landingCustom8": "",
+                          "landingCustom9": "",
+                          "landingCustom10": "",
+                          "approach1": result1.rows.item(i).approach1,
+                          "approach2" : result1.rows.item(i).approach2,
+                          "approach3": "",
+                          "approach4": "",
+                          "approach5": "",
+                          "approach6": "",
+                          "approach7": "",
+                          "approach8": "",
+                          "approach9": "",
+                          "approach10": "",
+                          "crewCustom1": "",
+                          "crewCustom2": "",
+                          "crewCustom3": "",
+                          "crewCustom4": "",
+                          "crewCustom5": "",
+                          "offTime": result1.rows.item(i).offTime,
+                          "inTime": result1.rows.item(i).inTime,
+                          "outTime": result1.rows.item(i).outTime,
+                          "reliefCrew1":result1.rows.item(i).reliefCrew1,
+                          "reliefCrew2":result1.rows.item(i).reliefCrew2,
+                          "reliefCrew3":result1.rows.item(i).reliefCrew3,
+                          "reliefCrew4":result1.rows.item(i).reliefCrew4,
+                          "reliefCrew5":"",
+                          "instructor":result1.rows.item(i).instructor,
+                          "instructional":result1.rows.item(i).instructional,
+                          "student":result1.rows.item(i).student,
+                          "waterLanding":result1.rows.item(i).waterLanding,
+                          "waterTO":result1.rows.item(i).waterTO,
+                          "touch_n_gos":result1.rows.item(i).touch_n_gos,
+                          "fullStop":result1.rows.item(i).fullStop,
+                          "autolanding":result1.rows.item(i).autolanding,
+                          "flight":result1.rows.item(i).flight,
+                          "sim_type": result1.rows.item(i).sim_type,
+                          "simLocation":result1.rows.item(i).simLocation,
+                          "sim_exercise":result1.rows.item(i).sim_exercise,	
+                          "pf_hours":result1.rows.item(i).pf_time,
+                          "pm_hours":result1.rows.item(i).pm_time,
+                          "sfi_sfe":result1.rows.item(i).sfi_sfe,
+                          "from_lat":result1.rows.item(i).from_lat,
+                          "from_long":result1.rows.item(i).from_long,
+                          "to_lat":result1.rows.item(i).to_lat,
+                          "to_long":result1.rows.item(i).to_long,
+                          "is_saved":1,
+                      })
+                  }).then(res => res.json())
+                      .then(resData => {
+                          //Alert.alert(resData.message);
+                      }).catch((error) => {
+                          console.log(error)
+                        });
                    }
-                   //alert('hello')
+                   alert('Update')
                 }).catch((error) => {
                   console.log('error',error)
                 });
@@ -695,10 +813,13 @@ const LogBookListing = ({ navigation }) => {
           });
   };
 
-    const DeleteLogs = () => {
+    const DeleteLogs = async() => {
+      let user = await AsyncStorage.getItem('userdetails');
+      user = JSON.parse(user);
       prePopulateddb.transaction(tx => {
         tx.executeSql(
           'DELETE FROM logbook WHERE Id = "'+item.id+'"', [], (tx, Delresult) => {
+          'UPDATE logbook set isDeleted=1 where user_id = "'+user.id+'" AND date = "'+item.date+'" AND onTime = "'+item.chocksOnTime+'"'
             SELECTAfterDelOnSlide()
             //navigation.navigate('LogBookListing')
           }
@@ -1265,6 +1386,7 @@ const LogBookListing = ({ navigation }) => {
               })
             });
             }
+            setRefreshing(false)
             //setData(resData);
             //dataDispatcher(LogListData({ data: resData, inProgress:false }))
         });
@@ -1372,6 +1494,7 @@ const onRefresh = React.useCallback(async () => {
             distance: result.rows.item(i).distance,
             isSaved: result.rows.item(i).isSaved,
             savedChocksOff: result.rows.item(i).savedChocksOff,
+            isDeleted:result.rows.item(i).isDeleted,
           });
         }
         else{
@@ -1399,10 +1522,10 @@ const onRefresh = React.useCallback(async () => {
             isSaved: result.rows.item(i).isSaved,
             savedChocksOff: result.rows.item(i).savedChocksOff,
             remark: result.rows.item(i).remark,
-            
+            isDeleted:result.rows.item(i).isDeleted,
           })
         }
-          //console.log('tagssss',temData)
+          console.log('Deleted',result.rows.item(i).isSaved)
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>

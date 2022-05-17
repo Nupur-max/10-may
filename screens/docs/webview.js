@@ -66,9 +66,20 @@ class Sample extends Component {
     var EData = this.props.egcaDetail.Egcadata;
     var uploadedEData = EData.data.data
     let arrival = logData[this.state.index].date;
+    
+    const ar = new Date(arrival);
+    var arDay = ar.getDate() < 10 ? '0' + ar.getDate() : ar.getDate()
+    var arMonth = ar.getMonth()+1 < 10 ? '0' + Number(ar.getMonth()+1) : ar.getMonth()+1
+    var arYear = ar.getFullYear()
+    const arr = arDay+'/'+arMonth+'/'+arYear;
+    
     let departure = logData[this.state.index].date;
-    let arr = '01/05/2022'//arrival.replace(/-/g, '/');
-    let dep = '01/05/2022'//departure.replace(/-/g, '/');
+    const de = new Date(departure)
+    var deDay = de.getDate() < 10 ? '0' + de.getDate() : de.getDate()
+    var deMonth = de.getMonth()+1 < 10 ? '0' + Number(de.getMonth()+1) : de.getMonth()+1
+    var deYear = de.getFullYear()
+    let dep = deDay+'/'+deMonth+'/'+deYear;
+
     var p = logData[this.state.index].timeCustom1;
     var pur = p.split(",");
     var Pic_Name = logData[this.state.index].p1 ==='Self'? logData[this.state.index].p1 : logData[this.state.index].p1.split("(")
@@ -99,12 +110,18 @@ class Sample extends Component {
       console.log('no error')
     }
 
+   
     
 
     if (Number(takeOffTime[0]) > Number(landingTime[0])) {
-      let date = logData[this.state.index].date.split("-")
-      const day = Number(date[0]) + 1
-      const arrivalDate = day < 10 ?"0"+ day + "/" + date[1] + "/" + date[2] : day + "/" + date[1] + "/" + date[2]
+      let date = logData[this.state.index].date
+      let newDate = new Date(date)
+      let tomorrow =  new Date()
+      tomorrow.setDate(newDate.getDate() + 1)
+      var nextDay = tomorrow.getDate() < 10 ? '0' + tomorrow.getDate() : tomorrow.getDate()
+    var nextMonth = tomorrow.getMonth()+1 < 10 ? '0' + Number(tomorrow.getMonth()+1) : tomorrow.getMonth()+1
+    var nextYear = tomorrow.getFullYear()
+      const arrivalDate = nextDay + "/" + nextMonth + "/" +  nextYear
       this.setState({
         arrDate: arrivalDate,
         depDate: dep,
@@ -268,7 +285,6 @@ class Sample extends Component {
                 setTimeout(function () {
                 document.querySelector('#username').value = '${this.state.egcaUploadedData[0].egcaId}';
                 document.querySelector('#password ').value = '${this.state.egcaUploadedData[0].egcaPwd}';
-                window.alert('${this.state.egcaData[dataPos].from_nameICAO}')
               }, 2000)
             
         }
