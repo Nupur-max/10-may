@@ -231,7 +231,7 @@ const Login = ({navigation}) => {
                         from_long : result.rows.item(i).from_long,
                         from : result.rows.item(i).from_nameICAO, 
                         chocksOffTime : getChocksOff, 
-                        chocksOnTime : getChocksOn,
+                        chocksOnTime : result.rows.item(i).onTime,
                         outTime : result.rows.item(i).outTime,
                         inTime : result.rows.item(i).inTime,
                         p1 : result.rows.item(i).p1,

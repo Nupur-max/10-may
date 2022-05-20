@@ -891,6 +891,7 @@ const Docs = ({ navigation }) => {
                 tabTextStyle={{ color: '#256173' }}
                 activeTabStyle={{ backgroundColor: '#256173' }}
               /> : null}
+              <Text style={{textAlign:'center',fontWeight:'bold'}}>Scroll down to Update the List!!</Text>
               {data == null ?
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                   <Text style={{
