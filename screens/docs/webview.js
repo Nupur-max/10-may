@@ -89,8 +89,8 @@ class Sample extends Component {
     const takeOffTime =logData[this.state.index].offTime.split(":");
     const landingTime=logData[this.state.index].onTime.split(":");
      
-    const chokOff = Number(takeOffTime[0]) < 10 ? "0" + takeOffTime[0] + ":" + takeOffTime[1] : takeOffTime[0] + ":" + takeOffTime[1]
-    const chokOn = Number(landingTime[0]) < 10 ? "0" + landingTime[0] + ":" + landingTime[1] : landingTime[0] + ":" + landingTime[1]
+    const chokOff = Number(takeOffTime[0]) < 10 ?  takeOffTime[0] + ":" + takeOffTime[1] : takeOffTime[0] + ":" + takeOffTime[1]
+    const chokOn = Number(landingTime[0]) < 10 ?  landingTime[0] + ":" + landingTime[1] : landingTime[0] + ":" + landingTime[1]
 
     this.setState({
       egcaData: logData,
@@ -159,11 +159,13 @@ class Sample extends Component {
   //// TO GET EGCA RESPONSE ///
   updateLogTags = async () => {
     const value = await AsyncStorage.getItem('result');
+    console.log('val',value)
     if (value !== null) {
       const logRes = JSON.parse(value)
       console.log('logRes',logRes.id)
       if (logRes.success !== false) {
         let id = Number(logRes.id)
+        console.log('number',id)
         let user = await AsyncStorage.getItem('userdetails');
         user = JSON.parse(user);
         await fetch(Platform.OS==='ios'?BaseUrl + 'updateLogbook':BaseUrlAndroid + 'updateLogbook', {
@@ -174,7 +176,8 @@ class Sample extends Component {
           },
           body: JSON.stringify({
               "user_id": user.id,
-              "local_id": logRes.id,
+              "date": logRes.date,
+              "onTime": logRes.landing,
               "tag": 'uploaded'
               
           })
@@ -186,11 +189,11 @@ class Sample extends Component {
         allSuccess = JSON.parse(allSuccess) == null ? [] : JSON.parse(allSuccess)
         // console.log("sucess of log upload" , allSuccess)
         prePopulateddb.transaction(tx => {
-          tx.executeSql('UPDATE logbook set tag="uploaded" WHERE user_id = "' + user.id + '" AND  id = "' + logRes.id + '"')
+          tx.executeSql('UPDATE logbook set tag="uploaded" WHERE user_id = "' + user.id + '" AND date= "'+logRes.date+'" AND onTime= "'+logRes.onTime+'"')
           let Data = [];
           let SingleResult = '';
           prePopulateddb.transaction(tx => {
-            tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '" AND  id = "' + logRes.id + '"', [], (tx, result) => {
+            tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '"AND date= "'+logRes.date+'" AND onTime= "'+logRes.onTime+'"', [], (tx, result) => {
               if (result.rows.length > 0) {
                 for (let i = 0; i <= result.rows.length; i++) {
                   SingleResult = {
@@ -210,10 +213,12 @@ class Sample extends Component {
                     to_long: result.rows.item(i).to_long,
                     orderedDate: result.rows.item(i).orderedDate,
                   }
+                  console.log('result single' , SingleResult)
                   Data.push(SingleResult)
                   this.props.LogListData({ data: Data, inProgress: false })
                   var successData = [...allErrors, temData];
-                 AsyncStorage.setItem('success', JSON.stringify(successData));
+                  AsyncStorage.setItem('success', JSON.stringify(successData));
+                  this.props.navigation.navigate('Docs')
                 }
               }
               else {
@@ -290,7 +295,7 @@ class Sample extends Component {
         }
             else if (window.location.href === "https://www.dgca.gov.in/digigov-portal/web?requestType=ApplicationRH&actionVal=checkLogin") {
              
-              window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos}, success:false, error:null ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' , from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
+              window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos}, success:false, error:null ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' , from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].offTime}', landing:'${this.state.egcaData[dataPos].onTime}' ,visible: true}));
               setTimeout(function () {
                   document.querySelector('#a90000603 ul:nth-child(2) li a').click();
                 }, 10000)
@@ -535,7 +540,7 @@ class Sample extends Component {
           document.querySelector('#btn_Ok').clicked =true
             document.querySelector('#btn_Ok').onclick();
             if(document.querySelector('#btn_Ok').clicked == true){
-              window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} , success:true, error:false ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));    
+              window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} , success:true, error:false ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].offTime}', landing:'${this.state.egcaData[dataPos].onTime}' ,visible: true}));    
             }
           }, 65000)
 
@@ -544,20 +549,20 @@ class Sample extends Component {
             if(${dataPos}+1 == ${this.state.egcaData.length}){
               document.querySelector('#Logout_btn').click();
               document.querySelector('#noFeedback').click();
-            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:false, error:true ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
+            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:false, error:true ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].offTime}', landing:'${this.state.egcaData[dataPos].onTime}' ,visible: true}));
           }
           else{
-            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:false, error:true ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
+            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:false, error:true ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].offTime}', landing:'${this.state.egcaData[dataPos].onTime}' ,visible: true}));
           }
           }
           else {
             if(${dataPos}+1 == ${this.state.egcaData.length}){
               document.querySelector('#Logout_btn').click();
               document.querySelector('#noFeedback').click();
-            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:${this.state.success}, error:${this.state.error} ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
+            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:${this.state.success}, error:${this.state.error} ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].offTime}', landing:'${this.state.egcaData[dataPos].onTime}' ,visible: true}));
           }
           else{
-            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:${this.state.success}, error:${this.state.error} ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].chocksOffTime}', landing:'${this.state.egcaData[dataPos].chocksOnTime}' ,visible: true}));
+            window.ReactNativeWebView.postMessage(JSON.stringify({index:${dataPos} +1, success:${this.state.success}, error:${this.state.error} ,  id:'${this.state.egcaData[dataPos].id}' , date:'${this.state.egcaData[dataPos].date}' ,from:'${this.state.egcaData[dataPos].to}' , to:'${this.state.egcaData[dataPos].date}' , takeoff: '${this.state.egcaData[dataPos].offTime}', landing:'${this.state.egcaData[dataPos].onTime}' ,visible: true}));
           }
           }
         }, 70000)

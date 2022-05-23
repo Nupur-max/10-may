@@ -16,7 +16,7 @@ const SettingScreen = ({navigation}) => {
     const { dark, theme, toggle } = React.useContext(ThemeContext);
 
     return (
-        <ScrollView style={{backgroundColor:dark?'#000':'#fff'}} contentContainerStyle={modalVisible || inviteModalVisible || BuildmodalVisible || DisplaymodalVisible || BackupmodalVisible?{backgroundColor: 'rgba(0,0,0,0)'}:{paddingBottom: 150}}>
+        <ScrollView style={{backgroundColor:dark?'#000':'#fff'}} contentContainerStyle={modalVisible || inviteModalVisible || BuildmodalVisible || DisplaymodalVisible || BackupmodalVisible?{backgroundColor: 'rgba(0,0,0,0)'}:{paddingBottom: 150}} showsVerticalScrollIndicator={false}>
         <View style={modalVisible || inviteModalVisible || BuildmodalVisible || DisplaymodalVisible || BackupmodalVisible? [SsStyle.container , {backgroundColor: 'rgba(0,0,0,0.5)'}] : [SsStyle.container, { backgroundColor: theme.backgroundColor }]}>
             <View style={{flexDirection: 'row'}}>
             <MaterialCommunityIcons  

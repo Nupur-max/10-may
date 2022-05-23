@@ -513,7 +513,7 @@ const P1 = ({ navigation }) => {
     }).then(response => response.json())
       .then(response => {
         if(response.success === true){
-          alert('Updated Successfully')
+          //alert('Updated Successfully')
         }
       })
       .catch(error => {

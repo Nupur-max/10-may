@@ -230,7 +230,7 @@ const Login = ({navigation}) => {
                         from_lat : result.rows.item(i).from_lat,
                         from_long : result.rows.item(i).from_long,
                         from : result.rows.item(i).from_nameICAO, 
-                        chocksOffTime : getChocksOff, 
+                        chocksOffTime : result.rows.item(i).offTime, 
                         chocksOnTime : result.rows.item(i).onTime,
                         outTime : result.rows.item(i).outTime,
                         inTime : result.rows.item(i).inTime,
@@ -283,7 +283,7 @@ const Login = ({navigation}) => {
    }
    else{
    Alert.alert(resData.message);
-
+    setForgotModalVisible(false)
    }
 });
  }
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
 },
 flightModalView:{
-  marginLeft: '5%',
+  //marginLeft: '5%',
   backgroundColor: "white",
   borderRadius:10,
   //padding: 10,
@@ -486,7 +486,8 @@ flightModalView:{
   shadowOpacity: 0.25,
   shadowRadius: 4,
   elevation: 5,
-  width:'50%',
+  width:'80%',
+  height:'25%',
   //position: 'absolute',
   //bottom: '1%'
 },

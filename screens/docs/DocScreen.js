@@ -352,7 +352,8 @@ const Docs = ({ navigation }) => {
         },
         body: JSON.stringify({
             "user_id": user.id,
-            "is_saved": 1
+            "is_saved": 1,
+            "tag": 'server',
         })
     }).then(res => res.json())
         .then(resData => {

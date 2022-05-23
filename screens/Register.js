@@ -63,11 +63,19 @@ const Register = ({navigation}) => {
      })
     }).then(res => res.json())
     .then(resData => {
-       //console.log(resData);
-       Alert.alert(resData.message);
+       console.log(resData);
        if(resData.message === 'User Created Successfully'){
+        //Alert.alert(resData.message);
         navigation.navigate('Login')
        }
+       else if(resData.msg==='email already exist'){
+        Alert.alert('email already exist');
+       }
+       else if(resData.msg==='confirm password does not match'){
+        Alert.alert('confirm password does not match');
+       }
+    }).catch((error) => {
+      console.log(error)
     });
  }
   
