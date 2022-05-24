@@ -114,6 +114,8 @@ const LogBookListing = ({ navigation }) => {
   const [loadmore, setLoadmore] = React.useState(false);
   const [findTag, setFindTag] = React.useState('')
   const [totalFlyingHours, setTotalFlyingHours] = React.useState('')
+  const [selectedDate,setSelectedDate] = React.useState('')
+  const [selectedonTime, setSelectedOnTime] = React.useState('')
 
   const [activeRowKey, setActiveRowKey] = React.useState(null)
 
@@ -496,7 +498,7 @@ const LogBookListing = ({ navigation }) => {
                 })
             }).then(res => res.json())
                 .then(resData => {
-                   console.log('uploaded Data',resData);
+                   //console.log('uploaded Data',resData);
                    alert('The app is up to date now!!')
                    if(resData.message==='Record already existed.'){
                     fetch(Platform.OS==='ios'?BaseUrl + 'updateLogbook':BaseUrlAndroid + 'updateLogbook', {
@@ -720,7 +722,39 @@ const LogBookListing = ({ navigation }) => {
     </TouchableOpacity>
   );
 
-  
+  // const getUploadedData = async() => {
+  //   setRefreshing(true);
+  //     let user = await AsyncStorage.getItem('userdetails');
+  //     user = JSON.parse(user);
+  //     fetch(Platform.OS==='ios'?BaseUrl + 'getUploadedData':BaseUrlAndroid + 'getUploadedData', {
+  //       method: 'POST',
+  //       headers: {
+  //           'Accept': 'application/json',
+  //           'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify({
+  //           "user_id": user.id,
+  //           "date": selectedDate,
+  //           "onTime":selectedonTime
+  //       })
+  //   }).then(res => res.json())
+  //   .then(resData => {
+  //     console.log('uploaded data',resData.data.length)
+  //     if(resData.data.length>0){
+  //       dataDispatcher(LogListData({ data: resData.data, inProgress: false }))
+  //       return;
+  //       prePopulateddb.transaction((tx) => {
+  //         tx.executeSql(
+  //           'UPDATE logbook set tag="uploaded" Where user_id="'+user.id+'" AND onTime="'+resData.data.onTime+'"'
+  //         );
+  //         alert('Updated ')
+  //         onRefresh();
+  //       })
+  //     }
+  // }).catch((error) => {
+  //   //console.log(error)
+  // });
+  // }
 
   const renderItem = ({ item }) => {
 
@@ -974,6 +1008,8 @@ const LogBookListing = ({ navigation }) => {
 
     const selectParams = () => {
       setSelectedId(item.id)
+      setSelectedDate(item.date)
+      setSelectedOnTime(item.chocksOnTime)
       setParamsLogbook(previousParams => ({
         ...(previousParams || {}),
         childParamList: 'Listvalue',
@@ -1465,7 +1501,7 @@ const LogBookListing = ({ navigation }) => {
         })
     }).then(res => res.json())
         .then(resData => {
-          console.log('resData',resData)
+          //console.log('resData',resData)
            
             for (let i = 0; i < resData.length; i++) {
               const AircraftReg = resData[i].aircraftReg
@@ -1490,7 +1526,7 @@ const LogBookListing = ({ navigation }) => {
 
               prePopulateddb.transaction((tx) => {
                 tx.executeSql('SELECT * FROM logbook Where user_id = "'+user.id+'" AND isSaved=1 AND date="'+resData[i].date+'" AND onTime="'+resData[i].onTime+'"', [], (tx, result) => {
-                  console.log('totalLength',result.rows.length)
+                  //console.log('totalLength',result.rows.length)
                   if (result.rows.length > 0) {
                     tx.executeSql('UPDATE logbook set tag="'+resData[i].tag+'", user_id="'+resData[i].user_id+'" , flight_no="'+resData[i].flight_no+'", date="'+PerfectDate+'", day="'+resData[i].day+'", actual_Instrument="'+resData[i].actual_Instrument+'", aircraftReg="'+resData[i].aircraftReg+'", aircraftType="'+nameAircrfat+'", approach1="'+resData[i].approach1+'", approach2="'+resData[i].approach2+'", approach3="'+resData[i].approach3+'", approach4="'+resData[i].approach4+'", approach5="'+resData[i].approach5+'", approach6="'+resData[i].approach6+'", approach7="'+resData[i].approach7+'", approach8="'+resData[i].approach8+'", approach9="'+resData[i].approach9+'", approach10="'+resData[i].approach10+'",crewCustom1="'+resData[i].crewCustom1+'",crewCustom2="'+resData[i].crewCustom2+'",crewCustom3="'+resData[i].crewCustom3+'",crewCustom4="'+resData[i].crewCustom4+'",crewCustom5="'+resData[i].crewCustom5+'",dayLanding="'+resData[i].dayLanding+'",dayTO="'+resData[i].dayTO+'",dual_day="'+resData[i].dual_day+'",dual_night="'+resData[i].dual_night+'",flight="'+resData[i].flight+'",from_airportID="'+resData[i].from_airportID+'",from_altitude="'+resData[i].from_altitude+'",from_city="'+resData[i].from_city+'",from_country="'+resData[i].from_country+'",from_dayLightSaving="'+resData[i].from_dayLightSaving+'",from_source="'+resData[i].from_source+'",from_lat="'+resData[i].from_lat+'",from_long="'+resData[i].from_long+'",from_name="'+resData[i].from_name+'",from_nameICAO="'+resData[i].from_nameICAO+'",from_nameIATA="'+resData[i].from_nameIATA+'",from_timeZone="'+resData[i].from_timeZone+'",from_type="'+resData[i].from_type+'",from_dst_status="'+resData[i].from_dst_status+'",fullStop="'+resData[i].fullStop+'",ifr_vfr="'+resData[i].ifr_vfr+'",instructional="'+resData[i].instructional+'",instructor="'+resData[i].instructor+'",inTime="'+resData[i].inTime+'",landingCustom1="'+resData[i].landingCustom1+'",landingCustom2="'+resData[i].landingCustom2+'",landingCustom3="'+resData[i].landingCustom3+'",landingCustom4="'+resData[i].landingCustom4+'",landingCustom5="'+resData[i].landingCustom5+'",landingCustom6="'+resData[i].landingCustom6+'",landingCustom7="'+resData[i].landingCustom7+'",landingCustom8="'+resData[i].landingCustom8+'",landingCustom9="'+resData[i].landingCustom9+'",landingCustom10="'+resData[i].landingCustom10+'",night="'+resData[i].night+'",nightLanding="'+resData[i].nightLanding+'",nightTO="'+resData[i].nightTO+'",offTime="'+takeoffTime+'",onTime="'+LandingTime+'",outTime="'+resData[i].outTime+'",p1="'+conditonalP1+'",p1_us_day="'+resData[i].p1_us_day+'",p1_us_night="'+resData[i].p1_us_night+'",p2="'+resData[i].p2+'",pic_day="'+resData[i].pic_day+'",pic_night="'+resData[i].pic_night+'",stl="'+resData[i].stl+'",reliefCrew1="'+resData[i].reliefCrew1+'",reliefCrew2="'+resData[i].reliefCrew2+'",reliefCrew3="'+resData[i].reliefCrew3+'",reliefCrew4="'+resData[i].reliefCrew4+'",route="'+resData[i].route+'",sic_day="'+resData[i].sic_day+'",sic_night="'+resData[i].sic_night+'",sim_instructional="'+resData[i].sim_instructional+'",sim_instrument="'+resData[i].sim_instrument+'",selected_role="'+resData[i].selected_role+'",student="'+resData[i].student+'",timeCustom1="'+resData[i].timeCustom1+'",timeCustom2="'+resData[i].timeCustom2+'",timeCustom3="'+resData[i].timeCustom3+'",timeCustom4="'+resData[i].timeCustom4+'",timeCustom5="'+resData[i].timeCustom5+'",timeCustom6="'+resData[i].timeCustom6+'",timeCustom7="'+resData[i].timeCustom7+'",timeCustom8="'+resData[i].timeCustom8+'",timeCustom9="'+resData[i].timeCustom9+'",timeCustom10="'+resData[i].timeCustom10+'",to_airportID="'+resData[i].to_airportID+'",to_altitude="'+resData[i].to_altitude+'",to_city="'+resData[i].to_city+'",to_country="'+resData[i].to_country+'",to_dayLightSaving="'+resData[i].to_dayLightSaving+'",to_source="'+resData[i].to_source+'",to_lat="'+resData[i].to_lat+'"to_long="'+resData[i].to_long+'",to_name="'+resData[i].to_name+'",to_nameIATA="'+resData[i].to_nameIATA+'",to_nameICAO="'+resData[i].to_nameICAO+'",to_timeZone="'+resData[i].to_timeZone+'",to_type="'+resData[i].to_type+'",to_dst_status="'+resData[i].to_dst_status+'",totalTime="'+resData[i].totalTime+'",touch_n_gos="'+resData[i].touch_n_gos+'",waterLanding="'+resData[i].waterLanding+'",waterTO="'+resData[i].waterTO+'",x_country_day="'+resData[i].x_country_day+'",x_country_night="'+resData[i].x_country_night+'",x_country_day_leg="'+resData[i].x_country_day_leg+'",x_country_night_leg="'+resData[i].x_country_night_leg+'",outTime_LT="'+resData[i].outTime_LT+'",offTime_LT="'+resData[i].offTime_LT+'",onTime_LT="'+resData[i].onTime_LT+'",inTime_LT="'+resData[i].inTime_LT+'",sim_type="'+resData[i].sim_type+'",sim_exercise="'+resData[i].sim_exercise+'",pf_time="'+resData[i].pf_hours+'",pm_time="'+resData[i].pm_hours+'",sfi_sfe="'+resData[i].sfi_sfe+'",simCustom1="'+resData[i].simCustom1+'",simCustom2="'+resData[i].simCustom2+'",simCustom3="'+resData[i].simCustom3+'",simCustom4="'+resData[i].simCustom4+'",simCustom5="'+resData[i].simCustom5+'",simLocation="'+resData[i].simLocation+'",p1_ut_day="'+resData[i].p1_ut_day+'",p1_ut_night="'+resData[i].p1_ut_night+'",remark="'+resData[i].remark+'",autolanding="'+resData[i].autolanding+'",flight_date="'+resData[i].flight_date+'",selected_flight_timelog="'+resData[i].selected_flight_timelog+'",imported_log="'+resData[i].imported_log+'",orderedDate="'+orderedDate+'",purpose1="'+resData[i].timeCustom1+'",isSaved="'+resData[i].is_saved+'" where user_id="'+user.id+'" AND isSaved = 1');
                   }
@@ -1514,13 +1550,6 @@ const LogBookListing = ({ navigation }) => {
 
 
 //////////////// 13 May -------------------------
-
-
-
-
-
-
-
 
 const onRefresh = React.useCallback(async () => {
     dataDispatcher(LogListData({ data: [], inProgress: false }))
@@ -1642,13 +1671,13 @@ const onRefresh = React.useCallback(async () => {
             isDeleted:result.rows.item(i).isDeleted,
           })
         }
-          console.log('temData',temData)
+          console.log('temData',result.rows.item(i).serverId)
           setLocalLogbookData(temData);
           var arr = temData;
           var clean = arr.filter((arr, index, self) =>
           index === self.findIndex((t) => (t.chocksOffTime === arr.chocksOffTime && t.date === arr.date && t.from === arr.from)))
           dataDispatcher(LogListData({ data: clean, inProgress: false }))
-          console.log('Data',clean)
+          //console.log('Data',clean)
 
           setFindTag(result.rows.item(i).tag);
           setRefreshing(false);
@@ -1805,7 +1834,7 @@ const handleIndexChange = (index) => {
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
-              onRefresh={getLatestData}
+              onRefresh={()=>{getLatestData()}}
             />
           }
         />

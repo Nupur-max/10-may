@@ -80,6 +80,9 @@ class Sample extends Component {
     var deYear = de.getFullYear()
     let dep = deDay+'/'+deMonth+'/'+deYear;
 
+    let locDept = deDay+'-'+deMonth+'-'+deYear;
+    console.log('dep',locDept)
+
     var p = logData[this.state.index].timeCustom1;
     var pur = p.split(",");
     var Pic_Name = logData[this.state.index].p1 ==='Self'? logData[this.state.index].p1 : logData[this.state.index].p1.split("(")
@@ -156,7 +159,7 @@ class Sample extends Component {
     }
   }
 
-  //// TO GET EGCA RESPONSE ///
+ //// TO GET EGCA RESPONSE ///
   updateLogTags = async () => {
     const value = await AsyncStorage.getItem('result');
     console.log('val',value)
@@ -183,17 +186,18 @@ class Sample extends Component {
           })
       }).then(res => res.json())
           .then(resData => {
-              console.log('server data',resData);
+              //console.log('server data',resData);
           });
         let allSuccess = await AsyncStorage.getItem('success');
         allSuccess = JSON.parse(allSuccess) == null ? [] : JSON.parse(allSuccess)
         // console.log("sucess of log upload" , allSuccess)
         prePopulateddb.transaction(tx => {
-          tx.executeSql('UPDATE logbook set tag="uploaded" WHERE user_id = "' + user.id + '" AND date= "'+logRes.date+'" AND onTime= "'+logRes.onTime+'"')
+          tx.executeSql('UPDATE logbook set tag="uploaded" WHERE user_id = "' + user.id + '" AND  date = "' + locDept + '"')
           let Data = [];
           let SingleResult = '';
+          console.log('....',locDept)
           prePopulateddb.transaction(tx => {
-            tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '"AND date= "'+logRes.date+'" AND onTime= "'+logRes.onTime+'"', [], (tx, result) => {
+            tx.executeSql('SELECT * from logbook WHERE user_id = "' + user.id + '"', [], (tx, result) => {
               if (result.rows.length > 0) {
                 for (let i = 0; i <= result.rows.length; i++) {
                   SingleResult = {
@@ -250,7 +254,7 @@ class Sample extends Component {
                 chocksOnTime: result.rows.item(i).onTime,
               }
               var saveddata = [...allErrors, temData];
-        console.log('allErrors',saveddata)
+              console.log('allErrors',saveddata)
 
               await AsyncStorage.setItem('failed', JSON.stringify(saveddata));
             }
@@ -282,6 +286,7 @@ class Sample extends Component {
       this.props.navigation.navigate('Docs')
     }
   }
+  
 
   injectJs = (dataPos, arrD, depD, airCraftReg, err , PiC ,SiC , chocksOff , chocksOn) => {
     const injectData =
